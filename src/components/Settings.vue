@@ -1,0 +1,17 @@
+<template>
+  <div>
+    <h1>Einstellungen</h1>
+    <vs-row>
+      <vs-col
+        vs-type="flex"
+        vs-justify="flex-end"
+        vs-w="12"
+      >
+        <vs-button
+          color="success"
+          icon="save"
+        >Speichern</vs-button>
+      </vs-col>
+    </vs-row>
+  </div>
+</template>

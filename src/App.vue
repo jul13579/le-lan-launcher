@@ -12,22 +12,20 @@
         </div>
       </vs-tab>
       <vs-tab label="Einstellungen" icon="settings">
-        <div>
-          <vs-row>
-            <vs-col vs-type="flex" vs-justify="flex-end" vs-w="12">
-              <vs-button color="success" icon="save">Speichern</vs-button>
-            </vs-col>
-          </vs-row>
-        </div>
+        <settings></settings>
       </vs-tab>
     </vs-tabs>
   </div>
 </template>
 
 <script>
+import Settings from "./components/Settings"
+
 export default {
   name: "app",
-  components: {},
+  components: {
+    Settings
+  },
   data() {
     return {
       backgroundColor: this.$store.state.backgroundColor,
