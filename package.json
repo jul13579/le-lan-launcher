@@ -10,6 +10,8 @@
   "dependencies": {
     "core-js": "^3.4.4",
     "material-icons": "^0.3.1",
+    "node-sass": "^4.13.0",
+    "sass-loader": "^8.0.0",
     "vue": "^2.6.10",
     "vuesax": "^3.11.5",
     "vuex": "^3.1.2"
@@ -32,6 +34,7 @@
       "plugin:vue/essential",
       "eslint:recommended"
     ],
+    "rules": {},
     "parserOptions": {
       "parser": "babel-eslint"
     }

@@ -7,6 +7,7 @@ import App from "./App.vue";
 
 // Styles
 import "vuesax/dist/vuesax.css"; //Vuesax styles
+import "./sass/app.sass"
 
 Vue.use(Vuesax, {
   // options
@@ -15,11 +16,11 @@ Vue.use(Vuex);
 
 const store = new Vuex.Store({
   state: {
-    primaryColor: localStorage.getItem("primaryColor") || "rgb(0,0,0)"
+    backgroundColor: localStorage.getItem("backgroundColor") || "rgb(15, 5, 35)"
   },
   mutations: {
-    primaryColor(state, color) {
-      localStorage.setItem("primaryColor", color);
+    backgroundColor(state, color) {
+      localStorage.setItem("backgroundColor", color);
     }
   }
 });
