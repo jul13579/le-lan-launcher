@@ -13,7 +13,11 @@
       </vs-tab>
       <vs-tab label="Einstellungen" icon="settings">
         <div>
-          Lorem ipsum dolor sit amet
+          <vs-row>
+            <vs-col vs-type="flex" vs-justify="flex-end" vs-w="12">
+              <vs-button color="success" icon="save">Speichern</vs-button>
+            </vs-col>
+          </vs-row>
         </div>
       </vs-tab>
     </vs-tabs>
