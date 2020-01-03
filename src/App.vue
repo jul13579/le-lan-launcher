@@ -1,6 +1,6 @@
 <template>
-  <div id="app" class="outer-container" :style="{background: $store.state.backgroundColor}">
-    <div class="outer-container"></div>
+  <div id="app" class="frame" :style="{background: backgroundColor}">
+    <div class="frame texture"></div>
   </div>
 </template>
 
@@ -8,30 +8,29 @@
 export default {
   name: "app",
   components: {},
-  beforeMount() {
-    // this.init();
-    // this.$store.subscribe(mutation => {
-    //   if (mutation.type == "backgroundColor") {
-    //     this.init();
-    //   }
-    // });
+  data() {
+    return {
+      backgroundColor: this.$store.state.backgroundColor
+    };
   },
-  methods: {
-    init() {
-      // let backgroundColor = this.$store.state.backgroundColor
-      // this.$vs.theme({
-      //   primary: backgroundColor
-      // });
-    }
-  }
+  beforeMount() {
+    this.$store.subscribe(mutation => {
+      if (mutation.type == "backgroundColor") {
+        this.backgroundColor = mutation.payload;
+      }
+    });
+  },
 };
 </script>
 
 <style lang="sass">
-  .outer-container
+  .frame
     width: 100%
     height: 100%
     max-width: 100%
     max-height: 100%
     overflow: hidden
+    .texture
+      background: url('assets/gaming-pattern-alpha.png')
+      filter: opacity(0.1)
 </style>
