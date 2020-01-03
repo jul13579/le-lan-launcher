@@ -6,11 +6,20 @@ import Vuex from "vuex";
 import App from "./App.vue";
 
 // Styles
-import "vuesax/dist/vuesax.css"; //Vuesax styles
+import "material-icons/iconfont/material-icons.css";
+import "./stylus/vuesax.styl";
 import "./sass/app.sass";
 
 Vue.use(Vuesax, {
-  // options
+  theme: {
+    colors: {
+      primary: "#FFF"
+      // success:'rgb(23, 201, 100)',
+      // danger:'rgb(242, 19, 93)',
+      // warning:'rgb(255, 130, 0)',
+      // dark:'rgb(36, 33, 69)'
+    }
+  }
 });
 Vue.use(Vuex);
 
@@ -19,11 +28,15 @@ const defaultBackgroundColor = "rgb(15, 5, 35)";
 const store = new Vuex.Store({
   state: {
     backgroundColor:
-      localStorage.getItem("backgroundColor") || defaultBackgroundColor
+      localStorage.getItem("backgroundColor") || defaultBackgroundColor,
+    setupCompleted: localStorage.getItem("setupCompleted") || false
   },
   mutations: {
     backgroundColor(state, color) {
       localStorage.setItem("backgroundColor", color);
+    },
+    setupCompleted(state, bool) {
+      localStorage.setItem("setupCompleted", bool);
     }
   }
 });

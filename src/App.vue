@@ -1,6 +1,22 @@
 <template>
-  <div id="app" class="frame" :style="{background: backgroundColor}">
+  <div
+    id="app"
+    class="frame"
+    :style="{background: backgroundColor}"
+  >
     <div class="frame texture"></div>
+    <vs-tabs v-model="activeTab" position="left">
+      <vs-tab label="Spielebibliothek" icon="gamepad" :disabled="!setupCompleted">
+        <div>
+          Home
+        </div>
+      </vs-tab>
+      <vs-tab label="Einstellungen" icon="settings">
+        <div>
+          Lorem ipsum dolor sit amet
+        </div>
+      </vs-tab>
+    </vs-tabs>
   </div>
 </template>
 
@@ -10,7 +26,9 @@ export default {
   components: {},
   data() {
     return {
-      backgroundColor: this.$store.state.backgroundColor
+      backgroundColor: this.$store.state.backgroundColor,
+      setupCompleted: this.$store.state.setupCompleted,
+      activeTab: this.$store.state.setupCompleted ? 0 : 1,
     };
   },
   beforeMount() {
@@ -18,8 +36,11 @@ export default {
       if (mutation.type == "backgroundColor") {
         this.backgroundColor = mutation.payload;
       }
+      if (mutation.type == "setupCompleted") {
+        this.setupCompleted = mutation.payload;
+      }
     });
-  },
+  }
 };
 </script>
 
@@ -30,7 +51,12 @@ export default {
     max-width: 100%
     max-height: 100%
     overflow: hidden
+    padding: 10px
+
     .texture
+      position: absolute
+      top: 0
+      left: 0
       background: url('assets/gaming-pattern-alpha.png')
       filter: opacity(0.1)
 </style>
