@@ -27,7 +27,7 @@ function createWindow() {
     minWidth: 1200,
     minHeight: 720,
     title: "[|LE|] LAN-Launcher",
-    icon: path.join(__static, "icon.png"),
+    icon: path.join(__static, "./icon.png"),
     webPreferences: {
       nodeIntegration: true
     }
@@ -112,12 +112,13 @@ if (isDevelopment) {
 
 function startSync() {
   if (store.state.homeDir != false) {
-    let binPath = "./syncthing";
+    let binPath = path.join(__static, "./syncthing");
     if (process.platform == "win32") binPath += ".exe";
-    let args = ["-no-browser", "-home=" + store.state.homeDir];
-    
+    let args = ["-no-console", "-no-browser", "-home=" + store.state.homeDir];
+
     execFile(binPath, args, function(err, data) {
-      // do nothing
+      console.log(err);
+      console.log(data.toString());
     });
   }
 }
