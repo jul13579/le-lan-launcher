@@ -1,6 +1,6 @@
 "use strict";
 
-import { app, protocol, BrowserWindow, Menu, nativeImage } from "electron";
+import { app, protocol, BrowserWindow, Menu, dialog } from "electron";
 import {
   createProtocol,
   installVueDevtools
@@ -26,7 +26,7 @@ function createWindow() {
     minWidth: 1200,
     minHeight: 720,
     title: "[|LE|] LAN-Launcher",
-    icon: path.join(__static, 'icon.png'),
+    icon: path.join(__static, "icon.png"),
     webPreferences: {
       nodeIntegration: true
     }
@@ -85,6 +85,7 @@ app.on("ready", async () => {
     }
   }
   createWindow();
+  startSync();
 });
 
 // Exit cleanly on request from parent process in development mode.
@@ -101,3 +102,15 @@ if (isDevelopment) {
     });
   }
 }
+
+function startSync() {
+  if (store.state.homeDir != false) {
+    console.log("Start syncthing...");
+  }
+}
+
+store.subscribe((mutation, payload) => {
+  if (mutation == "homeDir") {
+    startSync();
+  }
+});

@@ -1,10 +1,18 @@
 <template>
   <div class="container">
     <h1>Einstellungen</h1>
-    <vs-alert color="danger" title="Spielername nicht gesetzt" v-if="playerName == false">
+    <vs-alert
+      color="danger"
+      title="Spielername nicht gesetzt"
+      v-if="playerName == false"
+    >
       Bevor du auf die Spielebibliothek zugreifen kannst musst du deinen Spielernamen eingeben!
     </vs-alert>
-    <vs-alert color="danger" title="Spieleverzeichnis nicht gesetzt" v-if="homeDir == false">
+    <vs-alert
+      color="danger"
+      title="Spieleverzeichnis nicht gesetzt"
+      v-if="homeDir == false"
+    >
       Bevor du auf die Spielebibliothek zugreifen kannst musst du das Spieleverzeichnis setzen!
     </vs-alert>
     <h2>Design</h2>
@@ -18,14 +26,17 @@
     </vs-images>
     <h2>Farbton</h2>
     <vs-row>
-      <vs-col vs-w="12" style="padding: 0 1rem">
+      <vs-col
+        vs-w="12"
+        style="padding: 0 1rem"
+      >
         <vs-slider
-        :min="0"
-        :max="360"
-        @input="(input) => {$store.dispatch('setBackgroundColor', {color: 'hsl(' + input + ', 75%, 8%)'})}"
-        :color="backgroundColor"
-        :value="parseInt(backgroundColor.replace('hsl(', '').split(',')[0])"
-      />
+          :min="0"
+          :max="360"
+          @input="(input) => {$store.dispatch('setBackgroundColor', {color: 'hsl(' + input + ', 75%, 8%)'})}"
+          :color="backgroundColor"
+          :value="parseInt(backgroundColor.replace('hsl(', '').split(',')[0])"
+        />
       </vs-col>
     </vs-row>
     <h2>Umgebung</h2>
@@ -38,22 +49,20 @@
           :danger="playerName == false"
         />
       </vs-col>
-      <vs-col vs-w="8" vs-offset="1">
+      <vs-col
+        vs-w="8"
+        vs-offset="1"
+      >
         <vs-input
           label-placeholder="Spieleverzeichnis"
           @click="openFolderChooser"
           :value="homeDir"
           :danger="homeDir == false"
         />
-        <input
-          id="folderInput"
-          type="file"
-          style="display: none"
-          @change="(event) => {$store.dispatch('setHomeDir', {dir: event.target.files[0].path})}"
-          webkitdirectory
-        />
       </vs-col>
     </vs-row>
+    <template v-if="homeDir != false">
+    </template>
   </div>
 </template>
 
@@ -74,7 +83,11 @@ export default {
   computed: mapState(["backgroundColor", "playerName", "homeDir"]),
   methods: {
     openFolderChooser() {
-      document.getElementById('folderInput').click()
+      require("electron")
+        .remote.dialog.showOpenDialog()
+        .then(result => {
+          this.$store.dispatch("setHomeDir", { dir: result.filePaths[0] });
+        });
     }
   }
 };
