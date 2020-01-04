@@ -17,32 +17,33 @@
       ></vs-image>
     </vs-images>
     <h2>Farbton</h2>
-    <div style="padding: 0 1rem">
-      <vs-slider
+    <vs-row>
+      <vs-col vs-w="12" style="padding: 0 1rem">
+        <vs-slider
         :min="0"
         :max="360"
         @input="(input) => {$store.dispatch('setBackgroundColor', {color: 'hsl(' + input + ', 75%, 8%)'})}"
         :color="backgroundColor"
         :value="parseInt(backgroundColor.replace('hsl(', '').split(',')[0])"
       />
-    </div>
-    <h2>Spielerinfos</h2>
+      </vs-col>
+    </vs-row>
+    <h2>Umgebung</h2>
     <vs-row>
       <vs-col vs-w="3">
         <vs-input
-          label-placeholder="Name"
+          label-placeholder="Spielername"
           :value="playerName"
           @input="(input) => {$store.dispatch('setPlayerName', {name: input})}"
+          :danger="playerName == false"
         />
       </vs-col>
-    </vs-row>
-    <h2>Dateien</h2>
-    <vs-row>
-      <vs-col vs-w="6">
+      <vs-col vs-w="8" vs-offset="1">
         <vs-input
           label-placeholder="Spieleverzeichnis"
           @click="openFolderChooser"
           :value="homeDir"
+          :danger="homeDir == false"
         />
         <input
           id="folderInput"
