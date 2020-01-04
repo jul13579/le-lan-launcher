@@ -20,14 +20,30 @@
         :value="parseInt(backgroundColor.replace('hsl(', '').split(',')[0])"
       />
     </div>
-    <h2>Spielerinformationen</h2>
+    <h2>Spielerinfos</h2>
     <vs-row>
       <vs-col vs-w="3">
         <vs-input
           label-placeholder="Name"
           :value="playerName"
           @input="(input) => {$store.dispatch('setPlayerName', {name: input})}"
-          color="primary"
+        />
+      </vs-col>
+    </vs-row>
+    <h2>Dateien</h2>
+    <vs-row>
+      <vs-col vs-w="6">
+        <vs-input
+          label-placeholder="Spieleverzeichnis"
+          @click="openFolderChooser"
+          :value="homeDir"
+        />
+        <input
+          id="folderInput"
+          type="file"
+          style="display: none"
+          @change="(event) => {$store.dispatch('setHomeDir', {dir: event.target.files[0].path})}"
+          webkitdirectory
         />
       </vs-col>
     </vs-row>
@@ -45,9 +61,14 @@ export default {
         require("@/assets/gaming.png"),
         require("@/assets/prism.png"),
         require("@/assets/maze.png")
-      ],
+      ]
     };
   },
-  computed: mapState(["backgroundColor", "playerName", "homeDir"])
+  computed: mapState(["backgroundColor", "playerName", "homeDir"]),
+  methods: {
+    openFolderChooser() {
+      document.getElementById('folderInput').click()
+    }
+  }
 };
 </script>

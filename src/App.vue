@@ -33,6 +33,9 @@
 
 <script>
 import Settings from "./components/Settings";
+import { mapState } from "vuex";
+
+let backgroundColorTimeout, playerNameTimeout;
 
 export default {
   name: "app",
@@ -41,22 +44,32 @@ export default {
   },
   data() {
     return {
-      backgroundColor: this.$store.state.backgroundColor,
-      theme: this.$store.state.theme,
-      setupCompleted: this.$store.state.setupCompleted,
-      activeTab: this.$store.state.setupCompleted ? 0 : 1
+      activeTab: this.$store.state.setupCompleted ? 0 : 1,
+      setupCompleted: false
     };
   },
+  computed: mapState(["backgroundColor", "theme"]),
   beforeMount() {
     this.$store.subscribe(mutation => {
-      if (mutation.type == "backgroundColor") {
-        this.backgroundColor = mutation.payload;
-      }
-      if (mutation.type == "theme") {
-        this.theme = mutation.payload;
-      }
-      if (mutation.type == "setupCompleted") {
-        this.setupCompleted = mutation.payload;
+      switch (mutation.type) {
+        case "theme":
+          this.$toasted.global.success("Design gespeichert");
+          break;
+        case "backgroundColor":
+          clearTimeout(backgroundColorTimeout);
+          backgroundColorTimeout = setTimeout(function() {
+            this.$toasted.global.success("Farbton gespeichert");
+          }.bind(this), 1000);
+          break;
+        case "playerName":
+          clearTimeout(playerNameTimeout);
+          playerNameTimeout = setTimeout(function() {
+            this.$toasted.global.success("Spielername gespeichert");
+          }.bind(this), 1000);
+          break;
+        case "homeDir":
+          this.$toasted.global.success("Spieleverzeichnis-Pfad gespeichert");
+          break;
       }
     });
   }
