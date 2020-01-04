@@ -45,10 +45,14 @@ export default {
   data() {
     return {
       activeTab: this.$store.state.setupCompleted ? 0 : 1,
-      setupCompleted: false
     };
   },
-  computed: mapState(["backgroundColor", "theme"]),
+  computed: {
+    setupCompleted() {
+      return this.playerName != false && this.homeDir != false
+    },
+    ...mapState(["backgroundColor", "theme", "playerName", "homeDir"])
+  },
   beforeMount() {
     this.$store.subscribe(mutation => {
       switch (mutation.type) {
@@ -57,15 +61,21 @@ export default {
           break;
         case "backgroundColor":
           clearTimeout(backgroundColorTimeout);
-          backgroundColorTimeout = setTimeout(function() {
-            this.$toasted.global.success("Farbton gespeichert");
-          }.bind(this), 1000);
+          backgroundColorTimeout = setTimeout(
+            function() {
+              this.$toasted.global.success("Farbton gespeichert");
+            }.bind(this),
+            1000
+          );
           break;
         case "playerName":
           clearTimeout(playerNameTimeout);
-          playerNameTimeout = setTimeout(function() {
-            this.$toasted.global.success("Spielername gespeichert");
-          }.bind(this), 1000);
+          playerNameTimeout = setTimeout(
+            function() {
+              this.$toasted.global.success("Spielername gespeichert");
+            }.bind(this),
+            1000
+          );
           break;
         case "homeDir":
           this.$toasted.global.success("Spieleverzeichnis-Pfad gespeichert");

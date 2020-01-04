@@ -1,6 +1,12 @@
 <template>
   <div class="container">
     <h1>Einstellungen</h1>
+    <vs-alert color="danger" title="Spielername nicht gesetzt" v-if="playerName == false">
+      Bevor du auf die Spielebibliothek zugreifen kannst musst du deinen Spielernamen eingeben!
+    </vs-alert>
+    <vs-alert color="danger" title="Spieleverzeichnis nicht gesetzt" v-if="homeDir == false">
+      Bevor du auf die Spielebibliothek zugreifen kannst musst du das Spieleverzeichnis setzen!
+    </vs-alert>
     <h2>Design</h2>
     <vs-images>
       <vs-image
