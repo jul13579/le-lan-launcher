@@ -17,20 +17,10 @@
         :max="360"
         @input="(input) => {$store.dispatch('setBackgroundColor', {color: 'hsl(' + input + ', 75%, 8%)'})}"
         :color="backgroundColor"
+        :value="parseInt(backgroundColor.replace('hsl(', '').split(',')[0])"
       />
     </div>
-    <vs-row>
-      <vs-col
-        vs-type="flex"
-        vs-justify="flex-end"
-        vs-w="12"
-      >
-        <vs-button
-          color="success"
-          icon="save"
-        >Speichern</vs-button>
-      </vs-col>
-    </vs-row>
+    <h2>Spielerinformationen</h2>
   </div>
 </template>
 
