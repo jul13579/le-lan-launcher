@@ -112,7 +112,7 @@ if (isDevelopment) {
 
 function startSync() {
   if (store.state.homeDir != false) {
-    let binPath = path.join(__static, "./syncthing");
+    let binPath = "./resources/syncthing";
     let args = ["-no-browser", "-home=" + store.state.homeDir];
     if (process.platform == "win32") {
       binPath += ".exe";
@@ -120,8 +120,7 @@ function startSync() {
     }
 
     execFile(binPath, args, function(err, data) {
-      console.log(err);
-      console.log(data.toString());
+      // do nothing
     });
   }
 }
