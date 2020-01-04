@@ -24,7 +24,7 @@ export default new Vuex.Store({
       state.playerName = name;
     },
     homeDir(state, dir) {
-      state.homeDir = dir;
+      if (dir != false) state.homeDir = dir;
     }
   },
   actions: {

@@ -85,6 +85,12 @@ app.on("ready", async () => {
     }
   }
   createWindow();
+
+  store.subscribe((mutation, payload) => {
+    if (mutation.type == "homeDir") {
+      startSync();
+    }
+  });
   startSync();
 });
 
@@ -108,9 +114,3 @@ function startSync() {
     console.log("Start syncthing...");
   }
 }
-
-store.subscribe((mutation, payload) => {
-  if (mutation == "homeDir") {
-    startSync();
-  }
-});

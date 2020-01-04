@@ -44,7 +44,7 @@ export default {
   },
   data() {
     return {
-      activeTab: this.$store.state.setupCompleted ? 0 : 1,
+      activeTab: this.$store.state.homeDir != false ? 0 : 1,
     };
   },
   computed: {
@@ -94,6 +94,7 @@ export default {
     max-height: 100%
     overflow: hidden
     padding: 10px
+    padding-left: 0px
 
     .texture
       position: absolute
