@@ -1,6 +1,7 @@
 "use strict";
 
 import { app, protocol, BrowserWindow, Menu, dialog } from "electron";
+import { execFile } from "child_process";
 import {
   createProtocol,
   installVueDevtools
@@ -111,6 +112,12 @@ if (isDevelopment) {
 
 function startSync() {
   if (store.state.homeDir != false) {
-    console.log("Start syncthing...");
+    let binPath = "./syncthing";
+    if (process.platform == "win32") binPath += ".exe";
+    let args = ["-no-browser", "-home=" + store.state.homeDir];
+    
+    execFile(binPath, args, function(err, data) {
+      // do nothing
+    });
   }
 }
