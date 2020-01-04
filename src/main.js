@@ -38,6 +38,16 @@ Vue.toasted.register(
     icon: "check"
   }
 );
+Vue.toasted.register(
+  "error",
+  message => {
+    return message;
+  },
+  {
+    type: "error",
+    icon: "error_outline"
+  }
+);
 
 
 import store from "./store";

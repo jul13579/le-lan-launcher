@@ -15,6 +15,9 @@ export default {
     System: {
       ping: () => {
         return axios.get(host + "/system/ping");
+      },
+      shutdown: () => {
+        return axios.post(host + "/system/shutdown");
       }
     }
   }

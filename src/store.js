@@ -12,7 +12,8 @@ export default new Vuex.Store({
     theme: "",
     playerName: "",
     homeDir: "",
-    apikey: ""
+    apikey: "",
+    started: false
   },
   mutations: {
     backgroundColor(state, color) {
@@ -29,6 +30,9 @@ export default new Vuex.Store({
     },
     apikey(state, key) {
       state.apikey = key;
+    },
+    started(state, bool) {
+      state.started = bool;
     }
   },
   actions: {
@@ -46,6 +50,9 @@ export default new Vuex.Store({
     },
     setApikey(store, payload) {
       store.commit("apikey", payload.key);
+    },
+    setStarted(store, payload) {
+      store.commit("started", payload.started);
     }
   },
   plugins: [createPersistedState(), createSharedMutations()],

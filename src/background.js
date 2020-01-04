@@ -1,6 +1,6 @@
 "use strict";
 
-import { app, protocol, BrowserWindow, Menu, dialog } from "electron";
+import { app, protocol, BrowserWindow, Menu, dialog, ipcMain } from "electron";
 import { execFile } from "child_process";
 import fs from "fs";
 import XMLParser from "xml-parser";
@@ -91,10 +91,10 @@ app.on("ready", async () => {
 
   store.subscribe((mutation, payload) => {
     if (mutation.type == "homeDir") {
-      startSync();
+      startService();
     }
   });
-  startSync();
+  startService();
 });
 
 // Exit cleanly on request from parent process in development mode.
@@ -112,7 +112,7 @@ if (isDevelopment) {
   }
 }
 
-function startSync() {
+function startService() {
   if (store.state.homeDir != false) {
     let binPath = "./resources/syncthing";
     let args = ["-no-browser", "-home=" + store.state.homeDir];
@@ -124,6 +124,8 @@ function startSync() {
     execFile(binPath, args, function(err, data) {
       // do nothing
     });
+
+    store.dispatch("setStarted", { started: true });
 
     const pollingInterval = setInterval(() => {
       let xml = XMLParser(
@@ -138,3 +140,5 @@ function startSync() {
     }, 5000);
   }
 }
+
+ipcMain.on("startService", () => startService());
