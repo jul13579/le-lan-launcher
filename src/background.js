@@ -4,6 +4,7 @@ import { app, protocol, BrowserWindow, Menu, dialog, ipcMain } from "electron";
 import { execFile } from "child_process";
 import fs from "fs";
 import XMLParser from "xml-parser";
+import AJAX from "./ajax";
 import {
   createProtocol,
   installVueDevtools
@@ -58,6 +59,14 @@ app.on("window-all-closed", () => {
   // On macOS it is common for applications and their menu bar
   // to stay active until the user quits explicitly with Cmd + Q
   if (process.platform !== "darwin") {
+    AJAX.Syncthing.System.shutdown()
+      .then(() => {
+        this.$store.dispatch("setStarted", { started: false });
+        this.$toasted.global.success("Service gestoppt");
+      })
+      .catch(() => {
+        this.$toasted.global.error("Fehler beim Stoppen des Services");
+      });
     app.quit();
   }
 });
@@ -102,11 +111,27 @@ if (isDevelopment) {
   if (process.platform === "win32") {
     process.on("message", data => {
       if (data === "graceful-exit") {
+        AJAX.Syncthing.System.shutdown()
+          .then(() => {
+            this.$store.dispatch("setStarted", { started: false });
+            this.$toasted.global.success("Service gestoppt");
+          })
+          .catch(() => {
+            this.$toasted.global.error("Fehler beim Stoppen des Services");
+          });
         app.quit();
       }
     });
   } else {
     process.on("SIGTERM", () => {
+      AJAX.Syncthing.System.shutdown()
+        .then(() => {
+          this.$store.dispatch("setStarted", { started: false });
+          this.$toasted.global.success("Service gestoppt");
+        })
+        .catch(() => {
+          this.$toasted.global.error("Fehler beim Stoppen des Services");
+        });
       app.quit();
     });
   }

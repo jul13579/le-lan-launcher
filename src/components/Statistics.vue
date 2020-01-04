@@ -11,7 +11,8 @@
       </div>
     </template>
     <template v-else-if="started && online">
-      <div>
+      <div class="online">
+        <h3>Statistiken</h3>
       </div>
     </template>
     <div class="controls">
@@ -80,8 +81,11 @@ export default {
         width: 100% 
         text-align: center
         position: relative
+.online
+    text-align: center
 .controls
     position: absolute
+    bottom: 0px
     overflow-y: hidden
     width: 100%
     height: 2rem
