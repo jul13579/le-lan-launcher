@@ -29,11 +29,16 @@ const store = new Vuex.Store({
   state: {
     backgroundColor:
       localStorage.getItem("backgroundColor") || defaultBackgroundColor,
+    theme:
+      localStorage.getItem("theme") || require('@/assets/funky-lines.png'),
     setupCompleted: localStorage.getItem("setupCompleted") || false
   },
   mutations: {
     backgroundColor(state, color) {
       localStorage.setItem("backgroundColor", color);
+    },
+    theme(state, theme) {
+      localStorage.setItem("theme", theme);
     },
     setupCompleted(state, bool) {
       localStorage.setItem("setupCompleted", bool);

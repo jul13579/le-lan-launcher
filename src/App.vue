@@ -4,14 +4,27 @@
     class="frame"
     :style="{background: backgroundColor}"
   >
-    <div class="frame texture"></div>
-    <vs-tabs v-model="activeTab" position="left">
-      <vs-tab label="Spielebibliothek" icon="gamepad" :disabled="!setupCompleted">
+    <div
+      class="frame texture"
+      :style="{background: 'url('+theme+')'}"
+    ></div>
+    <vs-tabs
+      v-model="activeTab"
+      position="left"
+    >
+      <vs-tab
+        label="Spielebibliothek"
+        icon="gamepad"
+        :disabled="!setupCompleted"
+      >
         <div>
           Home
         </div>
       </vs-tab>
-      <vs-tab label="Einstellungen" icon="settings">
+      <vs-tab
+        label="Einstellungen"
+        icon="settings"
+      >
         <settings></settings>
       </vs-tab>
     </vs-tabs>
@@ -19,7 +32,7 @@
 </template>
 
 <script>
-import Settings from "./components/Settings"
+import Settings from "./components/Settings";
 
 export default {
   name: "app",
@@ -29,14 +42,18 @@ export default {
   data() {
     return {
       backgroundColor: this.$store.state.backgroundColor,
+      theme: this.$store.state.theme,
       setupCompleted: this.$store.state.setupCompleted,
-      activeTab: this.$store.state.setupCompleted ? 0 : 1,
+      activeTab: this.$store.state.setupCompleted ? 0 : 1
     };
   },
   beforeMount() {
     this.$store.subscribe(mutation => {
       if (mutation.type == "backgroundColor") {
         this.backgroundColor = mutation.payload;
+      }
+      if (mutation.type == "theme") {
+        this.theme = mutation.payload;
       }
       if (mutation.type == "setupCompleted") {
         this.setupCompleted = mutation.payload;
@@ -59,6 +76,5 @@ export default {
       position: absolute
       top: 0
       left: 0
-      background: url('assets/gaming-alpha.png')
       filter: opacity(0.1)
 </style>
