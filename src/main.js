@@ -1,6 +1,5 @@
 import Vue from "vue";
 import Vuesax from "vuesax";
-import Toasted from "vue-toasted";
 
 // Components
 import App from "./App.vue";
@@ -21,22 +20,9 @@ Vue.use(Vuesax, {
     }
   }
 });
-// Vue.use(Vuex);
-Vue.use(Toasted);
-
-// Lets Register a Global Error Notification Toast.
-Vue.toasted.register(
-  "success",
-  message => {
-    return message;
-  },
-  {
-    type: "success",
-    icon: "check"
-  }
-);
 
 import store from "./store";
+import "./toaster"
 
 Vue.config.productionTip = false;
 

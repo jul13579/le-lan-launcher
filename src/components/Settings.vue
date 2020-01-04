@@ -10,6 +10,15 @@
         @click.native="() => {$store.dispatch('setTheme', {theme: item})}"
       ></vs-image>
     </vs-images>
+    <h2>Farbton</h2>
+    <div style="padding: 0 1rem">
+      <vs-slider
+        :min="0"
+        :max="360"
+        @input="(input) => {$store.dispatch('setBackgroundColor', {color: 'hsl(' + input + ', 75%, 8%)'})}"
+        :color="backgroundColor"
+      />
+    </div>
     <vs-row>
       <vs-col
         vs-type="flex"
@@ -26,6 +35,8 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
+
 export default {
   data() {
     return {
@@ -36,6 +47,7 @@ export default {
         require("@/assets/maze.png")
       ]
     };
-  }
+  },
+  computed: mapState(["backgroundColor"])
 };
 </script>
