@@ -1,6 +1,6 @@
 {
-  "name": "le-lan-launcher",
-  "productName": "[|LE|] LAN-Launcher",
+  "name": "legc-lan-launcher",
+  "productName": "LEGC LAN-Launcher",
   "version": "0.1.0",
   "private": true,
   "scripts": {
