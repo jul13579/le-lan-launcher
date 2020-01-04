@@ -113,8 +113,11 @@ if (isDevelopment) {
 function startSync() {
   if (store.state.homeDir != false) {
     let binPath = path.join(__static, "./syncthing");
-    if (process.platform == "win32") binPath += ".exe";
-    let args = ["-no-console", "-no-browser", "-home=" + store.state.homeDir];
+    let args = ["-no-browser", "-home=" + store.state.homeDir];
+    if (process.platform == "win32") {
+      binPath += ".exe";
+      args.push("-no-console");
+    }
 
     execFile(binPath, args, function(err, data) {
       console.log(err);

@@ -56,6 +56,7 @@
         <vs-input
           label-placeholder="Spieleverzeichnis"
           @click="openFolderChooser"
+          @blur="(event) => {$store.dispatch('setHomeDir', {dir: event.target.value})}"
           :value="homeDir"
           :danger="homeDir == false"
         />
