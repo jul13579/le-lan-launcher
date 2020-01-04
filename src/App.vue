@@ -2,7 +2,7 @@
   <div
     id="app"
     class="frame"
-    :style="{background: backgroundColor}"
+    :style="{background: 'linear-gradient(' + backgroundColor + ', black)'}"
   >
     <div
       class="frame texture"

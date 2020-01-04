@@ -6,19 +6,21 @@ import "./toaster";
 Vue.use(Vuex);
 
 const defaultBackgroundColor = "hsl(260, 75%, 8%)";
-let colorSaveTimeout;
+let backgroundColorTimeout;
+let playerNameTimeout;
 
 export default new Vuex.Store({
   state: {
     backgroundColor: defaultBackgroundColor,
     theme: "",
-    setupCompleted: false
+    playerName: "",
+    homeDir: ""
   },
   mutations: {
     backgroundColor(state, color) {
       state.backgroundColor = color;
-      clearTimeout(colorSaveTimeout);
-      colorSaveTimeout = setTimeout(function() {
+      clearTimeout(backgroundColorTimeout);
+      backgroundColorTimeout = setTimeout(function() {
         Vue.toasted.global.success("Farbton gespeichert");
       }, 1000);
     },
@@ -26,8 +28,16 @@ export default new Vuex.Store({
       state.theme = theme;
       Vue.toasted.global.success("Design gespeichert");
     },
-    setupCompleted(state, bool) {
-      state.setupCompleted = bool;
+    playerName(state, name) {
+      state.playerName = name;
+      clearTimeout(playerNameTimeout);
+      playerNameTimeout = setTimeout(function() {
+        Vue.toasted.global.success("Spielername gespeichert");
+      }, 1000);
+    },
+    homeDir(state, dir) {
+      state.homeDir = dir;
+      Vue.toasted.global.success("Spieleverzeichnis-Pfad gespeichert");
     }
   },
   actions: {
@@ -37,8 +47,11 @@ export default new Vuex.Store({
     setTheme(store, payload) {
       store.commit("theme", payload.theme);
     },
-    setSetupCompleted(store, payload) {
-      store.commit("setCompleted", payload.setupCompleted);
+    setPlayerName(store, payload) {
+      store.commit("playerName", payload.name);
+    },
+    setHomeDir(store, payload) {
+      store.commit("homeDir", payload.dir);
     }
   },
   plugins: [createPersistedState(), createSharedMutations()],

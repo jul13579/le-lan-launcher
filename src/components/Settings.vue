@@ -21,6 +21,16 @@
       />
     </div>
     <h2>Spielerinformationen</h2>
+    <vs-row>
+      <vs-col vs-w="3">
+        <vs-input
+          label-placeholder="Name"
+          :value="playerName"
+          @input="(input) => {$store.dispatch('setPlayerName', {name: input})}"
+          color="primary"
+        />
+      </vs-col>
+    </vs-row>
   </div>
 </template>
 
@@ -35,9 +45,9 @@ export default {
         require("@/assets/gaming.png"),
         require("@/assets/prism.png"),
         require("@/assets/maze.png")
-      ]
+      ],
     };
   },
-  computed: mapState(["backgroundColor"])
+  computed: mapState(["backgroundColor", "playerName", "homeDir"])
 };
 </script>
