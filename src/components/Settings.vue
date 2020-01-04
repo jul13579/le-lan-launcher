@@ -59,18 +59,19 @@
           @blur="(event) => {$store.dispatch('setHomeDir', {dir: event.target.value})}"
           :value="homeDir"
           :danger="homeDir == false"
+          :disabled="online"
         />
       </vs-col>
     </vs-row>
-    <template v-if="homeDir != false">
-    </template>
   </div>
 </template>
 
 <script>
+import online from "../mixins/online";
 import { mapState } from "vuex";
 
 export default {
+  mixins: [online],
   data() {
     return {
       textures: [

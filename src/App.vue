@@ -17,16 +17,16 @@
         icon="gamepad"
         :disabled="!setupCompleted"
       >
-        <games></games>
+        <games :online="online"></games>
       </vs-tab>
       <vs-tab
         label="Einstellungen"
         icon="settings"
       >
-        <settings></settings>
+        <settings :online="online"></settings>
       </vs-tab>
     </vs-tabs>
-    <statistics></statistics>
+    <statistics :online="online"></statistics>
   </div>
 </template>
 
@@ -36,7 +36,9 @@ import Games from "./components/Games";
 import Statistics from "./components/Statistics";
 import { mapState } from "vuex";
 
-let backgroundColorTimeout, playerNameTimeout;
+import AJAX from "./ajax";
+
+let backgroundColorTimeout, playerNameTimeout, intervalHandle;
 
 export default {
   name: "app",
@@ -48,15 +50,17 @@ export default {
   data() {
     return {
       activeTab: this.$store.state.homeDir != false ? 0 : 1,
+      online: false
     };
   },
   computed: {
     setupCompleted() {
-      return this.playerName != false && this.homeDir != false
+      return this.playerName != false && this.homeDir != false;
     },
     ...mapState(["backgroundColor", "theme", "playerName", "homeDir"])
   },
   beforeMount() {
+    // Setup notification handles
     this.$store.subscribe(mutation => {
       switch (mutation.type) {
         case "theme":
@@ -85,6 +89,18 @@ export default {
           break;
       }
     });
+
+    // Setup global service status poller
+    clearInterval(intervalHandle);
+    intervalHandle = setInterval(() => {
+      AJAX.Syncthing.System.ping()
+        .then(() => {
+          this.online = true;
+        })
+        .catch(() => {
+          this.online = false;
+        });
+    }, 5000);
   }
 };
 </script>
