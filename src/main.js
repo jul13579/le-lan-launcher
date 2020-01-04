@@ -1,6 +1,6 @@
 import Vue from "vue";
 import Vuesax from "vuesax";
-import Vuex from "vuex";
+import Toasted from "vue-toasted";
 
 // Components
 import App from "./App.vue";
@@ -21,30 +21,22 @@ Vue.use(Vuesax, {
     }
   }
 });
-Vue.use(Vuex);
+// Vue.use(Vuex);
+Vue.use(Toasted);
 
-const defaultBackgroundColor = "rgb(15, 5, 35)";
-
-const store = new Vuex.Store({
-  state: {
-    backgroundColor:
-      localStorage.getItem("backgroundColor") || defaultBackgroundColor,
-    theme:
-      localStorage.getItem("theme") || require('@/assets/funky-lines.png'),
-    setupCompleted: localStorage.getItem("setupCompleted") || false
+// Lets Register a Global Error Notification Toast.
+Vue.toasted.register(
+  "success",
+  message => {
+    return message;
   },
-  mutations: {
-    backgroundColor(state, color) {
-      localStorage.setItem("backgroundColor", color);
-    },
-    theme(state, theme) {
-      localStorage.setItem("theme", theme);
-    },
-    setupCompleted(state, bool) {
-      localStorage.setItem("setupCompleted", bool);
-    }
+  {
+    type: "success",
+    icon: "check"
   }
-});
+);
+
+import store from "./store";
 
 Vue.config.productionTip = false;
 

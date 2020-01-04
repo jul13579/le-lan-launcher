@@ -7,7 +7,7 @@
         v-for="(item, index) in textures"
         :key="index"
         :src="item"
-        @click.native="() => {$store.commit('theme', item)}"
+        @click.native="() => {$store.dispatch('setTheme', {theme: item})}"
       ></vs-image>
     </vs-images>
     <vs-row>
@@ -26,14 +26,15 @@
 </template>
 
 <script>
-var img1 = require('@/assets/funky-lines.png')
-var img2 = require('@/assets/gaming.png')
-var img3 = require('@/assets/prism.png')
-
 export default {
   data() {
     return {
-      textures: [img1, img2, img3]
+      textures: [
+        require("@/assets/funky-lines.png"),
+        require("@/assets/gaming.png"),
+        require("@/assets/prism.png"),
+        require("@/assets/maze.png")
+      ]
     };
   }
 };
