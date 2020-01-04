@@ -2,6 +2,8 @@
 
 import { app, protocol, BrowserWindow, Menu, dialog } from "electron";
 import { execFile } from "child_process";
+import fs from "fs";
+import XMLParser from "xml-parser";
 import {
   createProtocol,
   installVueDevtools
@@ -122,5 +124,17 @@ function startSync() {
     execFile(binPath, args, function(err, data) {
       // do nothing
     });
+
+    const pollingInterval = setInterval(() => {
+      let xml = XMLParser(
+        fs.readFileSync(path.join(store.state.homeDir, "config.xml"), "utf8")
+      );
+      let gui = xml.root.children.find(item => item.name == "gui");
+      let apikey = gui.children.find(item => item.name == "apikey").content;
+      if (apikey) {
+        store.dispatch("setApikey", { key: apikey });
+        clearInterval(pollingInterval);
+      }
+    }, 5000);
   }
 }

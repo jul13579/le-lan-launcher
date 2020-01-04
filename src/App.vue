@@ -17,9 +17,7 @@
         icon="gamepad"
         :disabled="!setupCompleted"
       >
-        <div>
-          Home
-        </div>
+        <games></games>
       </vs-tab>
       <vs-tab
         label="Einstellungen"
@@ -28,11 +26,14 @@
         <settings></settings>
       </vs-tab>
     </vs-tabs>
+    <statistics></statistics>
   </div>
 </template>
 
 <script>
 import Settings from "./components/Settings";
+import Games from "./components/Games";
+import Statistics from "./components/Statistics";
 import { mapState } from "vuex";
 
 let backgroundColorTimeout, playerNameTimeout;
@@ -40,7 +41,9 @@ let backgroundColorTimeout, playerNameTimeout;
 export default {
   name: "app",
   components: {
-    Settings
+    Settings,
+    Games,
+    Statistics
   },
   data() {
     return {

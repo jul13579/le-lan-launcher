@@ -11,7 +11,8 @@ export default new Vuex.Store({
     backgroundColor: defaultBackgroundColor,
     theme: "",
     playerName: "",
-    homeDir: ""
+    homeDir: "",
+    apikey: ""
   },
   mutations: {
     backgroundColor(state, color) {
@@ -25,6 +26,9 @@ export default new Vuex.Store({
     },
     homeDir(state, dir) {
       if (dir != false) state.homeDir = dir;
+    },
+    apikey(state, key) {
+      state.apikey = key;
     }
   },
   actions: {
@@ -39,6 +43,9 @@ export default new Vuex.Store({
     },
     setHomeDir(store, payload) {
       store.commit("homeDir", payload.dir);
+    },
+    setApikey(store, payload) {
+      store.commit("apikey", payload.key);
     }
   },
   plugins: [createPersistedState(), createSharedMutations()],
