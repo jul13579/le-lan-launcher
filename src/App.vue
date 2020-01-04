@@ -59,6 +59,6 @@ export default {
       position: absolute
       top: 0
       left: 0
-      background: url('assets/gaming-pattern-alpha.png')
+      background: url('assets/gaming-alpha.png')
       filter: opacity(0.1)
 </style>
