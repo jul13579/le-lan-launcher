@@ -1,10 +1,11 @@
 "use strict";
 
-import { app, protocol, BrowserWindow, Menu } from "electron";
+import { app, protocol, BrowserWindow, Menu, nativeImage } from "electron";
 import {
   createProtocol,
   installVueDevtools
 } from "vue-cli-plugin-electron-builder/lib";
+import path from "path";
 import store from "./store";
 const isDevelopment = process.env.NODE_ENV !== "production";
 
@@ -24,6 +25,8 @@ function createWindow() {
     height: 720,
     minWidth: 1200,
     minHeight: 720,
+    title: "[|LE|] LAN-Launcher",
+    icon: path.join(__static, 'icon.png'),
     webPreferences: {
       nodeIntegration: true
     }
