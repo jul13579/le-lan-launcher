@@ -101,7 +101,6 @@ export default {
     startService() {
       if (!this.started) {
         require("electron").ipcRenderer.send("startService");
-        this.$store.dispatch("setStarted", { started: true });
       }
     },
     stopService() {
