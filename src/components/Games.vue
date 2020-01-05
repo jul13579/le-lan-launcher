@@ -1,18 +1,33 @@
 <template>
   <div>
-
+    <template v-if="!libDirAdded">
+      <div style="height: 96vh">
+        <hollow-dots-spinner
+          :animation-duration="1000"
+          :dot-size="15"
+          :dots-num="3"
+          style="margin: 0 auto; padding-top: 40vh"
+        />
+        <h2 style="padding-top: 4vh; text-align: center">Spielebibliothek wird geladen...</h2>
+      </div>
+    </template>
   </div>
 </template>
 
 <script>
+import { mapState } from "vuex";
+import { HollowDotsSpinner } from "epic-spinners";
+
 import AJAX from "../ajax";
 import online from "../mixins/online";
-import { mapState } from "vuex";
 
 let nasDeviceInterval;
 
 export default {
   mixins: [online],
+  components: {
+    HollowDotsSpinner
+  },
   data() {
     return {
       config: {}
@@ -40,6 +55,10 @@ export default {
           deviceID: device.deviceID
         };
       });
+    },
+    libDirAdded() {
+      if (!this.config.folders) return false;
+      return this.config.folders.find(folder => folder.id == "gamelib") != null;
     },
     ...mapState(["nas"])
   },
