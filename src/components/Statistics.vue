@@ -30,7 +30,7 @@
                 size="small"
               ></vs-icon><span>Downl.:</span>
             </td>
-            <td>{{((connections.total.inBytesTotal || 0) / 1024**2).toFixed(2)}} MB/s</td>
+            <td>{{(inbps / 1024**2).toFixed(2)}} MB/s</td>
           </tr>
           <tr>
             <td>
@@ -39,7 +39,7 @@
                 size="small"
               ></vs-icon><span>Upl.:</span>
             </td>
-            <td>{{((connections.total.outBytesTotal || 0) / 1024**2).toFixed(2)}} MB/s</td>
+            <td>{{(outbps / 1024**2).toFixed(2)}} MB/s</td>
           </tr>
         </table>
       </div>
@@ -81,7 +81,14 @@ export default {
       status: {},
       connections: {
         total: {}
-      }
+      },
+      prev: {
+        time: new Date(),
+        inBytesTotal: 0,
+        outBytesTotal: 0
+      },
+      inbps: 0,
+      outbps: 0
     };
   },
   created() {
@@ -93,6 +100,19 @@ export default {
         });
         AJAX.Syncthing.System.connections().then(response => {
           this.connections = response.data;
+          let now = new Date();
+          let diffSec = (now - this.prev.time) / 1000;
+          this.inbps =
+            (this.connections.total.inBytesTotal - this.prev.inBytesTotal) /
+            diffSec;
+          this.outbps =
+            (this.connections.total.outBytesTotal - this.prev.outBytesTotal) /
+            diffSec;
+          this.prev = {
+            time: now,
+            inBytesTotal: this.connections.total.inBytesTotal,
+            outBytesTotal: this.connections.total.outBytesTotal
+          };
         });
       }
     }, 5000);
