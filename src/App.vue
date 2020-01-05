@@ -87,6 +87,12 @@ export default {
         case "homeDir":
           this.$toasted.global.success("Spieleverzeichnis-Pfad gespeichert");
           break;
+        case "started":
+          if (mutation.payload == true) {
+            this.$toasted.global.success("Service startet...");
+          } else {
+            this.$toasted.global.success("Service gestoppt");
+          }
       }
     });
 

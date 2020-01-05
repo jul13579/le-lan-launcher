@@ -62,12 +62,8 @@ app.on("window-all-closed", () => {
     AJAX.Syncthing.System.shutdown()
       .then(() => {
         this.$store.dispatch("setStarted", { started: false });
-        this.$toasted.global.success("Service gestoppt");
-      })
-      .catch(() => {
-        this.$toasted.global.error("Fehler beim Stoppen des Services");
+        app.quit();
       });
-    app.quit();
   }
 });
 
@@ -114,12 +110,8 @@ if (isDevelopment) {
         AJAX.Syncthing.System.shutdown()
           .then(() => {
             this.$store.dispatch("setStarted", { started: false });
-            this.$toasted.global.success("Service gestoppt");
-          })
-          .catch(() => {
-            this.$toasted.global.error("Fehler beim Stoppen des Services");
+            app.quit();
           });
-        app.quit();
       }
     });
   } else {
@@ -127,12 +119,8 @@ if (isDevelopment) {
       AJAX.Syncthing.System.shutdown()
         .then(() => {
           this.$store.dispatch("setStarted", { started: false });
-          this.$toasted.global.success("Service gestoppt");
-        })
-        .catch(() => {
-          this.$toasted.global.error("Fehler beim Stoppen des Services");
+          app.quit();
         });
-      app.quit();
     });
   }
 }

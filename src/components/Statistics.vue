@@ -21,7 +21,25 @@
                 size="small"
               ></vs-icon><span>CPU:</span>
             </td>
-            <td>{{status.cpuPercent.toFixed(2)}} %</td>
+            <td>{{(status.cpuPercent || 0.00).toFixed(2)}} %</td>
+          </tr>
+          <tr>
+            <td>
+              <vs-icon
+                icon="arrow_drop_down"
+                size="small"
+              ></vs-icon><span>Downl.:</span>
+            </td>
+            <td>{{((connections.total.inBytesTotal || 0) / 1024**2).toFixed(2)}} MB/s</td>
+          </tr>
+          <tr>
+            <td>
+              <vs-icon
+                icon="arrow_drop_up"
+                size="small"
+              ></vs-icon><span>Upl.:</span>
+            </td>
+            <td>{{((connections.total.outBytesTotal || 0) / 1024**2).toFixed(2)}} MB/s</td>
           </tr>
         </table>
       </div>
@@ -60,7 +78,10 @@ export default {
   },
   data() {
     return {
-      status: {}
+      status: {},
+      connections: {
+        total: {}
+      }
     };
   },
   created() {
@@ -70,15 +91,17 @@ export default {
         AJAX.Syncthing.System.status().then(response => {
           this.status = response.data;
         });
+        AJAX.Syncthing.System.connections().then(response => {
+          this.connections = response.data;
+        });
       }
-    });
+    }, 5000);
   },
   methods: {
     startService() {
       if (!this.started) {
         require("electron").ipcRenderer.send("startService");
         this.$store.dispatch("setStarted", { started: true });
-        this.$toasted.global.success("Service startet...");
       }
     },
     stopService() {
@@ -86,7 +109,6 @@ export default {
         AJAX.Syncthing.System.shutdown()
           .then(() => {
             this.$store.dispatch("setStarted", { started: false });
-            this.$toasted.global.success("Service gestoppt");
           })
           .catch(() => {
             this.$toasted.global.error("Fehler beim Stoppen des Services");
@@ -120,11 +142,13 @@ export default {
         margin-right: .4rem
         vertical-align: bottom
       tr td
-        width: 50%
+        width: auto
         &:nth-child(1)
+          max-width: 50%
           text-align: right
           padding-right: .2rem
         &:nth-child(2)
+          min-width: 50%
           text-align: left
           padding-left: .2rem
 

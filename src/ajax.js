@@ -21,6 +21,15 @@ export default {
       },
       status: () => {
         return axios.get(host + "/system/status");
+      },
+      getConfig: () => {
+        return axios.get(host + "/system/config");
+      },
+      setConfig: config => {
+        return axios.post(host + "/system/config", config);
+      },
+      connections: () => {
+        return axios.get(host + "/system/connections");
       }
     }
   }
