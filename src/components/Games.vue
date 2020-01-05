@@ -34,6 +34,7 @@ export default {
     };
   },
   created() {
+    this.addNasDevice();
     clearInterval(nasDeviceInterval);
     nasDeviceInterval = setInterval(this.addNasDevice, 5000);
   },
