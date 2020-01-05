@@ -13,6 +13,17 @@
     <template v-else-if="started && online">
       <div class="online">
         <h3>Statistiken</h3>
+        <table>
+          <tr>
+            <td>
+              <vs-icon
+                icon="desktop_windows"
+                size="small"
+              ></vs-icon><span>CPU:</span>
+            </td>
+            <td>{{status.cpuPercent.toFixed(2)}} %</td>
+          </tr>
+        </table>
       </div>
     </template>
     <div class="controls">
@@ -40,10 +51,27 @@ import { BreedingRhombusSpinner } from "epic-spinners";
 import AJAX from "../ajax";
 import online from "../mixins/online";
 
+let statisticsInterval;
+
 export default {
   mixins: [online],
   components: {
     BreedingRhombusSpinner
+  },
+  data() {
+    return {
+      status: {}
+    };
+  },
+  created() {
+    clearInterval(statisticsInterval);
+    statisticsInterval = setInterval(() => {
+      if (online) {
+        AJAX.Syncthing.System.status().then(response => {
+          this.status = response.data;
+        });
+      }
+    });
   },
   methods: {
     startService() {
@@ -83,6 +111,23 @@ export default {
         position: relative
 .online
     text-align: center
+    table
+      width: 100%
+      .vs-icon
+        height: 1rem
+        width: 1rem
+        font-size: 1rem
+        margin-right: .4rem
+        vertical-align: bottom
+      tr td
+        width: 50%
+        &:nth-child(1)
+          text-align: right
+          padding-right: .2rem
+        &:nth-child(2)
+          text-align: left
+          padding-left: .2rem
+
 .controls
     position: absolute
     bottom: 0px
