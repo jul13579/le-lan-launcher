@@ -17,10 +17,7 @@
         icon="gamepad"
         :disabled="!setupCompleted"
       >
-        <games
-          :online="online"
-          :nasId="nasId"
-        ></games>
+        <games :online="online"></games>
       </vs-tab>
       <vs-tab
         label="Einstellungen"
@@ -52,18 +49,16 @@ export default {
   },
   data() {
     return {
-      activeTab: this.setupCompleted ? 0 : 1,
+      activeTab: this.setupCompletedCallback() != false ? 0 : 1,
       online: false,
       nasId: ""
     };
   },
   computed: {
     setupCompleted() {
-      return (
-        this.playerName != false && this.homeDir != false && this.nasIp != false
-      );
+      return this.setupCompletedCallback() != false;
     },
-    ...mapState(["backgroundColor", "theme", "playerName", "homeDir", "nasIp"])
+    ...mapState(["backgroundColor", "theme", "playerName", "homeDir", "nas"])
   },
   beforeMount() {
     // Setup notification handles
@@ -89,7 +84,11 @@ export default {
           break;
         case "nasIp":
           this.$toasted.global.success("NAS IP-Adresse gespeichert");
-          this.getNasId();
+          AJAX.Syncthing.System.getDiscovery().then(response => {
+            this.$store.dispatch("setNasId", {
+              id: Object.keys(response.data)[0]
+            });
+          });
           break;
         case "started":
           if (mutation.payload == true) {
@@ -111,15 +110,12 @@ export default {
           this.online = false;
         });
     }, 5000);
-
-    // Initialize NAS ID
-    this.getNasId()
   },
   methods: {
-    getNasId() {
-      AJAX.Syncthing.System.getDiscovery().then(response => {
-        this.nasId = Object.keys(response.data)[0];
-      });
+    setupCompletedCallback() {
+      return (
+        this.playerName != false && this.homeDir != false && this.nasIp != false
+      );
     }
   }
 };

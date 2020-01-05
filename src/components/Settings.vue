@@ -18,7 +18,7 @@
     <vs-alert
       color="danger"
       title="NAS IP-Adresse nicht gesetzt"
-      v-if="nasIp == false"
+      v-if="nas.ip == false"
     >
       Bevor du auf die Spielebibliothek zugreifen kannst musst du die IP-Adresse des NAS angeben!
     </vs-alert>
@@ -72,9 +72,9 @@
       <vs-col vs-w="3">
         <vs-input
           label-placeholder="NAS IP-Adresse"
-          :value="nasIp"
+          :value="nas.ip"
           @blur="(event) => {$store.dispatch('setNasIp', {ip: event.target.value})}"
-          :danger="nasIp == false"
+          :danger="nas.ip == false"
         />
       </vs-col>
     </vs-row>
@@ -97,7 +97,7 @@ export default {
       ]
     };
   },
-  computed: mapState(["backgroundColor", "playerName", "homeDir", "nasIp", "started"]),
+  computed: mapState(["backgroundColor", "playerName", "homeDir", "nas", "started"]),
   methods: {
     openFolderChooser() {
       require("electron")
