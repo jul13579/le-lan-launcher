@@ -13,7 +13,8 @@ export default new Vuex.Store({
     playerName: "",
     homeDir: "",
     apikey: "",
-    started: false
+    started: false,
+    nasIp: ""
   },
   mutations: {
     backgroundColor(state, color) {
@@ -33,6 +34,9 @@ export default new Vuex.Store({
     },
     started(state, bool) {
       state.started = bool;
+    },
+    nasIp(state, ip) {
+      state.nasIp = ip;
     }
   },
   actions: {
@@ -53,6 +57,9 @@ export default new Vuex.Store({
     },
     setStarted(store, payload) {
       store.commit("started", payload.started);
+    },
+    setNasIp(store, payload) {
+      store.commit("nasIp", payload.ip);
     }
   },
   plugins: [createPersistedState(), createSharedMutations()],

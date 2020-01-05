@@ -17,7 +17,10 @@
         icon="gamepad"
         :disabled="!setupCompleted"
       >
-        <games :online="online"></games>
+        <games
+          :online="online"
+          :nasId="nasId"
+        ></games>
       </vs-tab>
       <vs-tab
         label="Einstellungen"
@@ -38,7 +41,7 @@ import { mapState } from "vuex";
 
 import AJAX from "./ajax";
 
-let backgroundColorTimeout, playerNameTimeout, intervalHandle;
+let backgroundColorTimeout, intervalHandle;
 
 export default {
   name: "app",
@@ -49,15 +52,18 @@ export default {
   },
   data() {
     return {
-      activeTab: this.$store.state.homeDir != false ? 0 : 1,
-      online: false
+      activeTab: this.setupCompleted ? 0 : 1,
+      online: false,
+      nasId: ""
     };
   },
   computed: {
     setupCompleted() {
-      return this.playerName != false && this.homeDir != false;
+      return (
+        this.playerName != false && this.homeDir != false && this.nasIp != false
+      );
     },
-    ...mapState(["backgroundColor", "theme", "playerName", "homeDir"])
+    ...mapState(["backgroundColor", "theme", "playerName", "homeDir", "nasIp"])
   },
   beforeMount() {
     // Setup notification handles
@@ -76,16 +82,14 @@ export default {
           );
           break;
         case "playerName":
-          clearTimeout(playerNameTimeout);
-          playerNameTimeout = setTimeout(
-            function() {
-              this.$toasted.global.success("Spielername gespeichert");
-            }.bind(this),
-            1000
-          );
+          this.$toasted.global.success("Spielername gespeichert");
           break;
         case "homeDir":
           this.$toasted.global.success("Spieleverzeichnis-Pfad gespeichert");
+          break;
+        case "nasIp":
+          this.$toasted.global.success("NAS IP-Adresse gespeichert");
+          this.getNasId();
           break;
         case "started":
           if (mutation.payload == true) {
@@ -107,6 +111,16 @@ export default {
           this.online = false;
         });
     }, 5000);
+
+    // Initialize NAS ID
+    this.getNasId()
+  },
+  methods: {
+    getNasId() {
+      AJAX.Syncthing.System.getDiscovery().then(response => {
+        this.nasId = Object.keys(response.data)[0];
+      });
+    }
   }
 };
 </script>

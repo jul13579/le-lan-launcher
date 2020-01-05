@@ -30,6 +30,9 @@ export default {
       },
       connections: () => {
         return axios.get(host + "/system/connections");
+      },
+      getDiscovery: () => {
+        return axios.get(host + "/system/discovery");
       }
     }
   }

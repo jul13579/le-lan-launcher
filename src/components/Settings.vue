@@ -15,6 +15,13 @@
     >
       Bevor du auf die Spielebibliothek zugreifen kannst musst du das Spieleverzeichnis setzen!
     </vs-alert>
+    <vs-alert
+      color="danger"
+      title="NAS IP-Adresse nicht gesetzt"
+      v-if="nasIp == false"
+    >
+      Bevor du auf die Spielebibliothek zugreifen kannst musst du die IP-Adresse des NAS angeben!
+    </vs-alert>
     <h2>Design</h2>
     <vs-images>
       <vs-image
@@ -45,13 +52,13 @@
         <vs-input
           label-placeholder="Spielername"
           :value="playerName"
-          @input="(input) => {$store.dispatch('setPlayerName', {name: input})}"
+          @blur="(input) => {$store.dispatch('setPlayerName', {name: event.target.value})}"
           :danger="playerName == false"
         />
       </vs-col>
       <vs-col
-        vs-w="8"
-        vs-offset="1"
+        vs-w="6"
+        style="padding: 0 .2rem"
       >
         <vs-input
           label-placeholder="Spieleverzeichnis"
@@ -59,7 +66,15 @@
           @blur="(event) => {$store.dispatch('setHomeDir', {dir: event.target.value})}"
           :value="homeDir"
           :danger="homeDir == false"
-          :disabled="online"
+          :disabled="started || online"
+        />
+      </vs-col>
+      <vs-col vs-w="3">
+        <vs-input
+          label-placeholder="NAS IP-Adresse"
+          :value="nasIp"
+          @blur="(event) => {$store.dispatch('setNasIp', {ip: event.target.value})}"
+          :danger="nasIp == false"
         />
       </vs-col>
     </vs-row>
@@ -82,7 +97,7 @@ export default {
       ]
     };
   },
-  computed: mapState(["backgroundColor", "playerName", "homeDir"]),
+  computed: mapState(["backgroundColor", "playerName", "homeDir", "nasIp", "started"]),
   methods: {
     openFolderChooser() {
       require("electron")
