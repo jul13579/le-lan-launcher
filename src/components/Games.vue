@@ -34,6 +34,13 @@ export default {
         AJAX.System.Syncthing.setConfig(this.config);
       }
     },
+    devices() {
+      return this.config.devices.map(device => {
+        return {
+          deviceID: device.deviceID
+        };
+      });
+    },
     ...mapState(["nas"])
   },
   watch: {
@@ -66,43 +73,38 @@ export default {
           this.nasDevice.pendingFolders.length > 0 &&
           this.config.folders.length == 0
         ) {
-          this.config.folders.push({
-            type: "receiveonly",
-            rescanIntervalS: 3600,
-            fsWatcherDelayS: 10,
-            fsWatcherEnabled: true,
-            minDiskFree: { value: 1, unit: "%" },
-            maxConflicts: 10,
-            fsync: true,
-            order: "random",
-            fileVersioningSelector: "none",
-            trashcanClean: 0,
-            simpleKeep: 5,
-            staggeredMaxAge: 365,
-            staggeredCleanInterval: 3600,
-            staggeredVersionsPath: "",
-            externalCommand: "",
-            autoNormalize: true,
-            path: this.$store.state.homeDir + "/Bibliothek",
-            id: "gamelib",
-            label: "Bibliothek",
-            viewFlags: { importFromOtherDevice: true }
-            // devices: [
-            //   {
-            //     deviceID:
-            //       "ACZ6RZG-BXTPNX4-KMK3CB7-F7DWWCG-THBQTN2-TUXG2OD-R76BSHQ-NQDLNAL"
-            //   },
-            //   {
-            //     deviceID:
-            //       "IMHH2OP-ZDC3AOD-766RJPT-BXAAZ76-M7RX6FR-G3MDF4U-NBXKHVC-ZSFA3AM"
-            //   }
-            // ]
-          });
+          this.config.folders.push(this.getDeviceObj("gamelib", "Bibliothek"));
+          AJAX.Syncthing.System.setConfig(this.config);
         }
       });
     },
     nasDeviceFilter(device) {
       return device.deviceID == this.nas.id;
+    },
+    getDeviceObj(id, label) {
+      return {
+        type: "receiveonly",
+        rescanIntervalS: 3600,
+        fsWatcherDelayS: 10,
+        fsWatcherEnabled: true,
+        minDiskFree: { value: 1, unit: "%" },
+        maxConflicts: 10,
+        fsync: true,
+        order: "random",
+        fileVersioningSelector: "none",
+        trashcanClean: 0,
+        simpleKeep: 5,
+        staggeredMaxAge: 365,
+        staggeredCleanInterval: 3600,
+        staggeredVersionsPath: "",
+        externalCommand: "",
+        autoNormalize: true,
+        path: this.$store.state.homeDir + "/" + label,
+        id: id,
+        label: label,
+        viewFlags: { importFromOtherDevice: true },
+        devices: this.devices
+      };
     }
   }
 };
