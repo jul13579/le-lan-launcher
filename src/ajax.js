@@ -36,6 +36,12 @@ export default {
       },
       getDiscovery: () => {
         return axios.get(host + "/system/discovery");
+      },
+      initialEvent: () => {
+        return axios.get(host + "/system/events?limit=1");
+      },
+      events: index => {
+        return axios.get(host + "/system/events?since=" + index);
       }
     }
   }

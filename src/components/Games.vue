@@ -18,6 +18,10 @@
         :key="index"
         :value="item"
         :homeDir="homeDir"
+        @download="downloadGame(item)"
+        :subscribed="gameSubscribed(item)"
+        @pause="pauseGame(item)"
+        :status="getGameFolder(item)"
       />
     </template>
   </div>
@@ -109,7 +113,7 @@ export default {
           this.nasDevice.pendingFolders.length > 0 &&
           this.config.folders.length == 0
         ) {
-          this.config.folders.push(this.getDeviceObj("gamelib", "Bibliothek"));
+          this.config.folders.push(this.getFolderObj("gamelib", "Bibliothek"));
           AJAX.Syncthing.System.setConfig(this.config);
         }
       });
@@ -117,7 +121,7 @@ export default {
     nasDeviceFilter(device) {
       return device.deviceID == this.nas.id;
     },
-    getDeviceObj(id, label) {
+    getFolderObj(id, label) {
       return {
         type: "receiveonly",
         rescanIntervalS: 3600,
@@ -167,6 +171,27 @@ export default {
           return 1;
         }
       });
+    },
+    downloadGame(game) {
+      this.config.folders.push(this.getFolderObj(game.id, game.title));
+      AJAX.Syncthing.System.setConfig(this.config).then(() => {
+        this.$toasted.global.success("Download gestartet: " + game.title);
+      });
+    },
+    getGameFolder(game) {
+      return this.config.folders.find(folder => folder.id == game.id);
+    },
+    getGameFolderIndex(game) {
+      return this.config.folders.indexOf(this.getGameFolder(game));
+    },
+    pauseGame(game) {
+      this.config.folders[this.getGameFolderIndex(game)].paused = true;
+      AJAX.Syncthing.System.setConfig(this.config).then(() => {
+        this.$toasted.global.success("Download pausiert: " + game.title);
+      });
+    },
+    gameSubscribed(game) {
+      return this.getGameFolder(game) != null;
     }
   }
 };

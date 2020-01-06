@@ -21,10 +21,46 @@
       >
         <ul>
           <li
+            @click="$emit('download')"
+            v-if="!subscribed"
+          >
+            <vs-icon
+              icon="cloud_download"
+              size="small"
+            ></vs-icon>Herunterladen
+          </li>
+          <!-- <li
             v-for="(item, index) in options"
             :key="index"
           >
             <vs-icon :icon="item.icon" size="small"></vs-icon>{{item.text}}
+          </li> -->
+          <li
+            @click="$emit('pause')"
+            v-if="subscribed && !status.paused"
+          >
+            <vs-icon
+              icon="pause"
+              size="small"
+            ></vs-icon>Pause
+          </li>
+          <li
+            @click="$emit('resume')"
+            v-if="subscribed && status.paused"
+          >
+            <vs-icon
+              icon="resume"
+              size="small"
+            ></vs-icon>Fortsetzen
+          </li>
+          <li
+            @click="$emit('delete')"
+            v-if="subscribed"
+          >
+            <vs-icon
+              icon="delete"
+              size="small"
+            ></vs-icon>Löschen
           </li>
         </ul>
       </div>
@@ -39,7 +75,9 @@ const coverWidth = 150;
 export default {
   props: {
     value: Object,
-    homeDir: String
+    homeDir: String,
+    subscribed: Boolean,
+    status: Object,
   },
   data() {
     return {
@@ -63,14 +101,6 @@ export default {
       return {
         "--options-width": optionsWidth + "px"
       };
-    },
-    options() {
-      return [
-        {
-          icon: "cloud_download",
-          text: "Herunterladen"
-        }
-      ];
     }
   },
   mounted() {
