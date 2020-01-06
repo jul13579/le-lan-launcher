@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="container">
     <template v-if="!libExisting">
       <div style="height: calc(100vh - 40px)">
         <hollow-dots-spinner
@@ -9,6 +9,18 @@
           style="margin: 0 auto; padding-top: 40vh"
         />
         <h2 style="padding-top: 4vh; text-align: center">Spielebibliothek wird geladen...</h2>
+      </div>
+    </template>
+    <template v-else>
+      <div
+        class="gameEntry"
+        v-for="(item, index) in lib"
+        :key="index"
+      >
+        <img
+          :src="'file://' + homeDir + '/Bibliothek/' + item.cover"
+          alt=""
+        >
       </div>
     </template>
   </div>
@@ -132,6 +144,9 @@ export default {
     },
     setLibWatcher() {
       this.libExisting = fs.existsSync(this.libConfigPath);
+      if (this.libExisting) {
+        this.lib = JSON.parse(fs.readFileSync(this.libConfigPath));
+      }
       fs.watchFile(this.libConfigPath, curr => {
         this.libExisting = curr.size > 0;
         if (curr.size > 0) {
@@ -142,3 +157,13 @@ export default {
   }
 };
 </script>
+
+<style lang="sass">
+  .gameEntry
+    display: inline-block
+    width: 150px
+    margin: 10px
+    img
+      width: 100%
+      height: auto
+</style>

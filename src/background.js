@@ -32,7 +32,8 @@ function createWindow() {
     title: "[|LE|] LAN-Launcher",
     icon: path.join(__static, "./icon.png"),
     webPreferences: {
-      nodeIntegration: true
+      nodeIntegration: true,
+      webSecurity: false
     }
   });
 
