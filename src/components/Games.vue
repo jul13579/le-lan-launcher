@@ -14,7 +14,7 @@
     <template v-else>
       <div
         class="gameEntry"
-        v-for="(item, index) in lib"
+        v-for="(item, index) in sortedLib(lib.games)"
         :key="index"
       >
         <img
@@ -151,6 +151,19 @@ export default {
         this.libExisting = curr.size > 0;
         if (curr.size > 0) {
           this.lib = JSON.parse(fs.readFileSync(this.libConfigPath));
+        }
+      });
+    },
+    sortedLib(games) {
+      return games.sort((game1, game2) => {
+        if (game1.title == game2.title) {
+          return 0;
+        }
+        if (game1.title < game2.title) {
+          return -1;
+        }
+        if (game1.title > game2.title) {
+          return 1;
         }
       });
     }
