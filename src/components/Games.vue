@@ -12,6 +12,7 @@
       </div>
     </template>
     <template v-else>
+      <h1 style="margin-bottom: 1rem">Spielebibliothek</h1>
       <div
         class="gameEntry"
         v-for="(item, index) in sortedLib(lib.games)"
