@@ -15,7 +15,7 @@
       <h1 style="margin-bottom: 1rem">Spielebibliothek</h1>
       <div
         class="gameEntry"
-        v-for="(item, index) in sortedLib(lib.games)"
+        v-for="(item, index) in lib.games"
         :key="index"
       >
         <img
@@ -146,17 +146,18 @@ export default {
     setLibWatcher() {
       this.libExisting = fs.existsSync(this.libConfigPath);
       if (this.libExisting) {
-        this.lib = JSON.parse(fs.readFileSync(this.libConfigPath));
+        this.getLib();
       }
       fs.watchFile(this.libConfigPath, curr => {
         this.libExisting = curr.size > 0;
         if (curr.size > 0) {
-          this.lib = JSON.parse(fs.readFileSync(this.libConfigPath));
+          this.getLib();
         }
       });
     },
-    sortedLib(games) {
-      return games.sort((game1, game2) => {
+    getLib() {
+      this.lib = JSON.parse(fs.readFileSync(this.libConfigPath));
+      this.lib.games.sort((game1, game2) => {
         if (game1.title == game2.title) {
           return 0;
         }
