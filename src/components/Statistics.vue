@@ -26,6 +26,26 @@
           <tr>
             <td>
               <vs-icon
+                icon="arrow_drop_up"
+                size="small"
+              ></vs-icon><span>NAS:</span>
+            </td>
+            <td>
+              <vs-icon
+                v-if="nasConnected"
+                icon="cloud_done"
+                size="small"
+              ></vs-icon>
+              <vs-icon
+                v-else
+                icon="cloud_off"
+                size="small"
+              ></vs-icon>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <vs-icon
                 icon="arrow_drop_down"
                 size="small"
               ></vs-icon><span>Downl.:</span>
@@ -64,6 +84,7 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
 import { BreedingRhombusSpinner } from "epic-spinners";
 
 import AJAX from "../ajax";
@@ -80,6 +101,7 @@ export default {
     return {
       status: {},
       connections: {
+        connections: {},
         total: {}
       },
       prev: {
@@ -90,6 +112,12 @@ export default {
       inbps: 0,
       outbps: 0
     };
+  },
+  computed: {
+    nasConnected() {
+      return this.connections.connections[this.nas.id].connected;
+    },
+    ...mapState(["nas"])
   },
   created() {
     clearInterval(statisticsInterval);
