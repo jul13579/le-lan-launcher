@@ -64,7 +64,7 @@ export default {
     ...mapState(["nas"])
   },
   watch: {
-    nasId() {
+    nas() {
       this.addNasDevice();
     }
   },
@@ -77,7 +77,7 @@ export default {
           !this.config.devices.find(this.nasDeviceFilter)
         ) {
           this.config.devices.push({
-            deviceID: this.nasId,
+            deviceID: this.nas.id,
             _addressesStr: "dynamic",
             compression: "metadata",
             introducer: true,
