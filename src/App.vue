@@ -49,14 +49,14 @@ export default {
   },
   data() {
     return {
-      activeTab: this.setupCompletedCallback ? 0 : 1,
+      activeTab: 1,
       online: false,
       nasId: ""
     };
   },
   computed: {
     setupCompleted() {
-      return this.playerName != false && this.homeDir != false && this.nasIp != false;
+      return this.playerName != false && this.homeDir != false && this.nas.ip != false;
     },
     ...mapState(["backgroundColor", "theme", "playerName", "homeDir", "nas"])
   },
@@ -107,6 +107,9 @@ export default {
           this.online = false;
         });
     }, 5000);
+
+    // Set initial tab
+    this.activeTab = this.setupCompleted ? 0 : 1;
   },
   methods: {
     findNas() {
