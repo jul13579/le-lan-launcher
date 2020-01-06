@@ -60,11 +60,16 @@ app.on("window-all-closed", () => {
   // On macOS it is common for applications and their menu bar
   // to stay active until the user quits explicitly with Cmd + Q
   if (process.platform !== "darwin") {
-    AJAX.Syncthing.System.shutdown()
-      .then(() => {
-        store.dispatch("setStarted", { started: false });
-        app.quit();
-      });
+    if (store.state.started) {
+      AJAX.Syncthing.System.shutdown()
+        .then(() => {
+          store.dispatch("setStarted", { started: false });
+          app.quit();
+        })
+        .catch(null);
+    } else {
+      app.quit();
+    }
   }
 });
 
@@ -102,20 +107,30 @@ if (isDevelopment) {
   if (process.platform === "win32") {
     process.on("message", data => {
       if (data === "graceful-exit") {
-        AJAX.Syncthing.System.shutdown()
-          .then(() => {
-            store.dispatch("setStarted", { started: false });
-            app.quit();
-          });
+        if (store.state.started) {
+          AJAX.Syncthing.System.shutdown()
+            .then(() => {
+              store.dispatch("setStarted", { started: false });
+              app.quit();
+            })
+            .catch(null);
+        } else {
+          app.quit();
+        }
       }
     });
   } else {
     process.on("SIGTERM", () => {
-      AJAX.Syncthing.System.shutdown()
-        .then(() => {
-          store.dispatch("setStarted", { started: false });
-          app.quit();
-        });
+      if (store.state.started) {
+        AJAX.Syncthing.System.shutdown()
+          .then(() => {
+            store.dispatch("setStarted", { started: false });
+            app.quit();
+          })
+          .catch(null);
+      } else {
+        app.quit();
+      }
     });
   }
 }
