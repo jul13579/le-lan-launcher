@@ -61,7 +61,7 @@ app.on("window-all-closed", () => {
   if (process.platform !== "darwin") {
     AJAX.Syncthing.System.shutdown()
       .then(() => {
-        this.$store.dispatch("setStarted", { started: false });
+        store.dispatch("setStarted", { started: false });
         app.quit();
       });
   }
@@ -109,7 +109,7 @@ if (isDevelopment) {
       if (data === "graceful-exit") {
         AJAX.Syncthing.System.shutdown()
           .then(() => {
-            this.$store.dispatch("setStarted", { started: false });
+            store.dispatch("setStarted", { started: false });
             app.quit();
           });
       }
@@ -118,7 +118,7 @@ if (isDevelopment) {
     process.on("SIGTERM", () => {
       AJAX.Syncthing.System.shutdown()
         .then(() => {
-          this.$store.dispatch("setStarted", { started: false });
+          store.dispatch("setStarted", { started: false });
           app.quit();
         });
     });
