@@ -13,16 +13,12 @@
     </template>
     <template v-else>
       <h1 style="margin-bottom: 1rem">Spielebibliothek</h1>
-      <div
-        class="gameEntry"
+      <game-entry
         v-for="(item, index) in lib.games"
         :key="index"
-      >
-        <img
-          :src="'file://' + homeDir + '/Bibliothek/' + item.cover"
-          alt=""
-        >
-      </div>
+        :value="item"
+        :homeDir="homeDir"
+      />
     </template>
   </div>
 </template>
@@ -35,13 +31,16 @@ import fs from "fs";
 import AJAX from "../ajax";
 import online from "../mixins/online";
 
+import GameEntry from "./GameEntry";
+
 const libJsonPath = "/Bibliothek/library.json";
 let configInterval;
 
 export default {
   mixins: [online],
   components: {
-    HollowDotsSpinner
+    HollowDotsSpinner,
+    GameEntry
   },
   data() {
     return {
@@ -172,17 +171,3 @@ export default {
   }
 };
 </script>
-
-<style lang="sass">
-  .gameEntry
-    display: inline-block
-    width: 150px
-    margin: 10px
-    cursor: pointer
-    transition: box-shadow .2s ease-in-out;
-    &:hover
-      box-shadow: 0px 0px 20px 5px white
-    img
-      width: 100%
-      height: auto
-</style>
