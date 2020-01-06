@@ -63,7 +63,7 @@
         <vs-input
           label-placeholder="Spieleverzeichnis"
           @click="openFolderChooser"
-          @blur="(event) => {$store.dispatch('setHomeDir', {dir: event.target.value})}"
+          @blur="(event) => {if (event.target.value) $store.dispatch('setHomeDir', {dir: event.target.value})}"
           :value="homeDir"
           :danger="homeDir == false"
           :disabled="started || online"
@@ -97,13 +97,21 @@ export default {
       ]
     };
   },
-  computed: mapState(["backgroundColor", "playerName", "homeDir", "nas", "started"]),
+  computed: mapState([
+    "backgroundColor",
+    "playerName",
+    "homeDir",
+    "nas",
+    "started"
+  ]),
   methods: {
     openFolderChooser() {
       require("electron")
-        .remote.dialog.showOpenDialog()
+        .remote.dialog.showOpenDialog({ properties: ["openDirectory"] })
         .then(result => {
-          this.$store.dispatch("setHomeDir", { dir: result.filePaths[0] });
+          console.log(result.canceled);
+          if (!result.canceled)
+            this.$store.dispatch("setHomeDir", { dir: result.filePaths[0] });
         });
     }
   }
