@@ -21,10 +21,9 @@ Vue.use(Vuesax, {
     }
   }
 });
-
 Vue.use(Toasted, {
-    position: 'bottom-center',
-    duration: 5000
+  position: "bottom-center",
+  duration: 5000
 });
 
 // Lets Register a Global Error Notification Toast.
@@ -48,7 +47,6 @@ Vue.toasted.register(
     icon: "error_outline"
   }
 );
-
 
 import store from "./store";
 
