@@ -1,6 +1,6 @@
 <template>
   <div>
-    <template v-if="!libDirAdded">
+    <template v-if="!libExisting">
       <div style="height: calc(100vh - 40px)">
         <hollow-dots-spinner
           :animation-duration="1000"
@@ -17,11 +17,13 @@
 <script>
 import { mapState } from "vuex";
 import { HollowDotsSpinner } from "epic-spinners";
+import fs from "fs";
 
 import AJAX from "../ajax";
 import online from "../mixins/online";
 
-let nasDeviceInterval;
+const libJsonPath = "/Bibliothek/library.json";
+let configInterval;
 
 export default {
   mixins: [online],
@@ -30,13 +32,16 @@ export default {
   },
   data() {
     return {
-      config: {}
+      config: {},
+      lib: {},
+      libExisting: false
     };
   },
   created() {
-    this.addNasDevice();
-    clearInterval(nasDeviceInterval);
-    nasDeviceInterval = setInterval(this.addNasDevice, 5000);
+    this.getConfig();
+    clearInterval(configInterval);
+    configInterval = setInterval(this.getConfig, 5000);
+    this.setLibWatcher();
   },
   computed: {
     nasDevice: {
@@ -57,19 +62,18 @@ export default {
         };
       });
     },
-    libDirAdded() {
-      if (!this.config.folders) return false;
-      return this.config.folders.find(folder => folder.id == "gamelib") != null;
+    libConfigPath() {
+      return this.homeDir + libJsonPath;
     },
-    ...mapState(["nas"])
+    ...mapState(["nas", "homeDir"])
   },
   watch: {
     nas() {
-      this.addNasDevice();
+      this.getConfig();
     }
   },
   methods: {
-    addNasDevice() {
+    getConfig() {
       AJAX.Syncthing.System.getConfig().then(response => {
         this.config = response.data;
         if (
@@ -125,6 +129,15 @@ export default {
         viewFlags: { importFromOtherDevice: true },
         devices: this.devices
       };
+    },
+    setLibWatcher() {
+      this.libExisting = fs.existsSync(this.libConfigPath);
+      fs.watchFile(this.libConfigPath, curr => {
+        this.libExisting = curr.size > 0;
+        if (curr.size > 0) {
+          this.lib = JSON.parse(fs.readFileSync(this.libConfigPath));
+        }
+      });
     }
   }
 };

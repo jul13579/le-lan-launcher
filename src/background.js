@@ -93,12 +93,6 @@ app.on("ready", async () => {
     }
   }
   createWindow();
-
-  store.subscribe((mutation, payload) => {
-    if (mutation.type == "homeDir") {
-      startService();
-    }
-  });
   startService();
 });
 

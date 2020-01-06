@@ -66,7 +66,7 @@
     </template>
     <div class="controls">
       <vs-icon
-        :class="{'enabled' : !started}"
+        :class="{'enabled' : !started && homeDir}"
         icon="play_arrow"
         size="medium"
         color="success"
@@ -124,7 +124,7 @@ export default {
     nasConnected() {
       return (this.connections.connections[this.nas.id] || {}).connected;
     },
-    ...mapState(["nas"])
+    ...mapState(["nas", "homeDir"])
   },
   created() {
     clearInterval(statisticsInterval);

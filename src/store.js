@@ -30,7 +30,13 @@ export default new Vuex.Store({
       state.playerName = name;
     },
     homeDir(state, dir) {
-      if (dir != false) state.homeDir = dir;
+      if (dir != false) {
+        let setDir = dir;
+        if (setDir.endsWith("/")) {
+          setDir = setDir.substr(0, setDir.length - 1);
+        }
+        state.homeDir = setDir;
+      }
     },
     apikey(state, key) {
       state.apikey = key;
@@ -43,7 +49,7 @@ export default new Vuex.Store({
     },
     nasId(state, id) {
       state.nas.id = id;
-    },
+    }
   },
   actions: {
     setBackgroundColor(store, payload) {
