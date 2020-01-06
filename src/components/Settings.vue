@@ -52,7 +52,7 @@
         <vs-input
           label-placeholder="Spielername"
           :value="playerName"
-          @blur="(input) => {$store.dispatch('setPlayerName', {name: event.target.value})}"
+          @blur="(event) => {$store.dispatch('setPlayerName', {name: event.target.value})}"
           :danger="playerName == false"
         />
       </vs-col>

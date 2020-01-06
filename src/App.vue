@@ -49,14 +49,14 @@ export default {
   },
   data() {
     return {
-      activeTab: this.setupCompletedCallback() != false ? 0 : 1,
+      activeTab: this.setupCompletedCallback ? 0 : 1,
       online: false,
       nasId: ""
     };
   },
   computed: {
     setupCompleted() {
-      return this.setupCompletedCallback() != false;
+      return this.playerName != false && this.homeDir != false && this.nasIp != false;
     },
     ...mapState(["backgroundColor", "theme", "playerName", "homeDir", "nas"])
   },
@@ -108,11 +108,6 @@ export default {
     }, 5000);
   },
   methods: {
-    setupCompletedCallback() {
-      return (
-        this.playerName != false && this.homeDir != false && this.nasIp != false
-      );
-    },
     findNas() {
       AJAX.Syncthing.System.getDiscovery().then(response => {
         for (var hostId in response.data) {

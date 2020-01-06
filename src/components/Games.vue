@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <template v-if="!libExisting">
-      <div style="height: calc(100vh - 40px)">
+      <div style="height: calc(100vh - 70px)">
         <hollow-dots-spinner
           :animation-duration="1000"
           :dot-size="15"
