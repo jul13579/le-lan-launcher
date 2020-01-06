@@ -38,7 +38,7 @@ import { mapState } from "vuex";
 
 import AJAX from "./ajax";
 
-let backgroundColorTimeout, intervalHandle;
+let backgroundColorTimeout, pingIntervalHandle, findIntervalHandle;
 
 export default {
   name: "app",
@@ -84,11 +84,7 @@ export default {
           break;
         case "nasIp":
           this.$toasted.global.success("NAS IP-Adresse gespeichert");
-          AJAX.Syncthing.System.getDiscovery().then(response => {
-            this.$store.dispatch("setNasId", {
-              id: Object.keys(response.data)[0]
-            });
-          });
+          findIntervalHandle = setInterval(this.findNas, 5000);
           break;
         case "started":
           if (mutation.payload == true) {
@@ -100,8 +96,8 @@ export default {
     });
 
     // Setup global service status poller
-    clearInterval(intervalHandle);
-    intervalHandle = setInterval(() => {
+    clearInterval(pingIntervalHandle);
+    pingIntervalHandle = setInterval(() => {
       AJAX.Syncthing.System.ping()
         .then(() => {
           this.online = true;
@@ -116,6 +112,22 @@ export default {
       return (
         this.playerName != false && this.homeDir != false && this.nasIp != false
       );
+    },
+    findNas() {
+      AJAX.Syncthing.System.getDiscovery().then(response => {
+        for (var hostId in response.data) {
+          let addresses = response.data[hostId].addresses;
+          for (var address of addresses) {
+            if (address.includes(this.nas.ip)) {
+              this.$store.dispatch("setNasId", {
+                id: hostId
+              });
+              clearInterval(findIntervalHandle);
+              break;
+            }
+          }
+        }
+      });
     }
   }
 };

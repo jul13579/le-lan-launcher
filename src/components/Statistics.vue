@@ -26,7 +26,7 @@
           <tr>
             <td>
               <vs-icon
-                icon="arrow_drop_up"
+                icon="cloud"
                 size="small"
               ></vs-icon><span>NAS:</span>
             </td>
@@ -115,7 +115,7 @@ export default {
   },
   computed: {
     nasConnected() {
-      return this.connections.connections[this.nas.id].connected;
+      return (this.connections.connections[this.nas.id] || {}).connected;
     },
     ...mapState(["nas"])
   },
