@@ -66,18 +66,25 @@
     </template>
     <div class="controls">
       <vs-icon
+        :class="{'enabled' : !started}"
         icon="play_arrow"
         size="medium"
         color="success"
         @click="startService"
-        :style="{filter: !started ? 'opacity(1)' : 'opacity(.2)'}"
       ></vs-icon>
       <vs-icon
+        :class="{'enabled' : started}"
+        icon="autorenew"
+        size="medium"
+        color="warning"
+        @click="restartService"
+      ></vs-icon>
+      <vs-icon
+        :class="{'enabled' : started}"
         icon="stop"
         size="medium"
         color="danger"
         @click="stopService"
-        :style="{filter: started ? 'opacity(1)' : 'opacity(.2)'}"
       ></vs-icon>
     </div>
   </div>
@@ -151,6 +158,17 @@ export default {
         require("electron").ipcRenderer.send("startService");
       }
     },
+    restartService() {
+      if (this.started) {
+        AJAX.Syncthing.System.restart()
+          .then(() => {
+            this.$toasted.global.success("Service wird neu gestartet...");
+          })
+          .catch(() => {
+            this.$toasted.global.error("Fehler beim Neustarten des Services");
+          });
+      }
+    },
     stopService() {
       if (this.started) {
         AJAX.Syncthing.System.shutdown()
@@ -207,5 +225,10 @@ export default {
     height: 2rem
     text-align: center
     .vs-icon
+      font-size: 1.5rem !important
+      padding-top: .3rem
+      filter: opacity(.2)
+      &.enabled
+        filter: opacity(1)
         cursor: pointer
 </style>

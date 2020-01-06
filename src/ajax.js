@@ -19,6 +19,9 @@ export default {
       shutdown: () => {
         return axios.post(host + "/system/shutdown");
       },
+      restart: () => {
+        return axios.post(host + "/system/restart");
+      },
       status: () => {
         return axios.get(host + "/system/status");
       },
