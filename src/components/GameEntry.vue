@@ -10,15 +10,8 @@
       :src="'file://' + homeDir + '/Bibliothek/' + value.cover"
       alt=""
     >
-    <div
-      :class="['gameOptions', optionsPosition, showOptions]"
-      :style="optionsWidth"
-      @mouseenter="showOptions = 'hidden'"
-    >
-      <div
-        @mouseenter="showOptions = 'visible'"
-        @mouseleave="showOptions = 'hidden'"
-      >
+    <div :class="['gameOptionsContainer', showOptions]">
+      <div ref="gameOptions">
         <ul>
           <template v-if="!subscribed">
             <li @click="$emit('download')">
@@ -47,9 +40,7 @@
                 size="small"
               ></vs-icon>Fortsetzen
             </li>
-            <li
-              @click="$emit('browse')"
-            >
+            <li @click="$emit('browse')">
               <vs-icon
                 icon="folder_open"
                 size="small"
@@ -75,8 +66,7 @@
 </template>
 
 <script>
-const optionsWidth = 200;
-const coverWidth = 150;
+const coverWidth = 170;
 
 export default {
   props: {
@@ -86,38 +76,18 @@ export default {
   },
   data() {
     return {
-      bodyWidth: 0,
-      coverX: 0,
       showOptions: "hidden"
     };
   },
   computed: {
-    optionsPosition() {
-      return this.coverX + coverWidth + optionsWidth < this.bodyWidth
-        ? "right"
-        : "left";
-    },
     coverWidth() {
       return {
         "--cover-width": coverWidth + "px"
       };
     },
-    optionsWidth() {
-      return {
-        "--options-width": optionsWidth + "px"
-      };
-    },
     subscribed() {
       return this.status != null;
     }
-  },
-  mounted() {
-    this.bodyWidth = window.innerWidth;
-    this.coverX = this.$refs.coverFace.getBoundingClientRect().x;
-    window.addEventListener("resize", () => {
-      this.bodyWidth = window.innerWidth;
-      this.coverX = this.$refs.coverFace.getBoundingClientRect().x;
-    });
   }
 };
 </script>
@@ -130,31 +100,26 @@ export default {
     margin: 10px
     cursor: pointer
     transition: box-shadow .2s ease-in-out;
+    overflow: hidden;
     &:hover
       box-shadow: 0px 0px 20px 5px white
     img
       width: 100%
       height: auto
 
-  .gameOptions
+  .gameOptionsContainer
     position: absolute
-    width: var(--options-width)
-    height: 0px
+    width: 100%
+    margin-top: 100%
     overflow: hidden
-    top: 0px
+    bottom: 0
     z-index: 2
-    transition: height .2s ease-in-out
-    &.left
-        left: calc(0px - var(--options-width))
-        >div
-            margin-left: 25px
-    &.right
-        right: calc(0px - var(--options-width))
-        >div
-            margin-right: 25px
+    left: 100%
+    transition: left .2s ease-in-out
     &.visible
-        height: 200px
+        left: 0%
     >div
+        position: relative
         background: rgba(0,0,0,.8)
         font-size: 1.2rem
         box-shadow: 0px 0px 20px 5px black
