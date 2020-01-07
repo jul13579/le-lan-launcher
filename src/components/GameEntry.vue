@@ -33,7 +33,7 @@
             </li>
             <li
               @click="$emit('reset')"
-              v-if="downloadFinished && status.localBytes != status.globalBytes"
+              v-if="downloadFinished && status.receiveOnlyTotalItems > 0"
             >
               <vs-icon
                 icon="restore"
