@@ -124,7 +124,10 @@ export default {
         }, 5000);
       }
     }
-  }
+  },
+  destroyed() {
+    clearInterval(statusInterval);
+  },
 };
 </script>
 

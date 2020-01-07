@@ -152,6 +152,9 @@ export default {
       }
     }, 5000);
   },
+  destroyed() {
+    clearInterval(statisticsInterval);
+  },
   methods: {
     startService() {
       if (!this.started) {

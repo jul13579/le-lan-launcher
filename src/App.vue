@@ -56,7 +56,11 @@ export default {
   },
   computed: {
     setupCompleted() {
-      return this.playerName != false && this.homeDir != false && this.nas.ip != false;
+      return (
+        this.playerName != false &&
+        this.homeDir != false &&
+        this.nas.ip != false
+      );
     },
     ...mapState(["backgroundColor", "theme", "playerName", "homeDir", "nas"])
   },
@@ -110,6 +114,10 @@ export default {
 
     // Set initial tab
     this.activeTab = this.setupCompleted ? 0 : 1;
+  },
+  destroyed() {
+    clearInterval(pingIntervalHandle);
+    clearInterval(findIntervalHandle);
   },
   methods: {
     findNas() {

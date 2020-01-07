@@ -63,6 +63,9 @@ export default {
     configInterval = setInterval(this.getConfig, 5000);
     this.setLibWatcher();
   },
+  destroyed() {
+    clearInterval(configInterval);
+  },
   computed: {
     nasDevice: {
       get() {
