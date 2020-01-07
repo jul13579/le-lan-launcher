@@ -133,5 +133,4 @@ export default {
     .vs-icon
         margin-right: .5rem
         vertical-align: bottom
-        
 </style>
