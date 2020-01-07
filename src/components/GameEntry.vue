@@ -22,9 +22,36 @@
             </li>
           </template>
           <template v-else>
+            <template v-if="downloadFinished">
+              <li @click="$emit('execute', config.path + '/' + value.executable)">
+                <vs-icon
+                  icon="play_arrow"
+                  size="small"
+                ></vs-icon>Spielen
+              </li>
+              <li
+                @click="$emit('reset')"
+                v-if="status.receiveOnlyTotalItems > 0"
+              >
+                <vs-icon
+                  icon="restore"
+                  size="small"
+                ></vs-icon>Zurücksetzen
+              </li>
+              <li
+                v-for="(item, index) in value.moreExecutables"
+                :key="index"
+                @click="$emit('execute', config.path + '/' + item.path)"
+              >
+                <vs-icon
+                  icon="more_horizontal"
+                  size="small"
+                ></vs-icon>{{item.text}}
+              </li>
+            </template>
             <li
               @click="$emit('pause')"
-              v-if="!config.paused && !downloadFinished"
+              v-if="!config.paused"
             >
               <vs-icon
                 icon="pause"
@@ -32,20 +59,11 @@
               ></vs-icon>Pause
             </li>
             <li
-              @click="$emit('reset')"
-              v-if="downloadFinished && status.receiveOnlyTotalItems > 0"
-            >
-              <vs-icon
-                icon="restore"
-                size="small"
-              ></vs-icon>Zurücksetzen
-            </li>
-            <li
               @click="$emit('resume')"
               v-if="config.paused"
             >
               <vs-icon
-                icon="play_arrow"
+                icon="double_arrow"
                 size="small"
               ></vs-icon>Fortsetzen
             </li>
@@ -62,12 +80,6 @@
               ></vs-icon>Löschen
             </li>
           </template>
-          <!-- <li
-            v-for="(item, index) in options"
-            :key="index"
-          >
-            <vs-icon :icon="item.icon" size="small"></vs-icon>{{item.text}}
-          </li> -->
         </ul>
       </div>
     </div>
@@ -118,16 +130,18 @@ export default {
       clearInterval(statusInterval);
       if (subscribed) {
         statusInterval = setInterval(() => {
-          AJAX.Syncthing.DB.folderStatus(this.config.id).then(response => {
-            this.status = response.data;
-          }).catch();
+          AJAX.Syncthing.DB.folderStatus(this.config.id)
+            .then(response => {
+              this.status = response.data;
+            })
+            .catch();
         }, 5000);
       }
     }
   },
   destroyed() {
     clearInterval(statusInterval);
-  },
+  }
 };
 </script>
 

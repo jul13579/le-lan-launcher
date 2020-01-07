@@ -25,6 +25,7 @@
         @delete="deleteGame(item)"
         @browse="browseGame(item)"
         @reset="resetGame(item)"
+        @execute="execute"
       />
     </template>
   </div>
@@ -35,6 +36,7 @@ import { mapState } from "vuex";
 import { HollowDotsSpinner } from "epic-spinners";
 import { shell } from "electron";
 import fs from "fs-extra";
+import { spawn } from "child_process";
 
 import AJAX from "../ajax";
 import online from "../mixins/online";
@@ -100,33 +102,37 @@ export default {
   },
   methods: {
     getConfig() {
-      AJAX.Syncthing.System.getConfig().then(response => {
-        this.config = response.data;
-        if (
-          this.nas.id && // If nasId is defined (if discovery finds an ID with corresponding ip)
-          !this.config.devices.find(this.nasDeviceFilter)
-        ) {
-          this.config.devices.push({
-            deviceID: this.nas.id,
-            _addressesStr: "dynamic",
-            compression: "metadata",
-            introducer: true,
-            selectedFolders: {},
-            pendingFolders: [],
-            ignoredFolders: [],
-            addresses: ["dynamic"]
-          });
-          AJAX.Syncthing.System.setConfig(this.config).catch();
-        }
-        if (
-          this.nasDevice && // If nasDevice is defined (after it has been set by previous if)
-          this.nasDevice.pendingFolders.length > 0 &&
-          this.config.folders.length == 0
-        ) {
-          this.config.folders.push(this.getFolderObj("gamelib", "Bibliothek"));
-          AJAX.Syncthing.System.setConfig(this.config).catch();
-        }
-      }).catch();
+      AJAX.Syncthing.System.getConfig()
+        .then(response => {
+          this.config = response.data;
+          if (
+            this.nas.id && // If nasId is defined (if discovery finds an ID with corresponding ip)
+            !this.config.devices.find(this.nasDeviceFilter)
+          ) {
+            this.config.devices.push({
+              deviceID: this.nas.id,
+              _addressesStr: "dynamic",
+              compression: "metadata",
+              introducer: true,
+              selectedFolders: {},
+              pendingFolders: [],
+              ignoredFolders: [],
+              addresses: ["dynamic"]
+            });
+            AJAX.Syncthing.System.setConfig(this.config).catch();
+          }
+          if (
+            this.nasDevice && // If nasDevice is defined (after it has been set by previous if)
+            this.nasDevice.pendingFolders.length > 0 &&
+            this.config.folders.length == 0
+          ) {
+            this.config.folders.push(
+              this.getFolderObj("gamelib", "Bibliothek")
+            );
+            AJAX.Syncthing.System.setConfig(this.config).catch();
+          }
+        })
+        .catch();
     },
     nasDeviceFilter(device) {
       return device.deviceID == this.nas.id;
@@ -188,9 +194,11 @@ export default {
     },
     downloadGame(game) {
       this.config.folders.push(this.getFolderObj(game.id, game.title));
-      AJAX.Syncthing.System.setConfig(this.config).then(() => {
-        this.$toasted.global.success("Download gestartet: " + game.title);
-      }).catch();
+      AJAX.Syncthing.System.setConfig(this.config)
+        .then(() => {
+          this.$toasted.global.success("Download gestartet: " + game.title);
+        })
+        .catch();
     },
     getGameFolder(game) {
       return this.folders.find(folder => folder.id == game.id);
@@ -200,29 +208,38 @@ export default {
     },
     unPauseGame(game, pause) {
       this.config.folders[this.getGameFolderIndex(game)].paused = pause;
-      AJAX.Syncthing.System.setConfig(this.config).then(() => {
-        if (pause) {
-          this.$toasted.global.success("Download pausiert: " + game.title);
-        } else {
-          this.$toasted.global.success("Download forgesetzt: " + game.title);
-        }
-      }).catch();
+      AJAX.Syncthing.System.setConfig(this.config)
+        .then(() => {
+          if (pause) {
+            this.$toasted.global.success("Download pausiert: " + game.title);
+          } else {
+            this.$toasted.global.success("Download forgesetzt: " + game.title);
+          }
+        })
+        .catch();
     },
     deleteGame(game) {
       let gameFolder = this.getGameFolder(game);
       this.config.folders.splice(this.getGameFolderIndex(game), 1);
-      AJAX.Syncthing.System.setConfig(this.config).then(() => {
-        this.$toasted.global.success("Spiel gelöscht: " + game.title);
-      }).catch();
+      AJAX.Syncthing.System.setConfig(this.config)
+        .then(() => {
+          this.$toasted.global.success("Spiel gelöscht: " + game.title);
+        })
+        .catch();
       fs.removeSync(gameFolder.path);
     },
     browseGame(game) {
       shell.openItem(this.getGameFolder(game).path);
     },
     resetGame(game) {
-      AJAX.Syncthing.DB.revertFolder(game.id).then(() => {
-        this.$toasted.global.success("Spiel zurückgesetzt: " + game.title);
-      }).catch();
+      AJAX.Syncthing.DB.revertFolder(game.id)
+        .then(() => {
+          this.$toasted.global.success("Spiel zurückgesetzt: " + game.title);
+        })
+        .catch();
+    },
+    execute(exe) {
+      spawn(exe, [], { detached: true }); // Spawn executable detached, so it stays open if launcher is closed.
     }
   }
 };
