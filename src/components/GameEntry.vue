@@ -33,7 +33,7 @@
             </li>
             <li
               @click="$emit('reset')"
-              v-if="status.localBytes != status.globalBytes"
+              v-if="downloadFinished && status.localBytes != status.globalBytes"
             >
               <vs-icon
                 icon="restore"
@@ -74,7 +74,7 @@
     <vs-progress
       v-if="subscribed && status.state != 'idle'"
       class="downloadProgress"
-      :percent="status.inSyncBytes / status.globalBytes"
+      :percent="(status.inSyncBytes / status.globalBytes) * 100"
     ></vs-progress>
   </div>
 </template>
