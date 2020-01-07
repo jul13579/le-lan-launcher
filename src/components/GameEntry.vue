@@ -10,8 +10,8 @@
       :src="'file://' + homeDir + '/Bibliothek/' + value.cover"
       alt=""
     >
-    <div :class="['gameOptionsContainer', showOptions]">
-      <div ref="gameOptions">
+    <div :class="['gameOptions', showOptions]">
+      <div>
         <ul>
           <template v-if="!subscribed">
             <li @click="$emit('download')">
@@ -24,7 +24,7 @@
           <template v-else>
             <li
               @click="$emit('pause')"
-              v-if="!status.paused"
+              v-if="!config.paused && !downloadFinished"
             >
               <vs-icon
                 icon="pause"
@@ -32,8 +32,17 @@
               ></vs-icon>Pause
             </li>
             <li
+              @click="$emit('reset')"
+              v-if="status.localBytes != status.globalBytes"
+            >
+              <vs-icon
+                icon="restore"
+                size="small"
+              ></vs-icon>Zurücksetzen
+            </li>
+            <li
               @click="$emit('resume')"
-              v-if="status.paused"
+              v-if="config.paused"
             >
               <vs-icon
                 icon="play_arrow"
@@ -62,21 +71,30 @@
         </ul>
       </div>
     </div>
+    <vs-progress
+      v-if="subscribed && status.state != 'idle'"
+      class="downloadProgress"
+      :percent="status.inSyncBytes / status.globalBytes"
+    ></vs-progress>
   </div>
 </template>
 
 <script>
+import AJAX from "../ajax";
+
 const coverWidth = 170;
+let statusInterval;
 
 export default {
   props: {
     value: Object,
     homeDir: String,
-    status: Object
+    config: Object
   },
   data() {
     return {
-      showOptions: "hidden"
+      showOptions: "hidden",
+      status: {}
     };
   },
   computed: {
@@ -86,7 +104,25 @@ export default {
       };
     },
     subscribed() {
-      return this.status != null;
+      return this.config != null;
+    },
+    downloadFinished() {
+      if (this.status.state != "idle") {
+        return false;
+      }
+      return this.status.globalBytes == this.status.inSyncBytes;
+    }
+  },
+  watch: {
+    subscribed(subscribed) {
+      clearInterval(statusInterval);
+      if (subscribed) {
+        statusInterval = setInterval(() => {
+          AJAX.Syncthing.DB.folderStatus(this.config.id).then(response => {
+            this.status = response.data;
+          });
+        }, 5000);
+      }
     }
   }
 };
@@ -107,10 +143,11 @@ export default {
       width: 100%
       height: auto
 
-  .gameOptionsContainer
+  .gameOptions
     position: absolute
     width: 100%
     margin-top: 100%
+    padding: 5px 0px
     overflow: hidden
     bottom: 0
     z-index: 2

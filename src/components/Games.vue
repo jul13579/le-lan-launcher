@@ -18,7 +18,7 @@
         :key="index"
         :value="item"
         :homeDir="homeDir"
-        :status="getGameFolder(item)"
+        :config="getGameFolder(item)"
         @download="downloadGame(item)"
         @pause="unPauseGame(item, true)"
         @resume="unPauseGame(item, false)"
@@ -74,7 +74,7 @@ export default {
     },
     devices: {
       get() {
-        return this.config.folders || [];
+        return this.config.devices || [];
       }
     },
     folders: {
