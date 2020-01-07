@@ -33,7 +33,7 @@ function createWindow() {
     icon: path.join(__static, "./icon.png"),
     webPreferences: {
       nodeIntegration: true,
-      webSecurity: false
+      webSecurity: false // Disabled to be able to load local images
     }
   });
 
