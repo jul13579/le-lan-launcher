@@ -22,6 +22,7 @@
         @download="downloadGame(item)"
         @pause="unPauseGame(item, true)"
         @resume="unPauseGame(item, false)"
+        @delete="deleteGame(item)"
       />
     </template>
   </div>
@@ -79,7 +80,7 @@ export default {
     folders: {
       get() {
         return this.config.folders || [];
-      },
+      }
     },
     libConfigPath() {
       return this.homeDir + libJsonPath;
@@ -199,6 +200,12 @@ export default {
         } else {
           this.$toasted.global.success("Download forgesetzt: " + game.title);
         }
+      });
+    },
+    deleteGame(game) {
+      this.config.folders.splice(this.getGameFolderIndex(game), 1);
+      AJAX.Syncthing.System.setConfig(this.config).then(() => {
+        this.$toasted.global.success("Spiel gelöscht: " + game.title);
       });
     }
   }

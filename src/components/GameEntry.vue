@@ -47,6 +47,14 @@
                 size="small"
               ></vs-icon>Fortsetzen
             </li>
+            <li
+              @click="$emit('browse')"
+            >
+              <vs-icon
+                icon="folder_open"
+                size="small"
+              ></vs-icon>Durchsuchen
+            </li>
             <li @click="$emit('delete')">
               <vs-icon
                 icon="delete"
