@@ -31,7 +31,7 @@
 <script>
 import { mapState } from "vuex";
 import { HollowDotsSpinner } from "epic-spinners";
-import fs from "fs";
+import fs from "fs-extra";
 
 import AJAX from "../ajax";
 import online from "../mixins/online";
@@ -203,10 +203,12 @@ export default {
       });
     },
     deleteGame(game) {
+      let gameFolder = this.getGameFolder(game);
       this.config.folders.splice(this.getGameFolderIndex(game), 1);
       AJAX.Syncthing.System.setConfig(this.config).then(() => {
         this.$toasted.global.success("Spiel gelöscht: " + game.title);
       });
+      fs.removeSync(gameFolder.path);
     }
   }
 };
