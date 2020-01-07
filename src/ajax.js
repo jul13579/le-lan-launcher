@@ -41,6 +41,9 @@ export default {
     DB: {
       folderStatus: folder => {
         return axios.get(host + "/db/status?folder=" + folder);
+      },
+      revertFolder: folder => {
+        return axios.post(host + "/db/revert?folder=" + folder);
       }
     }
   }

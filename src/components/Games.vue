@@ -23,6 +23,8 @@
         @pause="unPauseGame(item, true)"
         @resume="unPauseGame(item, false)"
         @delete="deleteGame(item)"
+        @browse="browseGame(item)"
+        @reset="resetGame(item)"
       />
     </template>
   </div>
@@ -31,6 +33,7 @@
 <script>
 import { mapState } from "vuex";
 import { HollowDotsSpinner } from "epic-spinners";
+import { shell } from "electron";
 import fs from "fs-extra";
 
 import AJAX from "../ajax";
@@ -209,6 +212,14 @@ export default {
         this.$toasted.global.success("Spiel gelöscht: " + game.title);
       });
       fs.removeSync(gameFolder.path);
+    },
+    browseGame(game) {
+      shell.openItem(this.getGameFolder(game).path);
+    },
+    resetGame(game) {
+      AJAX.Syncthing.DB.revertFolder(game.id).then(() => {
+        this.$toasted.global.success("Spiel zurückgesetzt: " + game.title);
+      });
     }
   }
 };
