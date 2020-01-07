@@ -120,7 +120,7 @@ export default {
         statusInterval = setInterval(() => {
           AJAX.Syncthing.DB.folderStatus(this.config.id).then(response => {
             this.status = response.data;
-          });
+          }).catch();
         }, 5000);
       }
     }

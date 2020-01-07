@@ -66,7 +66,7 @@ app.on("window-all-closed", () => {
           store.dispatch("setStarted", { started: false });
           app.quit();
         })
-        .catch(null);
+        .catch();
     } else {
       app.quit();
     }
@@ -113,7 +113,7 @@ if (isDevelopment) {
               store.dispatch("setStarted", { started: false });
               app.quit();
             })
-            .catch(null);
+            .catch();
         } else {
           app.quit();
         }
@@ -127,7 +127,7 @@ if (isDevelopment) {
             store.dispatch("setStarted", { started: false });
             app.quit();
           })
-          .catch(null);
+          .catch();
       } else {
         app.quit();
       }

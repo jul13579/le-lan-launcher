@@ -75,7 +75,7 @@ export default {
         this.config.devices[
           this.config.devices.find(this.nasDeviceFilter)
         ] = nasDeviceConfig;
-        AJAX.System.Syncthing.setConfig(this.config);
+        AJAX.System.Syncthing.setConfig(this.config).catch();
       }
     },
     devices: {
@@ -116,7 +116,7 @@ export default {
             ignoredFolders: [],
             addresses: ["dynamic"]
           });
-          AJAX.Syncthing.System.setConfig(this.config);
+          AJAX.Syncthing.System.setConfig(this.config).catch();
         }
         if (
           this.nasDevice && // If nasDevice is defined (after it has been set by previous if)
@@ -124,9 +124,9 @@ export default {
           this.config.folders.length == 0
         ) {
           this.config.folders.push(this.getFolderObj("gamelib", "Bibliothek"));
-          AJAX.Syncthing.System.setConfig(this.config);
+          AJAX.Syncthing.System.setConfig(this.config).catch();
         }
-      });
+      }).catch();
     },
     nasDeviceFilter(device) {
       return device.deviceID == this.nas.id;
@@ -190,7 +190,7 @@ export default {
       this.config.folders.push(this.getFolderObj(game.id, game.title));
       AJAX.Syncthing.System.setConfig(this.config).then(() => {
         this.$toasted.global.success("Download gestartet: " + game.title);
-      });
+      }).catch();
     },
     getGameFolder(game) {
       return this.folders.find(folder => folder.id == game.id);
@@ -206,14 +206,14 @@ export default {
         } else {
           this.$toasted.global.success("Download forgesetzt: " + game.title);
         }
-      });
+      }).catch();
     },
     deleteGame(game) {
       let gameFolder = this.getGameFolder(game);
       this.config.folders.splice(this.getGameFolderIndex(game), 1);
       AJAX.Syncthing.System.setConfig(this.config).then(() => {
         this.$toasted.global.success("Spiel gelöscht: " + game.title);
-      });
+      }).catch();
       fs.removeSync(gameFolder.path);
     },
     browseGame(game) {
@@ -222,7 +222,7 @@ export default {
     resetGame(game) {
       AJAX.Syncthing.DB.revertFolder(game.id).then(() => {
         this.$toasted.global.success("Spiel zurückgesetzt: " + game.title);
-      });
+      }).catch();
     }
   }
 };

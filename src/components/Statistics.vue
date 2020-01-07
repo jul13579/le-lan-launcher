@@ -132,7 +132,7 @@ export default {
       if (online) {
         AJAX.Syncthing.System.status().then(response => {
           this.status = response.data;
-        });
+        }).catch();
         AJAX.Syncthing.System.connections().then(response => {
           this.connections = response.data;
           let now = new Date();
@@ -148,7 +148,7 @@ export default {
             inBytesTotal: this.connections.total.inBytesTotal,
             outBytesTotal: this.connections.total.outBytesTotal
           };
-        });
+        }).catch();
       }
     }, 5000);
   },
