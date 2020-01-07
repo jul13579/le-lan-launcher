@@ -18,10 +18,10 @@
         :key="index"
         :value="item"
         :homeDir="homeDir"
-        @download="downloadGame(item)"
-        :subscribed="gameSubscribed(item)"
-        @pause="pauseGame(item)"
         :status="getGameFolder(item)"
+        @download="downloadGame(item)"
+        @pause="unPauseGame(item, true)"
+        @resume="unPauseGame(item, false)"
       />
     </template>
   </div>
@@ -71,12 +71,15 @@ export default {
         AJAX.System.Syncthing.setConfig(this.config);
       }
     },
-    devices() {
-      return this.config.devices.map(device => {
-        return {
-          deviceID: device.deviceID
-        };
-      });
+    devices: {
+      get() {
+        return this.config.folders || [];
+      }
+    },
+    folders: {
+      get() {
+        return this.config.folders || [];
+      },
     },
     libConfigPath() {
       return this.homeDir + libJsonPath;
@@ -143,7 +146,11 @@ export default {
         id: id,
         label: label,
         viewFlags: { importFromOtherDevice: true },
-        devices: this.devices
+        devices: this.devices.map(device => {
+          return {
+            deviceID: device.deviceID
+          };
+        })
       };
     },
     setLibWatcher() {
@@ -179,19 +186,20 @@ export default {
       });
     },
     getGameFolder(game) {
-      return this.config.folders.find(folder => folder.id == game.id);
+      return this.folders.find(folder => folder.id == game.id);
     },
     getGameFolderIndex(game) {
-      return this.config.folders.indexOf(this.getGameFolder(game));
+      return this.folders.indexOf(this.getGameFolder(game));
     },
-    pauseGame(game) {
-      this.config.folders[this.getGameFolderIndex(game)].paused = true;
+    unPauseGame(game, pause) {
+      this.config.folders[this.getGameFolderIndex(game)].paused = pause;
       AJAX.Syncthing.System.setConfig(this.config).then(() => {
-        this.$toasted.global.success("Download pausiert: " + game.title);
+        if (pause) {
+          this.$toasted.global.success("Download pausiert: " + game.title);
+        } else {
+          this.$toasted.global.success("Download forgesetzt: " + game.title);
+        }
       });
-    },
-    gameSubscribed(game) {
-      return this.getGameFolder(game) != null;
     }
   }
 };

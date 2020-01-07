@@ -20,48 +20,46 @@
         @mouseleave="showOptions = 'hidden'"
       >
         <ul>
-          <li
-            @click="$emit('download')"
-            v-if="!subscribed"
-          >
-            <vs-icon
-              icon="cloud_download"
-              size="small"
-            ></vs-icon>Herunterladen
-          </li>
+          <template v-if="!subscribed">
+            <li @click="$emit('download')">
+              <vs-icon
+                icon="cloud_download"
+                size="small"
+              ></vs-icon>Herunterladen
+            </li>
+          </template>
+          <template v-else>
+            <li
+              @click="$emit('pause')"
+              v-if="!status.paused"
+            >
+              <vs-icon
+                icon="pause"
+                size="small"
+              ></vs-icon>Pause
+            </li>
+            <li
+              @click="$emit('resume')"
+              v-if="status.paused"
+            >
+              <vs-icon
+                icon="play_arrow"
+                size="small"
+              ></vs-icon>Fortsetzen
+            </li>
+            <li @click="$emit('delete')">
+              <vs-icon
+                icon="delete"
+                size="small"
+              ></vs-icon>Löschen
+            </li>
+          </template>
           <!-- <li
             v-for="(item, index) in options"
             :key="index"
           >
             <vs-icon :icon="item.icon" size="small"></vs-icon>{{item.text}}
           </li> -->
-          <li
-            @click="$emit('pause')"
-            v-if="subscribed && !status.paused"
-          >
-            <vs-icon
-              icon="pause"
-              size="small"
-            ></vs-icon>Pause
-          </li>
-          <li
-            @click="$emit('resume')"
-            v-if="subscribed && status.paused"
-          >
-            <vs-icon
-              icon="resume"
-              size="small"
-            ></vs-icon>Fortsetzen
-          </li>
-          <li
-            @click="$emit('delete')"
-            v-if="subscribed"
-          >
-            <vs-icon
-              icon="delete"
-              size="small"
-            ></vs-icon>Löschen
-          </li>
         </ul>
       </div>
     </div>
@@ -76,8 +74,7 @@ export default {
   props: {
     value: Object,
     homeDir: String,
-    subscribed: Boolean,
-    status: Object,
+    status: Object
   },
   data() {
     return {
@@ -101,6 +98,9 @@ export default {
       return {
         "--options-width": optionsWidth + "px"
       };
+    },
+    subscribed() {
+      return this.status != null;
     }
   },
   mounted() {
