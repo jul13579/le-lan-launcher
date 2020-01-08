@@ -137,7 +137,10 @@ if (isDevelopment) {
 
 function startService() {
   if (store.state.homeDir != false) {
-    let binPath = "./resources/syncthing";
+    let binPath = "./syncthing";
+    if (!isDevelopment) {
+      binPath = path.join("./resources", binPath);
+    }
     let args = ["-no-browser", "-home=" + store.state.homeDir];
     if (process.platform == "win32") {
       binPath += ".exe";

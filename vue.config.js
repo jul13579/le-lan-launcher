@@ -2,7 +2,7 @@ module.exports = {
   pluginOptions: {
     electronBuilder: {
       builderOptions: {
-        extraResources: ["./resources/syncthing*"]
+        extraResources: ["./syncthing*"]
       }
     }
   }
