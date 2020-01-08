@@ -89,6 +89,7 @@ export default {
         case "nasIp":
           this.$toasted.global.success("NAS IP-Adresse gespeichert");
           clearInterval(findIntervalHandle);
+          this.findNas();
           findIntervalHandle = setInterval(this.findNas, 5000);
           break;
         case "started":

@@ -106,7 +106,6 @@
 import AJAX from "../ajax";
 
 const coverWidth = 170;
-let statusInterval;
 
 export default {
   props: {
@@ -117,7 +116,8 @@ export default {
   data() {
     return {
       showOptions: "hidden",
-      status: {}
+      status: {},
+      statusInterval: null
     };
   },
   computed: {
@@ -138,11 +138,11 @@ export default {
   },
   created() {
     this.getStatus();
-    clearInterval(statusInterval);
-    statusInterval = setInterval(this.getStatus, 5000);
+    clearInterval(this.statusInterval);
+    this.statusInterval = setInterval(this.getStatus, 5000);
   },
   destroyed() {
-    clearInterval(statusInterval);
+    clearInterval(this.statusInterval);
   },
   methods: {
     getStatus() {
