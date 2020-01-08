@@ -114,6 +114,12 @@ export default {
 
     // Set initial tab
     this.activeTab = this.setupCompleted ? 0 : 1;
+
+    // Resume discovery
+    if (this.nas.id == false) {
+      clearInterval(findIntervalHandle);
+      findIntervalHandle = setInterval(this.findNas, 5000);
+    }
   },
   destroyed() {
     clearInterval(pingIntervalHandle);
@@ -121,20 +127,22 @@ export default {
   },
   methods: {
     findNas() {
-      AJAX.Syncthing.System.getDiscovery().then(response => {
-        for (var hostId in response.data) {
-          let addresses = response.data[hostId].addresses;
-          for (var address of addresses) {
-            if (address.includes(this.nas.ip)) {
-              this.$store.dispatch("setNasId", {
-                id: hostId
-              });
-              clearInterval(findIntervalHandle);
-              break;
+      AJAX.Syncthing.System.getDiscovery()
+        .then(response => {
+          for (var hostId in response.data) {
+            let addresses = response.data[hostId].addresses;
+            for (var address of addresses) {
+              if (address.includes(this.nas.ip)) {
+                this.$store.dispatch("setNasId", {
+                  id: hostId
+                });
+                clearInterval(findIntervalHandle);
+                break;
+              }
             }
           }
-        }
-      }).catch();
+        })
+        .catch();
     }
   }
 };

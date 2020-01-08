@@ -23,7 +23,10 @@
           </template>
           <template v-else>
             <template v-if="downloadFinished">
-              <li @click="$emit('execute', config.path + '/' + value.executable)">
+              <li
+                @click="$emit('execute', config.path + '/' + value.executable)"
+                v-if="status.globalBytes > 0"
+              >
                 <vs-icon
                   icon="play_arrow"
                   size="small"
