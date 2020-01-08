@@ -9,7 +9,7 @@
     <img
       :src="'file://' + homeDir + '/Bibliothek/' + value.cover"
       alt=""
-    >
+    />
     <div :class="['gameOptions', showOptions]">
       <div>
         <ul>
@@ -24,7 +24,10 @@
           <template v-else>
             <template v-if="downloadFinished">
               <li
-                @click="$emit('execute', config.path + '/' + value.executable)"
+                @click="$emit('execute', {
+                    path: config.path,
+                    exe: config.path + '/' + value.executable
+                  })"
                 v-if="status.globalBytes > 0"
               >
                 <vs-icon
@@ -44,12 +47,17 @@
               <li
                 v-for="(item, index) in value.moreExecutables"
                 :key="index"
-                @click="$emit('execute', config.path + '/' + item.path)"
+                @click="
+                  $emit('execute', {
+                    path: config.path,
+                    exe: config.path + '/' + item.path
+                  })
+                "
               >
                 <vs-icon
                   icon="more_horizontal"
                   size="small"
-                ></vs-icon>{{item.text}}
+                ></vs-icon>{{ item.text }}
               </li>
             </template>
             <li
@@ -128,66 +136,68 @@ export default {
       return this.status.globalBytes == this.status.inSyncBytes;
     }
   },
-  watch: {
-    subscribed(subscribed) {
-      clearInterval(statusInterval);
-      if (subscribed) {
-        statusInterval = setInterval(() => {
-          AJAX.Syncthing.DB.folderStatus(this.config.id)
-            .then(response => {
-              this.status = response.data;
-            })
-            .catch();
-        }, 5000);
-      }
-    }
+  created() {
+    this.getStatus();
+    clearInterval(statusInterval);
+    statusInterval = setInterval(this.getStatus, 5000);
   },
   destroyed() {
     clearInterval(statusInterval);
+  },
+  methods: {
+    getStatus() {
+      if (this.subscribed) {
+        AJAX.Syncthing.DB.folderStatus(this.config.id)
+          .then(response => {
+            this.status = response.data;
+          })
+          .catch();
+      }
+    }
   }
 };
 </script>
 
 <style lang="sass">
-  .gameEntry
-    display: inline-block
-    position: relative
-    width: var(--cover-width)
-    margin: 10px
-    cursor: pointer
-    transition: box-shadow .2s ease-in-out;
-    overflow: hidden;
-    &:hover
-      box-shadow: 0px 0px 20px 5px white
-    img
-      width: 100%
-      height: auto
-
-  .gameOptions
-    position: absolute
+.gameEntry
+  display: inline-block
+  position: relative
+  width: var(--cover-width)
+  margin: 10px
+  cursor: pointer
+  transition: box-shadow .2s ease-in-out;
+  overflow: hidden;
+  &:hover
+    box-shadow: 0px 0px 20px 5px white
+  img
     width: 100%
-    margin-top: 100%
-    padding: 5px 0px
-    overflow: hidden
-    bottom: 0
-    z-index: 2
-    left: 100%
-    transition: left .2s ease-in-out
-    &.visible
-        left: 0%
-    >div
-        position: relative
-        background: rgba(0,0,0,.8)
-        font-size: 1.2rem
-        box-shadow: 0px 0px 20px 5px black
-    ul
-        list-style: none
-    li
-        padding: 5px 5px
-        transition: padding-left .2s ease-in-out
-        &:hover
-            padding-left: .8rem
-    .vs-icon
-        margin-right: .5rem
-        vertical-align: bottom
+    height: auto
+
+.gameOptions
+  position: absolute
+  width: 100%
+  margin-top: 100%
+  padding: 5px 0px
+  overflow: hidden
+  bottom: 0
+  z-index: 2
+  left: 100%
+  transition: left .2s ease-in-out
+  &.visible
+      left: 0%
+  >div
+      position: relative
+      background: rgba(0,0,0,.8)
+      font-size: 1.2rem
+      box-shadow: 0px 0px 20px 5px black
+  ul
+      list-style: none
+  li
+      padding: 5px 5px
+      transition: padding-left .2s ease-in-out
+      &:hover
+          padding-left: .8rem
+  .vs-icon
+      margin-right: .5rem
+      vertical-align: bottom
 </style>

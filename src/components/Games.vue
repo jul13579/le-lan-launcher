@@ -239,7 +239,7 @@ export default {
         .catch();
     },
     execute(exe) {
-      spawn(exe, [], { detached: true }); // Spawn executable detached, so it stays open if launcher is closed.
+      spawn(exe, [], { cwd: 'C:\\Users\\lerry\\Documents\\LAN\\Age of Empires 2', detached: true }); // Spawn executable detached, so it stays open if launcher is closed.
     }
   }
 };
