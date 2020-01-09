@@ -20,12 +20,12 @@
         :homeDir="homeDir"
         :config="getGameFolder(item)"
         :status="folderStatus[item.id] || {}"
-        @download="downloadGame(item)"
+        @download="downloadGame"
         @pause="unPauseGame(item, true)"
         @resume="unPauseGame(item, false)"
-        @delete="deleteGame(item)"
-        @browse="browseGame(item)"
-        @reset="resetGame(item)"
+        @delete="deleteGame"
+        @browse="browseGame"
+        @reset="resetGame"
         @execute="execute"
       />
     </template>
