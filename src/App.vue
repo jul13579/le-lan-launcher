@@ -96,6 +96,7 @@ export default {
           if (mutation.payload == true) {
             this.$toasted.global.success("Service startet...");
           } else {
+            this.online = false;
             this.$toasted.global.success("Service gestoppt");
           }
       }
@@ -104,13 +105,15 @@ export default {
     // Setup global service status poller
     clearInterval(pingIntervalHandle);
     pingIntervalHandle = setInterval(() => {
-      AJAX.Syncthing.System.ping()
-        .then(() => {
-          this.online = true;
-        })
-        .catch(() => {
-          this.online = false;
-        });
+      if (!this.online) {
+        AJAX.Syncthing.System.ping()
+          .then(() => {
+            this.online = true;
+          })
+          .catch(() => {
+            this.online = false;
+          });
+      }
     }, 5000);
 
     // Set initial tab

@@ -129,7 +129,7 @@ export default {
   created() {
     clearInterval(statisticsInterval);
     statisticsInterval = setInterval(() => {
-      if (online) {
+      if (this.online) {
         AJAX.Syncthing.System.status().then(response => {
           this.status = response.data;
         }).catch();

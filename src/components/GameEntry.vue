@@ -103,21 +103,18 @@
 </template>
 
 <script>
-import AJAX from "../ajax";
-
 const coverWidth = 170;
 
 export default {
   props: {
     value: Object,
     homeDir: String,
-    config: Object
+    config: Object,
+    status: Object
   },
   data() {
     return {
-      showOptions: "hidden",
-      status: {},
-      statusInterval: null
+      showOptions: "hidden"
     };
   },
   computed: {
@@ -134,25 +131,6 @@ export default {
         return false;
       }
       return this.status.globalBytes == this.status.inSyncBytes;
-    }
-  },
-  created() {
-    this.getStatus();
-    clearInterval(this.statusInterval);
-    this.statusInterval = setInterval(this.getStatus, 5000);
-  },
-  destroyed() {
-    clearInterval(this.statusInterval);
-  },
-  methods: {
-    getStatus() {
-      if (this.subscribed) {
-        AJAX.Syncthing.DB.folderStatus(this.config.id)
-          .then(response => {
-            this.status = response.data;
-          })
-          .catch();
-      }
     }
   }
 };

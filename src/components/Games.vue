@@ -102,37 +102,39 @@ export default {
   },
   methods: {
     getConfig() {
-      AJAX.Syncthing.System.getConfig()
-        .then(response => {
-          this.config = response.data;
-          if (
-            this.nas.id && // If nasId is defined (if discovery finds an ID with corresponding ip)
-            !this.config.devices.find(this.nasDeviceFilter)
-          ) {
-            this.config.devices.push({
-              deviceID: this.nas.id,
-              _addressesStr: "dynamic",
-              compression: "metadata",
-              introducer: true,
-              selectedFolders: {},
-              pendingFolders: [],
-              ignoredFolders: [],
-              addresses: ["dynamic"]
-            });
-            AJAX.Syncthing.System.setConfig(this.config).catch();
-          }
-          if (
-            this.nasDevice && // If nasDevice is defined (after it has been set by previous if)
-            this.nasDevice.pendingFolders.length > 0 &&
-            this.config.folders.length == 0
-          ) {
-            this.config.folders.push(
-              this.getFolderObj("gamelib", "Bibliothek")
-            );
-            AJAX.Syncthing.System.setConfig(this.config).catch();
-          }
-        })
-        .catch();
+      if (this.online) {
+        AJAX.Syncthing.System.getConfig()
+          .then(response => {
+            this.config = response.data;
+            if (
+              this.nas.id && // If nasId is defined (if discovery finds an ID with corresponding ip)
+              !this.config.devices.find(this.nasDeviceFilter)
+            ) {
+              this.config.devices.push({
+                deviceID: this.nas.id,
+                _addressesStr: "dynamic",
+                compression: "metadata",
+                introducer: true,
+                selectedFolders: {},
+                pendingFolders: [],
+                ignoredFolders: [],
+                addresses: ["dynamic"]
+              });
+              AJAX.Syncthing.System.setConfig(this.config).catch();
+            }
+            if (
+              this.nasDevice && // If nasDevice is defined (after it has been set by previous if)
+              this.nasDevice.pendingFolders.length > 0 &&
+              this.config.folders.length == 0
+            ) {
+              this.config.folders.push(
+                this.getFolderObj("gamelib", "Bibliothek")
+              );
+              AJAX.Syncthing.System.setConfig(this.config).catch();
+            }
+          })
+          .catch();
+      }
     },
     nasDeviceFilter(device) {
       return device.deviceID == this.nas.id;
@@ -239,7 +241,10 @@ export default {
         .catch();
     },
     execute(exe) {
-      spawn(exe, [], { cwd: 'C:\\Users\\lerry\\Documents\\LAN\\Age of Empires 2', detached: true }); // Spawn executable detached, so it stays open if launcher is closed.
+      spawn(exe, [], {
+        cwd: "C:\\Users\\lerry\\Documents\\LAN\\Age of Empires 2",
+        detached: true
+      }); // Spawn executable detached, so it stays open if launcher is closed.
     }
   }
 };
