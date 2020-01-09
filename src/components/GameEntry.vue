@@ -154,20 +154,20 @@ export default {
 .gameOptions
   position: absolute
   width: 100%
-  margin-top: 100%
-  padding: 5px 0px
-  overflow: hidden
+  padding-top: 100%
+  overflow-x: hidden
   bottom: 0
   z-index: 2
   left: 100%
   transition: left .2s ease-in-out
-  box-shadow: 0px 0px 20px 5px black
-  background: rgba(0,0,0,.8)
   &.visible
       left: 0%
   >div
       position: relative
       font-size: 1.2rem
+      box-shadow: 0px 0px 20px 5px black
+      background: rgba(0,0,0,.8)
+      padding-bottom: 5px;
   ul
       list-style: none
   li
