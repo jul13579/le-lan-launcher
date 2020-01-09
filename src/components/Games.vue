@@ -19,6 +19,7 @@
         :value="item"
         :homeDir="homeDir"
         :config="getGameFolder(item)"
+        :status="folderStatus[item.id] || {}"
         @download="downloadGame(item)"
         @pause="unPauseGame(item, true)"
         @resume="unPauseGame(item, false)"
@@ -56,7 +57,9 @@ export default {
     return {
       config: {},
       lib: {},
-      libExisting: false
+      libExisting: false,
+      lastEventId: 0,
+      folderStatus: {}
     };
   },
   created() {
@@ -103,6 +106,7 @@ export default {
   methods: {
     getConfig() {
       if (this.online) {
+        // Get Config
         AJAX.Syncthing.System.getConfig()
           .then(response => {
             this.config = response.data;
@@ -131,6 +135,32 @@ export default {
                 this.getFolderObj("gamelib", "Bibliothek")
               );
               AJAX.Syncthing.System.setConfig(this.config).catch();
+            }
+          })
+          .catch();
+
+        // Get initial folder states
+        if (Object.keys(this.folderStatus).length == 0) {
+          for (var folder of this.folders) {
+            if (folder.id != "gamelib") {
+              AJAX.Syncthing.DB.folderStatus(folder.id)
+                .then(response => {
+                  this.folderStatus[folder.id] = response.data;
+                })
+                .catch();
+            }
+          }
+        }
+
+        // Update folder states using events
+        AJAX.Syncthing.Events.since(this.lastEventId)
+          .then(response => {
+            if (response.data != false) {
+              this.lastEventId = response.data[response.data.length - 1].id;
+              for (var folderEvent of response.data) {
+                let eventData = folderEvent.data;
+                this.folderStatus[eventData.folder] = eventData.summary;
+              }
             }
           })
           .catch();
@@ -240,9 +270,9 @@ export default {
         })
         .catch();
     },
-    execute(exe) {
-      spawn(exe, [], {
-        cwd: "C:\\Users\\lerry\\Documents\\LAN\\Age of Empires 2",
+    execute(config) {
+      spawn(config.exe, [], {
+        cwd: config.path,
         detached: true
       }); // Spawn executable detached, so it stays open if launcher is closed.
     }

@@ -161,13 +161,13 @@ export default {
   z-index: 2
   left: 100%
   transition: left .2s ease-in-out
+  box-shadow: 0px 0px 20px 5px black
+  background: rgba(0,0,0,.8)
   &.visible
       left: 0%
   >div
       position: relative
-      background: rgba(0,0,0,.8)
       font-size: 1.2rem
-      box-shadow: 0px 0px 20px 5px black
   ul
       list-style: none
   li
