@@ -17,8 +17,8 @@
     </vs-alert>
     <vs-alert
       color="danger"
-      title="NAS IP-Adresse nicht gesetzt"
-      v-if="nas.ip == false"
+      title="NAS ID nicht gesetzt"
+      v-if="nas == false"
     >
       Bevor du auf die Spielebibliothek zugreifen kannst musst du die IP-Adresse des NAS angeben!
     </vs-alert>
@@ -57,7 +57,7 @@
         />
       </vs-col>
       <vs-col
-        vs-w="6"
+        vs-w="4"
         style="padding: 0 .2rem"
       >
         <vs-input
@@ -69,13 +69,23 @@
           :disabled="started || online"
         />
       </vs-col>
-      <vs-col vs-w="3">
-        <vs-input
-          label-placeholder="NAS IP-Adresse"
-          :value="nas.ip"
-          @blur="(event) => {$store.dispatch('setNasIp', {ip: event.target.value})}"
-          :danger="nas.ip == false"
-        />
+      <vs-col vs-w="5">
+        <vs-dropdown>
+          <vs-input
+            label-placeholder="NAS ID"
+            :value="nas"
+            :danger="nas == false"
+          />
+          <vs-dropdown-menu>
+            <vs-dropdown-item
+              v-for="(item, index) in devices"
+              :key="index"
+              @click.native="$store.dispatch('setNas', {id: index})"
+            >
+              {{index}}
+            </vs-dropdown-item>
+          </vs-dropdown-menu>
+        </vs-dropdown>
       </vs-col>
     </vs-row>
   </div>
@@ -84,6 +94,10 @@
 <script>
 import online from "../mixins/online";
 import { mapState } from "vuex";
+
+import AJAX from "../ajax";
+
+let discoveryInterval;
 
 export default {
   mixins: [online],
@@ -94,7 +108,8 @@ export default {
         require("@/assets/gaming.png"),
         require("@/assets/prism.png"),
         require("@/assets/maze.png")
-      ]
+      ],
+      devices: []
     };
   },
   computed: mapState([
@@ -104,6 +119,14 @@ export default {
     "nas",
     "started"
   ]),
+  created() {
+    this.discovery();
+    clearInterval(discoveryInterval);
+    discoveryInterval = setInterval(this.discovery, 5000);
+  },
+  destroyed() {
+    clearInterval(discoveryInterval);
+  },
   methods: {
     openFolderChooser() {
       require("electron")
@@ -113,6 +136,13 @@ export default {
           if (!result.canceled)
             this.$store.dispatch("setHomeDir", { dir: result.filePaths[0] });
         });
+    },
+    discovery() {
+      AJAX.Syncthing.System.getDiscovery()
+        .then(response => {
+          this.devices = response.data;
+        })
+        .catch();
     }
   }
 };

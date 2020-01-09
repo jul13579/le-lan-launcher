@@ -122,7 +122,7 @@ export default {
   },
   computed: {
     nasConnected() {
-      return (this.connections.connections[this.nas.id] || {}).connected;
+      return (this.connections.connections[this.nas] || {}).connected;
     },
     ...mapState(["nas", "homeDir"])
   },

@@ -111,11 +111,11 @@ export default {
           .then(response => {
             this.config = response.data;
             if (
-              this.nas.id && // If nasId is defined (if discovery finds an ID with corresponding ip)
+              this.nas && // If nasId is defined (if discovery finds an ID with corresponding ip)
               !this.config.devices.find(this.nasDeviceFilter)
             ) {
               this.config.devices.push({
-                deviceID: this.nas.id,
+                deviceID: this.nas,
                 _addressesStr: "dynamic",
                 compression: "metadata",
                 introducer: true,
@@ -167,7 +167,7 @@ export default {
       }
     },
     nasDeviceFilter(device) {
-      return device.deviceID == this.nas.id;
+      return device.deviceID == this.nas;
     },
     getFolderObj(id, label) {
       return {

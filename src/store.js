@@ -14,10 +14,7 @@ export default new Vuex.Store({
     homeDir: "",
     apikey: "",
     started: false,
-    nas: {
-      ip: "",
-      id: ""
-    }
+    nas: ""
   },
   mutations: {
     backgroundColor(state, color) {
@@ -44,11 +41,8 @@ export default new Vuex.Store({
     started(state, bool) {
       state.started = bool;
     },
-    nasIp(state, ip) {
-      state.nas.ip = ip;
-    },
-    nasId(state, id) {
-      state.nas.id = id;
+    nas(state, id) {
+      state.nas = id;
     }
   },
   actions: {
@@ -70,11 +64,8 @@ export default new Vuex.Store({
     setStarted(store, payload) {
       store.commit("started", payload.started);
     },
-    setNasIp(store, payload) {
-      store.commit("nasIp", payload.ip);
-    },
-    setNasId(store, payload) {
-      store.commit("nasId", payload.id);
+    setNas(store, payload) {
+      store.commit("nas", payload.id);
     }
   },
   plugins: [createPersistedState(), createSharedMutations()],

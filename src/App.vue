@@ -38,7 +38,7 @@ import { mapState } from "vuex";
 
 import AJAX from "./ajax";
 
-let backgroundColorTimeout, pingIntervalHandle, findIntervalHandle;
+let backgroundColorTimeout, pingIntervalHandle;
 
 export default {
   name: "app",
@@ -59,7 +59,7 @@ export default {
       return (
         this.playerName != false &&
         this.homeDir != false &&
-        this.nas.ip != false
+        this.nas != false
       );
     },
     ...mapState(["backgroundColor", "theme", "playerName", "homeDir", "nas"])
@@ -86,11 +86,8 @@ export default {
         case "homeDir":
           this.$toasted.global.success("Spieleverzeichnis-Pfad gespeichert");
           break;
-        case "nasIp":
-          this.$toasted.global.success("NAS IP-Adresse gespeichert");
-          clearInterval(findIntervalHandle);
-          this.findNas();
-          findIntervalHandle = setInterval(this.findNas, 5000);
+        case "nas":
+          this.$toasted.global.success("NAS ID gespeichert");
           break;
         case "started":
           if (mutation.payload == true) {
@@ -118,36 +115,9 @@ export default {
 
     // Set initial tab
     this.activeTab = this.setupCompleted ? 0 : 1;
-
-    // Resume discovery
-    if (this.nas.id == false) {
-      clearInterval(findIntervalHandle);
-      findIntervalHandle = setInterval(this.findNas, 5000);
-    }
   },
   destroyed() {
     clearInterval(pingIntervalHandle);
-    clearInterval(findIntervalHandle);
-  },
-  methods: {
-    findNas() {
-      AJAX.Syncthing.System.getDiscovery()
-        .then(response => {
-          for (var hostId in response.data) {
-            let addresses = response.data[hostId].addresses;
-            for (var address of addresses) {
-              if (address.includes(this.nas.ip)) {
-                this.$store.dispatch("setNasId", {
-                  id: hostId
-                });
-                clearInterval(findIntervalHandle);
-                break;
-              }
-            }
-          }
-        })
-        .catch();
-    }
   }
 };
 </script>
