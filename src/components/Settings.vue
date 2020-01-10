@@ -72,17 +72,28 @@
       <vs-col vs-w="5">
         <vs-dropdown>
           <vs-input
+            :disabled="!online"
             label-placeholder="NAS ID"
             :value="nas"
             :danger="nas == false"
           />
           <vs-dropdown-menu>
-            <vs-dropdown-item
-              v-for="(item, index) in devices"
-              :key="index"
-              @click.native="$store.dispatch('setNas', {id: index})"
-            >
-              {{index}}
+            <template v-if="online">
+              <vs-dropdown-item
+                v-for="(item, index) in devices"
+                :key="index"
+                @click.native="$store.dispatch('setNas', {id: index})"
+              >
+                {{index}}
+              </vs-dropdown-item>
+            </template>
+            <vs-dropdown-item v-else>
+              <vs-alert
+                color="danger"
+                title="Service nicht gestartet"
+              >
+                Der Synchronisationsservice muss gestartet sein, damit verfügbare Netzwerkgeräte angezeigt werden können.
+              </vs-alert>
             </vs-dropdown-item>
           </vs-dropdown-menu>
         </vs-dropdown>
