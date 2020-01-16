@@ -24,10 +24,7 @@
           <template v-else>
             <template v-if="downloadFinished">
               <li
-                @click="$emit('execute', {
-                    path: config.path,
-                    exe: config.path + '/' + value.executable
-                  })"
+                @click="$emit('execute', value.launch)"
                 v-if="status.globalBytes > 0"
               >
                 <vs-icon
@@ -45,13 +42,10 @@
                 ></vs-icon>Zurücksetzen
               </li>
               <li
-                v-for="(item, index) in value.moreExecutables"
+                v-for="(item, index) in value.moreLaunchs"
                 :key="index"
                 @click="
-                  $emit('execute', {
-                    path: config.path,
-                    exe: config.path + '/' + item.path
-                  })
+                  $emit('execute', item)
                 "
               >
                 <vs-icon

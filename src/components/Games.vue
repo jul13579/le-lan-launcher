@@ -26,7 +26,7 @@
         @delete="deleteGame(item)"
         @browse="browseGame(item)"
         @reset="resetGame(item)"
-        @execute="execute"
+        @execute="(config) => execute(getGameFolder(item), config)"
       />
     </template>
   </div>
@@ -38,6 +38,7 @@ import { HollowDotsSpinner } from "epic-spinners";
 import { shell } from "electron";
 import fs from "fs-extra";
 import { spawn } from "child_process";
+import path from "path";
 
 import AJAX from "../ajax";
 import online from "../mixins/online";
@@ -141,7 +142,7 @@ export default {
 
         // Get initial folder states
         if (Object.keys(this.folderStatus).length == 0) {
-          for (var folder of this.folders) {
+          this.folders.forEach(folder => {
             if (folder.id != "gamelib") {
               AJAX.Syncthing.DB.folderStatus(folder.id)
                 .then(response => {
@@ -149,7 +150,7 @@ export default {
                 })
                 .catch();
             }
-          }
+          });
         }
 
         // Update folder states using events
@@ -270,9 +271,9 @@ export default {
         })
         .catch();
     },
-    execute(config) {
-      spawn(config.exe, [], {
-        cwd: config.path,
+    execute(game, config) {
+      spawn(path.join(game.path, config.exe), config.args, {
+        cwd: game.path,
         detached: true
       }); // Spawn executable detached, so it stays open if launcher is closed.
     }
