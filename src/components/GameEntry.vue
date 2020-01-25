@@ -7,7 +7,7 @@
     @mouseleave="showOptions = 'hidden'"
   >
     <img
-      :src="'file://' + homeDir + '/Bibliothek/' + value.cover"
+      :src="'file://' + homeDir + '/Library/' + value.cover"
       alt=""
     />
     <div :class="['gameOptions', showOptions]">

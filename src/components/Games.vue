@@ -45,7 +45,7 @@ import online from "../mixins/online";
 
 import GameEntry from "./GameEntry";
 
-const libJsonPath = "/Bibliothek/library.json";
+const libJsonPath = "/Library/library.json";
 let configInterval;
 
 export default {
@@ -129,13 +129,16 @@ export default {
             }
             if (
               this.nasDevice && // If nasDevice is defined (after it has been set by previous if)
-              this.nasDevice.pendingFolders.length > 0 &&
-              this.config.folders.length == 0
+              this.nasDevice.pendingFolders.length > 0
             ) {
-              this.config.folders.push(
-                this.getFolderObj("gamelib", "Bibliothek")
-              );
-              AJAX.Syncthing.System.setConfig(this.config).catch();
+              this.nasDevice.pendingFolders.forEach(folder => {
+                if (folder.id == "gamelib") {
+                  this.config.folders.push(
+                    this.getFolderObj("gamelib", "Library")
+                  );
+                  AJAX.Syncthing.System.setConfig(this.config).catch();
+                }
+              });
             }
           })
           .catch();
@@ -272,10 +275,19 @@ export default {
         .catch();
     },
     execute(game, config) {
-      spawn(path.join(game.path, config.exe), config.args, {
+      let ls = spawn(path.join(game.path, config.exe), config.args, {
         cwd: game.path,
         detached: true
       }); // Spawn executable detached, so it stays open if launcher is closed.
+      ls.stdout.on("data", function(data) {
+        console.log("stdout: " + data);
+      });
+      ls.stderr.on("data", function(data) {
+        console.log("stderr: " + data);
+      });
+      ls.on("exit", function(code) {
+        console.log("child process exited with code " + code);
+      });
     }
   }
 };
