@@ -151,20 +151,20 @@ export default {
                 .catch();
             }
           });
-        }
-
-        // Update folder states using events
-        AJAX.Syncthing.Events.since(this.lastEventId)
-          .then(response => {
-            if (response.data != false) {
-              this.lastEventId = response.data[response.data.length - 1].id;
-              for (var folderEvent of response.data) {
-                let eventData = folderEvent.data;
-                this.folderStatus[eventData.folder] = eventData.summary;
+        } else {
+          // Update folder states using events
+          AJAX.Syncthing.Events.since(this.lastEventId)
+            .then(response => {
+              if (response.data != false) {
+                this.lastEventId = response.data[response.data.length - 1].id;
+                for (var folderEvent of response.data) {
+                  let eventData = folderEvent.data;
+                  this.folderStatus[eventData.folder] = eventData.summary;
+                }
               }
-            }
-          })
-          .catch();
+            })
+            .catch();
+        }
       }
     },
     nasDeviceFilter(device) {

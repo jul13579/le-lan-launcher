@@ -144,6 +144,7 @@ export default {
   img
     width: 100%
     height: auto
+    margin-bottom: -3px
 
 .gameOptions
   position: absolute
