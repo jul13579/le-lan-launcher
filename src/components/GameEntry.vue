@@ -136,18 +136,22 @@ export default {
   display: inline-block
   position: relative
   width: var(--cover-width)
+  height: calc(var(--cover-width) / 6 * 9)
   margin: 10px
   cursor: pointer
   transition: box-shadow .2s ease-in-out;
   overflow: hidden;
   &:hover
     box-shadow: 0px 0px 20px 5px white
+    img
+      width: 110%
+      margin: -5%
   img
     width: 100%
     height: auto
     margin-bottom: -3px
     filter: brightness(0.2)
-    transition: filter .2s ease-in-out
+    transition: filter .2s ease-in-out, width .2s linear, margin .2s linear
     &.installed
       filter: brightness(1)
 
