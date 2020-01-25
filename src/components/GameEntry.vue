@@ -7,6 +7,7 @@
     @mouseleave="showOptions = 'hidden'"
   >
     <img
+      :class="{'installed': subscribed && downloadFinished}"
       :src="'file://' + homeDir + '/Library/' + value.cover"
       alt=""
     />
@@ -145,6 +146,10 @@ export default {
     width: 100%
     height: auto
     margin-bottom: -3px
+    filter: brightness(0.2)
+    transition: filter .2s ease-in-out
+    &.installed
+      filter: brightness(1)
 
 .gameOptions
   position: absolute

@@ -270,7 +270,7 @@ export default {
     resetGame(game) {
       AJAX.Syncthing.DB.revertFolder(game.id)
         .then(() => {
-          this.$toasted.global.success("Spiel zurückgesetzt: " + game.title);
+          this.$toasted.global.success("Spiel wird zurückgesetzt: " + game.title);
         })
         .catch();
     },
