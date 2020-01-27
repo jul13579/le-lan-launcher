@@ -154,6 +154,9 @@ export default {
                 .catch();
             }
           });
+          AJAX.Syncthing.Events.latest().then(response => {
+            this.lastEventId = response.data[0].id;
+          });
         } else {
           // Update folder states using events
           AJAX.Syncthing.Events.since(this.lastEventId)
@@ -162,7 +165,16 @@ export default {
                 this.lastEventId = response.data[response.data.length - 1].id;
                 for (var folderEvent of response.data) {
                   let eventData = folderEvent.data;
-                  this.folderStatus[eventData.folder] = eventData.summary;
+                  switch (folderEvent.type) {
+                    case "FolderSummary":
+                      this.folderStatus[eventData.folder] = eventData.summary;
+                      console.log('summary', this.folderStatus[eventData.folder]);
+                      break;
+                    case "StateChanged":
+                      this.folderStatus[eventData.folder].state = eventData.to;
+                      console.log('state', this.folderStatus[eventData.folder]);
+                      break;
+                  }
                 }
               }
             })
@@ -270,7 +282,9 @@ export default {
     resetGame(game) {
       AJAX.Syncthing.DB.revertFolder(game.id)
         .then(() => {
-          this.$toasted.global.success("Spiel wird zurückgesetzt: " + game.title);
+          this.$toasted.global.success(
+            "Spiel wird zurückgesetzt: " + game.title
+          );
         })
         .catch();
     },

@@ -49,7 +49,12 @@ export default {
     Events: {
       since: lastSeenID => {
         return axios.get(
-          host + "/events?events=FolderSummary&timeout=1&since=" + lastSeenID
+          host + "/events?timeout=1&since=" + lastSeenID
+        );
+      },
+      latest: () => {
+        return axios.get(
+          host + "/events?limit=1"
         );
       }
     }
