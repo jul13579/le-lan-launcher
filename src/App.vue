@@ -72,7 +72,7 @@ export default {
       backgroundColorTimeout = setTimeout(
         function() {
           this.$store.dispatch("setBackgroundColor", {
-            color: "hsl(" + value + ", 75%, 8%)"
+            color: value
           });
         }.bind(this),
         1000
