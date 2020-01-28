@@ -86,6 +86,14 @@
               >
                 {{index}}
               </vs-dropdown-item>
+              <vs-dropdown-item v-if="Object.keys(devices).length == 0">
+                <vs-alert
+                  color="danger"
+                  title="Keine Geräte gefunden"
+                >
+                  Bitte warte einen Moment, während verfügbare Geräte gesucht werden...
+                </vs-alert>
+              </vs-dropdown-item>
             </template>
             <vs-dropdown-item v-else>
               <vs-alert
@@ -118,7 +126,8 @@ export default {
         require("@/assets/funky-lines.png"),
         require("@/assets/gaming.png"),
         require("@/assets/prism.png"),
-        require("@/assets/maze.png")
+        require("@/assets/maze.png"),
+        require("@/assets/unicorn.png")
       ],
       devices: []
     };
