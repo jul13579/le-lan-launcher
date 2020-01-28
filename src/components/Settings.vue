@@ -40,7 +40,7 @@
         <vs-slider
           :min="0"
           :max="360"
-          @input="(input) => {$store.dispatch('setBackgroundColor', {color: 'hsl(' + input + ', 75%, 8%)'})}"
+          @input="(input) => {$emit('update:backgroundColor', 'hsl(' + input + ', 75%, 8%)')}"
           :color="backgroundColor"
           :value="parseInt(backgroundColor.replace('hsl(', '').split(',')[0])"
         />
@@ -120,6 +120,9 @@ let discoveryInterval;
 
 export default {
   mixins: [online],
+  props: {
+    backgroundColor: String
+  },
   data() {
     return {
       textures: [
@@ -133,7 +136,6 @@ export default {
     };
   },
   computed: mapState([
-    "backgroundColor",
     "playerName",
     "homeDir",
     "nas",

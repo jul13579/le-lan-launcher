@@ -2,7 +2,7 @@
   <div
     id="app"
     class="frame"
-    :style="{background: 'linear-gradient(' + backgroundColor + ', black)'}"
+    :style="{background: 'linear-gradient(' + cachedBackgroundColor + ', black)'}"
   >
     <div
       class="frame texture"
@@ -23,7 +23,10 @@
         label="Einstellungen"
         icon="settings"
       >
-        <settings :online="online"></settings>
+        <settings
+          :online="online"
+          :backgroundColor.sync="cachedBackgroundColor"
+        ></settings>
       </vs-tab>
     </vs-tabs>
     <statistics :online="online"></statistics>
@@ -51,18 +54,30 @@ export default {
     return {
       activeTab: 1,
       online: false,
-      nasId: ""
+      nasId: "",
+      cachedBackgroundColor: this.$store.state.backgroundColor
     };
   },
   computed: {
     setupCompleted() {
       return (
-        this.playerName != false &&
-        this.homeDir != false &&
-        this.nas != false
+        this.playerName != false && this.homeDir != false && this.nas != false
       );
     },
-    ...mapState(["backgroundColor", "theme", "playerName", "homeDir", "nas"])
+    ...mapState(["theme", "playerName", "homeDir", "nas"])
+  },
+  watch: {
+    cachedBackgroundColor(value) {
+      clearTimeout(backgroundColorTimeout);
+      backgroundColorTimeout = setTimeout(
+        function() {
+          this.$store.dispatch("setBackgroundColor", {
+            color: "hsl(" + value + ", 75%, 8%)"
+          });
+        }.bind(this),
+        1000
+      );
+    }
   },
   beforeMount() {
     // Setup notification handles
@@ -72,13 +87,7 @@ export default {
           this.$toasted.global.success("Design gespeichert");
           break;
         case "backgroundColor":
-          clearTimeout(backgroundColorTimeout);
-          backgroundColorTimeout = setTimeout(
-            function() {
-              this.$toasted.global.success("Farbton gespeichert");
-            }.bind(this),
-            1000
-          );
+          this.$toasted.global.success("Farbton gespeichert");
           break;
         case "playerName":
           this.$toasted.global.success("Spielername gespeichert");
