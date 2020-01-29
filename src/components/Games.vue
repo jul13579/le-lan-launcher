@@ -165,16 +165,17 @@ export default {
                 this.lastEventId = response.data[response.data.length - 1].id;
                 for (var folderEvent of response.data) {
                   let eventData = folderEvent.data;
+                  let folderSummary = null;
                   switch (folderEvent.type) {
                     case "FolderSummary":
-                      this.folderStatus[eventData.folder] = eventData.summary;
-                      console.log('summary', this.folderStatus[eventData.folder]);
+                      folderSummary = eventData.summary;
                       break;
                     case "StateChanged":
-                      this.folderStatus[eventData.folder].state = eventData.to;
-                      console.log('state', this.folderStatus[eventData.folder]);
+                      folderSummary = this.folderStatus[eventData.folder];
+                      folderSummary.state = eventData.to;
                       break;
                   }
+                  this.folderStatus[eventData.folder] = folderSummary;
                 }
               }
             })
