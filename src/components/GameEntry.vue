@@ -122,10 +122,13 @@ export default {
       return this.config != null;
     },
     downloadFinished() {
-      if (this.status.state != "idle") {
-        return false;
+      switch (this.status.state) {
+        case "idle":
+        case "scanning":
+          return this.status.globalBytes == this.status.inSyncBytes;
+        default:
+          return false;
       }
-      return this.status.globalBytes == this.status.inSyncBytes;
     }
   }
 };

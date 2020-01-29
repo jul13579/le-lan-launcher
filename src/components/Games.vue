@@ -165,13 +165,13 @@ export default {
                 this.lastEventId = response.data[response.data.length - 1].id;
                 for (var folderEvent of response.data) {
                   let eventData = folderEvent.data;
-                  let folderSummary = null;
+                  let folderSummary = this.folderStatus[eventData.folder];
                   switch (folderEvent.type) {
                     case "FolderSummary":
                       folderSummary = eventData.summary;
                       break;
                     case "StateChanged":
-                      folderSummary = this.folderStatus[eventData.folder];
+                      folderSummary = this.folderStatus[eventData.folder] || {};
                       folderSummary.state = eventData.to;
                       break;
                   }
@@ -275,7 +275,9 @@ export default {
           this.$toasted.global.success("Spiel gelöscht: " + game.title);
         })
         .catch();
-      fs.removeSync(gameFolder.path);
+      setTimeout(() => {
+        fs.removeSync(gameFolder.path);
+      }, 5000);
     },
     browseGame(game) {
       shell.openItem(this.getGameFolder(game).path);
