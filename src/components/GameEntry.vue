@@ -90,7 +90,7 @@
       </div>
     </div>
     <vs-progress
-      v-if="subscribed && status.state != 'idle'"
+      v-if="subscribed && status.state == 'syncing'"
       class="downloadProgress"
       :percent="(status.inSyncBytes / status.globalBytes) * 100"
     ></vs-progress>
