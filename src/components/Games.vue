@@ -26,7 +26,7 @@
         @delete="deleteGame(item)"
         @browse="browseGame(item)"
         @reset="resetGame(item)"
-        @execute="(config) => execute(getGameFolder(item), config)"
+        @execute="(launch) => execute(getGameFolder(item), item, launch)"
       />
     </template>
   </div>
@@ -291,8 +291,9 @@ export default {
         })
         .catch();
     },
-    execute(game, config) {
-      let ls = spawn(path.join(game.path, config.exe), config.args, {
+    execute(game, config, launch) {
+      require("electron").ipcRenderer.send("setPlayerName", game, config);
+      let ls = spawn(path.join(game.path, launch.exe), launch.args, {
         cwd: game.path,
         detached: true
       }); // Spawn executable detached, so it stays open if launcher is closed.

@@ -167,4 +167,24 @@ function startService() {
   }
 }
 
-ipcMain.on("startService", () => startService());
+function setPlayerName(event, game, config) {
+  if (!config.nameConfig) {
+    return;
+  }
+  let nameConfig = config.nameConfig;
+  let filePath = path.resolve(
+    game.path,
+    nameConfig.env ? process.env[nameConfig.env] : "",
+    nameConfig.file
+  );
+  let nameFileContents = fs.readFileSync(filePath, { encoding: "utf8" });
+  if (nameConfig.regex) {
+    nameFileContents = nameFileContents.replace(new RegExp(nameConfig.regex), store.state.playerName);
+  } else {
+    nameFileContents = store.state.playerName;
+  }
+  fs.writeFileSync(filePath, nameFileContents, { encoding: "utf8" });
+}
+
+ipcMain.on("startService", startService);
+ipcMain.on("setPlayerName", setPlayerName);
