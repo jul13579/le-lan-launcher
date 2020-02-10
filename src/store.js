@@ -5,6 +5,7 @@ import { createPersistedState, createSharedMutations } from "vuex-electron";
 Vue.use(Vuex);
 
 const defaultBackgroundColor = "hsl(260, 75%, 8%)";
+const defaultLocale = "en";
 
 export default new Vuex.Store({
   state: {
@@ -14,7 +15,8 @@ export default new Vuex.Store({
     homeDir: "",
     apikey: "",
     started: false,
-    nas: ""
+    nas: "",
+    locale: defaultLocale,
   },
   mutations: {
     backgroundColor(state, color) {
@@ -43,6 +45,9 @@ export default new Vuex.Store({
     },
     nas(state, id) {
       state.nas = id;
+    },
+    locale(state, locale) {
+      state.locale = locale;
     }
   },
   actions: {
@@ -66,6 +71,9 @@ export default new Vuex.Store({
     },
     setNas(store, payload) {
       store.commit("nas", payload.id);
+    },
+    setLocale(store, payload) {
+      store.commit("locale", payload.locale);
     }
   },
   plugins: [createPersistedState(), createSharedMutations()],

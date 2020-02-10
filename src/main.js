@@ -1,9 +1,13 @@
 import Vue from "vue";
 import Vuesax from "vuesax";
 import Toasted from "vue-toasted";
+import VueI18n from "vue-i18n";
 
 // Components
 import App from "./App.vue";
+
+import store from "./store";
+import langs from "./langs.js"
 
 // Styles
 import "material-icons/iconfont/material-icons.css";
@@ -25,6 +29,7 @@ Vue.use(Toasted, {
   position: "bottom-center",
   duration: 5000
 });
+Vue.use(VueI18n);
 
 // Lets Register a Global Error Notification Toast.
 Vue.toasted.register(
@@ -48,11 +53,15 @@ Vue.toasted.register(
   }
 );
 
-import store from "./store";
+const i18n = new VueI18n({
+  locale: store.state.locale, // set locale
+  messages: langs // set locale messages
+});
 
 Vue.config.productionTip = false;
 
 new Vue({
   store,
+  i18n,
   render: h => h(App)
 }).$mount("#app");

@@ -13,7 +13,7 @@
       position="left"
     >
       <vs-tab
-        label="Spielebibliothek"
+        :label="$t('library')"
         icon="gamepad"
         :disabled="!setupCompleted"
       >
@@ -105,6 +105,11 @@ export default {
             this.online = false;
             this.$toasted.global.success("Service gestoppt");
           }
+          break;
+        case "locale":
+          this.$i18n.locale = mutation.payload;
+          this.$toasted.global.success("Sprache gespeichert");
+          break;
       }
     });
 

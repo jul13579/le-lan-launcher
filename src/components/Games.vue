@@ -12,7 +12,7 @@
       </div>
     </template>
     <template v-else>
-      <h1 style="margin-bottom: 1rem">Spielebibliothek</h1>
+      <h1 style="margin-bottom: 1rem">{{$t('library')}}</h1>
       <game-entry
         v-for="(item, index) in lib.games"
         :key="index"

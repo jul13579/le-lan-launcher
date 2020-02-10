@@ -81,7 +81,7 @@ h2~:not(h1)
     position: absolute
     bottom: 0
     left: 0
-    width: 170px
+    width: 180px
     height: auto
     min-height: 2rem
     background: $transparency
@@ -95,11 +95,16 @@ h2~:not(h1)
     background: $transparency
 
 .con-vs-dropdown--menu
-    width: 40rem
-    background: unset
+    background: unset !important
+    &.nasDropdown
+        width: 40rem
+    &.langDropdown
+        width: 10rem
 
-.vs-dropdown--menu
-    background: $transparency
+.vs-component 
+    &.vs-dropdown--menu
+        background: rgba(25, 25, 25, 0.95)
+        box-shadow: 0px 0px 16px 0px rgba(255, 255, 255, 0.5)
 
 .vs-dropdown--menu--after
     background: $textColor
@@ -107,3 +112,7 @@ h2~:not(h1)
 .parent-dropdown
     width: 100%
     color: $textColor
+
+.frame
+    .con-ul-tabs
+        width: 15rem

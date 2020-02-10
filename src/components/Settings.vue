@@ -49,6 +49,26 @@
     <h2>Umgebung</h2>
     <vs-row>
       <vs-col vs-w="3">
+        <vs-dropdown>
+          <vs-input
+            :disabled="!online"
+            label-placeholder="Sprache"
+            :value="langs[locale].lang"
+          />
+          <vs-dropdown-menu class="langDropdown">
+            <vs-dropdown-item
+              v-for="(item, index) in langs"
+              :key="index"
+              @click.native="$store.dispatch('setLocale', {locale: index})"
+            >
+              {{item.lang}}
+            </vs-dropdown-item>
+          </vs-dropdown-menu>
+        </vs-dropdown>
+      </vs-col>
+    </vs-row>
+    <vs-row>
+      <vs-col vs-w="3">
         <vs-input
           label-placeholder="Spielername"
           :value="playerName"
@@ -77,7 +97,7 @@
             :value="nas"
             :danger="nas == false"
           />
-          <vs-dropdown-menu>
+          <vs-dropdown-menu class="nasDropdown">
             <template v-if="online">
               <vs-dropdown-item
                 v-for="(item, index) in devices"
@@ -132,15 +152,11 @@ export default {
         require("@/assets/maze.png"),
         require("@/assets/unicorn.png")
       ],
-      devices: []
+      devices: [],
+      langs: require("../langs").default
     };
   },
-  computed: mapState([
-    "playerName",
-    "homeDir",
-    "nas",
-    "started"
-  ]),
+  computed: mapState(["playerName", "homeDir", "nas", "started", "locale"]),
   created() {
     this.discovery();
     clearInterval(discoveryInterval);

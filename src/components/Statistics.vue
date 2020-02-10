@@ -12,8 +12,8 @@
     </template>
     <template v-else-if="started && online">
       <div class="online">
-        <h3>Statistiken</h3>
-        <table>
+        <h3 style="padding-top: 1rem">Statistiken</h3>
+        <table style="padding: .5rem">
           <tr>
             <td>
               <vs-icon
