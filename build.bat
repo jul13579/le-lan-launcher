@@ -32,6 +32,10 @@ echo Move binary into place...
 move syncthing\syncthing* .\
 
 echo.
+echo Installing npm dependencies....
+npm install
+
+echo.
 echo Building LEGC LAN-Launcher...
 npm run electron:build
 exit 0
