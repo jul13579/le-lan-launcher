@@ -6,6 +6,7 @@
     "email": "jl@lerry.de"
   },
   "description": "A launcher to provide content (i.e. games, but it can also be used for other stuff) in a P2P-manner to friends on a LAN-Party. It is no more than a frontend based on electron to control a slightliy modified instance of Syncthing.",
+  "license": "GNU GPLv3",
   "version": "0.9.0",
   "private": true,
   "scripts": {
