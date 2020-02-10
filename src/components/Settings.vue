@@ -1,28 +1,28 @@
 <template>
   <div class="container">
-    <h1>Einstellungen</h1>
+    <h1>{{$t('nav.settings')}}</h1>
     <vs-alert
       color="danger"
-      title="Spielername nicht gesetzt"
+      :title="$t('errors.playerNameUnset.title')"
       v-if="playerName == false"
     >
-      Bevor du auf die Spielebibliothek zugreifen kannst musst du deinen Spielernamen eingeben!
+      {{$t('errors.playerNameUnset.message')}}
     </vs-alert>
     <vs-alert
       color="danger"
-      title="Spieleverzeichnis nicht gesetzt"
+      :title="$t('errors.homeDirUnset.title')"
       v-if="homeDir == false"
     >
-      Bevor du auf die Spielebibliothek zugreifen kannst musst du das Spieleverzeichnis setzen!
+      {{$t('errors.homeDirUnset.message')}}
     </vs-alert>
     <vs-alert
       color="danger"
-      title="NAS ID nicht gesetzt"
+      :title="$t('errors.nasUnset.title')"
       v-if="nas == false"
     >
-      Bevor du auf die Spielebibliothek zugreifen kannst musst du die IP-Adresse des NAS angeben!
+      {{$t('errors.nasUnset.message')}}
     </vs-alert>
-    <h2>Design</h2>
+    <h2>{{$t('settings.theme')}}</h2>
     <vs-images>
       <vs-image
         v-for="(item, index) in textures"
@@ -31,7 +31,7 @@
         @click.native="() => {$store.dispatch('setTheme', {theme: item})}"
       ></vs-image>
     </vs-images>
-    <h2>Farbton</h2>
+    <h2>{{$t('settings.backgroundColor')}}</h2>
     <vs-row>
       <vs-col
         vs-w="12"
@@ -46,13 +46,12 @@
         />
       </vs-col>
     </vs-row>
-    <h2>Umgebung</h2>
+    <h2>{{$t('settings.environment')}}</h2>
     <vs-row>
       <vs-col vs-w="3">
         <vs-dropdown>
           <vs-input
-            :disabled="!online"
-            label-placeholder="Sprache"
+            :label-placeholder="$t('settings.language')"
             :value="langs[locale].lang"
           />
           <vs-dropdown-menu class="langDropdown">
@@ -70,7 +69,7 @@
     <vs-row>
       <vs-col vs-w="3">
         <vs-input
-          label-placeholder="Spielername"
+          :label-placeholder="$t('settings.playerName')"
           :value="playerName"
           @blur="(event) => {$store.dispatch('setPlayerName', {name: event.target.value})}"
           :danger="playerName == false"
@@ -81,7 +80,7 @@
         style="padding: 0 .2rem"
       >
         <vs-input
-          label-placeholder="Spieleverzeichnis"
+          :label-placeholder="$t('settings.homeDir')"
           @click="openFolderChooser"
           @blur="(event) => {if (event.target.value) $store.dispatch('setHomeDir', {dir: event.target.value})}"
           :value="homeDir"
@@ -93,7 +92,7 @@
         <vs-dropdown>
           <vs-input
             :disabled="!online"
-            label-placeholder="NAS ID"
+            :label-placeholder="$t('settings.nas')"
             :value="nas"
             :danger="nas == false"
           />
@@ -111,7 +110,7 @@
                   color="danger"
                   title="Keine Geräte gefunden"
                 >
-                  Bitte warte einen Moment, während verfügbare Geräte gesucht werden...
+                  {{$t('settings.alerts.discovery')}}
                 </vs-alert>
               </vs-dropdown-item>
             </template>
@@ -120,7 +119,7 @@
                 color="danger"
                 title="Service nicht gestartet"
               >
-                Der Synchronisationsservice muss gestartet sein, damit verfügbare Netzwerkgeräte angezeigt werden können.
+                {{$t('settings.alerts.service')}}
               </vs-alert>
             </vs-dropdown-item>
           </vs-dropdown-menu>

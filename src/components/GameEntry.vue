@@ -19,7 +19,7 @@
               <vs-icon
                 icon="cloud_download"
                 size="small"
-              ></vs-icon>Herunterladen
+              ></vs-icon>{{$t('gameEntry.download')}}
             </li>
           </template>
           <template v-else>
@@ -31,7 +31,7 @@
                 <vs-icon
                   icon="play_arrow"
                   size="small"
-                ></vs-icon>Spielen
+                ></vs-icon>{{$t('gameEntry.play')}}
               </li>
               <li
                 @click="$emit('reset')"
@@ -40,7 +40,7 @@
                 <vs-icon
                   icon="restore"
                   size="small"
-                ></vs-icon>Zurücksetzen
+                ></vs-icon>{{$t('gameEntry.reset')}}
               </li>
               <li
                 v-for="(item, index) in value.moreLaunchs"
@@ -62,7 +62,7 @@
               <vs-icon
                 icon="pause"
                 size="small"
-              ></vs-icon>Pause
+              ></vs-icon>{{$t('gameEntry.pause')}}
             </li>
             <li
               @click="$emit('resume')"
@@ -71,19 +71,19 @@
               <vs-icon
                 icon="double_arrow"
                 size="small"
-              ></vs-icon>Fortsetzen
+              ></vs-icon>{{$t('gameEntry.resume')}}
             </li>
             <li @click="$emit('browse')">
               <vs-icon
                 icon="folder_open"
                 size="small"
-              ></vs-icon>Durchsuchen
+              ></vs-icon>{{$t('gameEntry.browse')}}
             </li>
             <li @click="$emit('delete')">
               <vs-icon
                 icon="delete"
                 size="small"
-              ></vs-icon>Löschen
+              ></vs-icon>{{$t('gameEntry.delete')}}
             </li>
           </template>
         </ul>

@@ -7,28 +7,28 @@
           :size="65"
           color="rgb(200,200,200)"
         />
-        <div>Verbindung zum Service wird hergestellt...</div>
+        <div>{{$t('statistics.connecting')}}</div>
       </div>
     </template>
     <template v-else-if="started && online">
       <div class="online">
-        <h3 style="padding-top: 1rem">Statistiken</h3>
+        <h3 style="padding-top: 1rem">{{$t('statistics.statistics')}}</h3>
         <table style="padding: .5rem">
           <tr>
             <td>
               <vs-icon
                 icon="desktop_windows"
                 size="small"
-              ></vs-icon><span>CPU:</span>
+              ></vs-icon><span>{{$t('statistics.cpu')}}:</span>
             </td>
-            <td>{{(status.cpuPercent || 0.00).toFixed(2)}} %</td>
+            <td>{{(status.cpuPercent || 0.00).toFixed(2)}} {{$t('statistics.percent')}}</td>
           </tr>
           <tr>
             <td>
               <vs-icon
                 icon="cloud"
                 size="small"
-              ></vs-icon><span>NAS:</span>
+              ></vs-icon><span>{{$t('statistics.nas')}}:</span>
             </td>
             <td>
               <vs-icon
@@ -48,18 +48,18 @@
               <vs-icon
                 icon="arrow_drop_down"
                 size="small"
-              ></vs-icon><span>Downl.:</span>
+              ></vs-icon><span>{{$t('statistics.download')}}:</span>
             </td>
-            <td>{{(inbps / 1024**2).toFixed(2)}} MB/s</td>
+            <td>{{(inbps / 1024**2).toFixed(2)}} {{$t('statistics.mbps')}}</td>
           </tr>
           <tr>
             <td>
               <vs-icon
                 icon="arrow_drop_up"
                 size="small"
-              ></vs-icon><span>Upl.:</span>
+              ></vs-icon><span>{{$t('statistics.upload')}}:</span>
             </td>
-            <td>{{(outbps / 1024**2).toFixed(2)}} MB/s</td>
+            <td>{{(outbps / 1024**2).toFixed(2)}} {{$t('statistics.mbps')}}</td>
           </tr>
         </table>
       </div>
@@ -165,10 +165,10 @@ export default {
       if (this.started) {
         AJAX.Syncthing.System.restart()
           .then(() => {
-            this.$toasted.global.success("Service wird neu gestartet...");
+            this.$toasted.global.success(this.$t('toast.service.restarting'));
           })
           .catch(() => {
-            this.$toasted.global.error("Fehler beim Neustarten des Services");
+            this.$toasted.global.error(this.$t('toast.service.error.restarting'));
           });
       }
     },
@@ -179,7 +179,7 @@ export default {
             this.$store.dispatch("setStarted", { started: false });
           })
           .catch(() => {
-            this.$toasted.global.error("Fehler beim Stoppen des Services");
+            this.$toasted.global.error(this.$t('toast.service.error.stopping'));
           });
       }
     }

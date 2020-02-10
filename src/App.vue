@@ -13,14 +13,14 @@
       position="left"
     >
       <vs-tab
-        :label="$t('library')"
+        :label="$t('nav.library')"
         icon="gamepad"
         :disabled="!setupCompleted"
       >
         <games :online="online"></games>
       </vs-tab>
       <vs-tab
-        label="Einstellungen"
+        :label="$t('nav.settings')"
         icon="settings"
       >
         <settings
@@ -81,37 +81,37 @@ export default {
   },
   beforeMount() {
     // Setup notification handles
-    this.$store.subscribe(mutation => {
+    this.$store.subscribe(function (mutation) {
       switch (mutation.type) {
         case "theme":
-          this.$toasted.global.success("Design gespeichert");
+          this.$toasted.global.success(this.$t('toast.theme'));
           break;
         case "backgroundColor":
-          this.$toasted.global.success("Farbton gespeichert");
+          this.$toasted.global.success(this.$t('toast.backgroundColor'));
           break;
         case "playerName":
-          this.$toasted.global.success("Spielername gespeichert");
+          this.$toasted.global.success(this.$t('toast.playerName'));
           break;
         case "homeDir":
-          this.$toasted.global.success("Spieleverzeichnis-Pfad gespeichert");
+          this.$toasted.global.success(this.$t('toast.homeDir'));
           break;
         case "nas":
-          this.$toasted.global.success("NAS ID gespeichert");
+          this.$toasted.global.success(this.$t('toast.nas'));
           break;
         case "started":
           if (mutation.payload == true) {
-            this.$toasted.global.success("Service startet...");
+            this.$toasted.global.success(this.$t('toast.service.started'));
           } else {
             this.online = false;
-            this.$toasted.global.success("Service gestoppt");
+            this.$toasted.global.success(this.$t('toast.service.stopped'));
           }
           break;
         case "locale":
           this.$i18n.locale = mutation.payload;
-          this.$toasted.global.success("Sprache gespeichert");
+          this.$toasted.global.success(this.$t('toast.locale'));
           break;
       }
-    });
+    }.bind(this));
 
     // Setup global service status poller
     clearInterval(pingIntervalHandle);
