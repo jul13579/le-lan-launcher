@@ -149,7 +149,7 @@ export default {
         require("@/assets/gaming.png"),
         require("@/assets/prism.png"),
         require("@/assets/maze.png"),
-        require("@/assets/unicorn.png")
+        require("@/assets/unicorns.png")
       ],
       devices: [],
       langs: require("../langs").default
