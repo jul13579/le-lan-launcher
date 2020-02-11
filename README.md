@@ -3,7 +3,7 @@
 ![Launcher preview](preview.png "Launcher preview")
 <sup><sub>(Shown games are examples and not included in the launcher. The launcher does not include **ANY** games by itself)</sup></sub>
 
-## Description
+## :book: Description
 The **LEGC LAN Launcher** mainly is a frontend for the widely known and used synchronization software "Syncthing" (https://github.com/syncthing/syncthing). The need for such a software arised every time our quite small gaming clan faced the challange to distribute games to other LAN-Party visitors in a fast and easy way.
 
 Instead of relying on a NAS for everyone to access, this launcher relies on "Syncthing", the P2P synchronization software, to distribute data to LAN-Party visitors. The setup in mind is as follows:
