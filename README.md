@@ -1,6 +1,7 @@
 # :video_game: LEGC LAN Launcher
 
 ![Launcher preview](preview.png "Launcher preview")
+<sup><sub>(Shown games are examples and not included in the launcher. The launcher does not include **ANY** games by itself)</sup></sub>
 
 ## Description
 The **LEGC LAN Launcher** mainly is a frontend for the widely known and used synchronization software "Syncthing" (https://github.com/syncthing/syncthing). The need for such a software arised every time our quite small gaming clan faced the challange to distribute games to other LAN-Party visitors in a fast and easy way.
@@ -15,7 +16,7 @@ As "Syncthing" is written in go, it is especially suited for cross-platform use,
 
 The necessary changes are very few, so feel free to see the patches in the *patches* directory.
 
-## Features
+## :metal: Features
 * Fancy customization features, including unicorns! :unicorn::rainbow:
 * Multilanguage support, currently english and german only!
 * Set a playername in settings, which can be automatically set in numerous games (see config)
@@ -23,7 +24,7 @@ The necessary changes are very few, so feel free to see the patches in the *patc
 * See network usage of "Syncthing"
 * Spawns games detached from launcher, so the launcher can be closed without killing the game.
 
-## Installation
+## :floppy_disk: Installation
 ### Prerequisites
 * git
 * Node.js + npm
@@ -32,7 +33,7 @@ The necessary changes are very few, so feel free to see the patches in the *patc
 ### Building
 Download/clone the repo and run *build.bat*. This will clone Syncthing, apply my patches to it and build the launcher app. The launcher's install file will be placed inside the *dist_electron* directory.
 
-## Configuration
+## :wrench: Configuration
 ### Library
 Before the launcher can be used, a device should be set up to provide the game folders and the library. As the library also is realized using a shared folder, you have to set this up first. Therefore, start Syncthing on the device and setup a folder called "Library" with the folder ID **"gamelib" (this is important, as the launcher automatically subscribes to this folder to fetch the library)**.
 
@@ -48,7 +49,7 @@ Inside this folder, place the game cover images (ideally 600x900px in size) and 
         "exe": "Bv2Launcher,2.exe"              // Executable path
         "args": []                              // Arguments (optional)
       },
-      "moreLaunchs": {                           // More launch configs (optional)
+      "moreLaunchs": {                          // More launch configs (optional)
         "text": "Foo"                           // Title for launch button
         "exe": "Bv2Launcher,2.exe"              // Executable path
         "args": ["--bar"]                       // Arguments (optional)
@@ -69,5 +70,5 @@ Most of the config should be pretty self-explanatory.
 * *moreLaunchs*: There may be situations, where it is convenient to have a second "play" button that spawns the same executable with different parameters or even spawns a different executable. In such cases, *moreLaunchs* allows to specify such launch configs and lets you even specify a button text.
 * *nameConfig*: For games that store the player's name in a human readable file, *nameConfig* lets you specify the path to this configuration file. In case this config file does not reside inside the games folder, you can specify an environment variable using *env* after which the given file path is interpreted relative to the resolved environment variable. If the player's name is the only content of the configuration file, you should omit the *regex* attribute, as it is used for search-replacing the player's name inside the configuration file. The regex has to be specified in a way that only the to-be-replaced playername inside the file is matched.
 
-## Finished!
+## :tada: Finished!
 That's it! I hope this LAN Launcher can be of use for more that just my people! :wink:
