@@ -16,7 +16,7 @@ As "Syncthing" is written in go, it is especially suited for cross-platform use,
 The necessary changes are very few, so feel free to see the patches in the *patches* directory.
 
 ## Features
-* Fancy customization features, including unicorns ;D
+* Fancy customization features, including unicorns! :unicorn::rainbow:
 * Multilanguage support, currently english and german only!
 * Set a playername in settings, which can be automatically set in numerous games (see config)
 * Download/browse/delete games, pause distribution of specific games, specify multiple launch configurations (see config)
