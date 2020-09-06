@@ -12,8 +12,8 @@ git reset --hard
 git pull origin master
 
 echo.
-echo Checking out latest syncthing release tag (v1.3.4)
-git checkout v1.3.4
+echo Checking out latest syncthing release tag (v1.8.0)
+git checkout v1.8.0
 
 echo.
 echo Patching syncthing
@@ -24,7 +24,7 @@ for %%f in (..\patches\*) do (
 
 echo.
 echo Building Syncthing...
-go run build.go -version v1.3.4-LEGC -no-upgrade build
+go run build.go -version v1.8.0-LEGC -no-upgrade build
 popd
 
 echo.
