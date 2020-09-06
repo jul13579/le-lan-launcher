@@ -1,4 +1,7 @@
 @echo off
+
+set VERSION="v1.8.0"
+
 if exist syncthing goto build
 :cloneSyncthing
 echo Cloning Syncthing...
@@ -9,11 +12,11 @@ echo.
 echo Pulling latest changes...
 pushd syncthing
 git reset --hard
-git pull origin master
+git pull origin main
 
 echo.
-echo Checking out latest syncthing release tag (v1.8.0)
-git checkout v1.8.0
+echo Checking out latest syncthing release tag (%VERSION%)
+git checkout %VERSION%
 
 echo.
 echo Patching syncthing
@@ -24,18 +27,9 @@ for %%f in (..\patches\*) do (
 
 echo.
 echo Building Syncthing...
-go run build.go -version v1.8.0-LEGC -no-upgrade build
+go run build.go -version %VERSION%-LEGC -no-upgrade build
 popd
 
 echo.
 echo Move binary into place...
 move syncthing\syncthing* .\
-
-echo.
-echo Installing npm dependencies....
-call npm install
-
-echo.
-echo Building LEGC LAN-Launcher...
-call npm run electron:build
-exit 0

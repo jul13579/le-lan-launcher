@@ -33,7 +33,10 @@ The necessary changes are very few, so feel free to see the patches in the *patc
 * Syncthing prerequisties (see Syncthing documentation for further information)
 
 ### Building
-Download/clone the repo and run *build.bat*. This will clone Syncthing, apply my patches to it and build the launcher app. The launcher's install file will be placed inside the *dist_electron* directory.
+Download/clone the repo and run the desired build script:
+* `build_all.*`: This will first run `build_syncthing.*` and then `build_app.*`
+* `build_syncthing.*`: This will clone Syncthing and apply my patches to it
+* `build_app.*`: This will build the launcher app. The launcher's install file will be placed inside the *dist_electron* directory.
 
 ## :wrench: Configuration
 ### Library
