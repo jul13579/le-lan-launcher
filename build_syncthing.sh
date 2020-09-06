@@ -1,13 +1,15 @@
 #!/bin/bash
+
+SYNCTHING_DIR="syncthing-src"
 VERSION="v1.8.0"
 
 if [ ! -d "syncthing" ]; then
     echo "Cloning Syncthing..."
-    git clone git@github.com:syncthing/syncthing.git
+    git clone git@github.com:syncthing/syncthing.git $SYNCTHING_DIR
 fi
 
 echo -e "\nPulling latest changes..."
-pushd syncthing
+pushd $SYNCTHING_DIR
 git reset --hard
 git pull origin main
 
@@ -26,4 +28,4 @@ go run build.go -version $VERSION-LEGC -no-upgrade build
 popd
 
 echo -e "Move binary into place..."
-mv syncthing/syncthing* ./
+mv $SYNCTHING_DIR/syncthing* ./

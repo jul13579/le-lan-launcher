@@ -1,16 +1,17 @@
 @echo off
 
+set SYNCTHING_DIR="syncthing-src"
 set VERSION="v1.8.0"
 
 if exist syncthing goto build
 :cloneSyncthing
 echo Cloning Syncthing...
-git clone git@github.com:syncthing/syncthing.git
+git clone git@github.com:syncthing/syncthing.git %SYNCTHING_DIR%
 
 :build
 echo.
 echo Pulling latest changes...
-pushd syncthing
+pushd %SYNCTHING_DIR%
 git reset --hard
 git pull origin main
 
@@ -32,4 +33,4 @@ popd
 
 echo.
 echo Move binary into place...
-move syncthing\syncthing* .\
+move %SYNCTHING_DIR%\syncthing* .\
