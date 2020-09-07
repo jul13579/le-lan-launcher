@@ -298,13 +298,19 @@ export default {
         detached: true
       }); // Spawn executable detached, so it stays open if launcher is closed.
       ls.stdout.on("data", function(data) {
-        console.log("stdout: " + data);
+        // TODO: Idea: create debug window?
+        // console.log("stdout: " + data);
+        data;
       });
       ls.stderr.on("data", function(data) {
-        console.log("stderr: " + data);
+        // TODO: Idea: create debug window?
+        // console.log("stderr: " + data);
+        data;
       });
       ls.on("exit", function(code) {
-        console.log("child process exited with code " + code);
+        // TODO: Idea: create debug window?
+        // console.log("child process exited with code " + code);
+        code;
       });
     }
   }

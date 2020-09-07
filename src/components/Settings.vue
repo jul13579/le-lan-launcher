@@ -169,7 +169,6 @@ export default {
       require("electron")
         .remote.dialog.showOpenDialog({ properties: ["openDirectory"] })
         .then(result => {
-          console.log(result.canceled);
           if (!result.canceled)
             this.$store.dispatch("setHomeDir", { dir: result.filePaths[0] });
         });
