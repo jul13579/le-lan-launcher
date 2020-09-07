@@ -5,12 +5,11 @@ import { execFile } from "child_process";
 import fs from "fs";
 import XMLParser from "xml-parser";
 import AJAX from "./ajax";
-import {
-  createProtocol,
-  installVueDevtools
-} from "vue-cli-plugin-electron-builder/lib";
+import { createProtocol } from "vue-cli-plugin-electron-builder/lib";
+import installExtension, { VUEJS_DEVTOOLS } from "electron-devtools-installer";
 import path from "path";
 import store from "./store";
+
 const isDevelopment = process.env.NODE_ENV !== "production";
 
 // Keep a global reference of the window object, if you don't, the window will
@@ -19,10 +18,10 @@ let win;
 
 // Scheme must be registered before the app is ready
 protocol.registerSchemesAsPrivileged([
-  { scheme: "app", privileges: { secure: true, standard: true } }
+  { scheme: "app", privileges: { secure: true, standard: true } },
 ]);
 
-function createWindow() {
+async function createWindow() {
   // Create the browser window.
   win = new BrowserWindow({
     width: 1200,
@@ -32,17 +31,16 @@ function createWindow() {
     title: "[|LE|] LAN-Launcher",
     icon: path.join(__static, "./icon.png"),
     webPreferences: {
-      nodeIntegration: true,
-      webSecurity: false // Disabled to be able to load local images
-    }
+      nodeIntegration: process.env.ELECTRON_NODE_INTEGRATION,
+      webSecurity: false, // Disabled to be able to load local images
+    },
   });
 
-  // Menu.setApplicationMenu(null);
   win.removeMenu();
 
   if (process.env.WEBPACK_DEV_SERVER_URL) {
     // Load the url of the dev server if in development mode
-    win.loadURL(process.env.WEBPACK_DEV_SERVER_URL);
+    await win.loadURL(process.env.WEBPACK_DEV_SERVER_URL);
     if (!process.env.IS_TEST) win.webContents.openDevTools();
   } else {
     createProtocol("app");
@@ -76,9 +74,7 @@ app.on("window-all-closed", () => {
 app.on("activate", () => {
   // On macOS it's common to re-create a window in the app when the
   // dock icon is clicked and there are no other windows open.
-  if (win === null) {
-    createWindow();
-  }
+  if (BrowserWindow.getAllWindows().length === 0) createWindow();
 });
 
 // This method will be called when Electron has finished
@@ -87,17 +83,19 @@ app.on("activate", () => {
 app.on("ready", async () => {
   if (isDevelopment && !process.env.IS_TEST) {
     // Install Vue Devtools
-    // Devtools extensions are broken in Electron 6.0.0 and greater
-    // See https://github.com/nklayman/vue-cli-plugin-electron-builder/issues/378 for more info
-    // Electron will not launch with Devtools extensions installed on Windows 10 with dark mode
-    // If you are not using Windows 10 dark mode, you may uncomment these lines
-    // In addition, if the linked issue is closed, you can upgrade electron and uncomment these lines
     try {
-      await installVueDevtools();
+      await installExtension(VUEJS_DEVTOOLS);
     } catch (e) {
       console.error("Vue Devtools failed to install:", e.toString());
     }
   }
+
+  // Register custom file protocol (gamethumb://) to load game thumbnails
+  protocol.registerFileProtocol('gamethumb', (request, callback) => {
+    const url = request.url.replace('gamethumb://', '');
+    callback({ path: path.normalize(`${url}`) })
+  })
+
   createWindow();
   startService();
 });
@@ -105,7 +103,7 @@ app.on("ready", async () => {
 // Exit cleanly on request from parent process in development mode.
 if (isDevelopment) {
   if (process.platform === "win32") {
-    process.on("message", data => {
+    process.on("message", (data) => {
       if (data === "graceful-exit") {
         if (store.state.started) {
           AJAX.Syncthing.System.shutdown()
@@ -157,8 +155,8 @@ function startService() {
       let xml = XMLParser(
         fs.readFileSync(path.join(store.state.homeDir, "config.xml"), "utf8")
       );
-      let gui = xml.root.children.find(item => item.name == "gui");
-      let apikey = gui.children.find(item => item.name == "apikey").content;
+      let gui = xml.root.children.find((item) => item.name == "gui");
+      let apikey = gui.children.find((item) => item.name == "apikey").content;
       if (apikey) {
         store.dispatch("setApikey", { key: apikey });
         clearInterval(pollingInterval);
@@ -179,7 +177,10 @@ function setPlayerName(event, game, config) {
   );
   let nameFileContents = fs.readFileSync(filePath, { encoding: "utf8" });
   if (nameConfig.regex) {
-    nameFileContents = nameFileContents.replace(new RegExp(nameConfig.regex), store.state.playerName);
+    nameFileContents = nameFileContents.replace(
+      new RegExp(nameConfig.regex),
+      store.state.playerName
+    );
   } else {
     nameFileContents = store.state.playerName;
   }

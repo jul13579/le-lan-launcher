@@ -8,7 +8,7 @@
   >
     <img
       :class="{'installed': subscribed && downloadFinished}"
-      :src="'file://' + homeDir + '/Library/' + value.cover"
+      :src="'gamethumb://' + homeDir + '/Library/' + value.cover"
       alt=""
     />
     <div :class="['gameOptions', showOptions]">
