@@ -16,10 +16,7 @@
         <ul>
           <template v-if="!subscribed">
             <li @click="$emit('download')">
-              <vs-icon
-                icon="cloud_download"
-                size="small"
-              ></vs-icon>{{$t('gameEntry.download')}}
+              <v-icon small>mdi-cloud-download</v-icon>{{$t('gameEntry.download')}}
             </li>
           </template>
           <template v-else>
@@ -28,19 +25,13 @@
                 @click="$emit('execute', value.launch)"
                 v-if="status.globalBytes > 0"
               >
-                <vs-icon
-                  icon="play_arrow"
-                  size="small"
-                ></vs-icon>{{$t('gameEntry.play')}}
+                <v-icon small>mdi-play</v-icon>{{$t('gameEntry.play')}}
               </li>
               <li
                 @click="$emit('reset')"
                 v-if="status.receiveOnlyTotalItems > 0"
               >
-                <vs-icon
-                  icon="restore"
-                  size="small"
-                ></vs-icon>{{$t('gameEntry.reset')}}
+                <v-icon small>mdi-backup-restore</v-icon>{{$t('gameEntry.reset')}}
               </li>
               <li
                 v-for="(item, index) in value.moreLaunchs"
@@ -49,41 +40,26 @@
                   $emit('execute', item)
                 "
               >
-                <vs-icon
-                  icon="more_horizontal"
-                  size="small"
-                ></vs-icon>{{ item.text }}
+                <v-icon small>mdi-dots-horizontal</v-icon>{{ item.text }}
               </li>
             </template>
             <li
               @click="$emit('pause')"
               v-if="!config.paused"
             >
-              <vs-icon
-                icon="pause"
-                size="small"
-              ></vs-icon>{{$t('gameEntry.pause')}}
+              <v-icon small>mdi-pause</v-icon>{{$t('gameEntry.pause')}}
             </li>
             <li
               @click="$emit('resume')"
               v-if="config.paused"
             >
-              <vs-icon
-                icon="double_arrow"
-                size="small"
-              ></vs-icon>{{$t('gameEntry.resume')}}
+              <v-icon small>mdi-chevron-double-right</v-icon>{{$t('gameEntry.resume')}}
             </li>
             <li @click="$emit('browse')">
-              <vs-icon
-                icon="folder_open"
-                size="small"
-              ></vs-icon>{{$t('gameEntry.browse')}}
+              <v-icon small>mdi-folder-open</v-icon>{{$t('gameEntry.browse')}}
             </li>
             <li @click="$emit('delete')">
-              <vs-icon
-                icon="delete"
-                size="small"
-              ></vs-icon>{{$t('gameEntry.delete')}}
+              <v-icon small>mdi-delete</v-icon>{{$t('gameEntry.delete')}}
             </li>
           </template>
         </ul>
