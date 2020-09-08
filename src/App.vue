@@ -17,6 +17,8 @@
 // Make frameless window draggable while excluding buttons and tabs, which still have to be clickable
 .app
   &__bar
+    backdrop-filter: blur(10px)
+    background-color: rgba(0,0,0,.3)!important
     -webkit-app-region: drag
 
     .v-tabs,button
@@ -100,7 +102,10 @@
 
     <v-main>
       <v-container fluid>
-        <v-tabs-items v-model="activeTab">
+        <v-tabs-items
+          v-model="activeTab"
+          style="background-color: unset"
+        >
           <v-tab-item>
             <games :online="online" />
           </v-tab-item>
