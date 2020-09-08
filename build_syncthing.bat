@@ -1,9 +1,9 @@
 @echo off
 
 set SYNCTHING_DIR="syncthing-src"
-set VERSION="v1.8.0"
+set VERSION="v1.9.0"
 
-if exist syncthing goto build
+if exist %SYNCTHING_DIR% goto build
 :cloneSyncthing
 echo Cloning Syncthing...
 git clone git@github.com:syncthing/syncthing.git %SYNCTHING_DIR%

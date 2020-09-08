@@ -1,9 +1,9 @@
 #!/bin/bash
 
 SYNCTHING_DIR="syncthing-src"
-VERSION="v1.8.0"
+VERSION="v1.9.0"
 
-if [ ! -d "syncthing" ]; then
+if [ ! -d "$SYNCTHING_DIR" ]; then
     echo "Cloning Syncthing..."
     git clone git@github.com:syncthing/syncthing.git $SYNCTHING_DIR
 fi

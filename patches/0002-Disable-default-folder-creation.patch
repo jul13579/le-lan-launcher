@@ -1,4 +1,4 @@
-From d4aca024cd2420ff694c0d02ae4b50d5806f0e4e Mon Sep 17 00:00:00 2001
+From a63b7b04b5caf7c7c8b98e53d6b6c4b0fe4ae678 Mon Sep 17 00:00:00 2001
 From: Julian Lehrhuber <jl@lerry.de>
 Date: Mon, 10 Feb 2020 09:31:15 +0100
 Subject: [PATCH 2/3] Disable default folder creation
@@ -8,7 +8,7 @@ Subject: [PATCH 2/3] Disable default folder creation
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/cmd/syncthing/main.go b/cmd/syncthing/main.go
-index 86847c6a..5d3b26ce 100644
+index c6599404..bbfcb26a 100644
 --- a/cmd/syncthing/main.go
 +++ b/cmd/syncthing/main.go
 @@ -146,7 +146,7 @@ The following are valid values for the STTRACE variable:
