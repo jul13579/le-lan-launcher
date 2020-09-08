@@ -30,12 +30,29 @@
     width: 100%
     justify-content: center
     letter-spacing: 5px
+
+.themeWrapper
+  position: fixed
+  width: 100vw
+  height: 100vh
+  top: 0
+  left: 0
+  &.texture
+    opacity: .1
+  
 </style>
 
 <template>
-  <!-- class="frame"
-    :style="{background: 'linear-gradient(' + cachedBackgroundColor + ', black)'}" -->
   <v-app>
+    <div
+      class="themeWrapper bgColor"
+      :style="{background: 'linear-gradient(' + cachedBackgroundColor + ', black)'}"
+    />
+    <div
+      class="themeWrapper texture"
+      :style="{background: 'url('+theme+')'}"
+    />
+
     <v-app-bar
       app
       elevate-on-scroll
@@ -67,8 +84,11 @@
       </v-btn>
 
       <template v-slot:extension>
-        <v-tabs centered>
-          <v-tab>
+        <v-tabs
+          centered
+          v-model="activeTab"
+        >
+          <v-tab :disabled="!setupCompleted">
             <v-icon left>mdi-gamepad</v-icon>{{ $t('nav.library') }}
           </v-tab>
           <v-tab>
@@ -80,40 +100,25 @@
 
     <v-main>
       <v-container fluid>
-        <games :online="online" />
+        <v-tabs-items v-model="activeTab">
+          <v-tab-item>
+            <games :online="online" />
+          </v-tab-item>
+          <v-tab-item>
+            <settings
+              :online="online"
+              :backgroundColor.sync="cachedBackgroundColor"
+            ></settings>
+          </v-tab-item>
+        </v-tabs-items>
       </v-container>
     </v-main>
   </v-app>
-  <!-- <div
-      class="frame texture"
-      :style="{background: 'url('+theme+')'}"
-    ></div>
-    <vs-tabs
-      v-model="activeTab"
-      position="left"
-    >
-      <vs-tab
-        :label="$t('nav.library')"
-        icon="gamepad"
-        :disabled="!setupCompleted"
-      >
-        <games :online="online"></games>
-      </vs-tab>
-      <vs-tab
-        :label="$t('nav.settings')"
-        icon="settings"
-      >
-        <settings
-          :online="online"
-          :backgroundColor.sync="cachedBackgroundColor"
-        ></settings>
-      </vs-tab>
-    </vs-tabs>
-    <statistics :online="online"></statistics> -->
+  <!-- <statistics :online="online"></statistics> -->
 </template>
 
 <script>
-// import Settings from "./components/Settings";
+import Settings from "./components/Settings";
 import Games from "./components/Games";
 // import Statistics from "./components/Statistics";
 import { mapState } from "vuex";
@@ -125,7 +130,7 @@ let backgroundColorTimeout, pingIntervalHandle;
 export default {
   name: "app",
   components: {
-    // Settings,
+    Settings,
     Games,
     // Statistics,
   },
