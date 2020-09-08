@@ -17,8 +17,6 @@
 // Make frameless window draggable while excluding buttons and tabs, which still have to be clickable
 .app
   &__bar
-    backdrop-filter: blur(10px)
-    background-color: rgba(0,0,0,.3)!important
     -webkit-app-region: drag
 
     .v-tabs,button
@@ -58,7 +56,7 @@
     <v-app-bar
       app
       elevate-on-scroll
-      class="app__bar justify-center"
+      class="app__bar blurry-backdrop justify-center"
     >
       <v-avatar class="mr-2"><img :src="require('../public/icon.png')"></v-avatar>
       <v-spacer></v-spacer>
@@ -118,14 +116,15 @@
         </v-tabs-items>
       </v-container>
     </v-main>
+
+    <statistics :online="online"></statistics>
   </v-app>
-  <!-- <statistics :online="online"></statistics> -->
 </template>
 
 <script>
 import Settings from "./components/Settings";
 import Games from "./components/Games";
-// import Statistics from "./components/Statistics";
+import Statistics from "./components/Statistics";
 import { mapState } from "vuex";
 
 import AJAX from "./ajax";
@@ -137,7 +136,7 @@ export default {
   components: {
     Settings,
     Games,
-    // Statistics,
+    Statistics,
   },
   data() {
     return {
