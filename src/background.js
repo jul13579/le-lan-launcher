@@ -135,18 +135,17 @@ if (isDevelopment) {
 
 function startService() {
   if (store.state.homeDir != false) {
-    let binPath = "./syncthing";
-    if (!isDevelopment) {
-      binPath = path.join("./resources", binPath);
-    }
+    let binPath = path.join(__dirname, "../syncthing");
     let args = ["-no-browser", "-home=" + store.state.homeDir];
     if (process.platform == "win32") {
       binPath += ".exe";
       args.push("-no-console");
     }
 
-    execFile(binPath, args, function(err, data) {
-      // do nothing
+    execFile(binPath, args, (error, stdout, stderr) => {
+      if (error) {
+        throw error;
+      }
     });
 
     store.dispatch("setStarted", { started: true });

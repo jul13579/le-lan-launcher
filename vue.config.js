@@ -3,7 +3,10 @@ module.exports = {
     electronBuilder: {
       nodeIntegration: true,
       builderOptions: {
-        extraResources: ["./syncthing*"]
+        extraResources: [
+          "./syncthing*",
+          "!*service*"
+        ]
       }
     }
   }
