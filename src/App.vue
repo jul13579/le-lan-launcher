@@ -173,31 +173,31 @@ export default {
       function (mutation) {
         switch (mutation.type) {
           case "theme":
-            this.$toasted.global.success(this.$t("toast.theme"));
+            this.$toasted.success(this.$t("toast.theme"));
             break;
           case "backgroundColor":
-            this.$toasted.global.success(this.$t("toast.backgroundColor"));
+            this.$toasted.success(this.$t("toast.backgroundColor"));
             break;
           case "playerName":
-            this.$toasted.global.success(this.$t("toast.playerName"));
+            this.$toasted.success(this.$t("toast.playerName"));
             break;
           case "homeDir":
-            this.$toasted.global.success(this.$t("toast.homeDir"));
+            this.$toasted.success(this.$t("toast.homeDir"));
             break;
           case "nas":
-            this.$toasted.global.success(this.$t("toast.nas"));
+            this.$toasted.success(this.$t("toast.nas"));
             break;
           case "started":
             if (mutation.payload == true) {
-              this.$toasted.global.success(this.$t("toast.service.started"));
+              this.$toasted.success(this.$t("toast.service.started"));
             } else {
               this.online = false;
-              this.$toasted.global.success(this.$t("toast.service.stopped"));
+              this.$toasted.success(this.$t("toast.service.stopped"));
             }
             break;
           case "locale":
             this.$i18n.locale = mutation.payload;
-            this.$toasted.global.success(this.$t("toast.locale"));
+            this.$toasted.success(this.$t("toast.locale"));
             break;
         }
       }.bind(this)

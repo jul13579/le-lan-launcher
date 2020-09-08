@@ -180,10 +180,10 @@ export default {
       if (this.started) {
         AJAX.Syncthing.System.restart()
           .then(() => {
-            this.$toasted.global.success(this.$t("toast.service.restarting"));
+            this.$toasted.success(this.$t("toast.service.restarting"));
           })
           .catch(() => {
-            this.$toasted.global.error(
+            this.$toasted.error(
               this.$t("toast.service.error.restarting")
             );
           });
@@ -196,7 +196,7 @@ export default {
             this.$store.dispatch("setStarted", { started: false });
           })
           .catch(() => {
-            this.$toasted.global.error(this.$t("toast.service.error.stopping"));
+            this.$toasted.error(this.$t("toast.service.error.stopping"));
           });
       }
     },

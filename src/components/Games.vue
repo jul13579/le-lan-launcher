@@ -245,7 +245,7 @@ export default {
       this.config.folders.push(this.getFolderObj(game.id, game.title));
       AJAX.Syncthing.System.setConfig(this.config)
         .then(() => {
-          this.$toasted.global.success("Download gestartet: " + game.title);
+          this.$toasted.success("Download gestartet: " + game.title);
         })
         .catch();
     },
@@ -260,9 +260,9 @@ export default {
       AJAX.Syncthing.System.setConfig(this.config)
         .then(() => {
           if (pause) {
-            this.$toasted.global.success("Download pausiert: " + game.title);
+            this.$toasted.success("Download pausiert: " + game.title);
           } else {
-            this.$toasted.global.success("Download forgesetzt: " + game.title);
+            this.$toasted.success("Download forgesetzt: " + game.title);
           }
         })
         .catch();
@@ -272,7 +272,7 @@ export default {
       this.config.folders.splice(this.getGameFolderIndex(game), 1);
       AJAX.Syncthing.System.setConfig(this.config)
         .then(() => {
-          this.$toasted.global.success("Spiel gelöscht: " + game.title);
+          this.$toasted.success("Spiel gelöscht: " + game.title);
         })
         .catch();
       setTimeout(() => {
@@ -285,7 +285,7 @@ export default {
     resetGame(game) {
       AJAX.Syncthing.DB.revertFolder(game.id)
         .then(() => {
-          this.$toasted.global.success(
+          this.$toasted.success(
             "Spiel wird zurückgesetzt: " + game.title
           );
         })
