@@ -1,19 +1,4 @@
 <style lang="sass">
-// .frame
-//   width: 100%
-//   height: 100%
-//   max-width: 100%
-//   max-height: 100%
-//   overflow: hidden
-//   padding: 10px
-//   padding-left: 0px
-
-//   .texture
-//     position: absolute
-//     top: 0
-//     left: 0
-//     filter: opacity(0.1)
-
 // Make frameless window draggable while excluding buttons and tabs, which still have to be clickable
 .app
   &__bar
@@ -46,7 +31,7 @@
   <v-app>
     <div
       class="themeWrapper bgColor"
-      :style="{background: 'linear-gradient(' + cachedBackgroundColor + ', black)'}"
+      :style="{background: 'linear-gradient(hsl(' + backgroundHue + ', 75%, 8%), black)'}"
     />
     <div
       class="themeWrapper texture"
@@ -85,6 +70,8 @@
 
       <template v-slot:extension>
         <v-tabs
+          :slider-color="'hsl(' + backgroundHue + ', 100%, 50%)'"
+          :color="'hsl(' + backgroundHue + ', 100%, 50%)'"
           centered
           v-model="activeTab"
         >
@@ -108,10 +95,7 @@
             <games :online="online" />
           </v-tab-item>
           <v-tab-item>
-            <settings
-              :online="online"
-              :backgroundColor.sync="cachedBackgroundColor"
-            ></settings>
+            <settings :online="online"></settings>
           </v-tab-item>
         </v-tabs-items>
       </v-container>
@@ -129,7 +113,7 @@ import { mapState } from "vuex";
 
 import AJAX from "./ajax";
 
-let backgroundColorTimeout, pingIntervalHandle;
+let pingIntervalHandle;
 
 export default {
   name: "app",
@@ -143,7 +127,6 @@ export default {
       activeTab: 1,
       online: false,
       nasId: "",
-      cachedBackgroundColor: this.$store.state.backgroundColor,
     };
   },
   computed: {
@@ -152,20 +135,7 @@ export default {
         this.playerName != false && this.homeDir != false && this.nas != false
       );
     },
-    ...mapState(["theme", "playerName", "homeDir", "nas"]),
-  },
-  watch: {
-    cachedBackgroundColor(value) {
-      clearTimeout(backgroundColorTimeout);
-      backgroundColorTimeout = setTimeout(
-        function () {
-          this.$store.dispatch("setBackgroundColor", {
-            color: value,
-          });
-        }.bind(this),
-        1000
-      );
-    },
+    ...mapState(["theme", "playerName", "homeDir", "nas", "backgroundHue"]),
   },
   beforeMount() {
     // Setup notification handles
@@ -175,8 +145,8 @@ export default {
           case "theme":
             this.$toasted.success(this.$t("toast.theme"));
             break;
-          case "backgroundColor":
-            this.$toasted.success(this.$t("toast.backgroundColor"));
+          case "backgroundHue":
+            this.$toasted.success(this.$t("toast.backgroundHue"));
             break;
           case "playerName":
             this.$toasted.success(this.$t("toast.playerName"));

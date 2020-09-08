@@ -7,7 +7,7 @@ export default {
     },
     toast: {
       theme: "Design saved",
-      backgroundColor: "Color saved",
+      backgroundHue: "Color saved",
       playerName: "Playername saved",
       homeDir: "Installation directory saved",
       nas: "NAS ID saved",
@@ -51,7 +51,7 @@ export default {
     },
     settings: {
       theme: "Theme",
-      backgroundColor: "Background color",
+      backgroundHue: "Background color",
       environment: "Environment",
       language: "Language",
       playerName: "Playername",
@@ -80,7 +80,7 @@ export default {
     },
     toast: {
       theme: "Design gespeichert",
-      backgroundColor: "Farbton gespeichert",
+      backgroundHue: "Farbton gespeichert",
       playerName: "Spielername gespeichert",
       homeDir: "Spieleverzeichnis-Pfad gespeichert",
       nas: "NAS ID gespeichert",
@@ -124,7 +124,7 @@ export default {
     },
     settings: {
       theme: "Design",
-      backgroundColor: "Farbton",
+      backgroundHue: "Farbton",
       environment: "Umgebung",
       language: "Sprache",
       playerName: "Spielername",

@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <v-container>
     <template v-if="!libExisting">
       <div style="height: calc(100vh - 70px)">
         <hollow-dots-spinner
@@ -12,7 +12,6 @@
       </div>
     </template>
     <template v-else>
-      <h1 style="margin-bottom: 1rem">{{$t('nav.library')}}</h1>
       <game-entry
         v-for="(item, index) in lib.games"
         :key="index"
@@ -29,7 +28,7 @@
         @execute="(launch) => execute(getGameFolder(item), item, launch)"
       />
     </template>
-  </div>
+  </v-container>
 </template>
 
 <script>

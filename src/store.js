@@ -4,12 +4,12 @@ import { createPersistedState, createSharedMutations } from "vuex-electron";
 
 Vue.use(Vuex);
 
-const defaultBackgroundColor = "hsl(260, 75%, 8%)";
+const defaultBackgroundHue = 265;
 const defaultLocale = "en";
 
 export default new Vuex.Store({
   state: {
-    backgroundColor: defaultBackgroundColor,
+    backgroundHue: defaultBackgroundHue,
     theme: "",
     playerName: "",
     homeDir: "",
@@ -19,8 +19,8 @@ export default new Vuex.Store({
     locale: defaultLocale,
   },
   mutations: {
-    backgroundColor(state, color) {
-      state.backgroundColor = color;
+    backgroundHue(state, color) {
+      state.backgroundHue = color;
     },
     theme(state, theme) {
       state.theme = theme;
@@ -51,8 +51,8 @@ export default new Vuex.Store({
     }
   },
   actions: {
-    setBackgroundColor(store, payload) {
-      store.commit("backgroundColor", payload.color);
+    setBackgroundHue(store, payload) {
+      store.commit("backgroundHue", payload.color);
     },
     setTheme(store, payload) {
       store.commit("theme", payload.theme);

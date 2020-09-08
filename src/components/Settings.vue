@@ -1,85 +1,106 @@
+<style lang="sass">
+.themePreview
+  border-radius: 10px
+  cursor: pointer
+  display: flex
+  width: 200px
+  max-width: 200px
+
+  &:hover * 
+    transform: scale(1.1)
+    transition: transform .1s ease-in-out
+
+</style>
+
 <template>
-  <div class="container">
-    <h1>{{$t('nav.settings')}}</h1>
-    <vs-alert
-      color="danger"
+  <v-container>
+    <v-alert
+      type="error"
+      text
+      border="left"
       :title="$t('errors.playerNameUnset.title')"
       v-if="playerName == false"
     >
       {{$t('errors.playerNameUnset.message')}}
-    </vs-alert>
-    <vs-alert
-      color="danger"
+    </v-alert>
+    <v-alert
+      type="error"
+      text
+      border="left"
       :title="$t('errors.homeDirUnset.title')"
       v-if="homeDir == false"
     >
       {{$t('errors.homeDirUnset.message')}}
-    </vs-alert>
-    <vs-alert
-      color="danger"
+    </v-alert>
+    <v-alert
+      type="error"
+      text
+      border="left"
       :title="$t('errors.nasUnset.title')"
       v-if="nas == false"
     >
       {{$t('errors.nasUnset.message')}}
-    </vs-alert>
-    <h2>{{$t('settings.theme')}}</h2>
-    <vs-images>
-      <vs-image
+    </v-alert>
+    <div class="text-h4">{{$t('settings.theme')}}</div>
+    <v-row>
+      <v-img
         v-for="(item, index) in textures"
         :key="index"
+        class="themePreview ma-3"
+        aspect-ratio="1"
         :src="item"
         @click.native="() => {$store.dispatch('setTheme', {theme: item})}"
-      ></vs-image>
-    </vs-images>
-    <h2>{{$t('settings.backgroundColor')}}</h2>
-    <vs-row>
-      <vs-col
-        vs-w="12"
-        style="padding: 0 1rem"
-      >
-        <vs-slider
+      ></v-img>
+    </v-row>
+
+    <div class="mt-5 text-h4">{{$t('settings.backgroundHue')}}</div>
+    <v-row>
+      <v-col cols="12">
+        <v-slider
           :min="0"
           :max="360"
-          @input="(input) => {$emit('update:backgroundColor', 'hsl(' + input + ', 75%, 8%)')}"
-          :color="backgroundColor"
-          :value="parseInt(backgroundColor.replace('hsl(', '').split(',')[0])"
+          thumb-label
+          v-model="sliderValue"
+          :color="'hsl(' + sliderValue + ', 100%, 50%)'"
+          @change="(input) => {$store.dispatch('setBackgroundHue', {color: input})}"
         />
-      </vs-col>
-    </vs-row>
-    <h2>{{$t('settings.environment')}}</h2>
-    <vs-row>
-      <vs-col vs-w="3">
-        <vs-dropdown>
-          <vs-input
+      </v-col>
+    </v-row>
+
+    <div class="text-h4">{{$t('settings.environment')}}</div>
+    <v-row>
+      <v-col cols="3">
+        <v-dropdown>
+          <v-input
             :label-placeholder="$t('settings.language')"
             :value="langs[locale].lang"
           />
-          <vs-dropdown-menu class="langDropdown">
-            <vs-dropdown-item
+          <v-dropdown-menu class="langDropdown">
+            <v-dropdown-item
               v-for="(item, index) in langs"
               :key="index"
               @click.native="$store.dispatch('setLocale', {locale: index})"
             >
               {{item.lang}}
-            </vs-dropdown-item>
-          </vs-dropdown-menu>
-        </vs-dropdown>
-      </vs-col>
-    </vs-row>
-    <vs-row>
-      <vs-col vs-w="3">
-        <vs-input
+            </v-dropdown-item>
+          </v-dropdown-menu>
+        </v-dropdown>
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col cols="3">
+        <v-input
           :label-placeholder="$t('settings.playerName')"
           :value="playerName"
           @blur="(event) => {$store.dispatch('setPlayerName', {name: event.target.value})}"
           :danger="playerName == false"
         />
-      </vs-col>
-      <vs-col
-        vs-w="4"
+      </v-col>
+      <v-col
+        cols="4"
         style="padding: 0 .2rem"
       >
-        <vs-input
+        <v-input
           :label-placeholder="$t('settings.homeDir')"
           @click="openFolderChooser"
           @blur="(event) => {if (event.target.value) $store.dispatch('setHomeDir', {dir: event.target.value})}"
@@ -87,46 +108,46 @@
           :danger="homeDir == false"
           :disabled="started || online"
         />
-      </vs-col>
-      <vs-col vs-w="5">
-        <vs-dropdown>
-          <vs-input
+      </v-col>
+      <v-col cols="5">
+        <v-dropdown>
+          <v-input
             :disabled="!online"
             :label-placeholder="$t('settings.nas')"
             :value="nas"
             :danger="nas == false"
           />
-          <vs-dropdown-menu class="nasDropdown">
+          <v-dropdown-menu class="nasDropdown">
             <template v-if="online">
-              <vs-dropdown-item
+              <v-dropdown-item
                 v-for="(item, index) in devices"
                 :key="index"
                 @click.native="$store.dispatch('setNas', {id: index})"
               >
                 {{index}}
-              </vs-dropdown-item>
-              <vs-dropdown-item v-if="Object.keys(devices).length == 0">
-                <vs-alert
+              </v-dropdown-item>
+              <v-dropdown-item v-if="Object.keys(devices).length == 0">
+                <v-alert
                   color="danger"
                   title="Keine Geräte gefunden"
                 >
                   {{$t('settings.alerts.discovery')}}
-                </vs-alert>
-              </vs-dropdown-item>
+                </v-alert>
+              </v-dropdown-item>
             </template>
-            <vs-dropdown-item v-else>
-              <vs-alert
+            <v-dropdown-item v-else>
+              <v-alert
                 color="danger"
                 title="Service nicht gestartet"
               >
                 {{$t('settings.alerts.service')}}
-              </vs-alert>
-            </vs-dropdown-item>
-          </vs-dropdown-menu>
-        </vs-dropdown>
-      </vs-col>
-    </vs-row>
-  </div>
+              </v-alert>
+            </v-dropdown-item>
+          </v-dropdown-menu>
+        </v-dropdown>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script>
@@ -140,7 +161,7 @@ let discoveryInterval;
 export default {
   mixins: [online],
   props: {
-    backgroundColor: String
+    backgroundHue: String,
   },
   data() {
     return {
@@ -149,17 +170,28 @@ export default {
         require("@/assets/gaming.png"),
         require("@/assets/prism.png"),
         require("@/assets/maze.png"),
-        require("@/assets/unicorns.png")
+        require("@/assets/unicorns.png"),
       ],
+      sliderValue: 0,
       devices: [],
-      langs: require("../langs").default
+      langs: require("../langs").default,
     };
   },
-  computed: mapState(["playerName", "homeDir", "nas", "started", "locale"]),
+  computed: mapState([
+    "playerName",
+    "homeDir",
+    "nas",
+    "started",
+    "locale",
+    "backgroundHue",
+  ]),
   created() {
     this.discovery();
     clearInterval(discoveryInterval);
     discoveryInterval = setInterval(this.discovery, 5000);
+  },
+  beforeMount() {
+    this.sliderValue = this.backgroundHue;
   },
   destroyed() {
     clearInterval(discoveryInterval);
@@ -168,18 +200,18 @@ export default {
     openFolderChooser() {
       require("electron")
         .remote.dialog.showOpenDialog({ properties: ["openDirectory"] })
-        .then(result => {
+        .then((result) => {
           if (!result.canceled)
             this.$store.dispatch("setHomeDir", { dir: result.filePaths[0] });
         });
     },
     discovery() {
       AJAX.Syncthing.System.getDiscovery()
-        .then(response => {
+        .then((response) => {
           this.devices = response.data;
         })
         .catch();
-    }
-  }
+    },
+  },
 };
 </script>
