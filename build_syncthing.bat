@@ -13,6 +13,7 @@ echo.
 echo Pulling latest changes...
 pushd %SYNCTHING_DIR%
 git reset --hard
+git fetch
 git pull origin main
 
 echo.

@@ -11,6 +11,7 @@ fi
 echo -e "\nPulling latest changes..."
 pushd $SYNCTHING_DIR
 git reset --hard
+git fetch
 git pull origin main
 
 echo -e "\nChecking out latest syncthing release tag ($VERSION)"
