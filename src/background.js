@@ -9,7 +9,6 @@ import { createProtocol } from "vue-cli-plugin-electron-builder/lib";
 import installExtension, { VUEJS_DEVTOOLS } from "electron-devtools-installer";
 import path from "path";
 import store from "./store";
-import app_config from "./config/app";
 
 const isDevelopment = process.env.NODE_ENV !== "production";
 
@@ -30,7 +29,7 @@ async function createWindow() {
     minWidth: 1200,
     minHeight: 720,
     frame: false,
-    title: app_config.full_title,
+    title: "[|LE|] LAN-Launcher",
     icon: path.join(__static, "./icon.png"),
     webPreferences: {
       nodeIntegration: process.env.ELECTRON_NODE_INTEGRATION,
