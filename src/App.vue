@@ -21,6 +21,15 @@
 
     .v-tabs,button
       -webkit-app-region: no-drag
+
+.v-toolbar__title
+  &.centered
+    position: absolute
+    display: flex
+    left: 0px
+    width: 100%
+    justify-content: center
+    letter-spacing: 5px
 </style>
 
 <template>
@@ -30,10 +39,11 @@
     <v-app-bar
       app
       elevate-on-scroll
-      class="app__bar"
+      class="app__bar justify-center"
     >
-      <v-app-bar-nav-icon></v-app-bar-nav-icon>
-      <v-toolbar-title>{{ require('./config/app').default.title }}</v-toolbar-title>
+      <v-avatar class="mr-2"><img :src="require('../public/icon.png')"></v-avatar>
+      <v-spacer></v-spacer>
+      <v-toolbar-title class="centered"><span>{{ require('./config/app').default.title }}</span></v-toolbar-title>
       <v-spacer></v-spacer>
 
       <v-btn
@@ -50,6 +60,7 @@
       </v-btn>
       <v-btn
         icon
+        class="justify-self-end"
         @click="require('electron').ipcRenderer.send('closeWindow')"
       >
         <v-icon>mdi-close</v-icon>

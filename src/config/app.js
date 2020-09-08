@@ -1,3 +1,4 @@
 export default {
-    title: "[|LE|] LAN-Launcher"
+    full_title: "[|LE|] LAN-Launcher",
+    title: "LAN-Launcher"
 }

@@ -30,7 +30,7 @@ async function createWindow() {
     minWidth: 1200,
     minHeight: 720,
     frame: false,
-    title: app_config.title,
+    title: app_config.full_title,
     icon: path.join(__static, "./icon.png"),
     webPreferences: {
       nodeIntegration: process.env.ELECTRON_NODE_INTEGRATION,
