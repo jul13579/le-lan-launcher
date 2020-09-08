@@ -59,16 +59,7 @@ app.on("window-all-closed", () => {
   // On macOS it is common for applications and their menu bar
   // to stay active until the user quits explicitly with Cmd + Q
   if (process.platform !== "darwin") {
-    if (store.state.started) {
-      AJAX.Syncthing.System.shutdown()
-        .then(() => {
-          store.dispatch("setStarted", { started: false });
-          app.quit();
-        })
-        .catch();
-    } else {
-      app.quit();
-    }
+    shutdown();
   }
 });
 
@@ -92,10 +83,10 @@ app.on("ready", async () => {
   }
 
   // Register custom file protocol (gamethumb://) to load game thumbnails
-  protocol.registerFileProtocol('gamethumb', (request, callback) => {
-    const url = request.url.replace('gamethumb://', '');
-    callback({ path: path.normalize(`${url}`) })
-  })
+  protocol.registerFileProtocol("gamethumb", (request, callback) => {
+    const url = request.url.replace("gamethumb://", "");
+    callback({ path: path.normalize(`${url}`) });
+  });
 
   createWindow();
   startService();
@@ -106,30 +97,12 @@ if (isDevelopment) {
   if (process.platform === "win32") {
     process.on("message", (data) => {
       if (data === "graceful-exit") {
-        if (store.state.started) {
-          AJAX.Syncthing.System.shutdown()
-            .then(() => {
-              store.dispatch("setStarted", { started: false });
-              app.quit();
-            })
-            .catch();
-        } else {
-          app.quit();
-        }
+        stopService();
       }
     });
   } else {
     process.on("SIGTERM", () => {
-      if (store.state.started) {
-        AJAX.Syncthing.System.shutdown()
-          .then(() => {
-            store.dispatch("setStarted", { started: false });
-            app.quit();
-          })
-          .catch();
-      } else {
-        app.quit();
-      }
+      stopService();
     });
   }
 }
@@ -162,6 +135,19 @@ function startService() {
         clearInterval(pollingInterval);
       }
     }, 5000);
+  }
+}
+
+async function shutdown() {
+  if (store.state.started) {
+    await AJAX.Syncthing.System.shutdown()
+      .then(() => {
+        store.dispatch("setStarted", { started: false });
+        app.quit();
+      })
+      .catch();
+  } else {
+    app.quit();
   }
 }
 
