@@ -9,6 +9,7 @@ import { createProtocol } from "vue-cli-plugin-electron-builder/lib";
 import installExtension, { VUEJS_DEVTOOLS } from "electron-devtools-installer";
 import path from "path";
 import store from "./store";
+import app_config from "./config/app";
 
 const isDevelopment = process.env.NODE_ENV !== "production";
 
@@ -28,7 +29,8 @@ async function createWindow() {
     height: 720,
     minWidth: 1200,
     minHeight: 720,
-    title: "[|LE|] LAN-Launcher",
+    frame: false,
+    title: app_config.title,
     icon: path.join(__static, "./icon.png"),
     webPreferences: {
       nodeIntegration: process.env.ELECTRON_NODE_INTEGRATION,
@@ -185,5 +187,24 @@ function setPlayerName(event, game, config) {
   fs.writeFileSync(filePath, nameFileContents, { encoding: "utf8" });
 }
 
+function minimizeWindow(event) {
+  win.minimize();
+}
+
+function maximizeWindow(event) {
+  if (win.isMaximized()) {
+    win.unmaximize();
+  } else {
+    win.maximize();
+  }
+}
+
+function closeWindow(event) {
+  win.close();
+}
+
 ipcMain.on("startService", startService);
 ipcMain.on("setPlayerName", setPlayerName);
+ipcMain.on("minimizeWindow", minimizeWindow);
+ipcMain.on("maximizeWindow", maximizeWindow);
+ipcMain.on("closeWindow", closeWindow);
