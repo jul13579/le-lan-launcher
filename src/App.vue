@@ -12,7 +12,7 @@
     <v-app-bar
       app
       elevate-on-scroll
-      class="app__bar blurry-backdrop justify-center"
+      class="justify-center"
     >
       <v-avatar class="mr-2"><img :src="require('../public/icon.png')"></v-avatar>
       <v-spacer></v-spacer>

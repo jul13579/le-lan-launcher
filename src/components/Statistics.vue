@@ -1,7 +1,6 @@
 <template>
   <v-footer
     fixed
-    class="blurry-backdrop"
     :height="66"
   >
     <v-container>
@@ -179,9 +178,7 @@ export default {
             this.$toasted.success(this.$t("toast.service.restarting"));
           })
           .catch(() => {
-            this.$toasted.error(
-              this.$t("toast.service.error.restarting")
-            );
+            this.$toasted.error(this.$t("toast.service.error.restarting"));
           });
       }
     },

@@ -21,12 +21,14 @@
   },
   "main": "background.js",
   "dependencies": {
+    "@mdi/font": "^5.5.55",
     "axios": "^0.20.0",
     "core-js": "^3.6.5",
     "epic-spinners": "^1.1.0",
     "fs-extra": "^9.0.1",
     "material-icons": "^0.3.1",
     "node-sass": "^4.14.1",
+    "roboto-fontface": "*",
     "sass-loader": "^10.0.2",
     "stylus": "^0.54.8",
     "stylus-loader": "^3.0.2",
@@ -34,25 +36,27 @@
     "vue-i18n": "^8.21.0",
     "vue-router": "^3.4.3",
     "vue-toasted": "^1.1.28",
-    "vuesax": "^3.11.17",
     "vuetify": "^2.3.10",
     "vuex": "^3.5.1",
     "vuex-electron": "^1.0.3",
     "xml-parser": "^1.2.1"
   },
   "devDependencies": {
-    "@mdi/font": "^5.5.55",
-    "@vue/cli-plugin-babel": "^4.5.4",
-    "@vue/cli-plugin-eslint": "^4.5.4",
-    "@vue/cli-service": "^4.5.4",
+    "@vue/cli-plugin-babel": "~4.5.4",
+    "@vue/cli-plugin-eslint": "~4.5.4",
+    "@vue/cli-service": "~4.5.4",
     "babel-eslint": "^10.1.0",
     "electron": "^9.3.0",
     "electron-devtools-installer": "^3.1.1",
     "electron-icon-builder": "^1.0.2",
     "eslint": "^7.8.1",
     "eslint-plugin-vue": "^6.2.2",
-    "vue-cli-plugin-electron-builder": "^2.0.0-rc.4",
-    "vue-template-compiler": "^2.6.12"
+    "sass": "^1.26.10",
+    "sass-loader": "^10.0.2",
+    "vue-cli-plugin-electron-builder": "~2.0.0-rc.4",
+    "vue-cli-plugin-vuetify": "~2.0.7",
+    "vue-template-compiler": "^2.6.12",
+    "vuetify-loader": "^1.6.0"
   },
   "eslintConfig": {
     "root": true,
@@ -63,15 +67,16 @@
       "plugin:vue/essential",
       "eslint:recommended"
     ],
-    "rules": {
-      "no-console": 1
-    },
     "parserOptions": {
       "parser": "babel-eslint"
+    },
+    "rules": {
+      "no-console": 1
     }
   },
   "browserslist": [
     "> 1%",
-    "last 2 versions"
+    "last 2 versions",
+    "not dead"
   ]
 }

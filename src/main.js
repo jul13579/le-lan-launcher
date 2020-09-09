@@ -2,7 +2,7 @@ import Vue from "vue";
 import Toasted from "vue-toasted";
 import VueI18n from "vue-i18n";
 
-import vuetify from "@/plugins/vuetify";
+import vuetify from "./plugins/vuetify";
 
 // Components
 import App from "./App.vue";
@@ -11,7 +11,9 @@ import store from "./store";
 import langs from "./langs.js";
 
 // Styles
-import "@/sass/app.sass";
+import 'roboto-fontface/css/roboto/roboto-fontface.css'
+import '@mdi/font/css/materialdesignicons.css'
+import "./sass/app.sass";
 
 Vue.use(Toasted, {
   position: "bottom-center",
