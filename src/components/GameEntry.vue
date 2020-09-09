@@ -81,17 +81,17 @@ export default {
     value: Object,
     homeDir: String,
     config: Object,
-    status: Object
+    status: Object,
   },
   data() {
     return {
-      showOptions: "hidden"
+      showOptions: "hidden",
     };
   },
   computed: {
     coverWidth() {
       return {
-        "--cover-width": coverWidth + "px"
+        "--cover-width": coverWidth + "px",
       };
     },
     subscribed() {
@@ -105,60 +105,7 @@ export default {
         default:
           return false;
       }
-    }
-  }
+    },
+  },
 };
 </script>
-
-<style lang="sass">
-.gameEntry
-  display: inline-block
-  position: relative
-  width: var(--cover-width)
-  height: calc(var(--cover-width) / 6 * 9)
-  margin: 10px
-  cursor: pointer
-  transition: box-shadow .2s ease-in-out;
-  overflow: hidden;
-  &:hover
-    box-shadow: 0px 0px 20px 5px white
-    img
-      width: 110%
-      margin: -5%
-  img
-    width: 100%
-    height: auto
-    margin-bottom: -3px
-    filter: brightness(0.2)
-    transition: filter .2s ease-in-out, width .2s linear, margin .2s linear
-    &.installed
-      filter: brightness(1)
-
-.gameOptions
-  position: absolute
-  width: 100%
-  padding-top: 100%
-  overflow-x: hidden
-  bottom: 0
-  z-index: 2
-  left: 100%
-  transition: left .2s ease-in-out
-  &.visible
-      left: 0%
-  >div
-      position: relative
-      font-size: 1.2rem
-      box-shadow: 0px 0px 20px 5px black
-      background: rgba(0,0,0,.8)
-      padding-bottom: 5px;
-  ul
-      list-style: none
-  li
-      padding: 5px 5px
-      transition: padding-left .2s ease-in-out
-      &:hover
-          padding-left: .8rem
-  .vs-icon
-      margin-right: .5rem
-      vertical-align: bottom
-</style>

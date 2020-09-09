@@ -1,32 +1,3 @@
-<style lang="sass">
-// Make frameless window draggable while excluding buttons and tabs, which still have to be clickable
-.app
-  &__bar
-    -webkit-app-region: drag
-
-    .v-tabs,button
-      -webkit-app-region: no-drag
-
-.v-toolbar__title
-  &.centered
-    position: absolute
-    display: flex
-    left: 0px
-    width: 100%
-    justify-content: center
-    letter-spacing: 5px
-
-.themeWrapper
-  position: fixed
-  width: 100vw
-  height: 100vh
-  top: 0
-  left: 0
-  &.texture
-    opacity: .1
-  
-</style>
-
 <template>
   <v-app>
     <div

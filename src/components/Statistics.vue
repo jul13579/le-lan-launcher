@@ -1,7 +1,3 @@
-<style lang="sass">
-
-</style>
-
 <template>
   <v-footer
     fixed

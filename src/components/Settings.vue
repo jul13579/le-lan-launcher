@@ -1,17 +1,3 @@
-<style lang="sass">
-.themePreview
-  border-radius: 10px
-  cursor: pointer
-  display: flex
-  width: 200px
-  max-width: 200px
-
-  &:hover * 
-    transform: scale(1.1)
-    transition: transform .1s ease-in-out
-
-</style>
-
 <template>
   <v-container>
     <v-alert

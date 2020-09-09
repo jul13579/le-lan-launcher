@@ -20,6 +20,94 @@ $transparency: rgba(100, 100, 100, 0.2)
     backdrop-filter: blur(10px)
     background-color: rgba(0,0,0,.3)!important
 
+// Make frameless window draggable while excluding buttons and tabs, which still have to be clickable
+.app
+&__bar
+    -webkit-app-region: drag
+
+    .v-tabs,button
+        -webkit-app-region: no-drag
+
+.v-toolbar__title
+&.centered
+    position: absolute
+    display: flex
+    left: 0px
+    width: 100%
+    justify-content: center
+    letter-spacing: 5px
+
+.themeWrapper
+    position: fixed
+    width: 100vw
+    height: 100vh
+    top: 0
+    left: 0
+&.texture
+    opacity: .1
+
+.themePreview
+    border-radius: 10px
+    cursor: pointer
+    display: flex
+    width: 200px
+    max-width: 200px
+
+&:hover *
+    transform: scale(1.1)
+    transition: transform .1s ease-in-out
+
+.gameEntry
+    display: inline-block
+    position: relative
+    width: var(--cover-width)
+    height: calc(var(--cover-width) / 6 * 9)
+    margin: 10px
+    cursor: pointer
+    transition: box-shadow .2s ease-in-out;
+    overflow: hidden;
+&:hover
+    box-shadow: 0px 0px 20px 5px white
+    img
+        width: 110%
+        margin: -5%
+img
+    width: 100%
+    height: auto
+    margin-bottom: -3px
+    filter: brightness(0.2)
+    transition: filter .2s ease-in-out, width .2s linear, margin .2s linear
+    &.installed
+        filter: brightness(1)
+
+.gameOptions
+    position: absolute
+    width: 100%
+    padding-top: 100%
+    overflow-x: hidden
+    bottom: 0
+    z-index: 2
+    left: 100%
+    transition: left .2s ease-in-out
+&.visible
+    left: 0%
+>div
+    position: relative
+    font-size: 1.2rem
+    box-shadow: 0px 0px 20px 5px black
+    background: rgba(0,0,0,.8)
+    padding-bottom: 5px;
+ul
+    list-style: none
+li
+    padding: 5px 5px
+    transition: padding-left .2s ease-in-out
+    &:hover
+        padding-left: .8rem
+.vs-icon
+    margin-right: .5rem
+    vertical-align: bottom
+
 .overlay
     position: absolute
     bottom: 0
