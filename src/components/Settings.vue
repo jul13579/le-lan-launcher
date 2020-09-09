@@ -63,64 +63,41 @@
           :item-text="(lang) => lang[1].lang"
           :item-value="(lang) => lang[0]"
           @change="(input) => $store.dispatch('setLocale', {locale: input})"
-        ></v-select>
+        />
       </v-col>
+    </v-row>
+    <v-row>
       <v-col cols="3">
         <v-text-field
           :label="$t('settings.playerName')"
           :value="playerName"
           @blur="(event) => {$store.dispatch('setPlayerName', {name: event.target.value})}"
+          :error="playerName == false"
         />
       </v-col>
-      <v-col
-        cols="4"
-        style="padding: 0 .2rem"
-      >
-        <v-input
-          :label-placeholder="$t('settings.homeDir')"
+      <v-col cols="4">
+        <v-text-field
+          :label="$t('settings.homeDir')"
           @click="openFolderChooser"
           @blur="(event) => {if (event.target.value) $store.dispatch('setHomeDir', {dir: event.target.value})}"
           :value="homeDir"
-          :danger="homeDir == false"
           :disabled="started || online"
+          :error="homeDir == false"
         />
       </v-col>
       <v-col cols="5">
-        <v-dropdown>
-          <v-input
-            :disabled="!online"
-            :label-placeholder="$t('settings.nas')"
-            :value="nas"
-            :danger="nas == false"
-          />
-          <v-dropdown-menu class="nasDropdown">
-            <template v-if="online">
-              <v-dropdown-item
-                v-for="(item, index) in devices"
-                :key="index"
-                @click.native="$store.dispatch('setNas', {id: index})"
-              >
-                {{index}}
-              </v-dropdown-item>
-              <v-dropdown-item v-if="Object.keys(devices).length == 0">
-                <v-alert
-                  color="danger"
-                  title="Keine Geräte gefunden"
-                >
-                  {{$t('settings.alerts.discovery')}}
-                </v-alert>
-              </v-dropdown-item>
-            </template>
-            <v-dropdown-item v-else>
-              <v-alert
-                color="danger"
-                title="Service nicht gestartet"
-              >
-                {{$t('settings.alerts.service')}}
-              </v-alert>
-            </v-dropdown-item>
-          </v-dropdown-menu>
-        </v-dropdown>
+        <v-select
+          :disabled="!online"
+          :label="$t('settings.nas')"
+          :value="nas"
+          :items="Object.entries(devices)"
+          :item-value="(device) => device[0]"
+          :item-text="(device) => device[0]"
+          :error="nas == false"
+          @change="$store.dispatch('setNas', {id: index})"
+          :no-data-text="$t('settings.alerts.discovery')"
+          :error-messages="!online ? $t('settings.alerts.service') : null"
+        />
       </v-col>
     </v-row>
   </v-container>
