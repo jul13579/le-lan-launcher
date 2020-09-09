@@ -6,7 +6,7 @@ According to https://stackoverflow.com/a/2412465 SASS is not whitepsace agnostic
 @use "sass:list";
 
 // Override necessary background variables of vuetify
-$transparent-backdrop: rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.8);
+$transparent-backdrop: rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.9);
 
 $material-dark: (
   "background": list.nth($transparent-backdrop, 1),

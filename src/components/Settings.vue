@@ -58,8 +58,10 @@
       <v-col cols="3">
         <v-select
           :label="$t('settings.language')"
-          v-model="langs[locale].lang"
-          :items="langs"
+          :value="locale"
+          :items="Object.entries(langs)"
+          :item-text="(lang) => lang[1].lang"
+          :item-value="(lang) => lang[0]"
           @change="(input) => $store.dispatch('setLocale', {locale: input})"
         ></v-select>
         <!-- <v-dropdown>
