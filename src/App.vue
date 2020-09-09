@@ -41,8 +41,8 @@
 
       <template v-slot:extension>
         <v-tabs
-          :slider-color="'hsl(' + backgroundHue + ', 100%, 50%)'"
-          :color="'hsl(' + backgroundHue + ', 100%, 50%)'"
+          :slider-color="tabColor"
+          :color="tabColor"
           centered
           v-model="activeTab"
         >
@@ -57,7 +57,10 @@
     </v-app-bar>
 
     <v-main>
-      <v-container fluid style="margin-bottom: 66px">
+      <v-container
+        fluid
+        style="margin-bottom: 66px"
+      >
         <v-tabs-items
           v-model="activeTab"
           style="background-color: unset"
@@ -105,6 +108,9 @@ export default {
       return (
         this.playerName != false && this.homeDir != false && this.nas != false
       );
+    },
+    tabColor() {
+      return "hsl(" + this.backgroundHue + ", 100%, 60%)";
     },
     ...mapState(["theme", "playerName", "homeDir", "nas", "backgroundHue"]),
   },
