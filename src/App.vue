@@ -41,8 +41,6 @@
 
       <template v-slot:extension>
         <v-tabs
-          :slider-color="tabColor"
-          :color="tabColor"
           centered
           v-model="activeTab"
         >
@@ -85,6 +83,8 @@ import Games from "./components/Games";
 import Statistics from "./components/Statistics";
 import { mapState } from "vuex";
 
+import hsl from "hsl-to-hex";
+
 import AJAX from "./ajax";
 
 let pingIntervalHandle;
@@ -109,12 +109,15 @@ export default {
         this.playerName != false && this.homeDir != false && this.nas != false
       );
     },
-    tabColor() {
-      return "hsl(" + this.backgroundHue + ", 100%, 60%)";
+    primaryColor() {
+      return hsl(this.backgroundHue, 100, 60);
     },
     ...mapState(["theme", "playerName", "homeDir", "nas", "backgroundHue"]),
   },
   beforeMount() {
+    // Set vuetify primary color
+    this.$vuetify.theme.themes.dark.primary = this.primaryColor;
+
     // Setup notification handles
     this.$store.subscribe(
       function (mutation) {
@@ -124,6 +127,7 @@ export default {
             break;
           case "backgroundHue":
             this.$toasted.success(this.$t("toast.backgroundHue"));
+            this.$vuetify.theme.themes.dark.primary = this.primaryColor;
             break;
           case "playerName":
             this.$toasted.success(this.$t("toast.playerName"));

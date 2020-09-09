@@ -64,30 +64,12 @@
           :item-value="(lang) => lang[0]"
           @change="(input) => $store.dispatch('setLocale', {locale: input})"
         ></v-select>
-        <!-- <v-dropdown>
-          <v-input
-            :label-placeholder="$t('settings.language')"
-            :value="langs[locale].lang"
-          />
-          <v-dropdown-menu class="langDropdown">
-            <v-dropdown-item
-              v-for="(item, index) in langs"
-              :key="index"
-              @click.native="$store.dispatch('setLocale', {locale: index})"
-            >
-              {{item.lang}}
-            </v-dropdown-item>
-          </v-dropdown-menu>
-        </v-dropdown> -->
       </v-col>
-    </v-row>
-    <v-row>
       <v-col cols="3">
-        <v-input
-          :label-placeholder="$t('settings.playerName')"
+        <v-text-field
+          :label="$t('settings.playerName')"
           :value="playerName"
           @blur="(event) => {$store.dispatch('setPlayerName', {name: event.target.value})}"
-          :danger="playerName == false"
         />
       </v-col>
       <v-col
