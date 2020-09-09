@@ -11,7 +11,7 @@ import store from "./store";
 import langs from "./langs.js";
 
 // Styles
-import "./sass/app.sass";
+import "@/sass/app.sass";
 
 Vue.use(Toasted, {
   position: "bottom-center",

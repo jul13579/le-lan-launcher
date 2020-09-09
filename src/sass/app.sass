@@ -1,3 +1,6 @@
+// Import for vue-toasted font-family
+@import vuetify/src/styles/settings/variables
+
 $transparency: rgba(100, 100, 100, 0.2)
 
 ::-webkit-scrollbar
@@ -14,7 +17,7 @@ $transparency: rgba(100, 100, 100, 0.2)
     background: none
 
 .toasted
-    font-family: Roboto, sans-serif
+    font-family: $body-font-family// Roboto, sans-serif
 
 .blurry-backdrop
     backdrop-filter: blur(10px)
