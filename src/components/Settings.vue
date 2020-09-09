@@ -152,9 +152,6 @@ let discoveryInterval;
 
 export default {
   mixins: [online],
-  props: {
-    backgroundHue: String,
-  },
   data() {
     return {
       textures: [
