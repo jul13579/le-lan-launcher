@@ -86,7 +86,7 @@
     </v-app-bar>
 
     <v-main>
-      <v-container fluid>
+      <v-container fluid style="margin-bottom: 66px">
         <v-tabs-items
           v-model="activeTab"
           style="background-color: unset"
