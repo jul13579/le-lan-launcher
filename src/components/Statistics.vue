@@ -28,13 +28,6 @@
             cols="3"
             class="d-flex justify-center"
           >
-            <v-icon class="mx-2">mdi-monitor</v-icon><span>{{$t('statistics.cpu')}}:</span>
-            <span>{{(status.cpuPercent || 0.00).toFixed(2)}} {{$t('statistics.percent')}}</span>
-          </v-col>
-          <v-col
-            cols="3"
-            class="d-flex justify-center"
-          >
             <v-icon class="mx-2">mdi-cloud</v-icon><span>{{$t('statistics.nas')}}:</span>
             <v-icon
               v-if="nasConnected"
@@ -44,6 +37,13 @@
               v-else
               class="mx-2"
             >mdi-cloud-off-outline</v-icon>
+          </v-col>
+          <v-col
+            cols="3"
+            class="d-flex justify-center"
+          >
+            <v-icon class="mx-2">mdi-monitor</v-icon><span>{{$t('statistics.cpu')}}:</span>
+            <span>{{(status.cpuPercent || 0.00).toFixed(2)}} {{$t('statistics.percent')}}</span>
           </v-col>
           <v-col
             cols="3"
