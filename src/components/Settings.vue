@@ -56,7 +56,13 @@
     <div class="text-h4">{{$t('settings.environment')}}</div>
     <v-row>
       <v-col cols="3">
-        <v-dropdown>
+        <v-select
+          :label="$t('settings.language')"
+          v-model="langs[locale].lang"
+          :items="langs"
+          @change="(input) => $store.dispatch('setLocale', {locale: input})"
+        ></v-select>
+        <!-- <v-dropdown>
           <v-input
             :label-placeholder="$t('settings.language')"
             :value="langs[locale].lang"
@@ -70,7 +76,7 @@
               {{item.lang}}
             </v-dropdown-item>
           </v-dropdown-menu>
-        </v-dropdown>
+        </v-dropdown> -->
       </v-col>
     </v-row>
     <v-row>
