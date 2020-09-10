@@ -2,6 +2,7 @@
   <v-footer
     fixed
     :height="66"
+    style="cursor: default"
   >
     <v-container>
       <template v-if="started && !online">
@@ -24,21 +25,27 @@
           no-gutters
           class="align-center"
         >
-          <v-col
-            cols="3"
-            class="d-flex justify-center"
-          >
-            <template v-if="nasConnected">
-              <div>
-                <v-icon class="mx-2">mdi-cloud-check</v-icon><span>{{$t('statistics.nas_connected')}}</span>
-              </div>
+          <v-tooltip top>
+            <template v-slot:activator="{ on }">
+              <v-col
+                cols="3"
+                class="d-flex justify-center"
+                v-on="on"
+              >
+                <template v-if="nasConnected">
+                  <div>
+                    <v-icon class="mx-2">mdi-cloud-check</v-icon><span>{{$t('statistics.nas_connected')}}</span>
+                  </div>
+                </template>
+                <template v-else>
+                  <div>
+                    <v-icon class="mx-2">mdi-cloud-off-outline</v-icon><span>{{$t('statistics.nas_connecting')}}</span>
+                  </div>
+                </template>
+              </v-col>
             </template>
-            <template v-else>
-              <div>
-                <v-icon class="mx-2">mdi-cloud-off-outline</v-icon><span>{{$t('statistics.nas_connecting')}}</span>
-              </div>
-            </template>
-          </v-col>
+            <span>Top tooltip</span>
+          </v-tooltip>
           <v-col
             cols="3"
             class="d-flex justify-center"
