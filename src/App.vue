@@ -2,11 +2,17 @@
   <v-app>
     <div
       class="themeWrapper bgColor"
-      :style="{background: 'linear-gradient(hsl(' + backgroundHue + ', 75%, 8%), black)'}"
+      :style="{
+        background: `linear-gradient(hsl(${backgroundHue}, 75%, 8%), black)`,
+      }"
     />
     <div
       class="themeWrapper texture"
-      :style="{background: 'url('+theme+')'}"
+      :style="{
+        background: `url('${theme.path}')`,
+        backgroundPosition: theme.cover ? 'center' : 'initial',
+        backgroundSize: theme.cover ? 'cover' : 'initial',
+      }"
     />
 
     <v-app-bar
@@ -14,7 +20,7 @@
       elevate-on-scroll
       class="justify-center"
     >
-      <v-avatar class="mr-2"><img :src="require('../public/icon.png')"></v-avatar>
+      <v-avatar class="mr-2"><img :src="require('../public/icon.png')" /></v-avatar>
       <v-spacer></v-spacer>
       <v-toolbar-title class="centered"><span>LAN-Launcher</span></v-toolbar-title>
       <v-spacer></v-spacer>
@@ -47,10 +53,10 @@
           :key="locale"
         >
           <v-tab :disabled="!setupCompleted">
-            <v-icon left>mdi-gamepad</v-icon>{{ $t('nav.library') }}
+            <v-icon left>mdi-gamepad</v-icon>{{ $t("nav.library") }}
           </v-tab>
           <v-tab>
-            <v-icon left>mdi-cog</v-icon>{{ $t('nav.settings') }}
+            <v-icon left>mdi-cog</v-icon>{{ $t("nav.settings") }}
           </v-tab>
         </v-tabs>
       </template>

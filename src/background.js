@@ -86,6 +86,12 @@ app.on("ready", async () => {
     const url = request.url.replace("gamethumb://", "");
     callback({ path: path.normalize(`${url}`) });
   });
+  // Register file protocol (file:///) to load external background themes
+  protocol.registerFileProtocol("file", (request, callback) => {
+    const url = request.url.replace("file://", "");
+    const normalizedPath = path.normalize(`${url}`)
+    callback({ normalizedPath });
+  });
 
   createWindow();
   startService();

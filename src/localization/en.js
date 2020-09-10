@@ -57,6 +57,7 @@ export default {
       service:
         "The syncing service has to be started in order to discover online devices.",
     },
+    images: "Images",
   },
   gameEntry: {
     download: "Download",

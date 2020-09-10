@@ -58,6 +58,7 @@ export default {
       service:
         "Der Synchronisationsservice muss gestartet sein, damit verfügbare Netzwerkgeräte angezeigt werden können.",
     },
+    images: "Bilder",
   },
   gameEntry: {
     download: "Herunterladen",

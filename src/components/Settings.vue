@@ -7,7 +7,7 @@
       :title="$t('errors.playerNameUnset.title')"
       v-if="playerName == false"
     >
-      {{$t('errors.playerNameUnset.message')}}
+      {{ $t("errors.playerNameUnset.message") }}
     </v-alert>
     <v-alert
       type="error"
@@ -16,7 +16,7 @@
       :title="$t('errors.homeDirUnset.title')"
       v-if="homeDir == false"
     >
-      {{$t('errors.homeDirUnset.message')}}
+      {{ $t("errors.homeDirUnset.message") }}
     </v-alert>
     <v-alert
       type="error"
@@ -25,9 +25,9 @@
       :title="$t('errors.nasUnset.title')"
       v-if="nas == false"
     >
-      {{$t('errors.nasUnset.message')}}
+      {{ $t("errors.nasUnset.message") }}
     </v-alert>
-    <div class="text-h4">{{$t('settings.theme')}}</div>
+    <div class="text-h4">{{ $t("settings.theme") }}</div>
     <div class="d-flex mx-n3 flex-wrap">
       <v-img
         v-for="(item, index) in textures"
@@ -35,11 +35,43 @@
         class="themePreview ma-3"
         aspect-ratio="1"
         :src="item"
-        @click.native="() => {$store.dispatch('setTheme', {theme: item})}"
+        @click.native="
+          () => {
+            $store.dispatch('setTheme', {
+              theme: { path: item, cover: false },
+            });
+          }
+        "
       ></v-img>
+      <div
+        class="themePreview ma-3 transparent-bg align-center justify-center"
+        :style="{border: `1px solid hsl(${backgroundHue}, 100%, 35%)`}"
+        @click="
+          openFileChooser(
+            (result) =>
+              $store.dispatch('setTheme', {
+                theme: {
+                  path: result.filePaths[0].replace(/\\/g, '/'),
+                  cover: true,
+                },
+              }),
+            {
+              properties: ['openFile'],
+              filters: [
+                {
+                  name: $t('settings.images'),
+                  extensions: ['jpg', 'jpeg', 'png'],
+                },
+              ],
+            }
+          )
+        "
+      >
+        <v-icon x-large>mdi-image-search</v-icon>
+      </div>
     </div>
 
-    <div class="mt-5 text-h4">{{$t('settings.backgroundHue')}}</div>
+    <div class="mt-5 text-h4">{{ $t("settings.backgroundHue") }}</div>
     <v-row>
       <v-col cols="12">
         <v-slider
@@ -48,12 +80,16 @@
           thumb-label
           v-model="sliderValue"
           :color="'hsl(' + sliderValue + ', 100%, 50%)'"
-          @change="(input) => {$store.dispatch('setBackgroundHue', {color: input})}"
+          @change="
+            (input) => {
+              $store.dispatch('setBackgroundHue', { color: input });
+            }
+          "
         />
       </v-col>
     </v-row>
 
-    <div class="text-h4">{{$t('settings.environment')}}</div>
+    <div class="text-h4">{{ $t("settings.environment") }}</div>
     <v-row>
       <v-col cols="3">
         <v-select
@@ -62,7 +98,7 @@
           :items="Object.entries(langs)"
           :item-text="(lang) => lang[1].lang"
           :item-value="(lang) => lang[0]"
-          @change="(input) => $store.dispatch('setLocale', {locale: input})"
+          @change="(input) => $store.dispatch('setLocale', { locale: input })"
         />
       </v-col>
     </v-row>
@@ -71,15 +107,24 @@
         <v-text-field
           :label="$t('settings.playerName')"
           :value="playerName"
-          @blur="(event) => {$store.dispatch('setPlayerName', {name: event.target.value})}"
+          @blur="
+            (event) => {
+              $store.dispatch('setPlayerName', { name: event.target.value });
+            }
+          "
           :error="playerName == false"
         />
       </v-col>
       <v-col cols="4">
         <v-text-field
           :label="$t('settings.homeDir')"
-          @click="openFolderChooser"
-          @blur="(event) => {if (event.target.value) $store.dispatch('setHomeDir', {dir: event.target.value})}"
+          @click="
+            openFileChooser(
+              (result) =>
+                $store.dispatch('setHomeDir', { dir: result.filePaths[0] }),
+              { properties: ['openDirectory'] }
+            )
+          "
           :value="homeDir"
           :disabled="started || online"
           :error="homeDir == false"
@@ -94,7 +139,7 @@
           :item-value="(device) => device[0]"
           :item-text="(device) => device[0]"
           :error="nas == false"
-          @change="$store.dispatch('setNas', {id: index})"
+          @change="$store.dispatch('setNas', { id: index })"
           :no-data-text="$t('settings.alerts.discovery')"
           :error-messages="!online ? $t('settings.alerts.service') : null"
         />
@@ -147,12 +192,11 @@ export default {
     clearInterval(discoveryInterval);
   },
   methods: {
-    openFolderChooser() {
+    openFileChooser(callback, options) {
       require("electron")
-        .remote.dialog.showOpenDialog({ properties: ["openDirectory"] })
+        .remote.dialog.showOpenDialog(options)
         .then((result) => {
-          if (!result.canceled)
-            this.$store.dispatch("setHomeDir", { dir: result.filePaths[0] });
+          if (!result.canceled) callback(result);
         });
     },
     discovery() {
