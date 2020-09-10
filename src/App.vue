@@ -90,6 +90,7 @@ import hsl from "hsl-to-hex";
 import AJAX from "./ajax";
 
 let pingIntervalHandle;
+let unsubscribeCallback;
 
 export default {
   name: "app",
@@ -128,7 +129,7 @@ export default {
     this.$vuetify.theme.themes.dark.primary = this.primaryColor;
 
     // Setup notification handles
-    this.$store.subscribe(
+    unsubscribeCallback = this.$store.subscribe(
       function (mutation) {
         switch (mutation.type) {
           case "theme":
@@ -182,6 +183,7 @@ export default {
   },
   destroyed() {
     clearInterval(pingIntervalHandle);
+    unsubscribeCallback();
   },
 };
 </script>
