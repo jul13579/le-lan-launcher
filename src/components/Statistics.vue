@@ -28,21 +28,22 @@
             cols="3"
             class="d-flex justify-center"
           >
-            <v-icon class="mx-2">mdi-cloud</v-icon><span>{{$t('statistics.nas')}}:</span>
-            <v-icon
-              v-if="nasConnected"
-              class="mx-2"
-            >mdi-cloud-check</v-icon>
-            <v-icon
-              v-else
-              class="mx-2"
-            >mdi-cloud-off-outline</v-icon>
+            <template v-if="nasConnected">
+              <div>
+                <v-icon class="mx-2">mdi-cloud-check</v-icon><span>{{$t('statistics.nas_connected')}}</span>
+              </div>
+            </template>
+            <template v-else>
+              <div>
+                <v-icon class="mx-2">mdi-cloud-off-outline</v-icon><span>{{$t('statistics.nas_connecting')}}</span>
+              </div>
+            </template>
           </v-col>
           <v-col
             cols="3"
             class="d-flex justify-center"
           >
-            <v-icon class="mx-2">mdi-monitor</v-icon><span>{{$t('statistics.cpu')}}:</span>
+            <v-icon class="mx-2">mdi-chip</v-icon><span>{{$t('statistics.cpu')}}:</span>
             <span>{{(status.cpuPercent || 0.00).toFixed(2)}} {{$t('statistics.percent')}}</span>
           </v-col>
           <v-col
@@ -52,8 +53,7 @@
             <v-icon
               class="mx-2"
               color="green"
-            >mdi-download</v-icon><span>{{$t('statistics.download')}}:</span>
-            <span>{{(inbps / 1024**2).toFixed(2)}} {{$t('statistics.mbps')}}</span>
+            >mdi-download</v-icon><span>{{(inbps / 1024**2).toFixed(2)}} {{$t('statistics.mbps')}}</span>
           </v-col>
           <v-col
             cols="3"
@@ -62,8 +62,7 @@
             <v-icon
               class="mx-2"
               color="red"
-            >mdi-upload</v-icon><span>{{$t('statistics.upload')}}:</span>
-            <span>{{(outbps / 1024**2).toFixed(2)}} {{$t('statistics.mbps')}}</span>
+            >mdi-upload</v-icon><span>{{(outbps / 1024**2).toFixed(2)}} {{$t('statistics.mbps')}}</span>
           </v-col>
         </v-row>
       </template>

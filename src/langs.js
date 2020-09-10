@@ -26,9 +26,8 @@ export default {
       connecting: "Establishing connection to service...",
       statistics: "Statistics",
       cpu: "CPU",
-      nas: "NAS",
-      download: "Downl.",
-      upload: "Upl.",
+      nas_connecting: "connecting...",
+      nas_connected: "connected",
       percent: "%",
       mbps: "MB/s"
     },
@@ -99,9 +98,8 @@ export default {
       connecting: "Verbindung zum Service wird hergestellt...",
       statistics: "Statistiken",
       cpu: "CPU",
-      nas: "NAS",
-      download: "Downl.",
-      upload: "Upl.",
+      nas_connecting: "verbinde...",
+      nas_connected: "verbunden",
       percent: "%",
       mbps: "MB/s"
     },
