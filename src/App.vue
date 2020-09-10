@@ -40,9 +40,11 @@
       </v-btn>
 
       <template v-slot:extension>
+        <!-- Force re-render of tabs on locale change, else tab indicator width is wrong -->
         <v-tabs
           centered
           v-model="activeTab"
+          :key="locale"
         >
           <v-tab :disabled="!setupCompleted">
             <v-icon left>mdi-gamepad</v-icon>{{ $t('nav.library') }}
@@ -112,7 +114,14 @@ export default {
     primaryColor() {
       return hsl(this.backgroundHue, 100, 60);
     },
-    ...mapState(["theme", "playerName", "homeDir", "nas", "backgroundHue"]),
+    ...mapState([
+      "theme",
+      "playerName",
+      "homeDir",
+      "nas",
+      "backgroundHue",
+      "locale",
+    ]),
   },
   beforeMount() {
     // Set vuetify primary color
