@@ -4,115 +4,116 @@
     :height="66"
     style="cursor: default"
   >
-    <v-container>
-      <template>
-        <v-row
-          no-gutters
-          class="align-center"
+    <v-container
+      class="py-0 d-flex"
+      style="height: 100%"
+    >
+      <v-row
+        no-gutters
+        sytle="height: 100%"
+      >
+        <v-menu
+          top
+          offset-y
+          open-on-hover
+          transition="slide-y-reverse-transition"
         >
-          <v-menu
-            top
-            offset-y
-            open-on-hover
-            transition="slide-y-reverse-transition"
-          >
-            <template v-slot:activator="{ on }">
-              <v-col
-                cols="3"
-                class="d-flex justify-center"
-                v-on="on"
+          <template v-slot:activator="{ on }">
+            <v-col
+              cols="3"
+              class="d-flex justify-center align-center"
+              v-on="on"
+            >
+              <template v-if="nasConnected && started">
+                <div>
+                  <v-icon class="mx-2">mdi-cloud-check</v-icon>
+                </div>
+              </template>
+              <template v-else-if="!started">
+                <div>
+                  <v-icon class="mx-2">mdi-cloud-off-outline</v-icon>
+                </div>
+              </template>
+              <template v-else>
+                <div>
+                  <half-circle-spinner
+                    :animation-duration="1000"
+                    :size="30"
+                    color="rgb(200,200,200)"
+                  />
+                </div>
+              </template>
+            </v-col>
+          </template>
+          <v-card class="text-center">
+            <v-card-title class="justify-center">
+              <span v-html="$t('statistics.service_controls')"></span>
+            </v-card-title>
+            <v-card-text>
+              <v-btn
+                icon
+                color="green"
+                :disabled="started || !homeDir"
+                @click="startService"
               >
-                <template v-if="nasConnected && started">
-                  <div>
-                    <v-icon class="mx-2">mdi-cloud-check</v-icon>
-                  </div>
-                </template>
-                <template v-else-if="!started">
-                  <div>
-                    <v-icon class="mx-2">mdi-cloud-off-outline</v-icon>
-                  </div>
-                </template>
-                <template v-else>
-                  <div>
-                    <half-circle-spinner
-                      :animation-duration="1000"
-                      :size="30"
-                      color="rgb(200,200,200)"
-                    />
-                  </div>
-                </template>
-              </v-col>
-            </template>
-            <v-card class="text-center">
-              <v-card-title class="justify-center">
-                <span v-html="$t('statistics.service_controls')"></span>
-              </v-card-title>
-              <v-card-text>
-                <v-btn
-                  icon
-                  color="green"
-                  :disabled="started || !homeDir"
-                  @click="startService"
-                >
-                  <v-icon>mdi-play</v-icon>
-                </v-btn>
-                <v-btn
-                  icon
-                  color="yellow"
-                  :disabled="!started"
-                  @click="restartService"
-                >
-                  <v-icon>mdi-restart</v-icon>
-                </v-btn>
-                <v-btn
-                  icon
-                  color="red"
-                  :disabled="!started"
-                  @click="stopService"
-                >
-                  <v-icon>mdi-stop</v-icon>
-                </v-btn>
-              </v-card-text>
-            </v-card>
-          </v-menu>
-          <v-col
-            cols="3"
-            class="d-flex justify-center"
-          >
-            <v-icon class="mx-2">mdi-chip</v-icon>
-            <i18n-n
-              :value="status.cpuPercent || 0"
-              format="percent"
-            ></i18n-n>
-          </v-col>
-          <v-col
-            cols="3"
-            class="d-flex justify-center"
-          >
-            <v-icon
-              class="mx-2"
-              color="green"
-            >mdi-download</v-icon>
-            <i18n-n
-              :value="inbps / 1024**2"
-              format="mbps"
-            ></i18n-n>
-          </v-col>
-          <v-col
-            cols="3"
-            class="d-flex justify-center"
-          >
-            <v-icon
-              class="mx-2"
-              color="red"
-            >mdi-upload</v-icon>
-            <i18n-n
-              :value="outbps / 1024**2"
-              format="mbps"
-            ></i18n-n>
-          </v-col>
-        </v-row>
-      </template>
+                <v-icon>mdi-play</v-icon>
+              </v-btn>
+              <v-btn
+                icon
+                color="yellow"
+                :disabled="!started"
+                @click="restartService"
+              >
+                <v-icon>mdi-restart</v-icon>
+              </v-btn>
+              <v-btn
+                icon
+                color="red"
+                :disabled="!started"
+                @click="stopService"
+              >
+                <v-icon>mdi-stop</v-icon>
+              </v-btn>
+            </v-card-text>
+          </v-card>
+        </v-menu>
+        <v-col
+          cols="3"
+          class="d-flex justify-center align-center"
+        >
+          <v-icon class="mx-2">mdi-chip</v-icon>
+          <i18n-n
+            :value="status.cpuPercent || 0"
+            format="percent"
+          ></i18n-n>
+        </v-col>
+        <v-col
+          cols="3"
+          class="d-flex justify-center align-center"
+        >
+          <v-icon
+            class="mx-2"
+            color="green"
+          >mdi-download</v-icon>
+          <i18n-n
+            :value="inbps / 1024**2"
+            format="mbps"
+          ></i18n-n>
+        </v-col>
+        <v-col
+          cols="3"
+          class="d-flex justify-center align-center"
+        >
+          <v-icon
+            class="mx-2"
+            color="red"
+          >mdi-upload</v-icon>
+          <i18n-n
+            :value="outbps / 1024**2"
+            format="mbps"
+          ></i18n-n>
+        </v-col>
+      </v-row>
     </v-container>
   </v-footer>
 </template>
