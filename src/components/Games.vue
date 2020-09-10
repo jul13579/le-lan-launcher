@@ -26,6 +26,7 @@
           :config="getGameFolder(item)"
           :status="folderStatus[item.id] || {}"
           @download="downloadGame(item)"
+          @cancelDownload="deleteGame(item)"
           @pause="unPauseGame(item, true)"
           @resume="unPauseGame(item, false)"
           @delete="deleteGame(item)"
@@ -171,17 +172,17 @@ export default {
                 this.lastEventId = response.data[response.data.length - 1].id;
                 for (var folderEvent of response.data) {
                   let eventData = folderEvent.data;
-                  let folderSummary = this.folderStatus[eventData.folder];
                   switch (folderEvent.type) {
                     case "FolderSummary":
-                      folderSummary = eventData.summary;
+                      this.folderStatus[eventData.folder] = eventData.summary;
                       break;
                     case "StateChanged":
-                      folderSummary = this.folderStatus[eventData.folder] || {};
-                      folderSummary.state = eventData.to;
+                      this.folderStatus[eventData.folder].state = eventData.to;
+                      break;
+                    case "FolderRejected":
+                      this.folderStatus[eventData.folder] = null;
                       break;
                   }
-                  this.folderStatus[eventData.folder] = folderSummary;
                 }
               }
             })
