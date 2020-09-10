@@ -81,11 +81,6 @@ app.on("ready", async () => {
     }
   }
 
-  // Register custom file protocol (gamethumb://) to load game thumbnails
-  protocol.registerFileProtocol("gamethumb", (request, callback) => {
-    const url = request.url.replace("gamethumb://", "");
-    callback({ path: path.normalize(`${url}`) });
-  });
   // Register file protocol (file:///) to load external background themes
   protocol.registerFileProtocol("file", (request, callback) => {
     const url = request.url.replace("file://", "");
