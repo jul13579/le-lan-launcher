@@ -59,9 +59,21 @@ $transparency: map-get($material-dark, 'background')
         transition: transform .1s ease-in-out
 
 .gameEntry
-    margin: 10px
     width: 190px
+    position: relative
+    overflow: hidden
 
     img
         width: 100%
         height: auto
+    
+    &>:not(.v-image)
+        position: absolute
+        top: 0
+        left: 0
+        width: 100%
+        height: 100%
+    
+    .progress
+        background: rgba(0,0,0,.7)
+        transition: top .1s linear

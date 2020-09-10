@@ -1,14 +1,39 @@
 <template>
   <div
-    class="gameEntry"
+    class="gameEntry ma-3"
     @mouseenter="showOptions = 'visible'"
     @mouseleave="showOptions = 'hidden'"
   >
-    <img
-      :class="{'installed': subscribed && downloadFinished}"
-      :src="'gamethumb://' + homeDir + '/Library/' + value.cover"
-      alt=""
+    <v-img
+      :src="`${homeDir}/Library/${value.cover}`"
+      :aspect-ratio="600/900"
     />
+    <div
+      class="progress"
+      :style="{top: `${-downloadProgress*100}%`}"
+    ></div>
+    <div
+      class="download d-flex justify-center align-center"
+      v-if="downloadProgress < 1"
+    >
+      <v-btn
+        fab
+        x-large
+        @click="$emit('download')"
+        v-if="!subscribed"
+      >
+        <v-icon>mdi-download</v-icon>
+      </v-btn>
+      <v-btn
+        fab
+        x-large
+        @click="$emit('cancel-download')"
+        v-else
+        :loading="!status.globalBytes"
+      >
+        <v-icon>mdi-close</v-icon>
+      </v-btn>
+    </div>
     <!-- <div :class="['gameOptions', showOptions]">
       <div>
         <ul>
@@ -87,6 +112,11 @@ export default {
   computed: {
     subscribed() {
       return this.config != null;
+    },
+    downloadProgress() {
+      return this.subscribed && this.status.globalBytes > 0
+        ? this.status.inSyncBytes / this.status.globalBytes
+        : 0;
     },
     downloadFinished() {
       switch (this.status.state) {
