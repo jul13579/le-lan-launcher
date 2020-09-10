@@ -28,7 +28,7 @@
       {{$t('errors.nasUnset.message')}}
     </v-alert>
     <div class="text-h4">{{$t('settings.theme')}}</div>
-    <v-row>
+    <div class="d-flex mx-n3 flex-wrap">
       <v-img
         v-for="(item, index) in textures"
         :key="index"
@@ -37,7 +37,7 @@
         :src="item"
         @click.native="() => {$store.dispatch('setTheme', {theme: item})}"
       ></v-img>
-    </v-row>
+    </div>
 
     <div class="mt-5 text-h4">{{$t('settings.backgroundHue')}}</div>
     <v-row>
