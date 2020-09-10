@@ -57,6 +57,9 @@ export default {
     },
     images: "Bilder",
   },
+  games: {
+    lib_loading: "Spielebibliothek wird abgerufen..."
+  },
   gameEntry: {
     download: "Herunterladen",
     play: "Spielen",

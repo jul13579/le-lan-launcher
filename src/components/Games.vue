@@ -1,14 +1,19 @@
 <template>
   <v-container>
     <template v-if="!libExisting">
-      <div style="height: calc(100vh - 70px)">
-        <hollow-dots-spinner
-          :animation-duration="1000"
-          :dot-size="15"
-          :dots-num="3"
-          style="margin: 0 auto; padding-top: 40vh"
+      <div
+        style="height: calc(100vh - 230px)"
+        class="d-flex align-center justify-center flex-column"
+      >
+        <self-building-square-spinner
+          :animation-duration="6000"
+          :size="100"
+          :color="$vuetify.theme.themes.dark.primary"
         />
-        <h2 style="padding-top: 4vh; text-align: center">Spielebibliothek wird geladen...</h2>
+        <div
+          class="text-h5 mt-5"
+          v-html="$t('games.lib_loading')"
+        ></div>
       </div>
     </template>
     <template v-else>
@@ -33,7 +38,7 @@
 
 <script>
 import { mapState } from "vuex";
-import { HollowDotsSpinner } from "epic-spinners";
+import { SelfBuildingSquareSpinner } from "epic-spinners";
 import { shell } from "electron";
 import fs from "fs-extra";
 import { spawn } from "child_process";
@@ -50,8 +55,8 @@ let configInterval;
 export default {
   mixins: [online],
   components: {
-    HollowDotsSpinner,
-    GameEntry
+    SelfBuildingSquareSpinner,
+    GameEntry,
   },
   data() {
     return {
@@ -59,7 +64,7 @@ export default {
       lib: {},
       libExisting: false,
       lastEventId: 0,
-      folderStatus: {}
+      folderStatus: {},
     };
   },
   created() {
@@ -81,34 +86,34 @@ export default {
           this.config.devices.find(this.nasDeviceFilter)
         ] = nasDeviceConfig;
         AJAX.System.Syncthing.setConfig(this.config).catch();
-      }
+      },
     },
     devices: {
       get() {
         return this.config.devices || [];
-      }
+      },
     },
     folders: {
       get() {
         return this.config.folders || [];
-      }
+      },
     },
     libConfigPath() {
       return this.homeDir + libJsonPath;
     },
-    ...mapState(["nas", "homeDir"])
+    ...mapState(["nas", "homeDir"]),
   },
   watch: {
     nas() {
       this.getConfig();
-    }
+    },
   },
   methods: {
     getConfig() {
       if (this.online) {
         // Get Config
         AJAX.Syncthing.System.getConfig()
-          .then(response => {
+          .then((response) => {
             this.config = response.data;
             if (
               this.nas && // If nasId is defined (if discovery finds an ID with corresponding ip)
@@ -122,7 +127,7 @@ export default {
                 selectedFolders: {},
                 pendingFolders: [],
                 ignoredFolders: [],
-                addresses: ["dynamic"]
+                addresses: ["dynamic"],
               });
               AJAX.Syncthing.System.setConfig(this.config).catch();
             }
@@ -130,7 +135,7 @@ export default {
               this.nasDevice && // If nasDevice is defined (after it has been set by previous if)
               this.nasDevice.pendingFolders.length > 0
             ) {
-              this.nasDevice.pendingFolders.forEach(folder => {
+              this.nasDevice.pendingFolders.forEach((folder) => {
                 if (folder.id == "gamelib") {
                   this.config.folders.push(
                     this.getFolderObj("gamelib", "Library")
@@ -144,22 +149,22 @@ export default {
 
         // Get initial folder states
         if (Object.keys(this.folderStatus).length == 0) {
-          this.folders.forEach(folder => {
+          this.folders.forEach((folder) => {
             if (folder.id != "gamelib") {
               AJAX.Syncthing.DB.folderStatus(folder.id)
-                .then(response => {
+                .then((response) => {
                   this.folderStatus[folder.id] = response.data;
                 })
                 .catch();
             }
           });
-          AJAX.Syncthing.Events.latest().then(response => {
+          AJAX.Syncthing.Events.latest().then((response) => {
             this.lastEventId = response.data[0].id;
           });
         } else {
           // Update folder states using events
           AJAX.Syncthing.Events.since(this.lastEventId)
-            .then(response => {
+            .then((response) => {
               if (response.data != false) {
                 this.lastEventId = response.data[response.data.length - 1].id;
                 for (var folderEvent of response.data) {
@@ -207,11 +212,11 @@ export default {
         id: id,
         label: label,
         viewFlags: { importFromOtherDevice: true },
-        devices: this.devices.map(device => {
+        devices: this.devices.map((device) => {
           return {
-            deviceID: device.deviceID
+            deviceID: device.deviceID,
           };
-        })
+        }),
       };
     },
     setLibWatcher() {
@@ -219,7 +224,7 @@ export default {
       if (this.libExisting) {
         this.getLib();
       }
-      fs.watchFile(this.libConfigPath, curr => {
+      fs.watchFile(this.libConfigPath, (curr) => {
         this.libExisting = curr.size > 0;
         if (curr.size > 0) {
           this.getLib();
@@ -249,7 +254,7 @@ export default {
         .catch();
     },
     getGameFolder(game) {
-      return this.folders.find(folder => folder.id == game.id);
+      return this.folders.find((folder) => folder.id == game.id);
     },
     getGameFolderIndex(game) {
       return this.folders.indexOf(this.getGameFolder(game));
@@ -284,9 +289,7 @@ export default {
     resetGame(game) {
       AJAX.Syncthing.DB.revertFolder(game.id)
         .then(() => {
-          this.$toasted.success(
-            "Spiel wird zurückgesetzt: " + game.title
-          );
+          this.$toasted.success("Spiel wird zurückgesetzt: " + game.title);
         })
         .catch();
     },
@@ -294,24 +297,24 @@ export default {
       require("electron").ipcRenderer.send("setPlayerName", game, config);
       let ls = spawn(path.join(game.path, launch.exe), launch.args, {
         cwd: game.path,
-        detached: true
+        detached: true,
       }); // Spawn executable detached, so it stays open if launcher is closed.
-      ls.stdout.on("data", function(data) {
+      ls.stdout.on("data", function (data) {
         // TODO: Idea: create debug window?
         // console.log("stdout: " + data);
         data;
       });
-      ls.stderr.on("data", function(data) {
+      ls.stderr.on("data", function (data) {
         // TODO: Idea: create debug window?
         // console.log("stderr: " + data);
         data;
       });
-      ls.on("exit", function(code) {
+      ls.on("exit", function (code) {
         // TODO: Idea: create debug window?
         // console.log("child process exited with code " + code);
         code;
       });
-    }
-  }
+    },
+  },
 };
 </script>
