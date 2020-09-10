@@ -5,27 +5,17 @@
     style="cursor: default"
   >
     <v-container>
-      <template v-if="started && !online">
-        <div class="d-flex justify-center align-center">
-          <half-circle-spinner
-            :animation-duration="1000"
-            :size="30"
-            color="rgb(200,200,200)"
-          />
-          <div class="px-5">{{$t('statistics.connecting')}}</div>
-          <half-circle-spinner
-            :animation-duration="1000"
-            :size="30"
-            color="rgb(200,200,200)"
-          />
-        </div>
-      </template>
-      <template v-else-if="started && online">
+      <template>
         <v-row
           no-gutters
           class="align-center"
         >
-          <v-tooltip top>
+          <v-menu
+            top
+            offset-y
+            open-on-hover
+            transition="slide-y-reverse-transition"
+          >
             <template v-slot:activator="{ on }">
               <v-col
                 cols="3"
@@ -34,18 +24,57 @@
               >
                 <template v-if="nasConnected">
                   <div>
-                    <v-icon class="mx-2">mdi-cloud-check</v-icon><span>{{$t('statistics.nas_connected')}}</span>
+                    <v-icon class="mx-2">mdi-cloud-check</v-icon>
+                  </div>
+                </template>
+                <template v-else-if="!started">
+                  <div>
+                    <v-icon class="mx-2">mdi-cloud-off-outline</v-icon>
                   </div>
                 </template>
                 <template v-else>
                   <div>
-                    <v-icon class="mx-2">mdi-cloud-off-outline</v-icon><span>{{$t('statistics.nas_connecting')}}</span>
+                    <half-circle-spinner
+                      :animation-duration="1000"
+                      :size="30"
+                      color="rgb(200,200,200)"
+                    />
                   </div>
                 </template>
               </v-col>
             </template>
-            <span>Top tooltip</span>
-          </v-tooltip>
+            <v-card class="text-center">
+              <v-card-title class="justify-center">
+                <span v-html="$t('statistics.service_controls')"></span>
+              </v-card-title>
+              <v-card-text>
+                <v-btn
+                  icon
+                  color="green"
+                  :disabled="started || !homeDir"
+                  @click="startService"
+                >
+                  <v-icon>mdi-play</v-icon>
+                </v-btn>
+                <v-btn
+                  icon
+                  color="yellow"
+                  :disabled="!started"
+                  @click="restartService"
+                >
+                  <v-icon>mdi-restart</v-icon>
+                </v-btn>
+                <v-btn
+                  icon
+                  color="red"
+                  :disabled="!started"
+                  @click="stopService"
+                >
+                  <v-icon>mdi-stop</v-icon>
+                </v-btn>
+              </v-card-text>
+            </v-card>
+          </v-menu>
           <v-col
             cols="3"
             class="d-flex justify-center"
@@ -86,31 +115,6 @@
       </template>
     </v-container>
   </v-footer>
-  <!-- <div class="overlay">
-    <div class="controls">
-      <vs-icon
-        :class="{'enabled' : !started && homeDir}"
-        icon="play_arrow"
-        size="medium"
-        color="success"
-        @click="startService"
-      ></vs-icon>
-      <vs-icon
-        :class="{'enabled' : started}"
-        icon="autorenew"
-        size="medium"
-        color="warning"
-        @click="restartService"
-      ></vs-icon>
-      <vs-icon
-        :class="{'enabled' : started}"
-        icon="stop"
-        size="medium"
-        color="danger"
-        @click="stopService"
-      ></vs-icon>
-    </div>
-  </div> -->
 </template>
 
 <script>

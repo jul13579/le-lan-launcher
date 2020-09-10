@@ -22,10 +22,7 @@ export default {
     },
   },
   statistics: {
-    connecting: "Verbindung zum Service wird hergestellt...",
-    statistics: "Statistiken",
-    nas_connecting: "verbinde...",
-    nas_connected: "verbunden",
+    service_controls: "Service-Steuerung"
   },
   errors: {
     playerNameUnset: {
