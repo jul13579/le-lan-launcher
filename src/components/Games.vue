@@ -17,21 +17,23 @@
       </div>
     </template>
     <template v-else>
-      <game-entry
-        v-for="(item, index) in lib.games"
-        :key="index"
-        :value="item"
-        :homeDir="homeDir"
-        :config="getGameFolder(item)"
-        :status="folderStatus[item.id] || {}"
-        @download="downloadGame(item)"
-        @pause="unPauseGame(item, true)"
-        @resume="unPauseGame(item, false)"
-        @delete="deleteGame(item)"
-        @browse="browseGame(item)"
-        @reset="resetGame(item)"
-        @execute="(launch) => execute(getGameFolder(item), item, launch)"
-      />
+      <div class="d-flex flex-wrap justify-center">
+        <game-entry
+          v-for="(item, index) in lib.games"
+          :key="index"
+          :value="item"
+          :homeDir="homeDir"
+          :config="getGameFolder(item)"
+          :status="folderStatus[item.id] || {}"
+          @download="downloadGame(item)"
+          @pause="unPauseGame(item, true)"
+          @resume="unPauseGame(item, false)"
+          @delete="deleteGame(item)"
+          @browse="browseGame(item)"
+          @reset="resetGame(item)"
+          @execute="(launch) => execute(getGameFolder(item), item, launch)"
+        />
+      </div>
     </template>
   </v-container>
 </template>

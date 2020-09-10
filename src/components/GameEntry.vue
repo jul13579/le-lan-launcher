@@ -1,8 +1,6 @@
 <template>
   <div
     class="gameEntry"
-    :style="coverWidth"
-    ref="coverFace"
     @mouseenter="showOptions = 'visible'"
     @mouseleave="showOptions = 'hidden'"
   >
@@ -11,7 +9,7 @@
       :src="'gamethumb://' + homeDir + '/Library/' + value.cover"
       alt=""
     />
-    <div :class="['gameOptions', showOptions]">
+    <!-- <div :class="['gameOptions', showOptions]">
       <div>
         <ul>
           <template v-if="!subscribed">
@@ -64,18 +62,16 @@
           </template>
         </ul>
       </div>
-    </div>
-    <vs-progress
+    </div> -->
+    <!-- <vs-progress
       v-if="subscribed && status.state == 'syncing'"
       class="downloadProgress"
       :percent="(status.inSyncBytes / status.globalBytes) * 100"
-    ></vs-progress>
+    ></vs-progress> -->
   </div>
 </template>
 
 <script>
-const coverWidth = 170;
-
 export default {
   props: {
     value: Object,
@@ -89,11 +85,6 @@ export default {
     };
   },
   computed: {
-    coverWidth() {
-      return {
-        "--cover-width": coverWidth + "px",
-      };
-    },
     subscribed() {
       return this.config != null;
     },
