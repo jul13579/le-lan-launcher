@@ -43,8 +43,11 @@
             cols="3"
             class="d-flex justify-center"
           >
-            <v-icon class="mx-2">mdi-chip</v-icon><span>{{$t('statistics.cpu')}}:</span>
-            <span>{{(status.cpuPercent || 0.00).toFixed(2)}} {{$t('statistics.percent')}}</span>
+            <v-icon class="mx-2">mdi-chip</v-icon>
+            <i18n-n
+              :value="status.cpuPercent || 0"
+              format="percent"
+            ></i18n-n>
           </v-col>
           <v-col
             cols="3"
@@ -53,7 +56,11 @@
             <v-icon
               class="mx-2"
               color="green"
-            >mdi-download</v-icon><span>{{(inbps / 1024**2).toFixed(2)}} {{$t('statistics.mbps')}}</span>
+            >mdi-download</v-icon>
+            <i18n-n
+              :value="inbps / 1024**2"
+              format="mbps"
+            ></i18n-n>
           </v-col>
           <v-col
             cols="3"
@@ -62,7 +69,11 @@
             <v-icon
               class="mx-2"
               color="red"
-            >mdi-upload</v-icon><span>{{(outbps / 1024**2).toFixed(2)}} {{$t('statistics.mbps')}}</span>
+            >mdi-upload</v-icon>
+            <i18n-n
+              :value="outbps / 1024**2"
+              format="mbps"
+            ></i18n-n>
           </v-col>
         </v-row>
       </template>

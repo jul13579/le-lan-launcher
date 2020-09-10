@@ -124,7 +124,7 @@ export default {
       ],
       sliderValue: 0,
       devices: [],
-      langs: require("../langs").default,
+      langs: require("../localization/langs").default,
     };
   },
   computed: mapState([

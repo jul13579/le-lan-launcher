@@ -8,11 +8,12 @@ import vuetify from "./plugins/vuetify";
 import App from "./App.vue";
 
 import store from "./store";
-import langs from "./langs.js";
+import langs from "./localization/langs";
+import numberFormats from "./localization/numberformats";
 
 // Styles
-import 'roboto-fontface/css/roboto/roboto-fontface.css'
-import '@mdi/font/css/materialdesignicons.css'
+import "roboto-fontface/css/roboto/roboto-fontface.css";
+import "@mdi/font/css/materialdesignicons.css";
 import "./sass/app.sass";
 
 Vue.use(Toasted, {
@@ -23,6 +24,7 @@ Vue.use(VueI18n);
 
 const i18n = new VueI18n({
   locale: store.state.locale, // set locale
+  numberFormats,
   messages: langs, // set locale messages
 });
 
