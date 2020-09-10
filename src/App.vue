@@ -156,9 +156,11 @@ export default {
             break;
           case "started":
             if (mutation.payload == true) {
+              pingIntervalHandle = setInterval(this.pingService, 5000);
               this.$toasted.success(this.$t("toast.service.started"));
             } else {
               this.online = false;
+              clearInterval(pingIntervalHandle);
               this.$toasted.success(this.$t("toast.service.stopped"));
             }
             break;
@@ -172,17 +174,7 @@ export default {
 
     // Setup global service status poller
     clearInterval(pingIntervalHandle);
-    pingIntervalHandle = setInterval(() => {
-      if (!this.online) {
-        AJAX.Syncthing.System.ping()
-          .then(() => {
-            this.online = true;
-          })
-          .catch(() => {
-            this.online = false;
-          });
-      }
-    }, 5000);
+    pingIntervalHandle = setInterval(this.pingService, 5000);
 
     // Set initial tab
     this.activeTab = this.setupCompleted ? 0 : 1;
@@ -190,6 +182,17 @@ export default {
   destroyed() {
     clearInterval(pingIntervalHandle);
     unsubscribeCallback();
+  },
+  methods: {
+    pingService() {
+      AJAX.Syncthing.System.ping()
+        .then(() => {
+          this.online = true;
+        })
+        .catch(() => {
+          this.online = false;
+        });
+    },
   },
 };
 </script>

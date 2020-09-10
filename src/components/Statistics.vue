@@ -22,7 +22,7 @@
                 class="d-flex justify-center"
                 v-on="on"
               >
-                <template v-if="nasConnected">
+                <template v-if="nasConnected && started">
                   <div>
                     <v-icon class="mx-2">mdi-cloud-check</v-icon>
                   </div>
@@ -126,6 +126,11 @@ import online from "../mixins/online";
 
 let statisticsInterval;
 
+const connections = {
+  connections: {},
+  total: {},
+};
+
 export default {
   mixins: [online],
   components: {
@@ -134,10 +139,7 @@ export default {
   data() {
     return {
       status: {},
-      connections: {
-        connections: {},
-        total: {},
-      },
+      connections,
       prev: {
         time: new Date(),
         inBytesTotal: 0,
@@ -153,40 +155,52 @@ export default {
     },
     ...mapState(["nas", "homeDir"]),
   },
-  created() {
-    clearInterval(statisticsInterval);
-    statisticsInterval = setInterval(() => {
-      if (this.online) {
-        AJAX.Syncthing.System.status()
-          .then((response) => {
-            this.status = response.data;
-          })
-          .catch();
-        AJAX.Syncthing.System.connections()
-          .then((response) => {
-            this.connections = response.data;
-            let now = new Date();
-            let diffSec = (now - this.prev.time) / 1000;
-            this.inbps =
-              (this.connections.total.inBytesTotal - this.prev.inBytesTotal) /
-              diffSec;
-            this.outbps =
-              (this.connections.total.outBytesTotal - this.prev.outBytesTotal) /
-              diffSec;
-            this.prev = {
-              time: now,
-              inBytesTotal: this.connections.total.inBytesTotal,
-              outBytesTotal: this.connections.total.outBytesTotal,
-            };
-          })
-          .catch();
+  watch: {
+    // Periodically fetch status from service if online
+    online(online) {
+      if (online) {
+        statisticsInterval = setInterval(this.getStatus, 5000);
+      } else {
+        clearInterval(statisticsInterval);
+        this.connections = connections;
       }
-    }, 5000);
+    },
+  },
+  beforeMount() {
+    clearInterval(statisticsInterval);
+    if (this.online) {
+      statisticsInterval = setInterval(this.getStatus, 5000);
+    }
   },
   destroyed() {
     clearInterval(statisticsInterval);
   },
   methods: {
+    getStatus() {
+      AJAX.Syncthing.System.status()
+        .then((response) => {
+          this.status = response.data;
+        })
+        .catch();
+      AJAX.Syncthing.System.connections()
+        .then((response) => {
+          this.connections = response.data;
+          let now = new Date();
+          let diffSec = (now - this.prev.time) / 1000;
+          this.inbps =
+            (this.connections.total.inBytesTotal - this.prev.inBytesTotal) /
+            diffSec;
+          this.outbps =
+            (this.connections.total.outBytesTotal - this.prev.outBytesTotal) /
+            diffSec;
+          this.prev = {
+            time: now,
+            inBytesTotal: this.connections.total.inBytesTotal,
+            outBytesTotal: this.connections.total.outBytesTotal,
+          };
+        })
+        .catch();
+    },
     startService() {
       if (!this.started) {
         require("electron").ipcRenderer.send("startService");

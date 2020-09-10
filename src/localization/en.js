@@ -13,7 +13,7 @@ export default {
     locale: "Language saved",
     service: {
       started: "Service is starting...",
-      stopped: "Service stopped",
+      stopped: "Service is shutting down...",
       restarting: "Service is restarting...",
       error: {
         restarting: "Error restarting service",
