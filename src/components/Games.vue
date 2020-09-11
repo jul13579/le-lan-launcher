@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <template v-if="!libExisting">
+    <template v-if="!(lib && lib.games)">
       <div
         style="height: calc(100vh - 230px)"
         class="d-flex align-center justify-center flex-column"
@@ -48,10 +48,10 @@ import path from "path";
 
 import AJAX from "../ajax";
 import online from "../mixins/online";
+import defaultFolderconfig, { gamelibDirId } from "../folderconfig";
 
 import GameEntry from "./GameEntry";
 
-const libJsonPath = "/Library/library.json";
 let configInterval;
 
 export default {
@@ -64,44 +64,35 @@ export default {
     return {
       config: {},
       lib: {},
-      libExisting: false,
       lastEventId: 0,
       folderStatus: {},
     };
   },
   created() {
+    this.setLibWatcher();
     this.getConfig();
+
     clearInterval(configInterval);
     configInterval = setInterval(this.getConfig, 5000);
-    this.setLibWatcher();
   },
   destroyed() {
     clearInterval(configInterval);
+    fs.unwatchFile(this.libConfigPath);
   },
   computed: {
-    nasDevice: {
-      get() {
-        return this.config.devices.find(this.nasDeviceFilter);
-      },
-      set(nasDeviceConfig) {
-        this.config.devices[
-          this.config.devices.find(this.nasDeviceFilter)
-        ] = nasDeviceConfig;
-        AJAX.System.Syncthing.setConfig(this.config).catch();
-      },
+    nasDevice() {
+      return (this.config.devices || []).find(
+        (device) => device.deviceID == this.nas
+      );
     },
-    devices: {
-      get() {
-        return this.config.devices || [];
-      },
+    devices() {
+      return this.config.devices || [];
     },
-    folders: {
-      get() {
-        return this.config.folders || [];
-      },
+    folders() {
+      return this.config.folders || [];
     },
     libConfigPath() {
-      return this.homeDir + libJsonPath;
+      return `${this.homeDir}/Library/library.json`;
     },
     ...mapState(["nas", "homeDir"]),
   },
@@ -112,111 +103,99 @@ export default {
   },
   methods: {
     getConfig() {
-      if (this.online) {
-        // Get Config
-        AJAX.Syncthing.System.getConfig()
+      if (!this.online) {
+        return;
+      }
+
+      // Get Config
+      AJAX.Syncthing.System.getConfig()
+        .then((response) => {
+          this.config = response.data;
+
+          // If nas is not yet part of devices list, add it
+          if (!this.nasDevice) {
+            this.config.devices.push({
+              deviceID: this.nas,
+              _addressesStr: "dynamic",
+              compression: "metadata",
+              introducer: true,
+              selectedFolders: {},
+              pendingFolders: [],
+              ignoredFolders: [],
+              addresses: ["dynamic"],
+            });
+            AJAX.Syncthing.System.setConfig(this.config).catch();
+          }
+
+          // If nas is set but gamelib folder is not yet subscribed, add it
+          // ! Dont do this in one step, e.g. with above nas-setup. Scenarios might come up where the gamelib folder will never be set-up!
+          if (
+            this.nasDevice && // If nasDevice is defined
+            !this.config.folders.find((folder) => folder.id == gamelibDirId)
+          ) {
+            this.config.folders.push(
+              this.getFolderObj(gamelibDirId, "Library")
+            );
+            AJAX.Syncthing.System.setConfig(this.config).catch();
+          }
+        })
+        .catch();
+
+      // Get initial folder states and last event id
+      if (Object.keys(this.folderStatus).length == 0) {
+        this.folders.forEach((folder) => {
+          // Only get status of game directories, not the library!
+          if (folder.id != gamelibDirId) {
+            AJAX.Syncthing.DB.folderStatus(folder.id)
+              .then((response) => {
+                this.folderStatus[folder.id] = response.data;
+              })
+              .catch();
+          }
+        });
+        AJAX.Syncthing.Events.latest().then((response) => {
+          this.lastEventId = response.data[0].id;
+        });
+      } else {
+        // Update folder states using events
+        AJAX.Syncthing.Events.since(this.lastEventId)
           .then((response) => {
-            this.config = response.data;
-            if (
-              this.nas && // If nasId is defined (if discovery finds an ID with corresponding ip)
-              !this.config.devices.find(this.nasDeviceFilter)
-            ) {
-              this.config.devices.push({
-                deviceID: this.nas,
-                _addressesStr: "dynamic",
-                compression: "metadata",
-                introducer: true,
-                selectedFolders: {},
-                pendingFolders: [],
-                ignoredFolders: [],
-                addresses: ["dynamic"],
-              });
-              AJAX.Syncthing.System.setConfig(this.config).catch();
-            }
-            if (
-              this.nasDevice && // If nasDevice is defined (after it has been set by previous if)
-              this.nasDevice.pendingFolders.length > 0
-            ) {
-              this.nasDevice.pendingFolders.forEach((folder) => {
-                if (folder.id == "gamelib") {
-                  this.config.folders.push(
-                    this.getFolderObj("gamelib", "Library")
-                  );
-                  AJAX.Syncthing.System.setConfig(this.config).catch();
+            if (response.data) {
+              // Update last event id
+              this.lastEventId = response.data[response.data.length - 1].id;
+              
+              for (var folderEvent of response.data) {
+                let eventData = folderEvent.data;
+                switch (folderEvent.type) {
+                  case "FolderSummary":
+                    this.folderStatus[eventData.folder] = eventData.summary;
+                    break;
+                  case "StateChanged":
+                    if (!this.folderStatus[eventData.folder]) {
+                      continue; // Skip state update if there is no folder data present
+                    }
+                    this.folderStatus[eventData.folder].state = eventData.to;
+                    break;
+                  case "FolderRejected":
+                    this.folderStatus[eventData.folder] = null;
+                    break;
                 }
-              });
+              }
             }
           })
           .catch();
-
-        // Get initial folder states
-        if (Object.keys(this.folderStatus).length == 0) {
-          this.folders.forEach((folder) => {
-            if (folder.id != "gamelib") {
-              AJAX.Syncthing.DB.folderStatus(folder.id)
-                .then((response) => {
-                  this.folderStatus[folder.id] = response.data;
-                })
-                .catch();
-            }
-          });
-          AJAX.Syncthing.Events.latest().then((response) => {
-            this.lastEventId = response.data[0].id;
-          });
-        } else {
-          // Update folder states using events
-          AJAX.Syncthing.Events.since(this.lastEventId)
-            .then((response) => {
-              if (response.data != false) {
-                this.lastEventId = response.data[response.data.length - 1].id;
-                for (var folderEvent of response.data) {
-                  let eventData = folderEvent.data;
-                  switch (folderEvent.type) {
-                    case "FolderSummary":
-                      this.folderStatus[eventData.folder] = eventData.summary;
-                      break;
-                    case "StateChanged":
-                      if (!this.folderStatus[eventData.folder]) {
-                        continue; // Skip state update if there is no folder data present
-                      }
-                      this.folderStatus[eventData.folder].state = eventData.to;
-                      break;
-                    case "FolderRejected":
-                      this.folderStatus[eventData.folder] = null;
-                      break;
-                  }
-                }
-              }
-            })
-            .catch();
-        }
       }
     },
-    nasDeviceFilter(device) {
-      return device.deviceID == this.nas;
-    },
+
+    // Get folder object to be used in config
     getFolderObj(id, label) {
       return {
-        type: "receiveonly",
-        rescanIntervalS: 3600,
-        fsWatcherDelayS: 10,
-        fsWatcherEnabled: true,
-        minDiskFree: { value: 1, unit: "%" },
-        maxConflicts: 10,
-        fsync: true,
-        order: "random",
-        fileVersioningSelector: "none",
-        trashcanClean: 0,
-        simpleKeep: 5,
-        staggeredMaxAge: 365,
-        staggeredCleanInterval: 3600,
-        staggeredVersionsPath: "",
-        externalCommand: "",
-        autoNormalize: true,
-        path: this.$store.state.homeDir + "/" + label,
+        ...defaultFolderconfig,
+        path: `${this.homeDir}/${label}`,
         id: id,
         label: label,
         viewFlags: { importFromOtherDevice: true },
+        // Share with all devices
         devices: this.devices.map((device) => {
           return {
             deviceID: device.deviceID,
@@ -224,21 +203,27 @@ export default {
         }),
       };
     },
+
+    // Watch library folder for changes
     setLibWatcher() {
-      this.libExisting = fs.existsSync(this.libConfigPath);
-      if (this.libExisting) {
-        this.getLib();
-      }
+      // Setup library watcher
+      // ! Use fs.watchFile as it handles ENOENT (file not existing) and also calls listener when file is created
       fs.watchFile(this.libConfigPath, (curr) => {
-        this.libExisting = curr.size > 0;
         if (curr.size > 0) {
-          this.getLib();
+          this.lib = this.getLib();
         }
       });
+
+      // If library was already existing before app start, we have to fetch the library config now
+      if (fs.existsSync(this.libConfigPath)) {
+        this.lib = this.getLib();
+      }
     },
+
+    // Parse library config
     getLib() {
-      this.lib = JSON.parse(fs.readFileSync(this.libConfigPath));
-      this.lib.games.sort((game1, game2) => {
+      let lib = JSON.parse(fs.readFileSync(this.libConfigPath));
+      lib.games.sort((game1, game2) => {
         if (game1.title == game2.title) {
           return 0;
         }
@@ -249,7 +234,10 @@ export default {
           return 1;
         }
       });
+      return lib;
     },
+
+    // Game actions
     downloadGame(game) {
       this.config.folders.push(this.getFolderObj(game.id, game.title));
       AJAX.Syncthing.System.setConfig(this.config)
