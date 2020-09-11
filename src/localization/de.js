@@ -22,7 +22,10 @@ export default {
     },
   },
   statistics: {
-    service_controls: "Service-Steuerung"
+    service_controls: "Service-Steuerung",
+    cpu_load: "Prozessorauslastung",
+    download_speed: "Downloadgeschwindigkeit",
+    upload_speed: "Uploadgeschwindigkeit",
   },
   errors: {
     playerNameUnset: {
@@ -58,7 +61,7 @@ export default {
     images: "Bilder",
   },
   games: {
-    lib_loading: "Spielebibliothek wird abgerufen..."
+    lib_loading: "Spielebibliothek wird abgerufen...",
   },
   gameEntry: {
     download: "Herunterladen",

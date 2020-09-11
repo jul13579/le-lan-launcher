@@ -77,42 +77,96 @@
             </v-card-text>
           </v-card>
         </v-menu>
-        <v-col
-          cols="3"
-          class="d-flex justify-center align-center"
+        <v-menu
+          top
+          offset-y
+          open-on-hover
+          transition="slide-y-reverse-transition"
         >
-          <v-icon class="mx-2">mdi-chip</v-icon>
-          <i18n-n
-            :value="status.cpuPercent || 0"
-            format="percent"
-          ></i18n-n>
-        </v-col>
-        <v-col
-          cols="3"
-          class="d-flex justify-center align-center"
+          <template v-slot:activator="{ on }">
+            <v-col
+              cols="3"
+              class="d-flex justify-center align-center"
+              v-on="on"
+            >
+              <v-icon class="mx-2">mdi-chip</v-icon>
+              <i18n-n
+                :value="status.cpuPercent || 0"
+                format="percent"
+              ></i18n-n>
+            </v-col>
+          </template>
+          <v-card class="text-center">
+            <v-card-title class="justify-center">
+              <span v-html="$t('statistics.cpu_load')"></span>
+            </v-card-title>
+            <v-card-text>
+              <line-chart :value="status.cpuPercent" />
+            </v-card-text>
+          </v-card>
+        </v-menu>
+        <v-menu
+          top
+          offset-y
+          open-on-hover
+          transition="slide-y-reverse-transition"
         >
-          <v-icon
-            class="mx-2"
-            color="green"
-          >mdi-download</v-icon>
-          <i18n-n
-            :value="inbps / 1024**2"
-            format="mbps"
-          ></i18n-n>
-        </v-col>
-        <v-col
-          cols="3"
-          class="d-flex justify-center align-center"
+          <template v-slot:activator="{ on }">
+            <v-col
+              cols="3"
+              class="d-flex justify-center align-center"
+              v-on="on"
+            >
+              <v-icon
+                class="mx-2"
+                color="green"
+              >mdi-download</v-icon>
+              <i18n-n
+                :value="inbps / 1024**2"
+                format="mbps"
+              ></i18n-n>
+            </v-col>
+          </template>
+          <v-card class="text-center">
+            <v-card-title class="justify-center">
+              <span v-html="$t('statistics.download_speed')"></span>
+            </v-card-title>
+            <v-card-text>
+              <line-chart :value="inbps / 1024**2" />
+            </v-card-text>
+          </v-card>
+        </v-menu>
+        <v-menu
+          top
+          offset-y
+          open-on-hover
+          transition="slide-y-reverse-transition"
         >
-          <v-icon
-            class="mx-2"
-            color="red"
-          >mdi-upload</v-icon>
-          <i18n-n
-            :value="outbps / 1024**2"
-            format="mbps"
-          ></i18n-n>
-        </v-col>
+          <template v-slot:activator="{ on }">
+            <v-col
+              cols="3"
+              class="d-flex justify-center align-center"
+              v-on="on"
+            >
+              <v-icon
+                class="mx-2"
+                color="red"
+              >mdi-upload</v-icon>
+              <i18n-n
+                :value="outbps / 1024**2"
+                format="mbps"
+              ></i18n-n>
+            </v-col>
+          </template>
+          <v-card class="text-center">
+            <v-card-title class="justify-center">
+              <span v-html="$t('statistics.upload_speed')"></span>
+            </v-card-title>
+            <v-card-text>
+              <line-chart :value="outbps / 1024**2" />
+            </v-card-text>
+          </v-card>
+        </v-menu>
       </v-row>
     </v-container>
   </v-footer>
@@ -121,6 +175,7 @@
 <script>
 import { mapState } from "vuex";
 import { HalfCircleSpinner } from "epic-spinners";
+import LineChart from "./LineChart";
 
 import AJAX from "../ajax";
 import online from "../mixins/online";
@@ -136,6 +191,7 @@ export default {
   mixins: [online],
   components: {
     HalfCircleSpinner,
+    LineChart,
   },
   data() {
     return {

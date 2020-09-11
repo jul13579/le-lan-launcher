@@ -23,6 +23,9 @@ export default {
   },
   statistics: {
     service_controls: "Service controls",
+    cpu_load: "CPU load",
+    download_speed: "Download speed",
+    upload_speed: "Upload speed",
   },
   errors: {
     playerNameUnset: {
@@ -57,7 +60,7 @@ export default {
     images: "Images",
   },
   games: {
-    lib_loading: "Game library is being downloaded..."
+    lib_loading: "Game library is being downloaded...",
   },
   gameEntry: {
     download: "Download",

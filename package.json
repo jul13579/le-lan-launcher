@@ -23,6 +23,7 @@
   "dependencies": {
     "@mdi/font": "^5.5.55",
     "axios": "^0.20.0",
+    "chart.js": "^2.9.3",
     "core-js": "^3.6.5",
     "epic-spinners": "^1.1.0",
     "fs-extra": "^9.0.1",
