@@ -25,6 +25,7 @@
           class="download d-flex flex-column justify-center align-center"
           v-if="downloadProgress < 1"
         >
+          <!-- If game is subscribed but there is no status yet, show loader -->
           <v-btn
             fab
             x-large
@@ -32,43 +33,19 @@
             v-if="subscribed && Object.keys(status).length == 0"
             loading
           />
+          <!-- Else show applicable download buttons -->
           <template v-else>
-            <!-- Download button to be displayed whenever !subscribed -->
-            <v-btn
-              fab
-              x-large
-              @click="$emit('download')"
-              v-if="!subscribed"
-            >
-              <v-icon>mdi-download</v-icon>
-            </v-btn>
-            <!-- Pause button to be displayed whenever config is existing and paused == false -->
-            <v-btn
-              fab
-              x-large
-              @click="$emit('pause')"
-              v-if="config && !config.paused"
-            >
-              <v-icon>mdi-pause</v-icon>
-            </v-btn>
-            <!-- Resume button to be displayed whenever config is existing and paused == true -->
-            <v-btn
-              fab
-              x-large
-              @click="$emit('resume')"
-              v-if="config && config.paused"
-            >
-              <v-icon>mdi-chevron-double-right</v-icon>
-            </v-btn>
-            <!-- Cancel button to be displayed whenever subscribed -->
-            <v-btn
-              fab
-              x-large
-              @click="$emit('delete')"
-              v-if="subscribed"
-            >
-              <v-icon>mdi-close</v-icon>
-            </v-btn>
+            <template v-for="(item, index) in downloadButtons">
+              <v-btn
+                fab
+                x-large
+                @click="item.click"
+                v-if="item.show"
+                :key="index"
+              >
+                <v-icon>{{item.icon}}</v-icon>
+              </v-btn>
+            </template>
           </template>
         </div>
         <div
@@ -122,9 +99,30 @@ export default {
         ? this.status.inSyncBytes / this.status.globalBytes
         : 0;
     },
-    // downloadButtons() {
-
-    // },
+    downloadButtons() {
+      return [
+        {
+          click: () => this.$emit("download"),
+          show: !this.subscribed,
+          icon: "mdi-download",
+        },
+        {
+          click: () => this.$emit("pause"),
+          show: this.config && !this.config.paused,
+          icon: "mdi-pause",
+        },
+        {
+          click: () => this.$emit("resume"),
+          show: this.config && this.config.paused,
+          icon: "mdi-chevron-double-right",
+        },
+        {
+          click: () => this.$emit("delete"),
+          show: this.subscribed,
+          icon: "mdi-close",
+        },
+      ];
+    },
     gameMenuButtons() {
       let buttons = [
         {
