@@ -26,7 +26,7 @@
           :config="getGameFolder(item)"
           :status="folderStatus[item.id] || {}"
           @download="downloadGame(item)"
-          @cancelDownload="deleteGame(item)"
+          @cancel-download="deleteGame(item)"
           @pause="unPauseGame(item, true)"
           @resume="unPauseGame(item, false)"
           @delete="deleteGame(item)"
@@ -280,11 +280,9 @@ export default {
       AJAX.Syncthing.System.setConfig(this.config)
         .then(() => {
           this.$toasted.success("Spiel gelöscht: " + game.title);
+          fs.removeSync(gameFolder.path);
         })
         .catch();
-      setTimeout(() => {
-        fs.removeSync(gameFolder.path);
-      }, 5000);
     },
     browseGame(game) {
       shell.openItem(this.getGameFolder(game).path);
