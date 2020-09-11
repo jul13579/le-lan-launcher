@@ -177,6 +177,9 @@ export default {
                       this.folderStatus[eventData.folder] = eventData.summary;
                       break;
                     case "StateChanged":
+                      if (!this.folderStatus[eventData.folder]) {
+                        continue; // Skip state update if there is no folder data present
+                      }
                       this.folderStatus[eventData.folder].state = eventData.to;
                       break;
                     case "FolderRejected":
