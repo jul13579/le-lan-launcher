@@ -63,6 +63,11 @@ $transparency: map-get($material-dark, 'background')
     position: relative
     overflow: hidden
 
+    &.installed
+        transition: transform .2s ease-in-out
+        &:hover
+            transform: perspective(10px) rotateX(.2deg)
+
     img
         width: 100%
         height: auto

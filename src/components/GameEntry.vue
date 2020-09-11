@@ -1,6 +1,7 @@
 <template>
   <div
     class="gameEntry ma-3"
+    :class="downloadProgress >=1 ? 'installed' : ''"
     @mouseenter="showOptions = 'visible'"
     @mouseleave="showOptions = 'hidden'"
   >
@@ -24,15 +25,21 @@
       >
         <v-icon>mdi-download</v-icon>
       </v-btn>
-      <v-btn
-        fab
-        x-large
-        @click="$emit('cancel-download')"
-        v-else
-        :loading="!status.globalBytes"
-      >
-        <v-icon>mdi-close</v-icon>
-      </v-btn>
+      <template v-else>
+        <v-btn
+          fab
+          x-large
+          @click="$emit('cancel-download')"
+          :loading="!status.globalBytes"
+        >
+          <v-icon>mdi-close</v-icon>
+        </v-btn>
+      </template>
+    </div>
+    <div
+      v-else
+      class="hover"
+    >
     </div>
     <!-- <div :class="['gameOptions', showOptions]">
       <div>
