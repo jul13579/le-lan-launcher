@@ -1,7 +1,7 @@
 <template>
   <div
     class="gameEntry ma-3"
-    :class="downloadProgress >=1 ? 'installed' : ''"
+    :class="downloadProgress >= 1 ? 'installed' : ''"
     @mouseenter="showOptions = 'visible'"
     @mouseleave="showOptions = 'hidden'"
   >
@@ -58,7 +58,7 @@
     </div>
     <div
       v-else
-      class="hover"
+      class="glass"
     >
     </div>
     <!-- <div :class="['gameOptions', showOptions]">

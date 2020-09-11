@@ -58,15 +58,21 @@ $transparency: map-get($material-dark, 'background')
         transform: scale(1.1)
         transition: transform .1s ease-in-out
 
+
+$hover-animation: .2s ease-in-out
+
 .gameEntry
     width: 190px
     position: relative
     overflow: hidden
 
     &.installed
-        transition: transform .2s ease-in-out
+        transition: transform $hover-animation
+        cursor: pointer
         &:hover
-            transform: perspective(10px) rotateX(.2deg)
+            transform: perspective(10px) rotateX(.1deg)
+            .glass
+                top: -70%
 
     img
         width: 100%
@@ -82,3 +88,11 @@ $transparency: map-get($material-dark, 'background')
     .progress
         background: rgba(0,0,0,.7)
         transition: top .1s linear
+
+    .glass
+        transition: top $hover-animation
+        top: -175%
+        height: 200%
+        width: 200%
+        box-shadow: 0px 0px 20px 5px white, inset 0px 0px 20px 5px white
+        transform: rotate(-45deg)
