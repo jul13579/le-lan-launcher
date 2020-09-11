@@ -10,6 +10,7 @@
 
 <script>
 import Chart from "chart.js";
+import { mapState } from "vuex";
 
 const lineChartOptions = {
   legend: {
@@ -58,6 +59,13 @@ export default {
         ],
         fill: true,
       };
+    },
+    ...mapState(["backgroundHue"]),
+  },
+  watch: {
+    backgroundHue() {
+      this.chart.data.datasets[0].backgroundColor = this.$vuetify.theme.themes.dark.primary;
+      this.chart.update();
     },
   },
   mounted() {
