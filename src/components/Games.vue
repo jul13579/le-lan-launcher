@@ -287,7 +287,7 @@ export default {
         .catch();
     },
     browseGame(game) {
-      shell.openItem(this.getGameFolder(game).path);
+      shell.openPath(this.getGameFolder(game).path);
     },
     resetGame(game) {
       AJAX.Syncthing.DB.revertFolder(game.id)

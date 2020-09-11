@@ -1,126 +1,123 @@
 <template>
-  <div
-    class="gameEntry ma-3"
-    :class="downloadProgress >= 1 ? 'installed' : ''"
-    @mouseenter="showOptions = 'visible'"
-    @mouseleave="showOptions = 'hidden'"
+  <v-menu
+    offset-x
+    open-on-hover
+    transition="slide-x-transition"
   >
-    <v-img
-      :src="`${homeDir}/Library/${value.cover}`"
-      :aspect-ratio="600/900"
-    />
-    <!-- Progress indicator -->
-    <div
-      class="progress"
-      :style="{top: `${-downloadProgress*100}%`}"
-    ></div>
-    <!-- Download buttons overlay. Only displayed when downloadProgress < 1, hence not completed -->
-    <div
-      class="download d-flex flex-column justify-center align-center"
-      v-if="downloadProgress < 1"
-    >
-      <!-- Download button to be displayed whenever !subscribed -->
-      <v-btn
-        fab
-        x-large
-        @click="$emit('download')"
-        v-if="!subscribed"
+    <template v-slot:activator="{ on }">
+      <div
+        class="gameEntry ma-3"
+        :class="downloadProgress >= 1 ? 'installed' : ''"
+        @mouseenter="showOptions = 'visible'"
+        @mouseleave="showOptions = 'hidden'"
       >
-        <v-icon>mdi-download</v-icon>
-      </v-btn>
-      <!-- Pause button to be displayed whenever config is existing and paused == false -->
-      <v-btn
-        fab
-        x-large
-        @click="$emit('pause')"
-        v-if="config && !config.paused"
-      >
-        <v-icon>mdi-pause</v-icon>
-      </v-btn>
-      <!-- Resume button to be displayed whenever config is existing and paused == true -->
-      <v-btn
-        fab
-        x-large
-        @click="$emit('resume')"
-        v-if="config && config.paused"
-      >
-        <v-icon>mdi-chevron-double-right</v-icon>
-      </v-btn>
-      <!-- Cancel button to be displayed whenever subscribed -->
-      <v-btn
-        fab
-        x-large
-        @click="$emit('delete')"
-        v-if="subscribed"
-      >
-        <v-icon>mdi-close</v-icon>
-      </v-btn>
-    </div>
-    <div
-      v-else
-      class="glass"
-    >
-    </div>
-    <!-- <div :class="['gameOptions', showOptions]">
-      <div>
-        <ul>
-          <template v-if="!subscribed">
-            <li @click="$emit('download')">
-              <v-icon small>mdi-cloud-download</v-icon>{{$t('gameEntry.download')}}
-            </li>
-          </template>
-          <template v-else>
-            <template v-if="downloadFinished">
-              <li
-                @click="$emit('execute', value.launch)"
-                v-if="status.globalBytes > 0"
-              >
-                <v-icon small>mdi-play</v-icon>{{$t('gameEntry.play')}}
-              </li>
-              <li
-                @click="$emit('reset')"
-                v-if="status.receiveOnlyTotalItems > 0"
-              >
-                <v-icon small>mdi-backup-restore</v-icon>{{$t('gameEntry.reset')}}
-              </li>
-              <li
-                v-for="(item, index) in value.moreLaunchs"
-                :key="index"
-                @click="
-                  $emit('execute', item)
-                "
-              >
-                <v-icon small>mdi-dots-horizontal</v-icon>{{ item.text }}
-              </li>
-            </template>
-            <li
-              @click="$emit('pause')"
-              v-if="!config.paused"
-            >
-              <v-icon small>mdi-pause</v-icon>{{$t('gameEntry.pause')}}
-            </li>
-            <li
-              @click="$emit('resume')"
-              v-if="config.paused"
-            >
-              <v-icon small>mdi-chevron-double-right</v-icon>{{$t('gameEntry.resume')}}
-            </li>
-            <li @click="$emit('browse')">
-              <v-icon small>mdi-folder-open</v-icon>{{$t('gameEntry.browse')}}
-            </li>
-            <li @click="$emit('delete')">
-              <v-icon small>mdi-delete</v-icon>{{$t('gameEntry.delete')}}
-            </li>
-          </template>
-        </ul>
+        <v-img
+          :src="`${homeDir}/Library/${value.cover}`"
+          :aspect-ratio="600/900"
+        />
+        <!-- Progress indicator -->
+        <div
+          class="progress"
+          :style="{top: `${-downloadProgress*100}%`}"
+        ></div>
+        <!-- Download buttons overlay. Only displayed when downloadProgress < 1, hence not completed -->
+        <div
+          class="download d-flex flex-column justify-center align-center"
+          v-if="downloadProgress < 1"
+        >
+          <!-- Download button to be displayed whenever !subscribed -->
+          <v-btn
+            fab
+            x-large
+            @click="$emit('download')"
+            v-if="!subscribed"
+          >
+            <v-icon>mdi-download</v-icon>
+          </v-btn>
+          <!-- Pause button to be displayed whenever config is existing and paused == false -->
+          <v-btn
+            fab
+            x-large
+            @click="$emit('pause')"
+            v-if="config && !config.paused"
+          >
+            <v-icon>mdi-pause</v-icon>
+          </v-btn>
+          <!-- Resume button to be displayed whenever config is existing and paused == true -->
+          <v-btn
+            fab
+            x-large
+            @click="$emit('resume')"
+            v-if="config && config.paused"
+          >
+            <v-icon>mdi-chevron-double-right</v-icon>
+          </v-btn>
+          <!-- Cancel button to be displayed whenever subscribed -->
+          <v-btn
+            fab
+            x-large
+            @click="$emit('delete')"
+            v-if="subscribed"
+          >
+            <v-icon>mdi-close</v-icon>
+          </v-btn>
+        </div>
+        <div
+          v-else
+          class="glass"
+          v-on="on"
+        >
+        </div>
       </div>
-    </div> -->
-    <!-- <vs-progress
-      v-if="subscribed && status.state == 'syncing'"
-      class="downloadProgress"
-      :percent="(status.inSyncBytes / status.globalBytes) * 100"
-    ></vs-progress> -->
-  </div>
+    </template>
+    <v-card>
+      <div class="d-flex flex-column">
+        <v-btn
+          text
+          block
+          @click="$emit('execute', value.launch)"
+          class="justify-start"
+        >
+          <v-icon left>mdi-play</v-icon>{{$t('gameEntry.play')}}
+        </v-btn>
+        <v-btn
+          text
+          block
+          @click="$emit('reset')"
+          v-if="status.receiveOnlyTotalItems > 0"
+          class="justify-start"
+        >
+          <v-icon left>mdi-backup-restore</v-icon>{{$t('gameEntry.reset')}}
+        </v-btn>
+        <v-btn
+          text
+          block
+          @click="$emit('execute', item)"
+          v-for="(item, index) in value.moreLaunchs"
+          :key="index"
+          class="justify-start"
+        >
+          <v-icon left>mdi-dots-horizontal</v-icon>{{ item.text }}
+        </v-btn>
+        <v-btn
+          text
+          block
+          @click="$emit('browse')"
+          class="justify-start"
+        >
+          <v-icon left>mdi-folder-open</v-icon>{{$t('gameEntry.browse')}}
+        </v-btn>
+        <v-btn
+          text
+          block
+          @click="$emit('delete')"
+          class="justify-start"
+        >
+          <v-icon left>mdi-delete</v-icon>{{$t('gameEntry.delete')}}
+        </v-btn>
+      </div>
+    </v-card>
+  </v-menu>
 </template>
 
 <script>
