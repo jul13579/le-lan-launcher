@@ -53,7 +53,6 @@ export default {
         datasets: [
           {
             backgroundColor: this.$vuetify.theme.themes.dark.primary,
-            // pointRadius: 0,
             data: [],
           },
         ],

@@ -82,6 +82,7 @@
           offset-y
           open-on-hover
           transition="slide-y-reverse-transition"
+          eager
         >
           <template v-slot:activator="{ on }">
             <v-col
@@ -110,6 +111,7 @@
           offset-y
           open-on-hover
           transition="slide-y-reverse-transition"
+          eager
         >
           <template v-slot:activator="{ on }">
             <v-col
@@ -141,6 +143,7 @@
           offset-y
           open-on-hover
           transition="slide-y-reverse-transition"
+          eager
         >
           <template v-slot:activator="{ on }">
             <v-col
