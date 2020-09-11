@@ -191,6 +191,15 @@ export default {
   destroyed() {
     clearInterval(discoveryInterval);
   },
+  watch: {
+    online(online) {
+      if (online) {
+        discoveryInterval = setInterval(this.discovery, 5000);
+      } else {
+        clearInterval(discoveryInterval);
+      }
+    },
+  },
   methods: {
     openFileChooser(callback, options) {
       require("electron")
