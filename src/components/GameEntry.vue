@@ -1,7 +1,7 @@
 <template>
   <v-menu
     offset-x
-    open-on-hover
+    open-on-click
     transition="slide-x-transition"
   >
     <template v-slot:activator="{ on }">
