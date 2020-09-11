@@ -52,7 +52,7 @@ import defaultFolderconfig, { gamelibDirId } from "../folderconfig";
 
 import GameEntry from "./GameEntry";
 
-let configInterval;
+let configInterval, libraryWatcher;
 
 export default {
   mixins: [online],
@@ -68,7 +68,7 @@ export default {
       folderStatus: {},
     };
   },
-  created() {
+  beforeMount() {
     this.setLibWatcher();
     this.getConfig();
 
@@ -77,7 +77,7 @@ export default {
   },
   destroyed() {
     clearInterval(configInterval);
-    fs.unwatchFile(this.libConfigPath);
+    fs.unwatchFile(this.libConfigPath, libraryWatcher);
   },
   computed: {
     nasDevice() {
@@ -218,7 +218,7 @@ export default {
     setLibWatcher() {
       // Setup library watcher
       // ! Use fs.watchFile as it handles ENOENT (file not existing) and also calls listener when file is created
-      fs.watchFile(this.libConfigPath, (curr) => {
+      libraryWatcher = fs.watchFile(this.libConfigPath, (curr) => {
         if (curr.size > 0) {
           this.lib = this.getLib();
         }
