@@ -138,6 +138,15 @@ export default {
             );
             AJAX.Syncthing.System.setConfig(this.config).catch();
           }
+
+          // Drop pendingFolders of nas device
+          if (this.nasDevice.pendingFolders.length > 0) {
+            this.nasDevice.pendingFolders.forEach((folder) => {
+              folder.time = new Date().toISOString();
+              this.nasDevice.ignoredFolders.push(folder);
+            });
+            AJAX.Syncthing.System.setConfig(this.config).catch();
+          }
         })
         .catch();
 
@@ -160,10 +169,11 @@ export default {
         // Update folder states using events
         AJAX.Syncthing.Events.since(this.lastEventId)
           .then((response) => {
-            if (response.data) {
+            // Catches empty arrays
+            if (response.data != false) {
               // Update last event id
               this.lastEventId = response.data[response.data.length - 1].id;
-              
+
               for (var folderEvent of response.data) {
                 let eventData = folderEvent.data;
                 switch (folderEvent.type) {
