@@ -70,51 +70,22 @@
         </div>
       </div>
     </template>
+
+    <!-- Game menu -->
     <v-card>
       <div class="d-flex flex-column">
-        <v-btn
-          text
-          block
-          @click="$emit('execute', value.launch)"
-          class="justify-start"
-        >
-          <v-icon left>mdi-play</v-icon>{{$t('gameEntry.play')}}
-        </v-btn>
-        <v-btn
-          text
-          block
-          @click="$emit('reset')"
-          v-if="status.receiveOnlyTotalItems > 0"
-          class="justify-start"
-        >
-          <v-icon left>mdi-backup-restore</v-icon>{{$t('gameEntry.reset')}}
-        </v-btn>
-        <v-btn
-          text
-          block
-          @click="$emit('execute', item)"
-          v-for="(item, index) in value.moreLaunchs"
-          :key="index"
-          class="justify-start"
-        >
-          <v-icon left>mdi-dots-horizontal</v-icon>{{ item.text }}
-        </v-btn>
-        <v-btn
-          text
-          block
-          @click="$emit('browse')"
-          class="justify-start"
-        >
-          <v-icon left>mdi-folder-open</v-icon>{{$t('gameEntry.browse')}}
-        </v-btn>
-        <v-btn
-          text
-          block
-          @click="$emit('delete')"
-          class="justify-start"
-        >
-          <v-icon left>mdi-delete</v-icon>{{$t('gameEntry.delete')}}
-        </v-btn>
+        <template v-for="(item, index) in gameMenuButtons">
+          <v-btn
+            text
+            block
+            @click="item.click"
+            v-if="item.show"
+            class="justify-start"
+            :key="index"
+          >
+            <v-icon left>{{item.icon}}</v-icon>{{item.text}}
+          </v-btn>
+        </template>
       </div>
     </v-card>
   </v-menu>
@@ -142,14 +113,56 @@ export default {
         ? this.status.inSyncBytes / this.status.globalBytes
         : 0;
     },
-    downloadFinished() {
-      switch (this.status.state) {
-        case "idle":
-        case "scanning":
-          return this.status.globalBytes == this.status.inSyncBytes;
-        default:
-          return false;
+    gameMenuButtons() {
+      let buttons = [
+        {
+          click: () => this.$emit("execute", this.value.launch),
+          show: true,
+          icon: "mdi-play",
+          text: this.$t("gameEntry.play"),
+        },
+        {
+          click: () => this.$emit("pause"),
+          show: this.config && !this.config.paused,
+          icon: "mdi-pause",
+          text: this.$t("gameEntry.pause"),
+        },
+        {
+          click: () => this.$emit("resume"),
+          show: this.config && this.config.paused,
+          icon: "mdi-chevron-double-right",
+          text: this.$t("gameEntry.resume"),
+        },
+        {
+          click: () => this.$emit("reset"),
+          show: this.status.receiveOnlyTotalItems > 0,
+          icon: "mdi-backup-restore",
+          text: this.$t("gameEntry.reset"),
+        },
+        {
+          click: () => this.$emit("browse"),
+          show: true,
+          icon: "mdi-folder-open",
+          text: this.$t("gameEntry.browse"),
+        },
+        {
+          click: () => this.$emit("delete"),
+          show: true,
+          icon: "mdi-delete",
+          text: this.$t("gameEntry.delete"),
+        },
+      ];
+
+      for (var item in this.value.moreLaunchs) {
+        buttons.splice(-2, 0, {
+          click: () => this.$emit("execute", item),
+          show: true,
+          icon: "mdi-dots-horizontal",
+          text: item.text,
+        });
       }
+
+      return buttons;
     },
   },
 };
