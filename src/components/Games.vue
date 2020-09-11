@@ -26,7 +26,6 @@
           :config="getGameFolder(item)"
           :status="folderStatus[item.id] || {}"
           @download="downloadGame(item)"
-          @cancel-download="deleteGame(item)"
           @pause="unPauseGame(item, true)"
           @resume="unPauseGame(item, false)"
           @delete="deleteGame(item)"

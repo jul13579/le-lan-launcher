@@ -9,14 +9,17 @@
       :src="`${homeDir}/Library/${value.cover}`"
       :aspect-ratio="600/900"
     />
+    <!-- Progress indicator -->
     <div
       class="progress"
       :style="{top: `${-downloadProgress*100}%`}"
     ></div>
+    <!-- Download buttons overlay. Only displayed when downloadProgress < 1, hence not completed -->
     <div
-      class="download d-flex justify-center align-center"
+      class="download d-flex flex-column justify-center align-center"
       v-if="downloadProgress < 1"
     >
+      <!-- Download button to be displayed whenever !subscribed -->
       <v-btn
         fab
         x-large
@@ -25,16 +28,33 @@
       >
         <v-icon>mdi-download</v-icon>
       </v-btn>
-      <template v-else>
-        <v-btn
-          fab
-          x-large
-          @click="$emit('cancel-download')"
-          :loading="!status.globalBytes"
-        >
-          <v-icon>mdi-close</v-icon>
-        </v-btn>
-      </template>
+      <!-- Pause button to be displayed whenever config is existing and paused == false -->
+      <v-btn
+        fab
+        x-large
+        @click="$emit('pause')"
+        v-if="config && !config.paused"
+      >
+        <v-icon>mdi-pause</v-icon>
+      </v-btn>
+      <!-- Resume button to be displayed whenever config is existing and paused == true -->
+      <v-btn
+        fab
+        x-large
+        @click="$emit('resume')"
+        v-if="config && config.paused"
+      >
+        <v-icon>mdi-chevron-double-right</v-icon>
+      </v-btn>
+      <!-- Cancel button to be displayed whenever subscribed -->
+      <v-btn
+        fab
+        x-large
+        @click="$emit('delete')"
+        v-if="subscribed"
+      >
+        <v-icon>mdi-close</v-icon>
+      </v-btn>
     </div>
     <div
       v-else
