@@ -42,6 +42,7 @@
             });
           }
         "
+        eager
       ></v-img>
       <div
         class="themePreview ma-3 transparent-bg align-center justify-center"
