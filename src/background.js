@@ -84,7 +84,7 @@ app.on("ready", async () => {
   // Register file protocol (file:///) to load external background themes
   protocol.registerFileProtocol("file", (request, callback) => {
     const url = request.url.replace("file://", "");
-    const normalizedPath = path.normalize(`${url}`)
+    const normalizedPath = path.normalize(`${url}`);
     callback({ normalizedPath });
   });
 
@@ -118,7 +118,9 @@ function startService() {
 
     execFile(binPath, args, (error, stdout, stderr) => {
       if (error) {
-        throw error;
+        throw new Error(
+          "It seems that you already have an instance of Syncthing running. For the best experience, please make sure to use the Syncthing executable that comes with this launcher. If an instance of that is already running, you can safely ignore this error."
+        );
       }
     });
 
