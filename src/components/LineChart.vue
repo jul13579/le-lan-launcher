@@ -12,29 +12,10 @@
 import Chart from "chart.js";
 import { mapState } from "vuex";
 
-const lineChartOptions = {
-  legend: {
-    display: false,
-  },
-  tooltips: {
-    enabled: true,
-  },
-  scales: {
-    xAxes: [
-      {
-        display: false,
-        type: "time",
-        time: {
-          unit: "second",
-          displayFormats: {
-            second: "mm:ss",
-          },
-          stepSize: 5,
-        },
-      },
-    ],
-  },
-};
+// Common options for all charts
+Chart.defaults.global.datasets.type = "line";
+Chart.defaults.global.datasets.fill = true;
+Chart.defaults.global.legend.display = false;
 
 const queueLength = 30;
 const taskPeriod = 5000;
@@ -43,6 +24,11 @@ let updaterInterval;
 export default {
   props: {
     value: Number,
+    unit: String, // vue-i18n number format key
+    max: {
+      type: Number,
+      required: false,
+    },
   },
   data() {
     return {
@@ -50,28 +36,63 @@ export default {
     };
   },
   computed: {
-    ...mapState(["backgroundHue"]),
+    ...mapState(["backgroundHue", "locale"]),
   },
   watch: {
     backgroundHue() {
       this.chart.data.datasets[0].backgroundColor = this.$vuetify.theme.themes.dark.primary;
       this.chart.update();
     },
+    locale() {
+      this.chart.options.scales.yAxes[0].scaleLabel.labelString = this.getYAxesUnit();
+      this.chart.update();
+    },
   },
   mounted() {
-    this.chart = new Chart(this.$refs.chart, {
-      type: "line",
-      data: {
-        type: "line",
-        datasets: [
+    // Create objects here, so we dont have to deep clone them from global consts
+    let data = {
+      datasets: [
+        {
+          backgroundColor: this.$vuetify.theme.themes.dark.primary,
+          data: this.createQueue(queueLength),
+        },
+      ],
+    };
+    let options = {
+      scales: {
+        xAxes: [
           {
-            backgroundColor: this.$vuetify.theme.themes.dark.primary,
-            data: this.createQueue(queueLength),
+            display: false,
+            type: "time",
+            time: {
+              unit: "second",
+              displayFormats: {
+                second: "mm:ss",
+              },
+              stepSize: 5,
+            },
           },
         ],
-        fill: true,
+        yAxes: [
+          {
+            scaleLabel: {
+              display: true,
+              labelString: this.getYAxesUnit(),
+            },
+            ticks: {
+              min: 0,
+              max: this.max,
+              precision: 2, // Round step size to 2 decimal places
+            },
+          },
+        ],
       },
-      options: lineChartOptions,
+    };
+
+    this.chart = new Chart(this.$refs.chart, {
+      type: "line",
+      data,
+      options,
     });
     // ! Use periodic task to update chart, becuase multiple euqal numbers in this.value wont trigger the watcher
     updaterInterval = setInterval(this.chartUpdater, taskPeriod);
@@ -100,6 +121,15 @@ export default {
         data.shift();
       }
       data.push({ x: new Date(), y: value });
+    },
+    getYAxesUnit() {
+      let locale = this.$i18n.locale;
+      return new Intl.NumberFormat(
+        locale,
+        this.$i18n.numberFormats[locale][this.unit]
+      )
+        .formatToParts(0) // Use arbitrary number, we are only interested in unit
+        .find((item) => item.type == "unit").value;
     },
   },
 };

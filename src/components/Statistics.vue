@@ -102,7 +102,11 @@
               <span v-html="$t('statistics.cpu_load')"></span>
             </v-card-title>
             <v-card-text>
-              <line-chart :value="status.cpuPercent" />
+              <line-chart
+                :value="status.cpuPercent"
+                unit="percent"
+                :max="100"
+              />
             </v-card-text>
           </v-card>
         </v-menu>
@@ -134,7 +138,10 @@
               <span v-html="$t('statistics.download_speed')"></span>
             </v-card-title>
             <v-card-text>
-              <line-chart :value="inbps / 1024**2" />
+              <line-chart
+                :value="inbps / 1024**2"
+                unit="mbps"
+              />
             </v-card-text>
           </v-card>
         </v-menu>
@@ -166,7 +173,10 @@
               <span v-html="$t('statistics.upload_speed')"></span>
             </v-card-title>
             <v-card-text>
-              <line-chart :value="outbps / 1024**2" />
+              <line-chart
+                :value="outbps / 1024**2"
+                unit="mbps"
+              />
             </v-card-text>
           </v-card>
         </v-menu>
