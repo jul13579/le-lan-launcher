@@ -48,6 +48,9 @@ export default {
     theme: "Design",
     backgroundHue: "Farbton",
     environment: "Umgebung",
+    debug: "Debug-Modus",
+    debug_explanation:
+      "Wenn du Probleme hast ein Spiel in den Launcher zu integrieren, kannst du diesen Modus aktivieren. Der Launcher wird dann beim Starten eines externen Programmes ein Fenster anzeigen, das die Standardausgabe des Prozesses protokolliert",
     language: "Sprache",
     playerName: "Spielername",
     homeDir: "Spieleverzeichnis",

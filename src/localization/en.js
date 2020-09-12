@@ -48,6 +48,9 @@ export default {
     theme: "Theme",
     backgroundHue: "Background color",
     environment: "Environment",
+    debug: "Debug mode",
+    debug_explanation:
+      "If you have trouble integrating a game into this launcher, you can enable this mode. When starting an external executable, the launcher will display a window with the executable's STDOUT log",
     language: "Language",
     playerName: "Playername",
     homeDir: "Library path",

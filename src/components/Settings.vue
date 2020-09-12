@@ -102,6 +102,24 @@
           @change="(input) => $store.dispatch('setLocale', { locale: input })"
         />
       </v-col>
+      <v-col
+        cols="5"
+        class="offset-4"
+      >
+        <v-tooltip
+          top
+          max-width="400"
+        >
+          <template v-slot:activator="{ on }">
+            <v-switch>
+              <template v-slot:label>
+                <span v-on="on">{{$t('settings.debug')}}</span>
+              </template>
+            </v-switch>
+          </template>
+          <span v-html="$t('settings.debug_explanation')"></span>
+        </v-tooltip>
+      </v-col>
     </v-row>
     <v-row>
       <v-col cols="3">
