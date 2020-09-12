@@ -6,25 +6,26 @@
 <sup><sub>(Shown games are examples and not included in the launcher. The launcher does not include **ANY** games by itself)</sup></sub>
 
 ## :book: Description
-The **LEGC LAN Launcher** mainly is a frontend for the widely known and used synchronization software "Syncthing" (https://github.com/syncthing/syncthing). The need for such a software arised every time our quite small gaming clan faced the challange to distribute games to other LAN-Party visitors in a fast and easy way.
+The **LEGC LAN Launcher** mainly is a frontend for the widely known and used synchronization software *Syncthing* (https://github.com/syncthing/syncthing). The need for such a software arised every time our quite small gaming clan faced the challange to distribute games to other LAN-Party visitors in a fast and easy way.
 
-Instead of relying on a NAS for everyone to access, this launcher relies on "Syncthing", the P2P synchronization software, to distribute data to LAN-Party visitors. The setup in mind is as follows:
+Instead of relying on a NAS for everyone to access, this launcher relies on *Syncthing*, the P2P synchronization software, to distribute data to LAN-Party visitors. The setup in mind is as follows:
 
 A node (in our case the NAS) shares gamefolders which are set up as "send only", while the LAN Launcher subscribes to these gamefolders as "receive only". This does **NOT** mean that a client does not further distribute the data! Instead it means that only original and unaltered files are distributed by the client.
 
-As "Syncthing" is written in go, it is especially suited for cross-platform use, such as e.g. on a ARM-based NAS. For a more convenient usage of "Syncthing" in this setup, some changes were made (see *patches* directory):
+As *Syncthing* is written in go, it is especially suited for cross-platform use, such as e.g. on a ARM-based NAS. For a more convenient usage of *Syncthing* in this setup, some changes were made (see *patches* directory):
 * First and foremost, syncthing requires you to manually bind devices to each other by prompting you for it. This feature was removed in favor of automatic device approval (especially for the NAS side).
 * Some default values were altered (disabling creation of a default sync folder, disabling global discovery, disabling relays, ...)
 
-The necessary changes are very few, so feel free to see the patches in the *patches* directory.
+The necessary changes are very few, so feel free to see the patches in the `patches` directory.
 
 ## :metal: Features
 * Fancy customization features, including unicorns! :unicorn::rainbow:
 * Multilanguage support, currently english and german only!
 * Set a playername in settings, which can be automatically set in numerous games (see config)
 * Download/browse/delete games, pause distribution of specific games, specify multiple launch configurations (see config)
-* See network usage of "Syncthing"
+* See network usage of *Syncthing*
 * Spawns games detached from launcher, so the launcher can be closed without killing the game.
+* Debug mode to be used when having trouble integrating games. After launching an external executable, the launcher will show a window with the process' output.
 
 ## :floppy_disk: Installation
 ### Prerequisites
