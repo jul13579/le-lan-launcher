@@ -158,7 +158,7 @@
           :item-value="(device) => device[0]"
           :item-text="(device) => device[0]"
           :error="nas == false"
-          @change="$store.dispatch('setNas', { id: index })"
+          @change="(input) => $store.dispatch('setNas', { id: input })"
           :no-data-text="$t('settings.alerts.discovery')"
           :error-messages="!online ? $t('settings.alerts.service') : null"
         />
@@ -202,7 +202,9 @@ export default {
   created() {
     this.discovery();
     clearInterval(discoveryInterval);
-    discoveryInterval = setInterval(this.discovery, 5000);
+    if (this.online) {
+      discoveryInterval = setInterval(this.discovery, 5000);
+    }
   },
   beforeMount() {
     this.sliderValue = this.backgroundHue;

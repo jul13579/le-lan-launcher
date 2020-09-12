@@ -128,6 +128,7 @@ export default {
       "nas",
       "backgroundHue",
       "locale",
+      "started",
     ]),
   },
   beforeMount() {
@@ -176,7 +177,9 @@ export default {
 
     // Setup global service status poller
     clearInterval(pingIntervalHandle);
-    pingIntervalHandle = setInterval(this.pingService, 5000);
+    if (this.started) {
+      pingIntervalHandle = setInterval(this.pingService, 5000);
+    }
 
     // Set initial tab
     this.activeTab = this.setupCompleted ? 0 : 1;
