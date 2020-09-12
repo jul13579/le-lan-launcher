@@ -1,8 +1,5 @@
-import { mapState } from "vuex";
-
 export default {
   props: {
-    online: Boolean
+    online: Boolean,
   },
-  computed: mapState(["started"])
 };

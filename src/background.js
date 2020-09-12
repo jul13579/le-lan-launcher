@@ -1,6 +1,6 @@
 "use strict";
 
-import { app, protocol, BrowserWindow, Menu, dialog, ipcMain } from "electron";
+import { app, protocol, BrowserWindow, dialog, ipcMain } from "electron";
 import { execFile } from "child_process";
 import fs from "fs";
 import XMLParser from "xml-parser";
@@ -118,13 +118,32 @@ function startService() {
 
     execFile(binPath, args, (error, stdout, stderr) => {
       if (error) {
-        throw new Error(
-          "It seems that you already have an instance of Syncthing running. For the best experience, please make sure to use the Syncthing executable that comes with this launcher. If an instance of that is already running, you can safely ignore this error."
-        );
+        let buttonIndex = dialog.showMessageBoxSync(win, {
+          type: "error",
+          title: "Sync-Service error",
+          message:
+            "It seems that you already have an instance of Syncthing running. For the best experience, please make sure to use the Syncthing executable that comes with this launcher. If an instance of that is already running, you can safely ignore this error.",
+          buttons: ["Ignore", "Exit"],
+        });
+        if (buttonIndex == 1) {
+          buttonIndex = dialog.showMessageBoxSync(win, {
+            type: "question",
+            title: "Try to stop conflicting sync-service?",
+            message: "Should we try to stop the conflicting sync-service?",
+            buttons: ["Yes", "No"],
+          });
+
+          switch (buttonIndex) {
+            case 0:
+              shutdown();
+              return;
+            case 1:
+              app.quit();
+              return;
+          }
+        }
       }
     });
-
-    store.dispatch("setStarted", { started: true });
 
     const pollingInterval = setInterval(() => {
       let xml = XMLParser(
@@ -141,16 +160,11 @@ function startService() {
 }
 
 async function shutdown() {
-  if (store.state.started) {
-    await AJAX.Syncthing.System.shutdown()
-      .then(() => {
-        store.dispatch("setStarted", { started: false });
-        app.quit();
-      })
-      .catch();
-  } else {
-    app.quit();
-  }
+  await AJAX.Syncthing.System.shutdown()
+    .catch()
+    .then(() => {
+      app.quit();
+    });
 }
 
 function setPlayerName(event, game, config) {

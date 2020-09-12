@@ -14,7 +14,6 @@ export default new Vuex.Store({
     playerName: "",
     homeDir: "",
     apikey: "",
-    started: false,
     nas: "",
     locale: defaultLocale,
     debug: false,
@@ -41,9 +40,6 @@ export default new Vuex.Store({
     apikey(state, key) {
       state.apikey = key;
     },
-    started(state, bool) {
-      state.started = bool;
-    },
     nas(state, id) {
       state.nas = id;
     },
@@ -69,9 +65,6 @@ export default new Vuex.Store({
     },
     setApikey(store, payload) {
       store.commit("apikey", payload.key);
-    },
-    setStarted(store, payload) {
-      store.commit("started", payload.started);
     },
     setNas(store, payload) {
       store.commit("nas", payload.id);

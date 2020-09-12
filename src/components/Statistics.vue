@@ -24,23 +24,19 @@
               class="d-flex justify-center align-center"
               v-on="on"
             >
-              <template v-if="nasConnected && started">
+              <template v-if="nasConnected">
                 <div>
                   <v-icon class="mx-2">mdi-cloud-check</v-icon>
                 </div>
               </template>
-              <template v-else-if="!started">
+              <template v-else-if="!nasConnected && online">
                 <div>
-                  <v-icon class="mx-2">mdi-cloud-off-outline</v-icon>
+                  <v-icon class="mx-2">mdi-cloud-search</v-icon>
                 </div>
               </template>
               <template v-else>
                 <div>
-                  <half-circle-spinner
-                    :animation-duration="1000"
-                    :size="30"
-                    color="rgb(200,200,200)"
-                  />
+                  <v-icon class="mx-2">mdi-cloud-off-outline</v-icon>
                 </div>
               </template>
             </v-col>
@@ -53,7 +49,7 @@
               <v-btn
                 icon
                 color="green"
-                :disabled="started || !homeDir"
+                :disabled="online || !homeDir"
                 @click="startService"
               >
                 <v-icon>mdi-play</v-icon>
@@ -61,7 +57,7 @@
               <v-btn
                 icon
                 color="yellow"
-                :disabled="!started"
+                :disabled="!online"
                 @click="restartService"
               >
                 <v-icon>mdi-restart</v-icon>
@@ -69,7 +65,7 @@
               <v-btn
                 icon
                 color="red"
-                :disabled="!started"
+                :disabled="!online"
                 @click="stopService"
               >
                 <v-icon>mdi-stop</v-icon>
@@ -187,7 +183,6 @@
 
 <script>
 import { mapState } from "vuex";
-import { HalfCircleSpinner } from "epic-spinners";
 import LineChart from "./LineChart";
 
 import AJAX from "../ajax";
@@ -203,7 +198,6 @@ const connections = {
 export default {
   mixins: [online],
   components: {
-    HalfCircleSpinner,
     LineChart,
   },
   data() {
@@ -272,12 +266,13 @@ export default {
         .catch();
     },
     startService() {
-      if (!this.started) {
+      if (!this.online) {
         require("electron").ipcRenderer.send("startService");
+        this.$toasted.success(this.$t("toast.service.started"));
       }
     },
     restartService() {
-      if (this.started) {
+      if (this.online) {
         AJAX.Syncthing.System.restart()
           .then(() => {
             this.$toasted.success(this.$t("toast.service.restarting"));
@@ -288,10 +283,10 @@ export default {
       }
     },
     stopService() {
-      if (this.started) {
+      if (this.online) {
         AJAX.Syncthing.System.shutdown()
           .then(() => {
-            this.$store.dispatch("setStarted", { started: false });
+            this.$toasted.success(this.$t("toast.service.stopped"));
           })
           .catch(() => {
             this.$toasted.error(this.$t("toast.service.error.stopping"));

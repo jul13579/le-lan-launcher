@@ -145,7 +145,7 @@
             )
           "
           :value="homeDir"
-          :disabled="started || online"
+          :disabled="online"
           :error="homeDir == false"
         />
       </v-col>
@@ -195,7 +195,6 @@ export default {
     "playerName",
     "homeDir",
     "nas",
-    "started",
     "locale",
     "backgroundHue",
   ]),

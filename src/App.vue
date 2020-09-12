@@ -128,7 +128,6 @@ export default {
       "nas",
       "backgroundHue",
       "locale",
-      "started",
     ]),
   },
   beforeMount() {
@@ -155,16 +154,6 @@ export default {
           case "nas":
             this.$toasted.success(this.$t("toast.nas"));
             break;
-          case "started":
-            if (mutation.payload == true) {
-              pingIntervalHandle = setInterval(this.pingService, 5000);
-              this.$toasted.success(this.$t("toast.service.started"));
-            } else {
-              this.online = false;
-              clearInterval(pingIntervalHandle);
-              this.$toasted.success(this.$t("toast.service.stopped"));
-            }
-            break;
           case "locale":
             this.$i18n.locale = mutation.payload;
             this.$toasted.success(this.$t("toast.locale"));
@@ -177,9 +166,7 @@ export default {
 
     // Setup global service status poller
     clearInterval(pingIntervalHandle);
-    if (this.started) {
-      pingIntervalHandle = setInterval(this.pingService, 5000);
-    }
+    pingIntervalHandle = setInterval(this.pingService, 5000);
 
     // Set initial tab
     this.activeTab = this.setupCompleted ? 0 : 1;
