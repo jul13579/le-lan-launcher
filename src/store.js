@@ -6,11 +6,15 @@ Vue.use(Vuex);
 
 const defaultBackgroundHue = 265;
 const defaultLocale = "en";
+const defaultTheme = "./funky-lines.png";
 
 export default new Vuex.Store({
   state: {
     backgroundHue: defaultBackgroundHue,
-    theme: "",
+    theme: {
+      cover: false,
+      path: defaultTheme,
+    },
     playerName: "",
     homeDir: "",
     apikey: "",

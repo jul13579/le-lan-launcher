@@ -180,11 +180,11 @@ export default {
   data() {
     return {
       textures: [
-        require("@/assets/funky-lines.png"),
-        require("@/assets/gaming.png"),
-        require("@/assets/prism.png"),
-        require("@/assets/maze.png"),
-        require("@/assets/unicorns.png"),
+        "./funky-lines.png",
+        "./gaming.png",
+        "./prism.png",
+        "./maze.png",
+        "./unicorns.png",
       ],
       sliderValue: 0,
       devices: [],
