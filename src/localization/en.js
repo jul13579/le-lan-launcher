@@ -51,7 +51,7 @@ export default {
     environment: "Environment",
     debug: "Debug mode",
     debug_explanation:
-      "If you have trouble integrating a game into this launcher, you can enable this mode. When starting an external executable, the launcher will display a window with the executable's STDOUT log",
+      "If you have trouble integrating a game into this launcher, you can enable this mode. When starting an external executable, the launcher will display a window with the process' output log",
     language: "Language",
     playerName: "Playername",
     homeDir: "Library path",
