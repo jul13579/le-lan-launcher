@@ -164,14 +164,14 @@ export default {
         },
       ];
 
-      for (var item in this.value.moreLaunchs) {
+      (this.value.moreLaunchs || []).forEach((item) => {
         buttons.splice(-2, 0, {
           click: () => this.$emit("execute", item),
           show: true,
           icon: "mdi-dots-horizontal",
           text: item.text,
         });
-      }
+      });
 
       return buttons;
     },
