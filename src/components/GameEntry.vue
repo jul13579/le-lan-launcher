@@ -14,6 +14,7 @@
         <v-img
           :src="`${homeDir}/Library/${value.cover}`"
           :aspect-ratio="600/900"
+          eager
         />
         <!-- Progress indicator -->
         <div
