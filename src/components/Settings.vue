@@ -111,7 +111,7 @@
           max-width="400"
         >
           <template v-slot:activator="{ on }">
-            <v-switch>
+            <v-switch @change="(input) => $store.dispatch('setDebug', { debug: input })">
               <template v-slot:label>
                 <span v-on="on">{{$t('settings.debug')}}</span>
               </template>

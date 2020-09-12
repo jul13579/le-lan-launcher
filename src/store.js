@@ -17,6 +17,7 @@ export default new Vuex.Store({
     started: false,
     nas: "",
     locale: defaultLocale,
+    debug: false,
   },
   mutations: {
     backgroundHue(state, color) {
@@ -48,7 +49,10 @@ export default new Vuex.Store({
     },
     locale(state, locale) {
       state.locale = locale;
-    }
+    },
+    debug(state, bool) {
+      state.debug = bool;
+    },
   },
   actions: {
     setBackgroundHue(store, payload) {
@@ -74,8 +78,11 @@ export default new Vuex.Store({
     },
     setLocale(store, payload) {
       store.commit("locale", payload.locale);
-    }
+    },
+    setDebug(store, payload) {
+      store.commit("debug", payload.debug);
+    },
   },
   plugins: [createPersistedState(), createSharedMutations()],
-  strict: process.env.NODE_ENV !== "production"
+  strict: process.env.NODE_ENV !== "production",
 });

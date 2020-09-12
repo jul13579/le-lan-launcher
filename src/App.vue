@@ -168,6 +168,8 @@ export default {
             this.$i18n.locale = mutation.payload;
             this.$toasted.success(this.$t("toast.locale"));
             break;
+          case "debug":
+            this.$toasted.success(this.$t("toast.debug"));
         }
       }.bind(this)
     );

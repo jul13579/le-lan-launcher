@@ -35,6 +35,32 @@
         />
       </div>
     </template>
+    <v-dialog
+      max-width="600"
+      v-model="debugDialog"
+    >
+      <v-card>
+        <v-card-title>
+          <span>Debug</span>
+          <v-spacer></v-spacer>
+          <v-btn
+            icon
+            @click="debugDialog = false"
+          >
+            <v-icon>mdi-close</v-icon>
+          </v-btn>
+        </v-card-title>
+        <v-card-text>
+          <div class="d-flex flex-column">
+            <span
+              v-for="(item, index) in debugMessages"
+              :key="index"
+              :style="{color: item.type == 'stderr' ? 'red' : 'inherit'}"
+            >{{item.message}}</span>
+          </div>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
   </v-container>
 </template>
 
@@ -66,6 +92,8 @@ export default {
       lib: {},
       lastEventId: 0,
       folderStatus: {},
+      debugDialog: false,
+      debugMessages: [],
     };
   },
   beforeMount() {
@@ -94,7 +122,7 @@ export default {
     libConfigPath() {
       return `${this.homeDir}/Library/library.json`;
     },
-    ...mapState(["nas", "homeDir"]),
+    ...mapState(["nas", "homeDir", "debug"]),
   },
   watch: {
     nas() {
@@ -298,22 +326,31 @@ export default {
       require("electron").ipcRenderer.send("setPlayerName", game, config);
       let ls = spawn(path.join(game.path, launch.exe), launch.args, {
         cwd: game.path,
-        detached: true,
-      }); // Spawn executable detached, so it stays open if launcher is closed.
-      ls.stdout.on("data", function (data) {
-        // TODO: Idea: create debug window?
-        // console.log("stdout: " + data);
-        data;
+        detached: true, // Spawn executable detached, so it stays open if launcher is closed.
       });
-      ls.stderr.on("data", function (data) {
-        // TODO: Idea: create debug window?
-        // console.log("stderr: " + data);
-        data;
+
+      if (this.debug) {
+        this.debugMessages = [];
+        this.debugDialog = true;
+      }
+
+      ls.stdout.on("data", (data) => {
+        this.debugMessages.push({
+          type: "stdout",
+          message: data,
+        });
       });
-      ls.on("exit", function (code) {
-        // TODO: Idea: create debug window?
-        // console.log("child process exited with code " + code);
-        code;
+      ls.stderr.on("data", (data) => {
+        this.debugMessages.push({
+          type: "stderr",
+          message: data,
+        });
+      });
+      ls.on("exit", (code) => {
+        this.debugMessages.push({
+          type: "stdout",
+          message: `Process exited with exit code ${code}`,
+        });
       });
     },
   },

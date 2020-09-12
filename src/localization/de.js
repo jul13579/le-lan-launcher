@@ -20,6 +20,7 @@ export default {
         stopping: "Fehler beim Stoppen des Services",
       },
     },
+    debug: "Debug-Modus gespeichert",
   },
   statistics: {
     service_controls: "Service-Steuerung",
