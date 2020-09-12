@@ -14,6 +14,7 @@ import { mapState } from "vuex";
 
 // Common options for all charts
 Chart.defaults.global.datasets.type = "line";
+Chart.defaults.global.defaultFontFamily = "'Roboto', sans-serif";
 Chart.defaults.global.datasets.fill = true;
 Chart.defaults.global.legend.display = false;
 
