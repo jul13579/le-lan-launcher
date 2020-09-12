@@ -42,7 +42,7 @@ export default {
     nasUnset: {
       title: "NAS ID nicht gesetzt",
       message:
-        "Bevor du auf die Spielebibliothek zugreifen kannst musst du die IP-Adresse des NAS angeben!",
+        "Bevor du auf die Spielebibliothek zugreifen kannst musst du die ID des NAS angeben!",
     },
   },
   settings: {
