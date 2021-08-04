@@ -120,9 +120,9 @@ function startService() {
       if (error) {
         let buttonIndex = dialog.showMessageBoxSync(win, {
           type: "error",
-          title: "Sync-Service error",
+          title: "Whoops!",
           message:
-            "It seems that you already have an instance of Syncthing running. For the best experience, please make sure to use the Syncthing executable that comes with this launcher. If an instance of that is already running, you can safely ignore this error.",
+            "We had problems starting the Sync-Service. Perhaps you already have an instance of Syncthing running. For the best experience, please make sure to use the Syncthing executable that comes with this launcher. If an instance of that is already running, you can safely ignore this error.",
           buttons: ["Ignore", "Exit"],
         });
         if (buttonIndex == 1) {
