@@ -34,6 +34,7 @@ async function createWindow() {
     webPreferences: {
       nodeIntegration: process.env.ELECTRON_NODE_INTEGRATION,
       webSecurity: false, // Disabled to be able to load local images
+      enableRemoteModule: true,
     },
   });
 
