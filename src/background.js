@@ -240,18 +240,19 @@ function getLibConfigPath() {
   return `${store.state.homeDir}/${gamelibDirName}/${gamelibConfig}`;
 }
 
-function readLibrary() {
-  return JSON.parse(fs.readFileSync(getLibConfigPath()));
+function readAndSendLibrary() {
+  if (fs.existsSync(getLibConfigPath())) {
+    win.webContents.send(
+      "libraryChanged",
+      JSON.parse(fs.readFileSync(getLibConfigPath()))
+    );
+  }
 }
 
 function setupLibraryWatcher() {
   // Setup library watcher
   // ! Use fs.watchFile as it handles ENOENT (file not existing) and also calls listener when file is created
-  libraryWatcher = fs.watchFile(getLibConfigPath(), (curr) => {
-    if (curr.size > 0) {
-      win.webContents.send("libraryChanged", readLibrary());
-    }
-  });
+  libraryWatcher = fs.watchFile(getLibConfigPath(), readAndSendLibrary);
 }
 
 /**
@@ -325,12 +326,7 @@ ipcMain.on("startExecutable", (event, game, config, launch, debug) => {
 });
 
 // Handle app request to read library config file
-ipcMain.on("getLibrary", (event) => {
-  // If library was already existing before app start, we have to fetch the library config now
-  if (fs.existsSync(getLibConfigPath())) {
-    win.webContents.send("libraryChanged", readLibrary());
-  }
-});
+ipcMain.on("getLibrary", readAndSendLibrary);
 
 // Handle game directory deletion
 // eslint-disable-next-line no-unused-vars
