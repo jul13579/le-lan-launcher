@@ -335,5 +335,7 @@ ipcMain.on("getLibrary", (event) => {
 // Handle game directory deletion
 // eslint-disable-next-line no-unused-vars
 ipcMain.on("deleteGameDir", (event, gameDir) => {
-  fs.rm(gameDir, { recursive: true });
+  fs.rmdir(gameDir, { recursive: true }, () => {
+    console.log("test");
+  });
 });
