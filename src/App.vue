@@ -20,7 +20,7 @@
       elevate-on-scroll
       class="justify-center"
     >
-      <v-avatar class="mr-2"><img :src="`${__static}/icon.png`" /></v-avatar>
+      <v-avatar class="mr-2"><img :src="require('../public/icon.png')" /></v-avatar>
       <v-spacer></v-spacer>
       <v-toolbar-title class="centered"><span>LAN-Launcher</span></v-toolbar-title>
       <v-spacer></v-spacer>

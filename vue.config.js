@@ -2,7 +2,7 @@ module.exports = {
   transpileDependencies: ["vuetify"],
   pluginOptions: {
     electronBuilder: {
-      // nodeIntegration: true,
+      nodeIntegration: true,
       builderOptions: {
         extraResources: ["./syncthing*", "!*service*"],
       }
