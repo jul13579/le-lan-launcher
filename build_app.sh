@@ -1,7 +1,7 @@
 #!/bin/bash
 
 echo "Installing npm dependencies..."
-npm install
+npm ci
 
 echo -e "\nBuilding LEGC LAN-Launcher..."
 npm run electron:build
