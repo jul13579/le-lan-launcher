@@ -9,8 +9,8 @@
         class="gameEntry ma-3"
         :class="downloadProgress >= 1 ? 'installed' : ''"
       >
-      <!-- :src="`file://${homeDir}/${require('../folderconfig').gamelibDirName}/${value.cover}`" -->
         <v-img
+          :src="`file://${homeDir}/${require('../folderconfig').gamelibDirName}/${value.cover}`"
           :aspect-ratio="600/900"
           eager
         />

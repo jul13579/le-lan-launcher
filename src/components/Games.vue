@@ -94,11 +94,6 @@ export default {
     };
   },
   beforeMount() {
-    this.getConfig();
-
-    clearInterval(configInterval);
-    configInterval = setInterval(this.getConfig, 5000);
-
     // eslint-disable-next-line no-unused-vars
     ipcRenderer.on("debugMessages", (event, message) => {
       this.debugMessages.push(message);
@@ -119,6 +114,14 @@ export default {
       });
       this.lib = library;
     });
+
+    // Get Syncthing folder config and setup periodic fetch task
+    this.getSyncthingConfig();
+    clearInterval(configInterval);
+    configInterval = setInterval(this.getSyncthingConfig, 5000);
+
+    // Request library readout
+    ipcRenderer.send("getLibrary");
   },
   destroyed() {
     clearInterval(configInterval);
@@ -139,11 +142,11 @@ export default {
   },
   watch: {
     nas() {
-      this.getConfig();
+      this.getSyncthingConfig();
     },
   },
   methods: {
-    getConfig() {
+    getSyncthingConfig() {
       if (!this.online) {
         return;
       }
