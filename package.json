@@ -47,7 +47,7 @@
     "babel-eslint": "^10.1.0",
     "electron": "^9.4.4",
     "electron-devtools-installer": "^3.2.0",
-    "electron-icon-builder": "^1.0.2",
+    "electron-icon-builder": "^2.0.1",
     "eslint": "^7.32.0",
     "eslint-plugin-vue": "^7.15.1",
     "sass": "^1.37.5",
