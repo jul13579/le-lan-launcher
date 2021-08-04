@@ -9,6 +9,7 @@ import { createProtocol } from "vue-cli-plugin-electron-builder/lib";
 import installExtension, { VUEJS_DEVTOOLS } from "electron-devtools-installer";
 import path from "path";
 import store from "./store";
+import SyncService_Operations from "./syncservice_operations";
 
 const isDevelopment = process.env.NODE_ENV !== "production";
 
@@ -90,7 +91,47 @@ app.on("ready", async () => {
   });
 
   createWindow();
-  startService();
+  startService()
+    .then(() => {
+      // Poll for Syncthing config to read API key from
+      const pollingInterval = setInterval(() => {
+        let xml = XMLParser(
+          fs.readFileSync(path.join(store.state.homeDir, "config.xml"), "utf8")
+        );
+        let gui = xml.root.children.find((item) => item.name == "gui");
+        let apikey = gui.children.find((item) => item.name == "apikey").content;
+        if (apikey) {
+          store.dispatch("setApikey", { key: apikey });
+          clearInterval(pollingInterval);
+        }
+      }, 5000);
+    })
+    .catch(() => {
+      let buttonIndex = dialog.showMessageBoxSync(win, {
+        type: "error",
+        title: "Whoops!",
+        message:
+          "We had problems starting the Sync-Service. Perhaps you already have an instance of Syncthing running. For the best experience, please make sure to use the Syncthing executable that comes with this launcher. If an instance of that is already running, you can safely ignore this error.",
+        buttons: ["Ignore", "Exit"],
+      });
+      if (buttonIndex == 1) {
+        buttonIndex = dialog.showMessageBoxSync(win, {
+          type: "question",
+          title: "Try to stop conflicting sync-service?",
+          message: "Should we try to stop the conflicting sync-service?",
+          buttons: ["Yes", "No"],
+        });
+
+        switch (buttonIndex) {
+          case 0:
+            shutdown();
+            return;
+          case 1:
+            app.quit();
+            return;
+        }
+      }
+    });
 });
 
 // Exit cleanly on request from parent process in development mode.
@@ -109,63 +150,41 @@ if (isDevelopment) {
 }
 
 function startService() {
-  if (store.state.homeDir != false) {
-    let binPath = path.join(__dirname, "../syncthing");
-    let args = ["-no-browser", "-home=" + store.state.homeDir];
-    if (process.platform == "win32") {
-      binPath += ".exe";
-      args.push("-no-console");
-    }
+  return new Promise((resolve, reject) => {
+    if (store.state.homeDir != false) {
+      let binPath = path.join(__dirname, "../syncthing");
+      let args = ["-no-browser", "-home=" + store.state.homeDir];
+      if (process.platform == "win32") {
+        binPath += ".exe";
+        args.push("-no-console");
+      }
 
-    execFile(binPath, args, (error, stdout, stderr) => {
-      if (error) {
-        let buttonIndex = dialog.showMessageBoxSync(win, {
-          type: "error",
-          title: "Whoops!",
-          message:
-            "We had problems starting the Sync-Service. Perhaps you already have an instance of Syncthing running. For the best experience, please make sure to use the Syncthing executable that comes with this launcher. If an instance of that is already running, you can safely ignore this error.",
-          buttons: ["Ignore", "Exit"],
-        });
-        if (buttonIndex == 1) {
-          buttonIndex = dialog.showMessageBoxSync(win, {
-            type: "question",
-            title: "Try to stop conflicting sync-service?",
-            message: "Should we try to stop the conflicting sync-service?",
-            buttons: ["Yes", "No"],
-          });
-
-          switch (buttonIndex) {
-            case 0:
-              shutdown();
-              return;
-            case 1:
-              app.quit();
-              return;
-          }
+      execFile(binPath, args, (error, stdout, stderr) => {
+        if (error) {
+          // Reject Promise if error occurred
+          reject();
         }
-      }
-    });
+      });
 
-    const pollingInterval = setInterval(() => {
-      let xml = XMLParser(
-        fs.readFileSync(path.join(store.state.homeDir, "config.xml"), "utf8")
-      );
-      let gui = xml.root.children.find((item) => item.name == "gui");
-      let apikey = gui.children.find((item) => item.name == "apikey").content;
-      if (apikey) {
-        store.dispatch("setApikey", { key: apikey });
-        clearInterval(pollingInterval);
-      }
-    }, 5000);
-  }
+      // Resolve Promise after 10 sec, as Syncthing will terminate if it could not start after multiple attempts
+      setTimeout(() => {
+        resolve();
+      }, 10000);
+    }
+  });
+}
+
+function restartService() {
+  return AJAX.Syncthing.System.restart();
+}
+
+function stopService() {
+  return AJAX.Syncthing.System.shutdown();
 }
 
 async function shutdown() {
-  await AJAX.Syncthing.System.shutdown()
-    .catch()
-    .then(() => {
-      app.quit();
-    });
+  await stopService();
+  app.quit();
 }
 
 function setPlayerName(event, game, config) {
@@ -206,8 +225,28 @@ function closeWindow(event) {
   win.close();
 }
 
-ipcMain.on("startService", startService);
 ipcMain.on("setPlayerName", setPlayerName);
 ipcMain.on("minimizeWindow", minimizeWindow);
 ipcMain.on("maximizeWindow", maximizeWindow);
 ipcMain.on("closeWindow", closeWindow);
+ipcMain.handle("controlService", async (event, someArgument) => {
+  let callback = null;
+  switch (someArgument) {
+    case SyncService_Operations.START:
+      callback = startService;
+      break;
+    case SyncService_Operations.RESTART:
+      callback = restartService;
+      break;
+    case SyncService_Operations.STOP:
+      callback = stopService;
+      break;
+  }
+  return await callback()
+    .then(() => {
+      return true;
+    })
+    .catch(() => {
+      return false;
+    });
+});

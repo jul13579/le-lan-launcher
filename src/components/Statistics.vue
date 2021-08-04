@@ -183,10 +183,12 @@
 
 <script>
 import { mapState } from "vuex";
+import { ipcRenderer } from "electron";
 import LineChart from "./LineChart";
 
 import AJAX from "../ajax";
 import online from "../mixins/online";
+import SyncService_Operations from "../syncservice_operations";
 
 let statisticsInterval;
 
@@ -267,29 +269,39 @@ export default {
     },
     startService() {
       if (!this.online) {
-        require("electron").ipcRenderer.send("startService");
-        this.$toasted.success(this.$t("toast.service.started"));
+        this.$toasted.success(this.$t("toast.service.success.start"));
+        ipcRenderer
+          .invoke("controlService", SyncService_Operations.START)
+          .then((success) => {
+            if (!success) {
+              this.$toasted.error(this.$t("toast.service.error.start"));
+            }
+          });
       }
     },
     restartService() {
       if (this.online) {
-        AJAX.Syncthing.System.restart()
-          .then(() => {
-            this.$toasted.success(this.$t("toast.service.restarting"));
-          })
-          .catch(() => {
-            this.$toasted.error(this.$t("toast.service.error.restarting"));
+        ipcRenderer
+          .invoke("controlService", SyncService_Operations.RESTART)
+          .then((success) => {
+            if (success) {
+              this.$toasted.success(this.$t("toast.service.success.restart"));
+            } else {
+              this.$toasted.error(this.$t("toast.service.error.restart"));
+            }
           });
       }
     },
     stopService() {
       if (this.online) {
-        AJAX.Syncthing.System.shutdown()
-          .then(() => {
-            this.$toasted.success(this.$t("toast.service.stopped"));
-          })
-          .catch(() => {
-            this.$toasted.error(this.$t("toast.service.error.stopping"));
+        ipcRenderer
+          .invoke("controlService", SyncService_Operations.STOP)
+          .then((success) => {
+            if (success) {
+              this.$toasted.success(this.$t("toast.service.success.stop"));
+            } else {
+              this.$toasted.error(this.$t("toast.service.error.stop"));
+            }
           });
       }
     },

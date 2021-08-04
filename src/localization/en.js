@@ -12,12 +12,15 @@ export default {
     nas: "NAS ID saved",
     locale: "Language saved",
     service: {
-      started: "Service is starting...",
-      stopped: "Service is shutting down...",
-      restarting: "Service is restarting...",
+      success: {
+        start: "Service is starting...",
+        stop: "Service is shutting down...",
+        restart: "Service is restarting...",
+      },
       error: {
-        restarting: "Error restarting service",
-        stopping: "Error stopping service",
+        start: "Error starting service",
+        restart: "Error restarting service",
+        stop: "Error stopping service",
       },
     },
     debug: "Debug mode saved",
