@@ -33,9 +33,12 @@ async function createWindow() {
     title: "[|LE|] LAN-Launcher",
     icon: path.join(__static, "./icon.png"), // eslint-disable-line no-undef
     webPreferences: {
-      nodeIntegration: process.env.ELECTRON_NODE_INTEGRATION,
       webSecurity: false, // Disabled to be able to load local images
       enableRemoteModule: true,
+      // Use pluginOptions.nodeIntegration, leave this alone
+      // See nklayman.github.io/vue-cli-plugin-electron-builder/guide/security.html#node-integration for more info
+      nodeIntegration: process.env.ELECTRON_NODE_INTEGRATION,
+      contextIsolation: !process.env.ELECTRON_NODE_INTEGRATION,
     },
   });
 
