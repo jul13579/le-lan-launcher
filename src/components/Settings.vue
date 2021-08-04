@@ -68,6 +68,7 @@
           )
         "
       >
+        <span style="padding-bottom: 100%"></span>
         <v-icon x-large>mdi-image-search</v-icon>
       </div>
     </div>
