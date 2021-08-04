@@ -30,7 +30,7 @@ The necessary changes are very few, so feel free to see the patches in the `patc
 ## :floppy_disk: Installation
 ### Prerequisites
 * git
-* Node.js + npm
+* Node.js (14+) + npm
 * Syncthing prerequisties (see Syncthing documentation for further information)
 
 ### Building
