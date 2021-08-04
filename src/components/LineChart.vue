@@ -9,14 +9,30 @@
 </template>
 
 <script>
-import Chart from "chart.js";
+import {
+  Chart,
+  LineController,
+  LineElement,
+  PointElement,
+  LinearScale,
+  TimeScale,
+  Filler,
+} from "chart.js";
+import "chartjs-adapter-date-fns";
 import { mapState } from "vuex";
 
 // Common options for all charts
-Chart.defaults.global.datasets.type = "line";
-Chart.defaults.global.defaultFontFamily = "'Roboto', sans-serif";
-Chart.defaults.global.datasets.fill = true;
-Chart.defaults.global.legend.display = false;
+Chart.register(
+  LineController,
+  LineElement,
+  PointElement,
+  LinearScale,
+  TimeScale,
+  Filler
+);
+Chart.defaults.datasets.type = "line";
+Chart.defaults.font.family = "'Roboto', sans-serif";
+Chart.defaults.datasets.fill = true;
 
 const queueLength = 30;
 const taskPeriod = 5000;
@@ -41,11 +57,12 @@ export default {
   },
   watch: {
     backgroundHue() {
-      this.chart.data.datasets[0].backgroundColor = this.$vuetify.theme.themes.dark.primary;
+      this.chart.data.datasets[0].backgroundColor =
+        this.$vuetify.theme.themes.dark.primary;
       this.chart.update();
     },
     locale() {
-      this.chart.options.scales.yAxes[0].scaleLabel.labelString = this.getYAxesUnit();
+      this.chart.options.scales.y.title.text = this.getYAxesUnit();
       this.chart.update();
     },
   },
@@ -61,32 +78,28 @@ export default {
     };
     let options = {
       scales: {
-        xAxes: [
-          {
-            display: false,
-            type: "time",
-            time: {
-              unit: "second",
-              displayFormats: {
-                second: "mm:ss",
-              },
-              stepSize: 5,
+        x: {
+          display: false,
+          type: "time",
+          time: {
+            unit: "second",
+            displayFormats: {
+              second: "mm:ss",
             },
+            stepSize: 5,
           },
-        ],
-        yAxes: [
-          {
-            scaleLabel: {
-              display: true,
-              labelString: this.getYAxesUnit(),
-            },
-            ticks: {
-              min: 0,
-              max: this.max,
-              precision: 2, // Round step size to 2 decimal places
-            },
+        },
+        y: {
+          title: {
+            display: true,
+            text: this.getYAxesUnit(),
           },
-        ],
+          min: 0,
+          max: this.max,
+          ticks: {
+            precision: 2, // Round step size to 2 decimal places
+          },
+        },
       },
     };
 
