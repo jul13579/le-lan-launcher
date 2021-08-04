@@ -1,7 +1,7 @@
 "use strict";
 
 import { app, protocol, BrowserWindow, dialog, ipcMain } from "electron";
-import { execFile } from "child_process";
+import { execFile, spawn } from "child_process";
 import fs from "fs";
 import XMLParser from "xml-parser";
 import AJAX from "./ajax";
@@ -10,8 +10,12 @@ import installExtension, { VUEJS_DEVTOOLS } from "electron-devtools-installer";
 import path from "path";
 import store from "./store";
 import SyncService_Operations from "./syncservice_operations";
+import { gamelibDirName, gamelibConfig } from "./folderconfig";
 
 const isDevelopment = process.env.NODE_ENV !== "production";
+
+// Game library watcher
+let libraryWatcher;
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -92,6 +96,7 @@ app.on("ready", async () => {
   });
 
   createWindow();
+  setupLibraryWatcher();
   startService()
     .then(() => {
       // Poll for Syncthing config to read API key from
@@ -231,10 +236,30 @@ function closeWindow(event) {
   win.close();
 }
 
-ipcMain.on("setPlayerName", setPlayerName);
-ipcMain.on("minimizeWindow", minimizeWindow);
-ipcMain.on("maximizeWindow", maximizeWindow);
-ipcMain.on("closeWindow", closeWindow);
+function setupLibraryWatcher() {
+  let libConfigPath = `${store.state.homeDir}/${gamelibDirName}/${gamelibConfig}`;
+
+  const readLibrary = () => {
+    return JSON.parse(fs.readFileSync(libConfigPath));
+  };
+
+  // Setup library watcher
+  // ! Use fs.watchFile as it handles ENOENT (file not existing) and also calls listener when file is created
+  libraryWatcher = fs.watchFile(libConfigPath, (curr) => {
+    if (curr.size > 0) {
+      win.webContents.send("libraryChanged", readLibrary());
+    }
+  });
+
+  // If library was already existing before app start, we have to fetch the library config now
+  if (fs.existsSync(libConfigPath)) {
+    win.webContents.send("libraryChanged", readLibrary());
+  }
+}
+
+/**
+ * Handle Syncthing controls
+ */
 // eslint-disable-next-line no-unused-vars
 ipcMain.handle("controlService", async (event, someArgument) => {
   let callback = null;
@@ -256,4 +281,52 @@ ipcMain.handle("controlService", async (event, someArgument) => {
     .catch(() => {
       return false;
     });
+});
+
+// Handle player name setting
+ipcMain.on("setPlayerName", setPlayerName);
+
+// Handle window controls
+ipcMain.on("minimizeWindow", minimizeWindow);
+ipcMain.on("maximizeWindow", maximizeWindow);
+ipcMain.on("closeWindow", closeWindow);
+
+// Handle game execution
+// eslint-disable-next-line no-unused-vars
+ipcMain.on("startExecutable", (event, game, config, launch, debug) => {
+  // Set player name before launch
+  setPlayerName(game, config);
+
+  let ls = spawn(path.join(game.path, launch.exe), launch.args, {
+    cwd: game.path,
+    detached: true, // Spawn executable detached, so it stays open if launcher is closed.
+  });
+
+  // Do not setup event handlers if not in debug mode
+  if (!debug) return;
+
+  ls.stdout.on("data", (data) => {
+    win.webContents.send("debugMessages", {
+      type: "stdout",
+      message: data,
+    });
+  });
+  ls.stderr.on("data", (data) => {
+    win.webContents.send("debugMessages", {
+      type: "stderr",
+      message: data,
+    });
+  });
+  ls.on("exit", (code) => {
+    win.webContents.send("debugMessages", {
+      type: "stdout",
+      message: `Process exited with exit code ${code}`,
+    });
+  });
+});
+
+// Handle game directory deletion
+// eslint-disable-next-line no-unused-vars
+ipcMain.on("deleteGameDir", (event, gameDir) => {
+  fs.rm(gameDir, { recursive: true });
 });

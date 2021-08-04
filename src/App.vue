@@ -20,27 +20,27 @@
       elevate-on-scroll
       class="justify-center"
     >
-      <v-avatar class="mr-2"><img :src="require('../public/icon.png')" /></v-avatar>
+      <v-avatar class="mr-2"><img :src="`${__static}/icon.png`" /></v-avatar>
       <v-spacer></v-spacer>
       <v-toolbar-title class="centered"><span>LAN-Launcher</span></v-toolbar-title>
       <v-spacer></v-spacer>
 
       <v-btn
         icon
-        @click="require('electron').ipcRenderer.send('minimizeWindow')"
+        @click="ipcRenderer('minimizeWindow')"
       >
         <v-icon>mdi-window-minimize</v-icon>
       </v-btn>
       <v-btn
         icon
-        @click="require('electron').ipcRenderer.send('maximizeWindow')"
+        @click="ipcRenderer('maximizeWindow')"
       >
         <v-icon>mdi-window-maximize</v-icon>
       </v-btn>
       <v-btn
         icon
         class="justify-self-end"
-        @click="require('electron').ipcRenderer.send('closeWindow')"
+        @click="ipcRenderer('closeWindow')"
       >
         <v-icon>mdi-close</v-icon>
       </v-btn>
@@ -92,6 +92,7 @@ import Statistics from "./components/Statistics";
 import { mapState } from "vuex";
 
 import hsl from "hsl-to-hex";
+import { ipcRenderer } from "electron";
 
 import AJAX from "./ajax";
 
@@ -185,6 +186,9 @@ export default {
           this.online = false;
         });
     },
+    sendIpcCommand(cmd) {
+      ipcRenderer.send(cmd);
+    }
   },
 };
 </script>

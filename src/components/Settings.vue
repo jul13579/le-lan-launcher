@@ -170,9 +170,11 @@
 
 <script>
 import online from "../mixins/online";
+import { remote } from "electron";
 import { mapState } from "vuex";
 
 import AJAX from "../ajax";
+import langs from "../localization/langs";
 
 let discoveryInterval;
 
@@ -189,7 +191,7 @@ export default {
       ],
       sliderValue: 0,
       devices: [],
-      langs: require("../localization/langs").default,
+      langs: langs,
     };
   },
   computed: mapState([
@@ -223,11 +225,9 @@ export default {
   },
   methods: {
     openFileChooser(callback, options) {
-      require("electron")
-        .remote.dialog.showOpenDialog(options)
-        .then((result) => {
-          if (!result.canceled) callback(result);
-        });
+      remote.dialog.showOpenDialog(options).then((result) => {
+        if (!result.canceled) callback(result);
+      });
     },
     discovery() {
       AJAX.Syncthing.System.getDiscovery()
