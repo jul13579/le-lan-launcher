@@ -27,20 +27,20 @@
 
       <v-btn
         icon
-        @click="ipcRenderer('minimizeWindow')"
+        @click="sendIpcCommand('minimizeWindow')"
       >
         <v-icon>mdi-window-minimize</v-icon>
       </v-btn>
       <v-btn
         icon
-        @click="ipcRenderer('maximizeWindow')"
+        @click="sendIpcCommand('maximizeWindow')"
       >
         <v-icon>mdi-window-maximize</v-icon>
       </v-btn>
       <v-btn
         icon
         class="justify-self-end"
-        @click="ipcRenderer('closeWindow')"
+        @click="sendIpcCommand('closeWindow')"
       >
         <v-icon>mdi-close</v-icon>
       </v-btn>
