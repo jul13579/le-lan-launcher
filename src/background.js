@@ -31,7 +31,7 @@ async function createWindow() {
     minHeight: 720,
     frame: false,
     title: "[|LE|] LAN-Launcher",
-    icon: path.join(__static, "./icon.png"),
+    icon: path.join(__static, "./icon.png"), // eslint-disable-line no-undef
     webPreferences: {
       nodeIntegration: process.env.ELECTRON_NODE_INTEGRATION,
       webSecurity: false, // Disabled to be able to load local images
@@ -79,6 +79,7 @@ app.on("ready", async () => {
     try {
       await installExtension(VUEJS_DEVTOOLS);
     } catch (e) {
+      // eslint-disable-next-line no-console
       console.error("Vue Devtools failed to install:", e.toString());
     }
   }
@@ -159,6 +160,7 @@ function startService() {
         args.push("-no-console");
       }
 
+      // eslint-disable-next-line no-unused-vars
       execFile(binPath, args, (error, stdout, stderr) => {
         if (error) {
           // Reject Promise if error occurred
@@ -166,7 +168,7 @@ function startService() {
         }
       });
 
-      // Resolve Promise after 10 sec, as Syncthing will terminate if it could not start after multiple attempts
+      // Resolve Promise after 10 sec, as Syncthing will terminate if it could not start after multiple restarts
       setTimeout(() => {
         resolve();
       }, 10000);
@@ -187,6 +189,7 @@ async function shutdown() {
   app.quit();
 }
 
+// eslint-disable-next-line no-unused-vars
 function setPlayerName(event, game, config) {
   if (!config.nameConfig) {
     return;
@@ -209,10 +212,12 @@ function setPlayerName(event, game, config) {
   fs.writeFileSync(filePath, nameFileContents, { encoding: "utf8" });
 }
 
+// eslint-disable-next-line no-unused-vars
 function minimizeWindow(event) {
   win.minimize();
 }
 
+// eslint-disable-next-line no-unused-vars
 function maximizeWindow(event) {
   if (win.isMaximized()) {
     win.unmaximize();
@@ -221,6 +226,7 @@ function maximizeWindow(event) {
   }
 }
 
+// eslint-disable-next-line no-unused-vars
 function closeWindow(event) {
   win.close();
 }
@@ -229,6 +235,7 @@ ipcMain.on("setPlayerName", setPlayerName);
 ipcMain.on("minimizeWindow", minimizeWindow);
 ipcMain.on("maximizeWindow", maximizeWindow);
 ipcMain.on("closeWindow", closeWindow);
+// eslint-disable-next-line no-unused-vars
 ipcMain.handle("controlService", async (event, someArgument) => {
   let callback = null;
   switch (someArgument) {
