@@ -8,8 +8,6 @@
       <div
         class="gameEntry ma-3"
         :class="downloadProgress >= 1 ? 'installed' : ''"
-        @mouseenter="showOptions = 'visible'"
-        @mouseleave="showOptions = 'hidden'"
       >
         <v-img
           :src="`file://${homeDir}/${require('../folderconfig').gamelibDirName}/${value.cover}`"
@@ -85,11 +83,6 @@ export default {
     homeDir: String,
     config: Object,
     status: Object,
-  },
-  data() {
-    return {
-      showOptions: "hidden",
-    };
   },
   computed: {
     subscribed() {
