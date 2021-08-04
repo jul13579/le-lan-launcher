@@ -1,14 +1,14 @@
 import axios from "axios";
-import store from "./store";
+// import store from "./store";
 
 const host = "http://localhost:8384/rest";
-axios.defaults.headers.common["X-API-Key"] = store.state.apikey;
+// axios.defaults.headers.common["X-API-Key"] = store.state.apikey;
 
-store.subscribe(mutation => {
-  if (mutation.type == "apikey" && mutation.payload) {
-    axios.defaults.headers.common["X-API-Key"] = mutation.payload;
-  }
-});
+// store.subscribe(mutation => {
+//   if (mutation.type == "apikey" && mutation.payload) {
+//     axios.defaults.headers.common["X-API-Key"] = mutation.payload;
+//   }
+// });
 
 export default {
   Syncthing: {

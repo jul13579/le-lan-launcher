@@ -67,7 +67,7 @@
 <script>
 import { mapState } from "vuex";
 import { SelfBuildingSquareSpinner } from "epic-spinners";
-import { shell, ipcRenderer } from "electron";
+// import { shell } from "electron";
 
 import AJAX from "../ajax";
 import online from "../mixins/online";
@@ -295,9 +295,9 @@ export default {
         })
         .catch();
     },
-    browseGame(game) {
-      shell.openPath(this.getGameFolder(game).path);
-    },
+    // browseGame(game) {
+    //   shell.openPath(this.getGameFolder(game).path);
+    // },
     resetGame(game) {
       AJAX.Syncthing.DB.revertFolder(game.id)
         .then(() => {

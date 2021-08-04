@@ -170,7 +170,7 @@
 
 <script>
 import online from "../mixins/online";
-import { remote } from "electron";
+// import { remote } from "electron";
 import { mapState } from "vuex";
 
 import AJAX from "../ajax";
@@ -224,11 +224,11 @@ export default {
     },
   },
   methods: {
-    openFileChooser(callback, options) {
-      remote.dialog.showOpenDialog(options).then((result) => {
-        if (!result.canceled) callback(result);
-      });
-    },
+    // openFileChooser(callback, options) {
+    //   remote.dialog.showOpenDialog(options).then((result) => {
+    //     if (!result.canceled) callback(result);
+    //   });
+    // },
     discovery() {
       AJAX.Syncthing.System.getDiscovery()
         .then((response) => {
