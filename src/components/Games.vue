@@ -95,12 +95,12 @@ export default {
   },
   beforeMount() {
     // eslint-disable-next-line no-unused-vars
-    ipcRenderer.on("debugMessages", (event, message) => {
+    window.ipcRenderer.on("debugMessages", (event, message) => {
       this.debugMessages.push(message);
     });
 
     // eslint-disable-next-line no-unused-vars
-    ipcRenderer.on("libraryChanged", (event, library) => {
+    window.ipcRenderer.on("libraryChanged", (event, library) => {
       library.games.sort((game1, game2) => {
         if (game1.title == game2.title) {
           return 0;
@@ -121,7 +121,7 @@ export default {
     configInterval = setInterval(this.getSyncthingConfig, 5000);
 
     // Request library readout
-    ipcRenderer.send("getLibrary");
+    window.ipcRenderer.send("getLibrary");
   },
   destroyed() {
     clearInterval(configInterval);
@@ -291,7 +291,7 @@ export default {
       AJAX.Syncthing.System.setConfig(this.config)
         .then(() => {
           this.$toasted.success("Spiel gelöscht: " + game.title);
-          ipcRenderer.send("deleteGameDir", gameFolder.path);
+          window.ipcRenderer.send("deleteGameDir", gameFolder.path);
         })
         .catch();
     },
@@ -311,7 +311,7 @@ export default {
         this.debugDialog = true;
       }
 
-      ipcRenderer.send("startExecutable", game, config, launch, this.debug);
+      window.ipcRenderer.send("startExecutable", game, config, launch, this.debug);
     },
   },
 };

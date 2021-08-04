@@ -183,7 +183,6 @@
 
 <script>
 import { mapState } from "vuex";
-import { ipcRenderer } from "electron";
 import LineChart from "./LineChart";
 
 import AJAX from "../ajax";
@@ -270,7 +269,7 @@ export default {
     startService() {
       if (!this.online) {
         this.$toasted.success(this.$t("toast.service.success.start"));
-        ipcRenderer
+        window.ipcRenderer
           .invoke("controlService", SyncService_Operations.START)
           .then((success) => {
             if (!success) {
@@ -281,7 +280,7 @@ export default {
     },
     restartService() {
       if (this.online) {
-        ipcRenderer
+        window.ipcRenderer
           .invoke("controlService", SyncService_Operations.RESTART)
           .then((success) => {
             if (success) {
@@ -294,7 +293,7 @@ export default {
     },
     stopService() {
       if (this.online) {
-        ipcRenderer
+        window.ipcRenderer
           .invoke("controlService", SyncService_Operations.STOP)
           .then((success) => {
             if (success) {

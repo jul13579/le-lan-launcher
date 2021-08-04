@@ -92,7 +92,6 @@ import Statistics from "./components/Statistics";
 import { mapState } from "vuex";
 
 import hsl from "hsl-to-hex";
-import { ipcRenderer } from "electron";
 
 import AJAX from "./ajax";
 
@@ -187,7 +186,7 @@ export default {
         });
     },
     sendIpcCommand(cmd) {
-      ipcRenderer.send(cmd);
+      window.ipcRenderer.send(cmd);
     }
   },
 };
