@@ -74,7 +74,7 @@ import path from "path";
 
 import AJAX from "../ajax";
 import online from "../mixins/online";
-import defaultFolderconfig, { gamelibDirId } from "../folderconfig";
+import defaultFolderconfig, { gamelibDirId, gamelibDirName, gamelibConfig } from "../folderconfig";
 
 import GameEntry from "./GameEntry";
 
@@ -120,7 +120,7 @@ export default {
       return this.config.folders || [];
     },
     libConfigPath() {
-      return `${this.homeDir}/Library/library.json`;
+      return `${this.homeDir}/${gamelibDirName}/${gamelibConfig}`;
     },
     ...mapState(["nas", "homeDir", "debug"]),
   },

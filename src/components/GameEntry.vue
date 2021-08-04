@@ -12,7 +12,7 @@
         @mouseleave="showOptions = 'hidden'"
       >
         <v-img
-          :src="`${homeDir}/Library/${value.cover}`"
+          :src="`${homeDir}/${require('../folderconfig').gamelibDirName}/${value.cover}`"
           :aspect-ratio="600/900"
           eager
         />
