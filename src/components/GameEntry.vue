@@ -10,7 +10,7 @@
         :class="downloadProgress >= 1 ? 'installed' : ''"
       >
         <v-img
-          :src="`file://${homeDir}/${require('../folderconfig').gamelibDirName}/${value.cover}`"
+          :src="`game://${homeDir}/${require('../folderconfig').gamelibDirName}/${value.cover}`"
           :aspect-ratio="600/900"
           eager
         />

@@ -33,7 +33,7 @@ async function createWindow() {
     title: "[|LE|] LAN-Launcher",
     icon: path.join(__static, "./icon.png"), // eslint-disable-line no-undef
     webPreferences: {
-      webSecurity: false, // Disabled to be able to load local images
+      webSecurity: true, // Disabled to be able to load local images
       enableRemoteModule: true,
       // Use pluginOptions.nodeIntegration, leave this alone
       // See nklayman.github.io/vue-cli-plugin-electron-builder/guide/security.html#node-integration for more info
@@ -88,10 +88,18 @@ app.on("ready", async () => {
   }
 
   // Register file protocol (file:///) to load external background themes
-  protocol.registerFileProtocol("file", (request, callback) => {
-    const url = request.url.replace("file://", "");
-    const normalizedPath = path.normalize(`${url}`);
-    callback({ normalizedPath });
+  protocol.registerFileProtocol("game", (request, callback) => {
+    const url = request.url.replace(/^game:\/\//, "");
+    // Decode URL to prevent errors when loading filenames with UTF-8 chars or chars like "#"
+    const decodedUrl = decodeURI(url); // Needed in case URL contains spaces
+    try {
+      return callback(decodedUrl);
+    } catch (error) {
+      console.error(
+        "ERROR: registerLocalResourceProtocol: Could not get file path:",
+        error
+      );
+    }
   });
 
   createWindow();
