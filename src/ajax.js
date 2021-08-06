@@ -46,6 +46,14 @@ export default {
         return axios.post(host + "/db/revert?folder=" + folder);
       }
     },
+    Cluster: {
+      pendingFolders: () => {
+        return axios.get(host + "/cluster/pending/folders")
+      },
+      hidePendingFolder: (folderId, deviceId) => {
+        return axios.delete(host + `/cluster/pending/folders?folder=${folderId}&device=${deviceId}`)
+      }
+    },
     Events: {
       since: lastSeenID => {
         return axios.get(

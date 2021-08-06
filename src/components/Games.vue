@@ -74,7 +74,11 @@ import path from "path";
 
 import AJAX from "../ajax";
 import online from "../mixins/online";
-import defaultFolderconfig, { gamelibDirId, gamelibDirName, gamelibConfig } from "../folderconfig";
+import defaultFolderconfig, {
+  gamelibDirId,
+  gamelibDirName,
+  gamelibConfig,
+} from "../folderconfig";
 
 import GameEntry from "./GameEntry";
 
@@ -166,17 +170,19 @@ export default {
             );
             AJAX.Syncthing.System.setConfig(this.config).catch();
           }
-
-          // Drop pendingFolders of nas device
-          if (this.nasDevice.pendingFolders.length > 0) {
-            this.nasDevice.pendingFolders.forEach((folder) => {
-              folder.time = new Date().toISOString();
-              this.nasDevice.ignoredFolders.push(folder);
-            });
-            AJAX.Syncthing.System.setConfig(this.config).catch();
-          }
         })
         .catch();
+
+      AJAX.Syncthing.Cluster.pendingFolders().then((response) => {
+        const folders = response.data;
+
+        Object.entries(folders).forEach(([key, value]) => {
+          AJAX.Syncthing.Cluster.hidePendingFolder(
+            key,
+            Object.keys(value.offeredBy)[0]
+          );
+        });
+      });
 
       // Get initial folder states and last event id
       if (Object.keys(this.folderStatus).length == 0) {
@@ -309,6 +315,7 @@ export default {
         .then(() => {
           this.$toasted.success("Spiel gelöscht: " + game.title);
           fs.removeSync(gameFolder.path);
+          this.folderStatus[game.id] = null;
         })
         .catch();
     },
