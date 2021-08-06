@@ -32,7 +32,7 @@ Chart.register(
 );
 Chart.defaults.datasets.type = "line";
 Chart.defaults.font.family = "'Roboto', sans-serif";
-Chart.defaults.datasets.fill = true;
+Chart.defaults.elements.line.fill = true;
 
 const queueLength = 30;
 const taskPeriod = 5000;
