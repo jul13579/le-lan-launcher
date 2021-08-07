@@ -49,9 +49,6 @@ export default {
     Cluster: {
       pendingFolders: () => {
         return axios.get(host + "/cluster/pending/folders")
-      },
-      hidePendingFolder: (folderId, deviceId) => {
-        return axios.delete(host + `/cluster/pending/folders?folder=${folderId}&device=${deviceId}`)
       }
     },
     Events: {

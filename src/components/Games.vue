@@ -176,12 +176,16 @@ export default {
       AJAX.Syncthing.Cluster.pendingFolders().then((response) => {
         const folders = response.data;
 
-        Object.entries(folders).forEach(([key, value]) => {
-          AJAX.Syncthing.Cluster.hidePendingFolder(
-            key,
-            Object.keys(value.offeredBy)[0]
-          );
+        Object.entries(folders).forEach(([id, pendingFolderConfig]) => {
+          const { label, time } = Object.values(
+            pendingFolderConfig.offeredBy
+          )[0];
+          this.nasDevice.ignoredFolders.push({ id, label, time });
         });
+
+        if (Object.entries(folders).length > 0) {
+          AJAX.Syncthing.System.setConfig(this.config).catch();
+        }
       });
 
       // Get initial folder states and last event id
