@@ -11,28 +11,19 @@
 <script>
 import {
   Chart,
-  LineController,
-  LineElement,
+  BarController,
+  BarElement,
   PointElement,
   LinearScale,
   TimeScale,
-  Filler,
 } from "chart.js";
 import "chartjs-adapter-date-fns";
 import { mapState } from "vuex";
 
 // Common options for all charts
-Chart.register(
-  LineController,
-  LineElement,
-  PointElement,
-  LinearScale,
-  TimeScale,
-  Filler
-);
+Chart.register(BarController, BarElement, PointElement, LinearScale, TimeScale);
 Chart.defaults.datasets.type = "line";
 Chart.defaults.font.family = "'Roboto', sans-serif";
-Chart.defaults.elements.line.fill = true;
 
 const queueLength = 30;
 const taskPeriod = 5000;
@@ -104,7 +95,7 @@ export default {
     };
 
     this.chart = new Chart(this.$refs.chart, {
-      type: "line",
+      type: "bar",
       data,
       options,
     });

@@ -98,7 +98,7 @@
               <span v-html="$t('statistics.cpu_load')"></span>
             </v-card-title>
             <v-card-text>
-              <line-chart
+              <bar-chart
                 :value="status.cpuPercent"
                 unit="percent"
                 :max="100"
@@ -134,7 +134,7 @@
               <span v-html="$t('statistics.download_speed')"></span>
             </v-card-title>
             <v-card-text>
-              <line-chart
+              <bar-chart
                 :value="inbps / 1024**2"
                 unit="mbps"
               />
@@ -169,7 +169,7 @@
               <span v-html="$t('statistics.upload_speed')"></span>
             </v-card-title>
             <v-card-text>
-              <line-chart
+              <bar-chart
                 :value="outbps / 1024**2"
                 unit="mbps"
               />
@@ -184,7 +184,7 @@
 <script>
 import { mapState } from "vuex";
 import { ipcRenderer } from "electron";
-import LineChart from "./LineChart";
+import BarChart from "./BarChart";
 
 import AJAX from "../ajax";
 import online from "../mixins/online";
@@ -200,7 +200,7 @@ const connections = {
 export default {
   mixins: [online],
   components: {
-    LineChart,
+    BarChart,
   },
   data() {
     return {
