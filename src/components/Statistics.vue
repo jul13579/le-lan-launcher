@@ -20,7 +20,7 @@
         >
           <template v-slot:activator="{ on }">
             <v-col
-              cols="3"
+              cols="4"
               class="d-flex justify-center align-center"
               v-on="on"
             >
@@ -82,40 +82,7 @@
         >
           <template v-slot:activator="{ on }">
             <v-col
-              cols="3"
-              class="d-flex justify-center align-center"
-              v-on="on"
-            >
-              <v-icon class="mx-2">mdi-chip</v-icon>
-              <i18n-n
-                :value="status.cpuPercent || 0"
-                format="percent"
-              ></i18n-n>
-            </v-col>
-          </template>
-          <v-card class="text-center">
-            <v-card-title class="justify-center">
-              <span v-html="$t('statistics.cpu_load')"></span>
-            </v-card-title>
-            <v-card-text>
-              <bar-chart
-                :value="status.cpuPercent"
-                unit="percent"
-                :max="100"
-              />
-            </v-card-text>
-          </v-card>
-        </v-menu>
-        <v-menu
-          top
-          offset-y
-          open-on-hover
-          transition="slide-y-reverse-transition"
-          eager
-        >
-          <template v-slot:activator="{ on }">
-            <v-col
-              cols="3"
+              cols="4"
               class="d-flex justify-center align-center"
               v-on="on"
             >
@@ -150,7 +117,7 @@
         >
           <template v-slot:activator="{ on }">
             <v-col
-              cols="3"
+            cols="4"
               class="d-flex justify-center align-center"
               v-on="on"
             >
