@@ -64,7 +64,7 @@
 import { mapState } from "vuex";
 import { SelfBuildingSquareSpinner } from "epic-spinners";
 import { shell } from "electron";
-import fs from "fs-extra";
+import fs from "fs";
 import { spawn } from "child_process";
 import path from "path";
 
@@ -316,7 +316,9 @@ export default {
       AJAX.Syncthing.System.setConfig(this.config)
         .then(() => {
           this.$toasted.success("Spiel gelöscht: " + game.title);
-          fs.removeSync(gameFolder.path);
+          fs.rmdir(gameFolder.path, { recursive: true }, (error) => {
+            if (error) this.$toasted.error("Fehler beim Löschen: " + error);
+          });
           this.folderStatus[game.id] = null;
         })
         .catch();
