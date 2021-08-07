@@ -52,11 +52,7 @@
         </v-card-title>
         <v-card-text>
           <div class="d-flex flex-column">
-            <span
-              v-for="(item, index) in debugMessages"
-              :key="index"
-              :style="{color: item.type == 'stderr' ? 'red' : 'inherit'}"
-            >{{item.message}}</span>
+            <console v-model="debugMessages" />
           </div>
         </v-card-text>
       </v-card>
@@ -81,6 +77,7 @@ import defaultFolderconfig, {
 } from "../folderconfig";
 
 import GameEntry from "./GameEntry";
+import Console from "./Console.vue";
 
 let configInterval, libraryWatcher;
 
@@ -89,6 +86,7 @@ export default {
   components: {
     SelfBuildingSquareSpinner,
     GameEntry,
+    Console,
   },
   data() {
     return {
@@ -348,13 +346,13 @@ export default {
       ls.stdout.on("data", (data) => {
         this.debugMessages.push({
           type: "stdout",
-          message: data,
+          message: `${data}`,
         });
       });
       ls.stderr.on("data", (data) => {
         this.debugMessages.push({
           type: "stderr",
-          message: data,
+          message: `${data}`,
         });
       });
       ls.on("exit", (code) => {

@@ -1,7 +1,7 @@
 "use strict";
 
 import { app, protocol, BrowserWindow, dialog, ipcMain } from "electron";
-import { execFile } from "child_process";
+import { spawn } from "child_process";
 import fs from "fs";
 import XMLParser from "xml-parser";
 import AJAX from "./ajax";
@@ -172,11 +172,25 @@ function startService() {
       }
 
       // eslint-disable-next-line no-unused-vars
-      execFile(binPath, args, (error, stdout, stderr) => {
-        if (error) {
-          // Reject Promise if error occurred
-          reject();
-        }
+      const ls = spawn(binPath, args);
+
+      ls.stdout.on("data", (data) => {
+        win.webContents.send("syncthing", {
+          type: "stdout",
+          message: `${data}`,
+        });
+      });
+      ls.stderr.on("data", (data) => {
+        win.webContents.send("syncthing", {
+          type: "stderr",
+          message: `${data}`,
+        });
+      });
+      ls.on("exit", (code) => {
+        win.webContents.send("syncthing", {
+          type: "stdout",
+          message: `Process exited with exit code ${code}`,
+        });
       });
 
       // Resolve Promise after 10 sec, as Syncthing will terminate if it could not start after multiple restarts

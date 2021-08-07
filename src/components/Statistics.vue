@@ -12,7 +12,7 @@
         no-gutters
         sytle="height: 100%"
       >
-        <v-menu
+        <fixed-width-menu
           top
           offset-y
           open-on-hover
@@ -44,8 +44,7 @@
           <v-card class="text-center">
             <v-card-title class="justify-center">
               <span v-html="$t('statistics.service_controls')"></span>
-            </v-card-title>
-            <v-card-text>
+              <v-spacer></v-spacer>
               <v-btn
                 icon
                 color="green"
@@ -70,9 +69,12 @@
               >
                 <v-icon>mdi-stop</v-icon>
               </v-btn>
+            </v-card-title>
+            <v-card-text>
+              <console v-model="syncthingMessages" />
             </v-card-text>
           </v-card>
-        </v-menu>
+        </fixed-width-menu>
         <v-menu
           top
           offset-y
@@ -117,7 +119,7 @@
         >
           <template v-slot:activator="{ on }">
             <v-col
-            cols="4"
+              cols="4"
               class="d-flex justify-center align-center"
               v-on="on"
             >
@@ -152,10 +154,12 @@
 import { mapState } from "vuex";
 import { ipcRenderer } from "electron";
 import BarChart from "./BarChart";
+import FixedWidthMenu from "./FixedWidthMenu.vue";
 
 import AJAX from "../ajax";
 import online from "../mixins/online";
 import SyncService_Operations from "../syncservice_operations";
+import Console from "./Console.vue";
 
 let statisticsInterval;
 
@@ -168,6 +172,8 @@ export default {
   mixins: [online],
   components: {
     BarChart,
+    Console,
+    FixedWidthMenu,
   },
   data() {
     return {
@@ -180,6 +186,7 @@ export default {
       },
       inbps: 0,
       outbps: 0,
+      syncthingMessages: [],
     };
   },
   computed: {
@@ -198,6 +205,11 @@ export default {
         this.connections = connections;
       }
     },
+  },
+  created() {
+    require("electron").ipcRenderer.on("syncthing", (event, message) => {
+      this.syncthingMessages.push(message);
+    });
   },
   beforeMount() {
     clearInterval(statisticsInterval);
