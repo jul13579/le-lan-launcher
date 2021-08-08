@@ -164,7 +164,7 @@ export default {
             !this.config.folders.find((folder) => folder.id == gamelibDirId)
           ) {
             this.config.folders.push(
-              this.getFolderObj(gamelibDirId, "Library")
+              this.getFolderObj(gamelibDirId, gamelibDirName)
             );
             AJAX.Syncthing.System.setConfig(this.config).catch();
           }
