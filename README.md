@@ -1,6 +1,6 @@
 # :video_game: LEGC LAN Launcher
 
-![Node.js CI](https://github.com/jul13579/le-lan-launcher/workflows/Node.js%20CI/badge.svg?branch=master)
+![Build](https://github.com/jul13579/le-lan-launcher/workflows/Build/badge.svg?branch=master)
 
 ![Launcher preview](preview.png "Launcher preview")
 <sup><sub>(Shown games are examples and not included in the launcher. The launcher does not include **ANY** games by itself)</sup></sub>
