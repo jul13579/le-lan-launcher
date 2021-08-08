@@ -6,7 +6,7 @@ set VERSION="v1.18.1"
 if exist %SYNCTHING_DIR% goto build
 :cloneSyncthing
 echo Cloning Syncthing...
-git clone git@github.com:syncthing/syncthing.git %SYNCTHING_DIR%
+git clone https://github.com/syncthing/syncthing.git %SYNCTHING_DIR%
 
 :build
 echo.

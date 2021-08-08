@@ -4,7 +4,7 @@ on: [push]
 
 jobs:
   build:
-    name: Build ${{ matrix.os }} with node ${{ matrix.node_version }}
+    name: Build on ${{ matrix.os }} with node ${{ matrix.node_version }}
     runs-on: ${{ matrix.os }}
 
     strategy:

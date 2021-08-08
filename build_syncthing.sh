@@ -5,7 +5,7 @@ VERSION="v1.18.1"
 
 if [ ! -d "$SYNCTHING_DIR" ]; then
     echo "Cloning Syncthing..."
-    git clone git@github.com:syncthing/syncthing.git $SYNCTHING_DIR
+    git clone https://github.com/syncthing/syncthing.git $SYNCTHING_DIR
 fi
 
 echo -e "\nPulling latest changes..."
