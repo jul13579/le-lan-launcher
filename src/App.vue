@@ -89,7 +89,7 @@
 import Settings from "./components/Settings";
 import Games from "./components/Games";
 import Statistics from "./components/Statistics";
-import WindowOperations from "./enums/window_operations";
+import WindowOperations from "./enums/WindowOperations";
 import { mapState } from "vuex";
 
 import hsl from "hsl-to-hex";

@@ -9,8 +9,8 @@ import { createProtocol } from "vue-cli-plugin-electron-builder/lib";
 import installExtension, { VUEJS_DEVTOOLS } from "electron-devtools-installer";
 import path from "path";
 import store from "./store";
-import SyncService_Operations from "./enums/syncservice_operations";
-import WindowOperations from "./enums/window_operations";
+import SyncService_Operations from "./enums/SyncserviceOperations";
+import WindowOperations from "./enums/WindowOperations";
 
 const isDevelopment = process.env.NODE_ENV !== "production";
 
