@@ -158,7 +158,7 @@ import FixedWidthMenu from "./FixedWidthMenu.vue";
 
 import AJAX from "../ajax";
 import online from "../mixins/online";
-import SyncService_Operations from "../syncservice_operations";
+import SyncService_Operations from "../enums/syncservice_operations";
 import Console from "./Console.vue";
 
 let statisticsInterval;

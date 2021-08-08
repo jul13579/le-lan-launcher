@@ -9,7 +9,7 @@ import { createProtocol } from "vue-cli-plugin-electron-builder/lib";
 import installExtension, { VUEJS_DEVTOOLS } from "electron-devtools-installer";
 import path from "path";
 import store from "./store";
-import SyncService_Operations from "./syncservice_operations";
+import SyncService_Operations from "./enums/syncservice_operations";
 import WindowOperations from "./enums/window_operations";
 
 const isDevelopment = process.env.NODE_ENV !== "production";
@@ -34,7 +34,7 @@ async function createWindow() {
     title: "[|LE|] LAN-Launcher",
     icon: path.join(__static, "./icon.png"), // eslint-disable-line no-undef
     webPreferences: {
-      webSecurity: true, // Disabled to be able to load local images
+      webSecurity: true,
       enableRemoteModule: true,
       // Use pluginOptions.nodeIntegration, leave this alone
       // See nklayman.github.io/vue-cli-plugin-electron-builder/guide/security.html#node-integration for more info
@@ -88,7 +88,7 @@ app.on("ready", async () => {
     }
   }
 
-  // Register file protocol (file:///) to load external background themes
+  // Register file protocol (game://) to load external game thumbnails
   protocol.registerFileProtocol("game", (request, callback) => {
     const url = request.url.replace(/^game:\/\//, "");
     // Decode URL to prevent errors when loading filenames with UTF-8 chars or chars like "#"
