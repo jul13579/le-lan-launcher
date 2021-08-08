@@ -10,6 +10,7 @@ import installExtension, { VUEJS_DEVTOOLS } from "electron-devtools-installer";
 import path from "path";
 import store from "./store";
 import SyncService_Operations from "./syncservice_operations";
+import WindowOperations from "./enums/window_operations";
 
 const isDevelopment = process.env.NODE_ENV !== "production";
 
@@ -237,29 +238,30 @@ function setPlayerName(event, game, config) {
   fs.writeFileSync(filePath, nameFileContents, { encoding: "utf8" });
 }
 
-// eslint-disable-next-line no-unused-vars
-function minimizeWindow(event) {
-  win.minimize();
-}
-
-// eslint-disable-next-line no-unused-vars
-function maximizeWindow(event) {
-  if (win.isMaximized()) {
-    win.unmaximize();
-  } else {
-    win.maximize();
-  }
-}
-
-// eslint-disable-next-line no-unused-vars
-function closeWindow(event) {
-  win.close();
-}
-
+/* -------------------------------------------------------------------------- */
+/*                              IPC Configuration                             */
+/* -------------------------------------------------------------------------- */
 ipcMain.on("setPlayerName", setPlayerName);
-ipcMain.on("minimizeWindow", minimizeWindow);
-ipcMain.on("maximizeWindow", maximizeWindow);
-ipcMain.on("closeWindow", closeWindow);
+
+// eslint-disable-next-line no-unused-vars
+ipcMain.on("controlWindow", async (event, action) => {
+  switch (action) {
+    case WindowOperations.MAXIMIZE:
+      if (win.isMaximized()) {
+        win.unmaximize();
+      } else {
+        win.maximize();
+      }
+      break;
+    case WindowOperations.MINIMIZE:
+      win.minimize();
+      break;
+    case WindowOperations.CLOSE:
+      win.close();
+      break;
+  }
+});
+
 // eslint-disable-next-line no-unused-vars
 ipcMain.handle("controlService", async (event, someArgument) => {
   let callback = null;

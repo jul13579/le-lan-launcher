@@ -27,20 +27,20 @@
 
       <v-btn
         icon
-        @click="require('electron').ipcRenderer.send('minimizeWindow')"
+        @click="minimizeWindow()"
       >
         <v-icon>mdi-window-minimize</v-icon>
       </v-btn>
       <v-btn
         icon
-        @click="require('electron').ipcRenderer.send('maximizeWindow')"
+        @click="maximizeWindow()"
       >
         <v-icon>mdi-window-maximize</v-icon>
       </v-btn>
       <v-btn
         icon
         class="justify-self-end"
-        @click="require('electron').ipcRenderer.send('closeWindow')"
+        @click="closeWindow()"
       >
         <v-icon>mdi-close</v-icon>
       </v-btn>
@@ -89,6 +89,7 @@
 import Settings from "./components/Settings";
 import Games from "./components/Games";
 import Statistics from "./components/Statistics";
+import WindowOperations from "./enums/window_operations";
 import { mapState } from "vuex";
 
 import hsl from "hsl-to-hex";
@@ -184,6 +185,18 @@ export default {
         .catch(() => {
           this.online = false;
         });
+    },
+    sendWindowControl(action) {
+      require("electron").ipcRenderer.send("controlWindow", action);
+    },
+    minimizeWindow() {
+      this.sendWindowControl(WindowOperations.MINIMIZE);
+    },
+    maximizeWindow() {
+      this.sendWindowControl(WindowOperations.MAXIMIZE);
+    },
+    closeWindow() {
+      this.sendWindowControl(WindowOperations.CLOSE);
     },
   },
 };
