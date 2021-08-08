@@ -2,7 +2,7 @@
 
 echo.
 echo Installing npm dependencies....
-call npm ci
+call npm i
 
 echo.
 echo Building LEGC LAN-Launcher...
