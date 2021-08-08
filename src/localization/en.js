@@ -11,6 +11,18 @@ export default {
     homeDir: "Installation directory saved",
     nas: "NAS ID saved",
     locale: "Language saved",
+    download: {
+      started: "Download started: {gameTitle}",
+      paused: "Download paused: {gameTitle}",
+      resumed: "Download resumed: {gameTitle}",
+    },
+    game: {
+      delete: {
+        success: "Game deleted: {gameTitle}",
+        error: "Error deleting game: {error}",
+      },
+      reset: "Repairing game files: {gameTitle}",
+    },
     service: {
       success: {
         start: "Service is starting...",
@@ -72,7 +84,7 @@ export default {
   gameEntry: {
     download: "Download",
     play: "Play",
-    reset: "Reset",
+    reset: "Repair",
     pause: "Pause",
     resume: "Resume",
     browse: "Browse",

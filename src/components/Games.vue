@@ -288,7 +288,9 @@ export default {
       this.config.folders.push(this.getFolderObj(game.id, game.title));
       AJAX.Syncthing.System.setConfig(this.config)
         .then(() => {
-          this.$toasted.success("Download gestartet: " + game.title);
+          this.$toasted.success(
+            this.$t("toast.download.started", { gameTitle: game.title })
+          );
         })
         .catch();
     },
@@ -303,9 +305,13 @@ export default {
       AJAX.Syncthing.System.setConfig(this.config)
         .then(() => {
           if (pause) {
-            this.$toasted.success("Download pausiert: " + game.title);
+            this.$toasted.success(
+              this.$t("toast.download.paused", { gameTitle: game.title })
+            );
           } else {
-            this.$toasted.success("Download forgesetzt: " + game.title);
+            this.$toasted.success(
+              this.$t("toast.download.resumed", { gameTitle: game.title })
+            );
           }
         })
         .catch();
@@ -315,9 +321,14 @@ export default {
       this.config.folders.splice(this.getGameFolderIndex(game), 1);
       AJAX.Syncthing.System.setConfig(this.config)
         .then(() => {
-          this.$toasted.success("Spiel gelöscht: " + game.title);
+          this.$toasted.success(
+            this.$t("toast.game.delete.success", { gameTitle: game.title })
+          );
           fs.rmdir(gameFolder.path, { recursive: true }, (error) => {
-            if (error) this.$toasted.error("Fehler beim Löschen: " + error);
+            if (error)
+              this.$toasted.success(
+                this.$t("toast.game.delete.error", { error: error })
+              );
           });
           this.folderStatus[game.id] = null;
         })
@@ -329,7 +340,9 @@ export default {
     resetGame(game) {
       AJAX.Syncthing.DB.revertFolder(game.id)
         .then(() => {
-          this.$toasted.success("Spiel wird zurückgesetzt: " + game.title);
+          this.$toasted.success(
+            this.$t("toast.game.reset", { gameTitle: game.title })
+          );
         })
         .catch();
     },

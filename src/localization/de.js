@@ -11,6 +11,18 @@ export default {
     homeDir: "Spieleverzeichnis-Pfad gespeichert",
     nas: "NAS ID gespeichert",
     locale: "Sprache gespeichert",
+    download: {
+      started: "Download gestartet: {gameTitle}",
+      paused: "Download pausiert: {gameTitle}",
+      resumed: "Download fortgesetzt: {gameTitle}",
+    },
+    game: {
+      delete: {
+        success: "Spiel gelöscht: {gameTitle}",
+        error: "Fehler beim Löschen: {error}",
+      },
+      reset: "Repariere Spiel: {gameTitle}",
+    },
     service: {
       success: {
         start: "Service wird gestartet...",
@@ -73,7 +85,7 @@ export default {
   gameEntry: {
     download: "Herunterladen",
     play: "Spielen",
-    reset: "Zurücksetzen",
+    reset: "Reparieren",
     pause: "Pause",
     resume: "Fortsetzen",
     browse: "Durchsuchen",
