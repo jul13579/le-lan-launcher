@@ -4,21 +4,26 @@ on: [push]
 
 jobs:
   build:
-
-    runs-on: windows-latest
+    name: Build ${{ matrix.os }} with node ${{ matrix.node_version }}
+    runs-on: ${{ matrix.os }}
 
     strategy:
       matrix:
-        node-version: [14.x]
+        node-version: ["14", "16"]
+        go-version: ["1.16"]
+        os: [ubuntu-latest, windows-latest, macOS-latest]
 
     steps:
-    - uses: actions/checkout@v2
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v1
-      with:
-        node-version: ${{ matrix.node-version }}
-    - run: npm install
-    - run: npm run electron:build -- --publish=never
-#     - run: npm test
-      env:
-        CI: true
+      - uses: actions/checkout@v2
+      - name: Set up Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: ${{ matrix.go-version }}
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - run: ./build_all.bat
+        if: ${{ matrix.os == windows-latest }}
+      - run: ./build_all.sh
+        if: ${{ matrix.os != windows-latest }}
