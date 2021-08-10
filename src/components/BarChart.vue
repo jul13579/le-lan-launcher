@@ -25,13 +25,16 @@ Chart.register(BarController, BarElement, PointElement, LinearScale, TimeScale);
 Chart.defaults.datasets.type = "line";
 Chart.defaults.font.family = "'Roboto', sans-serif";
 
+// Configuration constants for quart queue length and update period in milliseconds
 const queueLength = 30;
 const taskPeriod = 5000;
+
+// Chart update handle
 let updaterInterval;
 
 export default {
   props: {
-    value: Number,
+    value: Number, // Current value to be added to chart
     unit: String, // vue-i18n number format key
   },
   data() {
@@ -94,17 +97,27 @@ export default {
       data,
       options,
     });
-    // ! Use periodic task to update chart, becuase multiple euqal numbers in this.value wont trigger the watcher
+
+    // ! Use periodic task to update chart, becuase multiple equal numbers in this.value wont trigger a watcher
     updaterInterval = setInterval(this.chartUpdater, taskPeriod);
   },
   destroyed() {
     clearInterval(updaterInterval);
   },
   methods: {
+    /**
+     * Update the chart with the current value.
+     * This method is used by {@link setInterval} to be executed every {@link taskPeriod} milliseconds.
+     */
     chartUpdater() {
       this.enqueue(this.value);
       this.chart.update();
     },
+
+    /**
+     * Create a queue of given length filled with 0 values.
+     * @param length The length of the queue to generate.
+     */
     createQueue(length) {
       return Array.from(new Array(length)).map((item, index) => {
         let object = {
@@ -115,6 +128,11 @@ export default {
         return object;
       });
     },
+
+    /**
+     * Enqueue a value into the chart.
+     * @param value The value to enqueue.
+     */
     enqueue(value) {
       let data = this.chart.data.datasets[0].data;
       if (data.length >= queueLength) {
@@ -122,6 +140,10 @@ export default {
       }
       data.push({ x: new Date(), y: value });
     },
+
+    /**
+     * Get locale-sensitive Y-axis unit name
+     */
     getYAxesUnit() {
       let locale = this.$i18n.locale;
       return new Intl.NumberFormat(
