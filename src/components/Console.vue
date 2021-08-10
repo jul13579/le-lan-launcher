@@ -30,7 +30,7 @@ export default {
   props: {
     messages: {
       type: Array,
-      default: null,
+      default: new Array(),
     },
     maxHeight: {
       type: String,
