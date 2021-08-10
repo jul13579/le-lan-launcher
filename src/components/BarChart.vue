@@ -33,10 +33,6 @@ export default {
   props: {
     value: Number,
     unit: String, // vue-i18n number format key
-    max: {
-      type: Number,
-      required: false,
-    },
   },
   data() {
     return {
@@ -86,7 +82,6 @@ export default {
             text: this.getYAxesUnit(),
           },
           min: 0,
-          max: this.max,
           ticks: {
             precision: 2, // Round step size to 2 decimal places
           },
