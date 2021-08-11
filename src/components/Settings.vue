@@ -1,3 +1,18 @@
+<style lang="scss" scoped>
+.themePreview {
+  border-radius: 10px;
+  cursor: pointer;
+  display: flex;
+  width: 200px;
+  max-width: 200px;
+
+  &:hover * {
+    transform: scale(1.1);
+    transition: transform 0.1s ease-in-out;
+  }
+}
+</style>
+
 <template>
   <v-container>
     <v-alert
@@ -45,7 +60,7 @@
         eager
       ></v-img>
       <div
-        class="themePreview ma-3 transparent-bg align-center justify-center"
+        class="themePreview ma-3 bg-transparent-dark align-center justify-center"
         :style="{border: `1px solid hsl(${backgroundHue}, 100%, 35%)`}"
         @click="
           openFileChooser(

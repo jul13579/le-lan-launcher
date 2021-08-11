@@ -1,7 +1,7 @@
 /* 
 Use SCSS for this file, as building maps is no fun with SASS.
 According to https://stackoverflow.com/a/2412465 SASS is not whitepsace agnostic.
-*/ 
+*/
 
 @use "sass:list";
 
@@ -13,3 +13,5 @@ $material-dark: (
   "app-bar": list.nth($transparent-backdrop, 1),
   "cards": list.nth($transparent-backdrop, 2),
 );
+
+$transparency: map-get($material-dark, "background");

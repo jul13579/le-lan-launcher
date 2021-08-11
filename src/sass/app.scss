@@ -1,5 +1,6 @@
-$transparency: map-get($material-dark, "background");
-
+/* -------------------------------------------------------------------------- */
+/*                              Scrollbar styling                             */
+/* -------------------------------------------------------------------------- */
 ::-webkit-scrollbar {
   height: 5px; // For horizontal scrollbars
   width: 5px; // For vertical scrollbars
@@ -16,21 +17,9 @@ $transparency: map-get($material-dark, "background");
   background: none;
 }
 
-.toasted {
-  font-family: $body-font-family;
-}
-
-.transparent-bg {
-  background: $transparency;
-}
-
-// Components with backdrop filter
-.v-app-bar,
-.v-footer,
-.v-list {
-  backdrop-filter: blur(10px);
-}
-
+/* -------------------------------------------------------------------------- */
+/*                                 APP styling                                */
+/* -------------------------------------------------------------------------- */
 // Make frameless window draggable while excluding buttons and tabs, which still have to be clickable
 .v-app-bar {
   -webkit-app-region: drag;
@@ -41,86 +30,18 @@ $transparency: map-get($material-dark, "background");
   }
 }
 
-.v-toolbar__title {
-  &.centered {
-    position: absolute;
-    display: flex;
-    left: 0px;
-    width: 100%;
-    justify-content: center;
-    letter-spacing: 5px;
-  }
+// Override font-family of vue-toasted
+.toasted {
+  font-family: $body-font-family;
 }
 
-.themeWrapper {
-  position: fixed;
-  width: 100vw;
-  height: 100vh;
-  top: 0;
-  left: 0;
-
-  &.texture {
-    opacity: 0.1;
-  }
+.bg-transparent-dark {
+  background: $transparency;
 }
 
-.themePreview {
-  border-radius: 10px;
-  cursor: pointer;
-  display: flex;
-  width: 200px;
-  max-width: 200px;
-
-  &:hover * {
-    transform: scale(1.1);
-    transition: transform 0.1s ease-in-out;
-  }
-}
-
-$hover-animation: 0.2s ease-in-out;
-
-.gameEntry {
-  width: 190px;
-  position: relative;
-  overflow: hidden;
-
-  &.installed {
-    transition: transform $hover-animation;
-    cursor: pointer;
-
-    &:hover {
-      transform: perspective(10px) rotateX(0.1deg);
-
-      .glass {
-        top: -70%;
-      }
-    }
-  }
-
-  img {
-    width: 100%;
-    height: auto;
-  }
-
-  & > :not(.v-image) {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-  }
-
-  .progress {
-    background: rgba(0, 0, 0, 0.7);
-    transition: top 0.1s linear;
-  }
-
-  .glass {
-    transition: top $hover-animation;
-    top: -175%;
-    height: 200%;
-    width: 200%;
-    box-shadow: 0px 0px 20px 5px white, inset 0px 0px 20px 5px white;
-    transform: rotate(-45deg);
-  }
+// Components with backdrop filter
+.v-app-bar,
+.v-footer,
+.v-list {
+  backdrop-filter: blur(10px);
 }

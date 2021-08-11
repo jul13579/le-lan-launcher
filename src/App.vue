@@ -1,3 +1,29 @@
+<style lang="scss" scoped>
+// Styling for background ("theme")
+.themeWrapper {
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+  left: 0;
+
+  &.texture {
+    opacity: 0.1;
+  }
+}
+
+.v-toolbar__title {
+  &.centered {
+    position: absolute;
+    display: flex;
+    left: 0px;
+    width: 100%;
+    justify-content: center;
+    letter-spacing: 5px;
+  }
+}
+</style>
+
 <template>
   <v-app>
     <div

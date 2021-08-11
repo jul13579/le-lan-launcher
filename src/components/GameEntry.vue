@@ -1,3 +1,59 @@
+<style lang="scss" scoped>
+$hover-animation: 0.2s ease-in-out;
+
+.gameEntry {
+  width: 190px;
+  position: relative;
+  overflow: hidden;
+
+  &.installed {
+    transition: transform $hover-animation;
+    cursor: pointer;
+
+    // Game entry hover effect adjustments
+    &:hover {
+      transform: perspective(10px) rotateX(0.1deg);
+
+      // Glass hover effect adjustments
+      .glass {
+        top: -70%;
+      }
+    }
+  }
+
+  // Game thumbnail styling
+  &::v-deep img {
+    width: 100%;
+    height: auto;
+  }
+
+  // Every child element that is not the game thumbnail is absolutely positioned => stacked on each other
+  & > :not(.v-image) {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  // Download progress styling
+  .progress {
+    background: rgba(0, 0, 0, 0.7);
+    transition: top 0.1s linear;
+  }
+
+  // Glass effect base styling
+  .glass {
+    transition: top $hover-animation;
+    top: -175%;
+    height: 200%;
+    width: 200%;
+    box-shadow: 0px 0px 20px 5px white, inset 0px 0px 20px 5px white;
+    transform: rotate(-45deg);
+  }
+}
+</style>
+
 <template>
   <v-menu
     offset-x
