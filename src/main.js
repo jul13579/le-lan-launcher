@@ -14,7 +14,7 @@ import numberFormats from "./localization/numberformats";
 // Styles
 import "roboto-fontface/css/roboto/roboto-fontface.css";
 import "@mdi/font/css/materialdesignicons.css";
-import "./sass/app.sass";
+import "./sass/app.scss";
 
 Vue.use(Toasted, {
   position: "bottom-center",
