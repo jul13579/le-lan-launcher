@@ -9,7 +9,7 @@ import { createProtocol } from "vue-cli-plugin-electron-builder/lib";
 import installExtension, { VUEJS_DEVTOOLS } from "electron-devtools-installer";
 import path from "path";
 import store from "./store";
-import SyncService_Operations from "./enums/SyncserviceOperations";
+import SyncserviceOperations from "./enums/SyncserviceOperations";
 import WindowOperations from "./enums/WindowOperations";
 
 const isDevelopment = process.env.NODE_ENV !== "production";
@@ -281,13 +281,13 @@ ipcMain.on("controlWindow", async (event, action) => {
 ipcMain.handle("controlService", async (event, someArgument) => {
   let callback = null;
   switch (someArgument) {
-    case SyncService_Operations.START:
+    case SyncserviceOperations.START:
       callback = startService;
       break;
-    case SyncService_Operations.RESTART:
+    case SyncserviceOperations.RESTART:
       callback = restartService;
       break;
-    case SyncService_Operations.STOP:
+    case SyncserviceOperations.STOP:
       callback = stopService;
       break;
   }

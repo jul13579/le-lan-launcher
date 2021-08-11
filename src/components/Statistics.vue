@@ -158,7 +158,7 @@ import FixedWidthMenu from "./FixedWidthMenu.vue";
 
 import AJAX from "../ajax";
 import online from "../mixins/online";
-import SyncService_Operations from "../enums/SyncserviceOperations";
+import SyncserviceOperations from "../enums/SyncserviceOperations";
 import Console from "./Console.vue";
 
 let statisticsInterval;
@@ -250,7 +250,7 @@ export default {
       if (!this.online) {
         this.$toasted.success(this.$t("toast.service.success.start"));
         ipcRenderer
-          .invoke("controlService", SyncService_Operations.START)
+          .invoke("controlService", SyncserviceOperations.START)
           .then((success) => {
             if (!success) {
               this.$toasted.error(this.$t("toast.service.error.start"));
@@ -261,7 +261,7 @@ export default {
     restartService() {
       if (this.online) {
         ipcRenderer
-          .invoke("controlService", SyncService_Operations.RESTART)
+          .invoke("controlService", SyncserviceOperations.RESTART)
           .then((success) => {
             if (success) {
               this.$toasted.success(this.$t("toast.service.success.restart"));
@@ -274,7 +274,7 @@ export default {
     stopService() {
       if (this.online) {
         ipcRenderer
-          .invoke("controlService", SyncService_Operations.STOP)
+          .invoke("controlService", SyncserviceOperations.STOP)
           .then((success) => {
             if (success) {
               this.$toasted.success(this.$t("toast.service.success.stop"));
