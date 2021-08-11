@@ -67,7 +67,7 @@
             (result) =>
               $store.dispatch('setTheme', {
                 theme: {
-                  path: result.filePaths[0].replace(/\\/g, '/'),
+                  path: `theme://${result.filePaths[0].replace(/\\/g, '/')}`,
                   cover: true,
                 },
               }),
