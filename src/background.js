@@ -88,35 +88,9 @@ app.on("ready", async () => {
     }
   }
 
-  // Register file protocol (game://) to load external game thumbnails
-  protocol.registerFileProtocol("game", (request, callback) => {
-    const url = request.url.replace(/^game:\/\//, "");
-    // Decode URL to prevent errors when loading filenames with UTF-8 chars or chars like "#"
-    const decodedUrl = decodeURI(url); // Needed in case URL contains spaces
-    try {
-      return callback(decodedUrl);
-    } catch (error) {
-      console.error(
-        "ERROR: registerLocalResourceProtocol: Could not get file path:",
-        error
-      );
-    }
-  });
-
-  // Register file protocol (theme://) to load external background images
-  protocol.registerFileProtocol("theme", (request, callback) => {
-    const url = request.url.replace(/^theme:\/\//, "");
-    // Decode URL to prevent errors when loading filenames with UTF-8 chars or chars like "#"
-    const decodedUrl = decodeURI(url); // Needed in case URL contains spaces
-    try {
-      return callback(decodedUrl);
-    } catch (error) {
-      console.error(
-        "ERROR: registerLocalResourceProtocol: Could not get file path:",
-        error
-      );
-    }
-  });
+  // Register file protocols to load external game thumbnails and theme background images
+  registerFileProtocol("game");
+  registerFileProtocol("theme");
 
   createWindow();
   startService()
@@ -175,6 +149,26 @@ if (isDevelopment) {
       stopService();
     });
   }
+}
+
+/**
+ * Shorthand function to register an arbitrary protocol to use in the app.
+ * @param {String} protocolName The name of the protocol.
+ */
+function registerFileProtocol(protocolName) {
+  protocol.registerFileProtocol(protocolName, (request, callback) => {
+    const url = request.url.replace(new RegExp(`^${protocolName}:\//`), "");
+    // Decode URL to prevent errors when loading filenames with UTF-8 chars or chars like "#"
+    const decodedUrl = decodeURI(url); // Needed in case URL contains spaces
+    try {
+      return callback(decodedUrl);
+    } catch (error) {
+      console.error(
+        "ERROR: registerLocalResourceProtocol: Could not get file path:",
+        error
+      );
+    }
+  });
 }
 
 function startService() {
