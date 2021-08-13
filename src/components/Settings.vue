@@ -10,49 +10,6 @@
     transform: scale(1.1);
     transition: transform 0.1s ease-in-out;
   }
-
-  // Convert v-file-input into button
-  &.v-text-field {
-    padding-top: 0px;
-
-    // Put prepend icon in center (horizontally & vertically)
-    &::v-deep .v-input__prepend-outer {
-      margin: 0px;
-      position: absolute;
-
-      // Increase size of prepended icon
-      button {
-        font-size: 3em;
-      }
-    }
-
-    &::v-deep .v-input__control {
-      .v-input__slot {
-        margin-bottom: 0px;
-        &::before,
-        &::after {
-          display: none;
-        }
-
-        .v-text-field__slot {
-          padding-bottom: 100%;
-          cursor: pointer;
-
-          .v-file-input__text {
-            display: none;
-          }
-        }
-
-        .v-input__append-inner {
-          display: none;
-        }
-      }
-
-      .v-text-field__details {
-        display: none;
-      }
-    }
-  }
 }
 </style>
 
@@ -100,18 +57,31 @@
         "
         eager
       ></v-img>
-      <v-file-input
+      <div
         class="themePreview ma-3 bg-transparent-dark align-center justify-center"
         :style="{border: `1px solid hsl(${backgroundHue}, 100%, 35%)`}"
-        prepend-icon="mdi-image-search"
-        accept="image/*"
-        @change="(file) => {
-          $store.commit('theme', {
-              path: `theme://${file.path.replace(/\\/g, '/')}`,
-              cover: true,
-          })
-        }"
-      />
+        @click="
+          openFileChooser(
+            (result) =>
+              $store.commit('theme', {
+                path: `theme://${result.filePaths[0].replace(/\\/g, '/')}`,
+                cover: true,
+              }),
+            {
+              properties: ['openFile'],
+              filters: [
+                {
+                  name: $t('settings.images'),
+                  extensions: ['jpg', 'jpeg', 'png'],
+                },
+              ],
+            }
+          )
+        "
+      >
+        <span style="padding-bottom: 100%"></span>
+        <v-icon x-large>mdi-image-search</v-icon>
+      </div>
     </div>
 
     <div class="mt-5 text-h4">{{ $t("settings.backgroundHue") }}</div>
@@ -263,6 +233,13 @@ export default {
     },
   },
   methods: {
+    openFileChooser(callback, options) {
+      require("electron")
+        .remote.dialog.showOpenDialog(options)
+        .then((result) => {
+          if (!result.canceled) callback(result);
+        });
+    },
     discovery() {
       AJAX.Syncthing.System.getDiscovery()
         .then((response) => {
