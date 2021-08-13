@@ -234,11 +234,9 @@ export default {
   },
   methods: {
     openFileChooser(callback, options) {
-      require("electron")
-        .remote.dialog.showOpenDialog(options)
-        .then((result) => {
-          if (!result.canceled) callback(result);
-        });
+      window.ipcRenderer.invoke("showOpenDialog", options).then((result) => {
+        if (!result.canceled) callback(result);
+      });
     },
     discovery() {
       AJAX.Syncthing.System.getDiscovery()

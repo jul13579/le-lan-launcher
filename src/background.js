@@ -273,24 +273,6 @@ ipcMain.on("controlWindow", async (event, action) => {
 });
 
 // eslint-disable-next-line no-unused-vars
-ipcMain.handle("controlService", async (event, someArgument) => {
-  let callback = null;
-  switch (someArgument) {
-    case SyncserviceOperations.START:
-      callback = startService;
-      break;
-    case SyncserviceOperations.RESTART:
-      callback = restartService;
-      break;
-    case SyncserviceOperations.STOP:
-      callback = stopService;
-      break;
-  }
-  return await callback()
-    .then(() => {
-      return true;
-    })
-    .catch(() => {
-      return false;
-    });
+ipcMain.handle("showOpenDialog", async (event, options) => {
+  return dialog.showOpenDialog(options);
 });

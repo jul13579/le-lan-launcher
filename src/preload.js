@@ -10,6 +10,13 @@ contextBridge.exposeInMainWorld("ipcRenderer", {
       ipcRenderer.send(channel, data);
     }
   },
+  invoke: (channel, data) => {
+    // whitelist channels
+    let validChannels = ["showOpenDialog"];
+    if (validChannels.includes(channel)) {
+      return ipcRenderer.invoke(channel, data);
+    }
+  },
   on: (channel, func) => {
     let validChannels = ["fromMain"];
     if (validChannels.includes(channel)) {
