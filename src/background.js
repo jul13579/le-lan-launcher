@@ -11,6 +11,7 @@ import path from "path";
 import store from "./store";
 import SyncserviceOperations from "./enums/SyncserviceOperations";
 import WindowOperations from "./enums/WindowOperations";
+import WindowConfig from "./config/window";
 
 const isDevelopment = process.env.NODE_ENV !== "production";
 
@@ -26,10 +27,10 @@ protocol.registerSchemesAsPrivileged([
 async function createWindow() {
   // Create the browser window.
   win = new BrowserWindow({
-    width: 1200,
-    height: 720,
-    minWidth: 1200,
-    minHeight: 720,
+    width: WindowConfig.MIN_WIDTH,
+    height: WindowConfig.MIN_HEIGHT,
+    minWidth: WindowConfig.MIN_WIDTH,
+    minHeight: WindowConfig.MIN_HEIGHT,
     frame: false,
     title: "[|LE|] LAN-Launcher",
     icon: path.join(__static, "./icon.png"), // eslint-disable-line no-undef
