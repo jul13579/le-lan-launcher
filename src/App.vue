@@ -213,7 +213,7 @@ export default {
         });
     },
     sendWindowControl(action) {
-      require("electron").ipcRenderer.send("controlWindow", action);
+      window.ipcRenderer.send("controlWindow", action);
     },
     minimizeWindow() {
       this.sendWindowControl(WindowOperations.MINIMIZE);
