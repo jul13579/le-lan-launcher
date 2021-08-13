@@ -1,12 +1,16 @@
 import Vue from "vue";
 import Vuex from "vuex";
-import { createPersistedState, createSharedMutations } from "vuex-electron";
+import VuexPersistence from "vuex-persist";
 
 Vue.use(Vuex);
 
 const defaultBackgroundHue = 265;
 const defaultLocale = "en";
 const defaultTheme = "./funky-lines.png";
+
+const vuexLocal = new VuexPersistence({
+  storage: window.localStorage,
+});
 
 export default new Vuex.Store({
   state: {
@@ -54,32 +58,6 @@ export default new Vuex.Store({
       state.debug = bool;
     },
   },
-  actions: {
-    setBackgroundHue(store, payload) {
-      store.commit("backgroundHue", payload.color);
-    },
-    setTheme(store, payload) {
-      store.commit("theme", payload.theme);
-    },
-    setPlayerName(store, payload) {
-      store.commit("playerName", payload.name);
-    },
-    setHomeDir(store, payload) {
-      store.commit("homeDir", payload.dir);
-    },
-    setApikey(store, payload) {
-      store.commit("apikey", payload.key);
-    },
-    setNas(store, payload) {
-      store.commit("nas", payload.id);
-    },
-    setLocale(store, payload) {
-      store.commit("locale", payload.locale);
-    },
-    setDebug(store, payload) {
-      store.commit("debug", payload.debug);
-    },
-  },
-  plugins: [createPersistedState(), createSharedMutations()],
+  plugins: [vuexLocal.plugin],
   strict: process.env.NODE_ENV !== "production",
 });

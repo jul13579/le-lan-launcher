@@ -95,9 +95,7 @@
         :src="item"
         @click.native="
           () => {
-            $store.dispatch('setTheme', {
-              theme: { path: item, cover: false },
-            });
+            $store.commit('theme', { path: item, cover: false });
           }
         "
         eager
@@ -108,11 +106,9 @@
         prepend-icon="mdi-image-search"
         accept="image/*"
         @change="(file) => {
-          $store.dispatch('setTheme', {
-            theme: {
+          $store.commit('theme', {
               path: `theme://${file.path.replace(/\\/g, '/')}`,
               cover: true,
-            },
           })
         }"
       />
@@ -129,7 +125,7 @@
           :color="'hsl(' + sliderValue + ', 100%, 50%)'"
           @change="
             (input) => {
-              $store.dispatch('setBackgroundHue', { color: input });
+              $store.commit('backgroundHue', input);
             }
           "
         />
@@ -145,7 +141,7 @@
           :items="Object.entries(langs)"
           :item-text="(lang) => lang[1].lang"
           :item-value="(lang) => lang[0]"
-          @change="(input) => $store.dispatch('setLocale', { locale: input })"
+          @change="(input) => $store.commit('locale', input)"
         />
       </v-col>
       <v-col
@@ -157,7 +153,7 @@
           max-width="400"
         >
           <template v-slot:activator="{ on }">
-            <v-switch @change="(input) => $store.dispatch('setDebug', { debug: input })">
+            <v-switch @change="(input) => $store.commit('debug', input)">
               <template v-slot:label>
                 <span v-on="on">{{$t('settings.debug')}}</span>
               </template>
@@ -174,7 +170,7 @@
           :value="playerName"
           @blur="
             (event) => {
-              $store.dispatch('setPlayerName', { name: event.target.value });
+              $store.commit('playerName', event.target.value);
             }
           "
           :error="playerName == false"
@@ -186,7 +182,7 @@
           @click="
             openFileChooser(
               (result) =>
-                $store.dispatch('setHomeDir', { dir: result.filePaths[0] }),
+                $store.commit('homeDir', result.filePaths[0]),
               { properties: ['openDirectory'] }
             )
           "
@@ -204,7 +200,7 @@
           :item-value="(device) => device[0]"
           :item-text="(device) => device[0]"
           :error="nas == false"
-          @change="(input) => $store.dispatch('setNas', { id: input })"
+          @change="(input) => $store.commit('nas', input)"
           :no-data-text="$t('settings.alerts.discovery')"
           :error-messages="!online ? $t('settings.alerts.service') : null"
         />
