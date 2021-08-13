@@ -63,10 +63,10 @@
 <script>
 import { mapState } from "vuex";
 import { SelfBuildingSquareSpinner } from "epic-spinners";
-import { shell } from "electron";
-import fs from "fs";
-import { spawn } from "child_process";
-import path from "path";
+// import { shell } from "electron";
+// import fs from "fs";
+// import { spawn } from "child_process";
+// import path from "path";
 
 import AJAX from "../ajax";
 import online from "../mixins/online";
@@ -74,11 +74,13 @@ import defaultFolderconfig, {
   gamelibDirId,
   gamelibDirName,
   gamelibConfig,
-} from "../folderconfig";
+} from "../config/folder";
 
 import GameEntry from "./GameEntry";
 import Console from "./Console.vue";
 
+// TODO remove lint exclusions!
+// eslint-disable-next-line no-unused-vars
 let configInterval, libraryWatcher;
 
 export default {
@@ -103,11 +105,11 @@ export default {
     this.getConfig();
 
     clearInterval(configInterval);
-    configInterval = setInterval(this.getConfig, 5000);
+    // configInterval = setInterval(this.getConfig, 5000);
   },
   destroyed() {
     clearInterval(configInterval);
-    fs.unwatchFile(this.libConfigPath, libraryWatcher);
+    // fs.unwatchFile(this.libConfigPath, libraryWatcher);
   },
   computed: {
     nasDevice() {
@@ -254,33 +256,33 @@ export default {
     setLibWatcher() {
       // Setup library watcher
       // ! Use fs.watchFile as it handles ENOENT (file not existing) and also calls listener when file is created
-      libraryWatcher = fs.watchFile(this.libConfigPath, (curr) => {
-        if (curr.size > 0) {
-          this.lib = this.getLib();
-        }
-      });
+      // libraryWatcher = fs.watchFile(this.libConfigPath, (curr) => {
+      //   if (curr.size > 0) {
+      //     this.lib = this.getLib();
+      //   }
+      // });
 
       // If library was already existing before app start, we have to fetch the library config now
-      if (fs.existsSync(this.libConfigPath)) {
-        this.lib = this.getLib();
-      }
+      // if (fs.existsSync(this.libConfigPath)) {
+      //   this.lib = this.getLib();
+      // }
     },
 
     // Parse library config
     getLib() {
-      let lib = JSON.parse(fs.readFileSync(this.libConfigPath));
-      lib.games.sort((game1, game2) => {
-        if (game1.title == game2.title) {
-          return 0;
-        }
-        if (game1.title < game2.title) {
-          return -1;
-        }
-        if (game1.title > game2.title) {
-          return 1;
-        }
-      });
-      return lib;
+      // let lib = JSON.parse(fs.readFileSync(this.libConfigPath));
+      // lib.games.sort((game1, game2) => {
+      //   if (game1.title == game2.title) {
+      //     return 0;
+      //   }
+      //   if (game1.title < game2.title) {
+      //     return -1;
+      //   }
+      //   if (game1.title > game2.title) {
+      //     return 1;
+      //   }
+      // });
+      // return lib;
     },
 
     // Game actions
@@ -316,26 +318,28 @@ export default {
         })
         .catch();
     },
+    // eslint-disable-next-line no-unused-vars
     deleteGame(game) {
-      let gameFolder = this.getGameFolder(game);
-      this.config.folders.splice(this.getGameFolderIndex(game), 1);
-      AJAX.Syncthing.System.setConfig(this.config)
-        .then(() => {
-          this.$toasted.success(
-            this.$t("toast.game.delete.success", { gameTitle: game.title })
-          );
-          fs.rmdir(gameFolder.path, { recursive: true }, (error) => {
-            if (error)
-              this.$toasted.success(
-                this.$t("toast.game.delete.error", { error: error })
-              );
-          });
-          this.folderStatus[game.id] = null;
-        })
-        .catch();
+      // let gameFolder = this.getGameFolder(game);
+      // this.config.folders.splice(this.getGameFolderIndex(game), 1);
+      // AJAX.Syncthing.System.setConfig(this.config)
+      //   .then(() => {
+      //     this.$toasted.success(
+      //       this.$t("toast.game.delete.success", { gameTitle: game.title })
+      //     );
+      //     fs.rmdir(gameFolder.path, { recursive: true }, (error) => {
+      //       if (error)
+      //         this.$toasted.success(
+      //           this.$t("toast.game.delete.error", { error: error })
+      //         );
+      //     });
+      //     this.folderStatus[game.id] = null;
+      //   })
+      //   .catch();
     },
+    // eslint-disable-next-line no-unused-vars
     browseGame(game) {
-      shell.openPath(this.getGameFolder(game).path);
+      // shell.openPath(this.getGameFolder(game).path);
     },
     resetGame(game) {
       AJAX.Syncthing.DB.revertFolder(game.id)
@@ -346,36 +350,37 @@ export default {
         })
         .catch();
     },
+    // eslint-disable-next-line no-unused-vars
     execute(game, config, launch) {
-      require("electron").ipcRenderer.send("setPlayerName", game, config);
-      let ls = spawn(path.join(game.path, launch.exe), launch.args, {
-        cwd: game.path,
-        detached: true, // Spawn executable detached, so it stays open if launcher is closed.
-      });
+      // require("electron").ipcRenderer.send("setPlayerName", game, config);
+      // let ls = spawn(path.join(game.path, launch.exe), launch.args, {
+      //   cwd: game.path,
+      //   detached: true, // Spawn executable detached, so it stays open if launcher is closed.
+      // });
 
-      if (this.debug) {
-        this.debugMessages = [];
-        this.debugDialog = true;
-      }
+      // if (this.debug) {
+      //   this.debugMessages = [];
+      //   this.debugDialog = true;
+      // }
 
-      ls.stdout.on("data", (data) => {
-        this.debugMessages.push({
-          type: "stdout",
-          message: `${data}`,
-        });
-      });
-      ls.stderr.on("data", (data) => {
-        this.debugMessages.push({
-          type: "stderr",
-          message: `${data}`,
-        });
-      });
-      ls.on("exit", (code) => {
-        this.debugMessages.push({
-          type: "stdout",
-          message: `Process exited with exit code ${code}`,
-        });
-      });
+      // ls.stdout.on("data", (data) => {
+      //   this.debugMessages.push({
+      //     type: "stdout",
+      //     message: `${data}`,
+      //   });
+      // });
+      // ls.stderr.on("data", (data) => {
+      //   this.debugMessages.push({
+      //     type: "stderr",
+      //     message: `${data}`,
+      //   });
+      // });
+      // ls.on("exit", (code) => {
+      //   this.debugMessages.push({
+      //     type: "stdout",
+      //     message: `Process exited with exit code ${code}`,
+      //   });
+      // });
     },
   },
 };
