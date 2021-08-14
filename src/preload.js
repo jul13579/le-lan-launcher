@@ -3,7 +3,7 @@ import { contextBridge, ipcRenderer } from "electron";
 // Expose protected methods that allow the renderer process to use
 // the ipcRenderer without exposing the entire object
 contextBridge.exposeInMainWorld("ipcRenderer", {
-  send: (channel, data) => {
+  send: (channel, ...data) => {
     // whitelist channels
     let validChannels = [
       "controlWindow",
@@ -13,10 +13,10 @@ contextBridge.exposeInMainWorld("ipcRenderer", {
       "browseGame",
     ];
     if (validChannels.includes(channel)) {
-      ipcRenderer.send(channel, data);
+      ipcRenderer.send(channel, ...data);
     }
   },
-  invoke: (channel, data) => {
+  invoke: (channel, ...data) => {
     // whitelist channels
     let validChannels = [
       "showOpenDialog",
@@ -26,7 +26,7 @@ contextBridge.exposeInMainWorld("ipcRenderer", {
       "deleteGame",
     ];
     if (validChannels.includes(channel)) {
-      return ipcRenderer.invoke(channel, data);
+      return ipcRenderer.invoke(channel, ...data);
     }
   },
   on: (channel, func) => {
