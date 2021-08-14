@@ -115,12 +115,11 @@
 import Settings from "./components/Settings";
 import Games from "./components/Games";
 import Statistics from "./components/Statistics";
+import SyncServiceController from "./controllers/SyncServiceController";
 import WindowOperations from "./enums/WindowOperations";
 import { mapState } from "vuex";
 
 import hsl from "hsl-to-hex";
-
-import AJAX from "./ajax";
 
 let pingIntervalHandle;
 let unsubscribeCallback;
@@ -204,7 +203,7 @@ export default {
   },
   methods: {
     pingService() {
-      AJAX.Syncthing.System.ping()
+      SyncServiceController.System.ping()
         .then(() => {
           this.online = true;
         })

@@ -68,7 +68,7 @@ import { SelfBuildingSquareSpinner } from "epic-spinners";
 // import { spawn } from "child_process";
 // import path from "path";
 
-import AJAX from "../ajax";
+import SyncServiceController from "../controllers/SyncServiceController";
 import online from "../mixins/online";
 import defaultFolderconfig, {
   gamelibDirId,
@@ -140,7 +140,7 @@ export default {
       }
 
       // Get Config
-      AJAX.Syncthing.System.getConfig()
+      SyncServiceController.System.getConfig()
         .then((response) => {
           this.config = response.data;
 
@@ -156,7 +156,7 @@ export default {
               ignoredFolders: [],
               addresses: ["dynamic"],
             });
-            AJAX.Syncthing.System.setConfig(this.config).catch();
+            SyncServiceController.System.setConfig(this.config).catch();
           }
 
           // If nas is set but gamelib folder is not yet subscribed, add it
@@ -168,12 +168,12 @@ export default {
             this.config.folders.push(
               this.getFolderObj(gamelibDirId, gamelibDirName)
             );
-            AJAX.Syncthing.System.setConfig(this.config).catch();
+            SyncServiceController.System.setConfig(this.config).catch();
           }
         })
         .catch();
 
-      AJAX.Syncthing.Cluster.pendingFolders().then((response) => {
+      SyncServiceController.Cluster.pendingFolders().then((response) => {
         const folders = response.data;
 
         Object.entries(folders).forEach(([id, pendingFolderConfig]) => {
@@ -184,7 +184,7 @@ export default {
         });
 
         if (Object.entries(folders).length > 0) {
-          AJAX.Syncthing.System.setConfig(this.config).catch();
+          SyncServiceController.System.setConfig(this.config).catch();
         }
       });
 
@@ -193,19 +193,19 @@ export default {
         this.folders.forEach((folder) => {
           // Only get status of game directories, not the library!
           if (folder.id != gamelibDirId) {
-            AJAX.Syncthing.DB.folderStatus(folder.id)
+            SyncServiceController.DB.folderStatus(folder.id)
               .then((response) => {
                 this.folderStatus[folder.id] = response.data;
               })
               .catch();
           }
         });
-        AJAX.Syncthing.Events.latest().then((response) => {
+        SyncServiceController.Events.latest().then((response) => {
           this.lastEventId = response.data[0].id;
         });
       } else {
         // Update folder states using events
-        AJAX.Syncthing.Events.since(this.lastEventId)
+        SyncServiceController.Events.since(this.lastEventId)
           .then((response) => {
             // Catches empty arrays
             if (response.data != false) {
@@ -288,7 +288,7 @@ export default {
     // Game actions
     downloadGame(game) {
       this.config.folders.push(this.getFolderObj(game.id, game.title));
-      AJAX.Syncthing.System.setConfig(this.config)
+      SyncServiceController.System.setConfig(this.config)
         .then(() => {
           this.$toasted.success(
             this.$t("toast.download.started", { gameTitle: game.title })
@@ -304,7 +304,7 @@ export default {
     },
     unPauseGame(game, pause) {
       this.config.folders[this.getGameFolderIndex(game)].paused = pause;
-      AJAX.Syncthing.System.setConfig(this.config)
+      SyncServiceController.System.setConfig(this.config)
         .then(() => {
           if (pause) {
             this.$toasted.success(
@@ -322,7 +322,7 @@ export default {
     deleteGame(game) {
       // let gameFolder = this.getGameFolder(game);
       // this.config.folders.splice(this.getGameFolderIndex(game), 1);
-      // AJAX.Syncthing.System.setConfig(this.config)
+      // SyncServiceController.System.setConfig(this.config)
       //   .then(() => {
       //     this.$toasted.success(
       //       this.$t("toast.game.delete.success", { gameTitle: game.title })
@@ -342,7 +342,7 @@ export default {
       // shell.openPath(this.getGameFolder(game).path);
     },
     resetGame(game) {
-      AJAX.Syncthing.DB.revertFolder(game.id)
+      SyncServiceController.DB.revertFolder(game.id)
         .then(() => {
           this.$toasted.success(
             this.$t("toast.game.reset", { gameTitle: game.title })

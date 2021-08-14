@@ -183,7 +183,7 @@
 import online from "../mixins/online";
 import { mapState } from "vuex";
 
-import AJAX from "../ajax";
+import SyncServiceController from "../controllers/SyncServiceController";
 
 let discoveryInterval;
 
@@ -239,7 +239,7 @@ export default {
       });
     },
     discovery() {
-      AJAX.Syncthing.System.getDiscovery()
+      SyncServiceController.System.getDiscovery()
         .then((response) => {
           this.devices = response.data;
         })

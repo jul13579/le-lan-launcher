@@ -152,13 +152,11 @@
 
 <script>
 import { mapState } from "vuex";
-import { ipcRenderer } from "electron";
 import BarChart from "./BarChart";
 import FixedWidthMenu from "./FixedWidthMenu.vue";
 
-import AJAX from "../ajax";
+import SyncServiceController from "../controllers/SyncServiceController";
 import online from "../mixins/online";
-import SyncserviceOperations from "../enums/SyncserviceOperations";
 import Console from "./Console.vue";
 
 let statisticsInterval;
@@ -222,12 +220,12 @@ export default {
   },
   methods: {
     getStatus() {
-      AJAX.Syncthing.System.status()
+      SyncServiceController.System.status()
         .then((response) => {
           this.status = response.data;
         })
         .catch();
-      AJAX.Syncthing.System.connections()
+      SyncServiceController.System.connections()
         .then((response) => {
           this.connections = response.data;
           let now = new Date();
@@ -260,9 +258,7 @@ export default {
     },
     restartService() {
       if (this.online) {
-        ipcRenderer
-          .invoke("controlService", SyncserviceOperations.RESTART)
-          .then((success) => {
+        SyncServiceController.System.restart().then((success) => {
             if (success) {
               this.$toasted.success(this.$t("toast.service.success.restart"));
             } else {
@@ -273,9 +269,7 @@ export default {
     },
     stopService() {
       if (this.online) {
-        ipcRenderer
-          .invoke("controlService", SyncserviceOperations.STOP)
-          .then((success) => {
+        SyncServiceController.System.stop().then((success) => {
             if (success) {
               this.$toasted.success(this.$t("toast.service.success.stop"));
             } else {
