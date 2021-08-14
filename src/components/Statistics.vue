@@ -191,7 +191,7 @@ export default {
     nasConnected() {
       return (this.connections.connections[this.nas] || {}).connected;
     },
-    ...mapState(["nas", "homeDir"]),
+    ...mapState(["nas", "homeDir", "apiKey"]),
   },
   watch: {
     // Periodically fetch status from service if online
@@ -209,13 +209,18 @@ export default {
       this.syncthingMessages.push(messageObj);
       if (messageObj.message.match(/GUI and API listening on/)) {
         this.$toasted.success(this.$t("toast.service.success.start"));
-        window.ipcRenderer
-          .invoke("getApiKey", this.homeDir)
-          .then((apiKey) => {
-            this.$store.commit("apiKey", apiKey);
-          });
+        if (!this.testApiAccess()) {
+          window.ipcRenderer
+            .invoke("getApiKey", this.homeDir)
+            .then((apiKey) => {
+              this.$store.commit("apiKey", apiKey);
+            });
+        }
       }
-      if (messageObj.message.match(/exit status [1-9][0-9]*/)) {
+      if (
+        messageObj.message.match(/exit status [1-9][0-9]*/) &&
+        !this.testApiAccess()
+      ) {
         this.$toasted.error(this.$t("toast.service.error.start"));
       }
     });
@@ -230,6 +235,19 @@ export default {
     clearInterval(statisticsInterval);
   },
   methods: {
+    testApiAccess() {
+      if (!this.apiKey) {
+        return false;
+      } else {
+        SyncServiceController.System.ping()
+          .then(() => {
+            return true;
+          })
+          .catch(() => {
+            return false;
+          });
+      }
+    },
     getStatus() {
       SyncServiceController.System.status()
         .then((response) => {
