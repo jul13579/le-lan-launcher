@@ -282,26 +282,26 @@ export default {
     },
     // eslint-disable-next-line no-unused-vars
     deleteGame(game) {
-      // let gameFolder = this.getGameFolder(game);
-      // this.config.folders.splice(this.getGameFolderIndex(game), 1);
-      // SyncServiceController.System.setConfig(this.config)
-      //   .then(() => {
-      //     this.$toasted.success(
-      //       this.$t("toast.game.delete.success", { gameTitle: game.title })
-      //     );
-      //     fs.rmdir(gameFolder.path, { recursive: true }, (error) => {
-      //       if (error)
-      //         this.$toasted.success(
-      //           this.$t("toast.game.delete.error", { error: error })
-      //         );
-      //     });
-      //     this.folderStatus[game.id] = null;
-      //   })
-      //   .catch();
+      let gameFolder = this.getGameFolder(game);
+      this.config.folders.splice(this.getGameFolderIndex(game), 1);
+      SyncServiceController.System.setConfig(this.config)
+        .then(() => {
+          this.$toasted.success(
+            this.$t("toast.game.delete.success", { gameTitle: game.title })
+          );
+          window.ipcRenderer.invoke("deleteGame", gameFolder).then((error) => {
+            if (error)
+              this.$toasted.success(
+                this.$t("toast.game.delete.error", { error: error })
+              );
+          });
+          this.folderStatus[game.id] = null;
+        })
+        .catch();
     },
     // eslint-disable-next-line no-unused-vars
     browseGame(game) {
-      // shell.openPath(this.getGameFolder(game).path);
+      window.ipcRenderer.send("browseGame", this.getGameFolder(game));
     },
     resetGame(game) {
       SyncServiceController.DB.revertFolder(game.id)
@@ -314,35 +314,7 @@ export default {
     },
     // eslint-disable-next-line no-unused-vars
     execute(game, config, launch) {
-      // require("electron").ipcRenderer.send("setPlayerName", game, config);
-      // let ls = spawn(path.join(game.path, launch.exe), launch.args, {
-      //   cwd: game.path,
-      //   detached: true, // Spawn executable detached, so it stays open if launcher is closed.
-      // });
-
-      // if (this.debug) {
-      //   this.debugMessages = [];
-      //   this.debugDialog = true;
-      // }
-
-      // ls.stdout.on("data", (data) => {
-      //   this.debugMessages.push({
-      //     type: "stdout",
-      //     message: `${data}`,
-      //   });
-      // });
-      // ls.stderr.on("data", (data) => {
-      //   this.debugMessages.push({
-      //     type: "stderr",
-      //     message: `${data}`,
-      //   });
-      // });
-      // ls.on("exit", (code) => {
-      //   this.debugMessages.push({
-      //     type: "stdout",
-      //     message: `Process exited with exit code ${code}`,
-      //   });
-      // });
+      window.ipcRenderer.send("launchGame", game, config, launch, this.debug);
     },
   },
 };

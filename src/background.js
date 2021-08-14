@@ -9,6 +9,7 @@ import WindowOperations from "./enums/WindowOperations";
 import WindowConfig from "./config/window";
 import SyncServiceController from "./controllers/SyncServiceMainController";
 import LibraryController from "./controllers/LibraryController";
+import GameController from "./controllers/GameMainController";
 
 const isDevelopment = process.env.NODE_ENV !== "production";
 
@@ -131,30 +132,7 @@ function registerFileProtocol(protocolName) {
 function shutdown() {
   if (SyncServiceController.stop()) {
     app.quit();
-      }
-}
-
-// eslint-disable-next-line no-unused-vars
-function setPlayerName(event, game, config) {
-  if (!config.nameConfig) {
-    return;
   }
-  let nameConfig = config.nameConfig;
-  let filePath = path.resolve(
-    game.path,
-    nameConfig.env ? process.env[nameConfig.env] : "",
-    nameConfig.file
-  );
-  let nameFileContents = fs.readFileSync(filePath, { encoding: "utf8" });
-  if (nameConfig.regex) {
-    nameFileContents = nameFileContents.replace(
-      new RegExp(nameConfig.regex),
-      store.state.playerName
-    );
-  } else {
-    nameFileContents = store.state.playerName;
-  }
-  fs.writeFileSync(filePath, nameFileContents, { encoding: "utf8" });
 }
 
 /* -------------------------------------------------------------------------- */
@@ -176,6 +154,16 @@ ipcMain.on("unwatchLibrary", (event, ...args) =>
 ipcMain.handle("readLibrary", (event, ...args) =>
   LibraryController.read(...args)
 );
+
+ipcMain.on("launchGame", (event, ...args) => {
+  GameController.launch(win, ...args);
+});
+ipcMain.on("browseGame", (event, ...args) => {
+  GameController.browse(...args);
+});
+ipcMain.handle("deleteGame", (event, ...args) => {
+  GameController.delete(...args);
+});
 
 // eslint-disable-next-line no-unused-vars
 ipcMain.on("controlWindow", async (event, action) => {
