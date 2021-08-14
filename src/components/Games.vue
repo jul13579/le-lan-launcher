@@ -247,39 +247,6 @@ export default {
       };
     },
 
-    // Watch library folder for changes
-    setLibWatcher() {
-      // Setup library watcher
-      // ! Use fs.watchFile as it handles ENOENT (file not existing) and also calls listener when file is created
-      // libraryWatcher = fs.watchFile(this.libConfigPath, (curr) => {
-      //   if (curr.size > 0) {
-      //     this.lib = this.getLib();
-      //   }
-      // });
-
-      // If library was already existing before app start, we have to fetch the library config now
-      // if (fs.existsSync(this.libConfigPath)) {
-      //   this.lib = this.getLib();
-      // }
-    },
-
-    // Parse library config
-    getLib() {
-      // let lib = JSON.parse(fs.readFileSync(this.libConfigPath));
-      // lib.games.sort((game1, game2) => {
-      //   if (game1.title == game2.title) {
-      //     return 0;
-      //   }
-      //   if (game1.title < game2.title) {
-      //     return -1;
-      //   }
-      //   if (game1.title > game2.title) {
-      //     return 1;
-      //   }
-      // });
-      // return lib;
-    },
-
     // Game actions
     downloadGame(game) {
       this.config.folders.push(this.getFolderObj(game.id, game.title));
