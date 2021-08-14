@@ -21,7 +21,7 @@ export default new Vuex.Store({
     },
     playerName: "",
     homeDir: "",
-    apikey: "",
+    apiKey: "",
     nas: "",
     locale: defaultLocale,
     debug: false,
@@ -45,8 +45,8 @@ export default new Vuex.Store({
         state.homeDir = setDir;
       }
     },
-    apikey(state, key) {
-      state.apikey = key;
+    apiKey(state, key) {
+      state.apiKey = key;
     },
     nas(state, id) {
       state.nas = id;
