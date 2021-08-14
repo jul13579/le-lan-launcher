@@ -12,7 +12,7 @@ contextBridge.exposeInMainWorld("ipcRenderer", {
   },
   invoke: (channel, data) => {
     // whitelist channels
-    let validChannels = ["showOpenDialog", "startSyncService"];
+    let validChannels = ["showOpenDialog", "startSyncService", "getApiKey"];
     if (validChannels.includes(channel)) {
       return ipcRenderer.invoke(channel, data);
     }

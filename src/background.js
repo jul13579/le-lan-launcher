@@ -7,7 +7,7 @@ import path from "path";
 
 import WindowOperations from "./enums/WindowOperations";
 import WindowConfig from "./config/window";
-import ExecutionController from "./controllers/ExecutionController";
+import SyncServiceController from "./controllers/SyncServiceMainController";
 
 const isDevelopment = process.env.NODE_ENV !== "production";
 
@@ -169,7 +169,7 @@ function registerFileProtocol(protocolName) {
 }
 
 function shutdown() {
-  if (ExecutionController.SyncService.stop()) {
+  if (SyncServiceController.stop()) {
     app.quit();
       }
 }
@@ -201,7 +201,10 @@ function setPlayerName(event, game, config) {
 /*                              IPC Configuration                             */
 /* -------------------------------------------------------------------------- */
 ipcMain.handle("startSyncService", (event, ...args) =>
-  ExecutionController.SyncService.start(win, ...args)
+  SyncServiceController.start(win, ...args)
+);
+ipcMain.handle("getApiKey", (event, ...args) =>
+  SyncServiceController.getApiKey(...args)
 );
 
 // eslint-disable-next-line no-unused-vars
