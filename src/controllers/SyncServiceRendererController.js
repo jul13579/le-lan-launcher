@@ -21,6 +21,9 @@ export default {
     stop: () => {
       return axios.post(host + "/system/shutdown");
     },
+    getApiKey: () => {
+      return window.ipcRenderer.invoke("getApiKey");
+    },
     ping: () => {
       return axios.get(host + "/system/ping");
     },

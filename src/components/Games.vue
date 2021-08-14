@@ -68,7 +68,7 @@ import { SelfBuildingSquareSpinner } from "epic-spinners";
 // import { spawn } from "child_process";
 // import path from "path";
 
-import SyncServiceController from "../controllers/SyncServiceController";
+import SyncServiceController from "../controllers/SyncServiceRendererController";
 import online from "../mixins/online";
 import defaultFolderconfig, {
   gamelibDirId,

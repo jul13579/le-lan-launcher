@@ -155,7 +155,7 @@ import { mapState } from "vuex";
 import BarChart from "./BarChart";
 import FixedWidthMenu from "./FixedWidthMenu.vue";
 
-import SyncServiceController from "../controllers/SyncServiceController";
+import SyncServiceController from "../controllers/SyncServiceRendererController";
 import online from "../mixins/online";
 import Console from "./Console.vue";
 

@@ -183,7 +183,7 @@
 import online from "../mixins/online";
 import { mapState } from "vuex";
 
-import SyncServiceController from "../controllers/SyncServiceController";
+import SyncServiceController from "../controllers/SyncServiceRendererController";
 
 let discoveryInterval;
 
