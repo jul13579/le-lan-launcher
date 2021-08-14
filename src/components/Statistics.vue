@@ -235,17 +235,11 @@ export default {
     clearInterval(statisticsInterval);
   },
   methods: {
-    testApiAccess() {
+    async testApiAccess() {
       if (!this.apiKey) {
         return false;
       } else {
-        SyncServiceController.System.ping()
-          .then(() => {
-            return true;
-          })
-          .catch(() => {
-            return false;
-          });
+        return await SyncServiceController.System.ping();
       }
     },
     getStatus() {
