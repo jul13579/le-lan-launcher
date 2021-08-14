@@ -101,6 +101,10 @@ export default {
 
     window.ipcRenderer.on("library", (event, lib) => (this.lib = lib));
     window.ipcRenderer.send("watchLibrary", this.libConfigPath);
+
+    window.ipcRenderer.on("game", (event, debugMsgObj) => {
+      this.debugMessages.push(debugMsgObj);
+    });
   },
   destroyed() {
     clearInterval(configInterval);
@@ -314,6 +318,9 @@ export default {
     },
     // eslint-disable-next-line no-unused-vars
     execute(game, config, launch) {
+      if (this.debug) {
+        this.debugDialog = true;
+      }
       window.ipcRenderer.send("launchGame", game, config, launch, this.debug);
     },
   },
