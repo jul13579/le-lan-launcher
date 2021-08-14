@@ -8,6 +8,7 @@ import path from "path";
 import WindowOperations from "./enums/WindowOperations";
 import WindowConfig from "./config/window";
 import SyncServiceController from "./controllers/SyncServiceMainController";
+import LibraryController from "./controllers/LibraryController";
 
 const isDevelopment = process.env.NODE_ENV !== "production";
 
@@ -164,6 +165,16 @@ ipcMain.handle("startSyncService", (event, ...args) =>
 );
 ipcMain.handle("getApiKey", (event, ...args) =>
   SyncServiceController.getApiKey(...args)
+);
+
+ipcMain.on("watchLibrary", (event, ...args) =>
+  LibraryController.watch(win, ...args)
+);
+ipcMain.on("unwatchLibrary", (event, ...args) =>
+  LibraryController.unwatch(...args)
+);
+ipcMain.handle("readLibrary", (event, ...args) =>
+  LibraryController.read(...args)
 );
 
 // eslint-disable-next-line no-unused-vars
