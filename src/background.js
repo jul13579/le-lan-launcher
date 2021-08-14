@@ -1,17 +1,13 @@
 "use strict";
 
-import { app, protocol, BrowserWindow, dialog, ipcMain } from "electron";
-import { spawn } from "child_process";
-import fs from "fs";
-import XMLParser from "xml-parser";
-import AJAX from "./ajax";
+import { app, protocol, BrowserWindow, ipcMain, dialog } from "electron";
 import { createProtocol } from "vue-cli-plugin-electron-builder/lib";
 import installExtension, { VUEJS_DEVTOOLS } from "electron-devtools-installer";
 import path from "path";
-import store from "./store";
-import SyncserviceOperations from "./enums/SyncserviceOperations";
+
 import WindowOperations from "./enums/WindowOperations";
 import WindowConfig from "./config/window";
+import ExecutionController from "./controllers/ExecutionController";
 
 const isDevelopment = process.env.NODE_ENV !== "production";
 
