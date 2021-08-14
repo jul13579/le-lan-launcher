@@ -115,7 +115,7 @@
 import Settings from "./components/Settings";
 import Games from "./components/Games";
 import Statistics from "./components/Statistics";
-import SyncServiceController from "./controllers/SyncServiceController";
+import SyncServiceController from "./controllers/SyncServiceRendererController";
 import WindowOperations from "./enums/WindowOperations";
 import { mapState } from "vuex";
 
@@ -189,6 +189,8 @@ export default {
         }
       }.bind(this)
     );
+
+    SyncServiceController.System.start(this.homeDir);
 
     // Setup global service status poller
     clearInterval(pingIntervalHandle);
