@@ -1,6 +1,6 @@
 import { spawn } from "child_process";
 import path from "path";
-import XMLParser from "xml-parser";
+import parse from "xml-parser";
 import fs from "fs";
 
 let syncServiceProcess;
@@ -40,9 +40,11 @@ export default {
   stop: () => {
     return syncServiceProcess.kill("SIGTERM");
   },
-  getApiKey: (homeDir) => {
-    let xml = XMLParser(fs.readFile(path.join(homeDir, "config.xml"), "utf8"));
-    let gui = xml.root.children.find((item) => item.name == "gui");
-    return gui.children.find((item) => item.name == "apiKey").content;
+  getApiKey: async (homeDir) => {
+    const xml = parse(
+      fs.readFileSync(path.join(homeDir, "config.xml"), "utf8")
+    );
+    const gui = xml.root.children.find((item) => item.name == "gui");
+    return gui.children.find((item) => item.name == "apikey").content;
   },
 };

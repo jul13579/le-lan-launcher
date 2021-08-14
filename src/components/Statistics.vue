@@ -207,8 +207,13 @@ export default {
   created() {
     window.ipcRenderer.on("syncService", (event, messageObj) => {
       this.syncthingMessages.push(messageObj);
-      if (messageObj.message.match(/GUI and APP listening on/)) {
-        this.$toasted.error(this.$t("toast.service.success.start"));
+      if (messageObj.message.match(/GUI and API listening on/)) {
+        this.$toasted.success(this.$t("toast.service.success.start"));
+        window.ipcRenderer
+          .invoke("getApiKey", this.homeDir)
+          .then((apiKey) => {
+            this.$store.commit("apiKey", apiKey);
+          });
       }
       if (messageObj.message.match(/exit status [1-9][0-9]*/)) {
         this.$toasted.error(this.$t("toast.service.error.start"));
