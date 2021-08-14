@@ -5,8 +5,8 @@ import fs from "fs";
 
 let syncServiceProcess;
 
-export default {
-  start: (win, homeDir) => {
+export default class SyncServiceMainController {
+  static start(win, homeDir) {
     if (homeDir) {
       let binPath = path.join(__dirname, "../syncthing");
       let args = ["-no-browser", "-home=" + homeDir];
@@ -36,15 +36,15 @@ export default {
         });
       });
     }
-  },
-  stop: () => {
+  };
+  static stop() {
     return syncServiceProcess.kill("SIGTERM");
-  },
-  getApiKey: async (homeDir) => {
+  };
+  static async getApiKey(homeDir) {
     const xml = parse(
       fs.readFileSync(path.join(homeDir, "config.xml"), "utf8")
     );
     const gui = xml.root.children.find((item) => item.name == "gui");
     return gui.children.find((item) => item.name == "apikey").content;
-  },
+  };
 };
