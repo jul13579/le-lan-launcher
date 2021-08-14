@@ -10,14 +10,19 @@ store.subscribe((mutation) => {
   }
 });
 
-export default class SyncServiceController {
-  System = {
-    start: () => {},
+export default {
+  System: {
+    start: (homeDir) => {
+      return window.ipcRenderer.invoke("startSyncService", homeDir);
+    },
     restart: () => {
       return axios.post(host + "/system/restart");
     },
     stop: () => {
       return axios.post(host + "/system/shutdown");
+    },
+    ping: () => {
+      return axios.get(host + "/system/ping");
     },
     status: () => {
       return axios.get(host + "/system/status");
@@ -34,26 +39,26 @@ export default class SyncServiceController {
     getDiscovery: () => {
       return axios.get(host + "/system/discovery");
     },
-  };
-  DB = {
+  },
+  DB: {
     folderStatus: (folder) => {
       return axios.get(host + "/db/status?folder=" + folder);
     },
     revertFolder: (folder) => {
       return axios.post(host + "/db/revert?folder=" + folder);
     },
-  };
-  Cluster = {
+  },
+  Cluster: {
     pendingFolders: () => {
       return axios.get(host + "/cluster/pending/folders");
     },
-  };
-  Events = {
+  },
+  Events: {
     since: (lastSeenID) => {
       return axios.get(host + "/events?timeout=1&since=" + lastSeenID);
     },
     latest: () => {
       return axios.get(host + "/events?limit=1");
     },
-  };
-}
+  },
+};

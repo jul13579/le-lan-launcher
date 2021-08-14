@@ -12,16 +12,16 @@ contextBridge.exposeInMainWorld("ipcRenderer", {
   },
   invoke: (channel, data) => {
     // whitelist channels
-    let validChannels = ["showOpenDialog"];
+    let validChannels = ["showOpenDialog", "startSyncService"];
     if (validChannels.includes(channel)) {
       return ipcRenderer.invoke(channel, data);
     }
   },
   on: (channel, func) => {
-    let validChannels = ["fromMain"];
+    let validChannels = ["syncService"];
     if (validChannels.includes(channel)) {
       // Deliberately strip event as it includes `sender`
-      ipcRenderer.on(channel, (event, ...args) => func(...args));
+      ipcRenderer.on(channel, func);
     }
   },
 });

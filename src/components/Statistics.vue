@@ -205,8 +205,14 @@ export default {
     },
   },
   created() {
-    require("electron").ipcRenderer.on("syncthing", (event, message) => {
-      this.syncthingMessages.push(message);
+    window.ipcRenderer.on("syncService", (event, messageObj) => {
+      this.syncthingMessages.push(messageObj);
+      if (messageObj.message.match(/GUI and APP listening on/)) {
+        this.$toasted.error(this.$t("toast.service.success.start"));
+      }
+      if (messageObj.message.match(/exit status [1-9][0-9]*/)) {
+        this.$toasted.error(this.$t("toast.service.error.start"));
+      }
     });
   },
   beforeMount() {
@@ -246,36 +252,29 @@ export default {
     },
     startService() {
       if (!this.online) {
-        this.$toasted.success(this.$t("toast.service.success.start"));
-        ipcRenderer
-          .invoke("controlService", SyncserviceOperations.START)
-          .then((success) => {
-            if (!success) {
-              this.$toasted.error(this.$t("toast.service.error.start"));
-            }
-          });
+        SyncServiceController.System.start(this.homeDir);
       }
     },
     restartService() {
       if (this.online) {
         SyncServiceController.System.restart().then((success) => {
-            if (success) {
-              this.$toasted.success(this.$t("toast.service.success.restart"));
-            } else {
-              this.$toasted.error(this.$t("toast.service.error.restart"));
-            }
-          });
+          if (success) {
+            this.$toasted.success(this.$t("toast.service.success.restart"));
+          } else {
+            this.$toasted.error(this.$t("toast.service.error.restart"));
+          }
+        });
       }
     },
     stopService() {
       if (this.online) {
         SyncServiceController.System.stop().then((success) => {
-            if (success) {
-              this.$toasted.success(this.$t("toast.service.success.stop"));
-            } else {
-              this.$toasted.error(this.$t("toast.service.error.stop"));
-            }
-          });
+          if (success) {
+            this.$toasted.success(this.$t("toast.service.success.stop"));
+          } else {
+            this.$toasted.error(this.$t("toast.service.error.stop"));
+          }
+        });
       }
     },
   },

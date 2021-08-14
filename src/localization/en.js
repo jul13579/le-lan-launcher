@@ -25,7 +25,7 @@ export default {
     },
     service: {
       success: {
-        start: "Service is starting...",
+        start: "Service started",
         stop: "Service is shutting down...",
         restart: "Service is restarting...",
       },

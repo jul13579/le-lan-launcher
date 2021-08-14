@@ -142,12 +142,12 @@ if (isDevelopment) {
   if (process.platform === "win32") {
     process.on("message", (data) => {
       if (data === "graceful-exit") {
-        stopService();
+        shutdown();
       }
     });
   } else {
     process.on("SIGTERM", () => {
-      stopService();
+      shutdown();
     });
   }
 }
@@ -172,57 +172,10 @@ function registerFileProtocol(protocolName) {
   });
 }
 
-function startService() {
-  return new Promise((resolve, reject) => {
-    if (store.state.homeDir != false) {
-      let binPath = path.join(__dirname, "../syncthing");
-      let args = ["-no-browser", "-home=" + store.state.homeDir];
-      if (process.platform == "win32") {
-        binPath += ".exe";
-        args.push("-no-console");
+function shutdown() {
+  if (ExecutionController.SyncService.stop()) {
+    app.quit();
       }
-
-      // eslint-disable-next-line no-unused-vars
-      const ls = spawn(binPath, args);
-
-      ls.stdout.on("data", (data) => {
-        win.webContents.send("syncthing", {
-          type: "stdout",
-          message: `${data}`,
-        });
-      });
-      ls.stderr.on("data", (data) => {
-        win.webContents.send("syncthing", {
-          type: "stderr",
-          message: `${data}`,
-        });
-      });
-      ls.on("exit", (code) => {
-        win.webContents.send("syncthing", {
-          type: "stdout",
-          message: `Process exited with exit code ${code}`,
-        });
-      });
-
-      // Resolve Promise after 10 sec, as Syncthing will terminate if it could not start after multiple restarts
-      setTimeout(() => {
-        resolve();
-      }, 10000);
-    }
-  });
-}
-
-function restartService() {
-  return AJAX.Syncthing.System.restart();
-}
-
-function stopService() {
-  return AJAX.Syncthing.System.shutdown();
-}
-
-async function shutdown() {
-  await stopService();
-  app.quit();
 }
 
 // eslint-disable-next-line no-unused-vars
@@ -251,7 +204,9 @@ function setPlayerName(event, game, config) {
 /* -------------------------------------------------------------------------- */
 /*                              IPC Configuration                             */
 /* -------------------------------------------------------------------------- */
-ipcMain.on("setPlayerName", setPlayerName);
+ipcMain.handle("startSyncService", (event, ...args) =>
+  ExecutionController.SyncService.start(win, ...args)
+);
 
 // eslint-disable-next-line no-unused-vars
 ipcMain.on("controlWindow", async (event, action) => {
