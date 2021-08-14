@@ -198,6 +198,7 @@ export default {
     this.activeTab = this.setupCompleted ? 0 : 1;
   },
   destroyed() {
+    window.ipcRenderer.removeAllListeners();
     clearInterval(pingIntervalHandle);
     unsubscribeCallback();
   },
