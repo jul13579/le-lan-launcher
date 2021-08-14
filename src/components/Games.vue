@@ -63,10 +63,6 @@
 <script>
 import { mapState } from "vuex";
 import { SelfBuildingSquareSpinner } from "epic-spinners";
-// import { shell } from "electron";
-// import fs from "fs";
-// import { spawn } from "child_process";
-// import path from "path";
 
 import SyncServiceController from "../controllers/SyncServiceRendererController";
 import online from "../mixins/online";
@@ -79,9 +75,7 @@ import defaultFolderconfig, {
 import GameEntry from "./GameEntry";
 import Console from "./Console.vue";
 
-// TODO remove lint exclusions!
-// eslint-disable-next-line no-unused-vars
-let configInterval, libraryWatcher;
+let configInterval;
 
 export default {
   mixins: [online],
@@ -101,15 +95,16 @@ export default {
     };
   },
   beforeMount() {
-    this.setLibWatcher();
+    clearInterval(configInterval);
+    configInterval = setInterval(this.getConfig, 5000);
     this.getConfig();
 
-    clearInterval(configInterval);
-    // configInterval = setInterval(this.getConfig, 5000);
+    window.ipcRenderer.on("library", (event, lib) => (this.lib = lib));
+    window.ipcRenderer.send("watchLibrary", this.libConfigPath);
   },
   destroyed() {
     clearInterval(configInterval);
-    // fs.unwatchFile(this.libConfigPath, libraryWatcher);
+    window.ipcRenderer.send("unwatchLibrary", this.libConfigPath);
   },
   computed: {
     nasDevice() {
