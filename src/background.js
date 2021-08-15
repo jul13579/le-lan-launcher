@@ -178,6 +178,6 @@ ipcMain.on("controlWindow", async (event, action) => {
 });
 
 // eslint-disable-next-line no-unused-vars
-ipcMain.handle("showOpenDialog", (event, options) => {
-  return dialog.showOpenDialog(options);
-});
+ipcMain.handle("showOpenDialog", (event, options) =>
+  dialog.showOpenDialog(options)
+);
