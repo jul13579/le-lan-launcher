@@ -159,6 +159,7 @@ import SyncServiceController from "../controllers/SyncServiceRendererController"
 import online from "../mixins/online";
 import Console from "./Console.vue";
 import SyncServiceRendererController from "../controllers/SyncServiceRendererController";
+import Mutations from "../enums/Mutations";
 
 let statisticsInterval;
 
@@ -212,7 +213,7 @@ export default {
         this.$toasted.success(this.$t("toast.service.success.start"));
         if (!this.testApiAccess()) {
           SyncServiceRendererController.System.getApiKey().then((apiKey) => {
-            this.$store.commit("apiKey", apiKey);
+            this.$store.commit(Mutations.API_KEY, apiKey);
           });
         }
       }

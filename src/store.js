@@ -1,6 +1,7 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import VuexPersistence from "vuex-persist";
+import Mutations from "./enums/Mutations";
 
 Vue.use(Vuex);
 
@@ -27,16 +28,16 @@ export default new Vuex.Store({
     debug: false,
   },
   mutations: {
-    backgroundHue(state, color) {
+    [Mutations.BACKGROUND_HUE](state, color) {
       state.backgroundHue = color;
     },
-    theme(state, theme) {
+    [Mutations.THEME](state, theme) {
       state.theme = theme;
     },
-    playerName(state, name) {
+    [Mutations.PLAYER_NAME](state, name) {
       state.playerName = name;
     },
-    homeDir(state, dir) {
+    [Mutations.HOME_DIR](state, dir) {
       if (dir != false) {
         let setDir = dir;
         if (setDir.endsWith("/")) {
@@ -45,16 +46,16 @@ export default new Vuex.Store({
         state.homeDir = setDir;
       }
     },
-    apiKey(state, key) {
+    [Mutations.API_KEY](state, key) {
       state.apiKey = key;
     },
-    nas(state, id) {
+    [Mutations.NAS](state, id) {
       state.nas = id;
     },
-    locale(state, locale) {
+    [Mutations.LOCALE](state, locale) {
       state.locale = locale;
     },
-    debug(state, bool) {
+    [Mutations.DEBUG](state, bool) {
       state.debug = bool;
     },
   },

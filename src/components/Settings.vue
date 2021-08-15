@@ -52,7 +52,7 @@
         :src="item"
         @click.native="
           () => {
-            $store.commit('theme', { path: item, cover: false });
+            $store.commit(require('../enums/Mutations').default.THEME, { path: item, cover: false });
           }
         "
         eager
@@ -63,7 +63,7 @@
         @click="
           openFileChooser(
             (result) =>
-              $store.commit('theme', {
+              $store.commit(require('../enums/Mutations').default.THEME, {
                 path: `theme://${result.filePaths[0].replace(/\\/g, '/')}`,
                 cover: true,
               }),
@@ -95,7 +95,7 @@
           :color="'hsl(' + sliderValue + ', 100%, 50%)'"
           @change="
             (input) => {
-              $store.commit('backgroundHue', input);
+              $store.commit(require('../enums/Mutations').default.BACKGROUND_HUE, input);
             }
           "
         />
@@ -111,7 +111,7 @@
           :items="Object.entries(langs)"
           :item-text="(lang) => lang[1].lang"
           :item-value="(lang) => lang[0]"
-          @change="(input) => $store.commit('locale', input)"
+          @change="(input) => $store.commit(require('../enums/Mutations').default.LOCALE, input)"
         />
       </v-col>
       <v-col
@@ -140,7 +140,7 @@
           :value="playerName"
           @blur="
             (event) => {
-              $store.commit('playerName', event.target.value);
+              $store.commit(require('../enums/Mutations').default.PLAYER_NAME, event.target.value);
             }
           "
           :error="playerName == false"
@@ -152,7 +152,7 @@
           @click="
             openFileChooser(
               (result) =>
-                $store.commit('homeDir', result.filePaths[0]),
+                $store.commit(require('../enums/Mutations').default.HOME_DIR, result.filePaths[0]),
               { properties: ['openDirectory'] }
             )
           "
@@ -170,7 +170,7 @@
           :item-value="(device) => device[0]"
           :item-text="(device) => device[0]"
           :error="nas == false"
-          @change="(input) => $store.commit('nas', input)"
+          @change="(input) => $store.commit(require('../enums/Mutations').default.NAS, input)"
           :no-data-text="$t('settings.alerts.discovery')"
           :error-messages="!online ? $t('settings.alerts.service') : null"
         />
@@ -210,7 +210,7 @@ export default {
         return this.$store.state.debug;
       },
       set(val) {
-        this.$store.commit("debug", val);
+        this.$store.commit(require("../enums/Mutations").default.DEBUG, val);
       },
     },
     ...mapState(["playerName", "homeDir", "nas", "locale", "backgroundHue"]),
