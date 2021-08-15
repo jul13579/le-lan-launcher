@@ -172,21 +172,13 @@ ipcMain.handle("deleteGame", (event, ...args) => {
 
 // eslint-disable-next-line no-unused-vars
 ipcMain.on("controlWindow", async (event, action) => {
-  switch (action) {
-    case WindowOperations.MAXIMIZE:
-      if (win.isMaximized()) {
-        win.unmaximize();
-      } else {
-        win.maximize();
-      }
-      break;
-    case WindowOperations.MINIMIZE:
-      win.minimize();
-      break;
-    case WindowOperations.CLOSE:
-      win.close();
-      break;
+  // ! Do not process request, if the action is not included in the enum!
+  if (!Object.values(WindowOperations).includes(action)) return;
+  // Unmaximize on `MAXIMIZE` if window is maximized
+  if (action == WindowOperations.MAXIMIZE && win.isMaximized()) {
+    action = "unmaximize";
   }
+  win[action]();
 });
 
 // eslint-disable-next-line no-unused-vars
