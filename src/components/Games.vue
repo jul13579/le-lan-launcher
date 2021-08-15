@@ -22,7 +22,7 @@
           v-for="(item, index) in lib.games"
           :key="index"
           :value="item"
-          :homeDir="homeDir"
+          :libFolderPath="libFolderPath"
           :config="getGameFolder(item)"
           :status="folderStatus[item.id] || {}"
           @download="downloadGame(item)"
@@ -68,7 +68,6 @@ import SyncServiceController from "../controllers/SyncServiceRendererController"
 import online from "../mixins/online";
 import defaultFolderconfig, {
   gamelibDirId,
-  gamelibDirName,
   gamelibConfig,
 } from "../config/folder";
 
@@ -102,41 +101,44 @@ export default {
     configInterval = setInterval(this.getConfig, 5000);
     this.getConfig();
 
-    // Setup library watcher
-    LibraryController.watch(
-      this.libConfigPath,
-      (event, lib) => (this.lib = lib)
-    );
-
     // Setup handler for game debug messages
     GameController.onDebugMsg((event, debugMsgObj) => {
       this.debugMessages.push(debugMsgObj);
     });
   },
   destroyed() {
-    clearInterval(configInterval);
     LibraryController.unwatch(this.libConfigPath);
+    clearInterval(configInterval);
   },
   computed: {
-    nasDevice() {
-      return (this.config.devices || []).find(
-        (device) => device.deviceID == this.nas
-      );
-    },
     devices() {
       return this.config.devices || [];
     },
     folders() {
       return this.config.folders || [];
     },
+    nasDevice() {
+      return this.devices.find((device) => device.deviceID == this.nas) || {};
+    },
+    libFolder() {
+      return this.folders.find((folder) => folder.id == gamelibDirId) || {};
+    },
+    libFolderPath() {
+      return `${this.homeDir}/${this.libFolder.label}`;
+    },
     libConfigPath() {
-      return `${this.homeDir}/${gamelibDirName}/${gamelibConfig}`;
+      return `${this.libFolderPath}/${gamelibConfig}`;
     },
     ...mapState(["nas", "homeDir", "debug"]),
   },
   watch: {
     nas() {
       this.getConfig();
+    },
+    libConfigPath(val, oldVal) {
+      // Since `libConfigPath` is not statically defined, setup watcher when the prop changes.
+      LibraryController.unwatch(oldVal);
+      LibraryController.watch(val, (event, lib) => (this.lib = lib));
     },
   },
   methods: {
@@ -165,18 +167,6 @@ export default {
             });
             SyncServiceController.System.setConfig(this.config).catch();
           }
-
-          // If nas is set but gamelib folder is not yet subscribed, add it
-          // ! Dont do this in one step, e.g. with above nas-setup. Scenarios might come up where the gamelib folder will never be set-up!
-          if (
-            this.nasDevice && // If nasDevice is defined
-            !this.config.folders.find((folder) => folder.id == gamelibDirId)
-          ) {
-            this.config.folders.push(
-              this.getFolderObj(gamelibDirId, gamelibDirName)
-            );
-            SyncServiceController.System.setConfig(this.config).catch();
-          }
         })
         .catch();
 
@@ -184,6 +174,19 @@ export default {
         const folders = response.data;
 
         Object.entries(folders).forEach(([id, pendingFolderConfig]) => {
+          // If library folder is among pending folders, add it to shared folders
+          if (id == gamelibDirId) {
+            this.config.folders.push(
+              this.getFolderObj(
+                gamelibDirId,
+                Object.values(pendingFolderConfig.offeredBy)[0].label
+              )
+            );
+            SyncServiceController.System.setConfig(this.config).catch();
+            return;
+          }
+
+          // Else add folder to ignored folders
           const { label, time } = Object.values(
             pendingFolderConfig.offeredBy
           )[0];

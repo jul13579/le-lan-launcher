@@ -1,8 +1,7 @@
 const gamelibDirId = "gamelib"; // The Syncthing folder ID of the library folder
-const gamelibDirName = "Library"; // The Syncthing folder name of the library folder
 const gamelibConfig = "library.json"; // The name of the library JSON file inside the library folder
 
-export { gamelibDirId, gamelibDirName, gamelibConfig };
+export { gamelibDirId, gamelibConfig };
 
 // Default syncthing folder configuration applied by client
 export default {

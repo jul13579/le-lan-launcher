@@ -66,7 +66,7 @@ $hover-animation: 0.2s ease-in-out;
         :class="downloadProgress >= 1 ? 'installed' : ''"
       >
         <v-img
-          :src="`game://${homeDir}/${require('../config/folder').gamelibDirName}/${value.cover}`"
+          :src="`game://${libFolderPath}/${value.cover}`"
           :aspect-ratio="600/900"
           eager
         />
@@ -136,7 +136,7 @@ $hover-animation: 0.2s ease-in-out;
 export default {
   props: {
     value: Object,
-    homeDir: String,
+    libFolderPath: String,
     config: Object,
     status: Object,
   },
