@@ -8,7 +8,7 @@ import path from "path";
 import WindowOperations from "./enums/WindowOperations";
 import WindowConfig from "./config/window";
 import SyncServiceController from "./controllers/SyncServiceMainController";
-import LibraryController from "./controllers/LibraryController";
+import LibraryController from "./controllers/LibraryMainController";
 import GameController from "./controllers/GameMainController";
 import SyncServiceOperations from "./enums/SyncServiceOperations";
 import LibraryOperations from "./enums/LibraryOperations";
