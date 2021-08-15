@@ -75,6 +75,7 @@ import defaultFolderconfig, {
 
 import GameEntry from "./GameEntry";
 import Console from "./Console.vue";
+import GameOperations from "../enums/GameOperations";
 
 let configInterval;
 
@@ -101,7 +102,11 @@ export default {
     this.getConfig();
 
     window.ipcRenderer.on("library", (event, lib) => (this.lib = lib));
-    window.ipcRenderer.send("controlLibrary", LibraryOperations.WATCH, this.libConfigPath);
+    window.ipcRenderer.send(
+      "controlLibrary",
+      LibraryOperations.WATCH,
+      this.libConfigPath
+    );
 
     window.ipcRenderer.on("game", (event, debugMsgObj) => {
       this.debugMessages.push(debugMsgObj);
@@ -109,7 +114,11 @@ export default {
   },
   destroyed() {
     clearInterval(configInterval);
-    window.ipcRenderer.send("controlLibrary", LibraryOperations.UNWATCH, this.libConfigPath);
+    window.ipcRenderer.send(
+      "controlLibrary",
+      LibraryOperations.UNWATCH,
+      this.libConfigPath
+    );
   },
   computed: {
     nasDevice() {
@@ -294,19 +303,25 @@ export default {
           this.$toasted.success(
             this.$t("toast.game.delete.success", { gameTitle: game.title })
           );
-          window.ipcRenderer.invoke("deleteGame", gameFolder).then((error) => {
-            if (error)
-              this.$toasted.success(
-                this.$t("toast.game.delete.error", { error: error })
-              );
-          });
+          window.ipcRenderer
+            .invoke("controlGame", GameOperations.DELETE, gameFolder)
+            .then((error) => {
+              if (error)
+                this.$toasted.success(
+                  this.$t("toast.game.delete.error", { error: error })
+                );
+            });
           this.folderStatus[game.id] = null;
         })
         .catch();
     },
     // eslint-disable-next-line no-unused-vars
     browseGame(game) {
-      window.ipcRenderer.send("browseGame", this.getGameFolder(game));
+      window.ipcRenderer.invoke(
+        "controlGame",
+        GameOperations.BROWSE,
+        this.getGameFolder(game)
+      );
     },
     resetGame(game) {
       SyncServiceController.DB.revertFolder(game.id)
@@ -323,7 +338,14 @@ export default {
         this.debugMessages = [];
         this.debugDialog = true;
       }
-      window.ipcRenderer.send("launchGame", game, config, launch, this.debug);
+      window.ipcRenderer.invoke(
+        "controlGame",
+        GameOperations.LAUNCH,
+        game,
+        config,
+        launch,
+        this.debug
+      );
     },
   },
 };

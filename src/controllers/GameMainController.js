@@ -2,10 +2,23 @@ import { spawn } from "child_process";
 import { shell } from "electron";
 import fs from "fs";
 import path from "path";
+import GameOperations from "../enums/GameOperations";
 
+/**
+ * Controller for games.
+ * This is only to be used by the main process, as it depends on electron and node functionalities.
+ */
 export default class GameController {
-  static launch(win, game, config, launch, debug) {
-    this.setPlayerName(game, config);
+  /**
+   * Launch a game.
+   * @param {BrowserWindow} win The BrowserWindow
+   * @param {Object} game The sync-service folder config
+   * @param {Object} config The game object of the library config file
+   * @param {Object} launch The launch config
+   * @param {Boolean} debug State of debug mode
+   */
+  static [GameOperations.LAUNCH](win, game, config, launch, debug) {
+    this._setPlayerName(game, config);
     let gameProcess = spawn(path.join(game.path, launch.exe), launch.args, {
       cwd: game.path,
       detached: true, // Spawn executable detached, so it stays open if launcher is closed.
@@ -34,15 +47,32 @@ export default class GameController {
       });
     });
   }
+
+  /**
+   * Open the install folder of a game in the file explorer.
+   * @param {Object} gameFolder The sync-service folder config
+   */
   static browse(gameFolder) {
     shell.openPath(gameFolder.path);
   }
+
+  /**
+   * Delete a game.
+   * @param {Object} gameFolder The sync-service folder config
+   */
   static delete(gameFolder) {
     fs.rmdir(gameFolder.path, { recursive: true }, (error) => {
       if (error) return error;
     });
   }
-  static setPlayerName(game, config) {
+
+  /**
+   * Set the player name according for a specific game.
+   * @param {Object} game The sync-service folder config
+   * @param {Object} config The game object of the library config file
+   * @private
+   */
+  static _setPlayerName(game, config) {
     if (!config.nameConfig) {
       return;
     }

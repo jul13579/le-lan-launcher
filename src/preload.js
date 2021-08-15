@@ -5,19 +5,14 @@ import { contextBridge, ipcRenderer } from "electron";
 contextBridge.exposeInMainWorld("ipcRenderer", {
   send: (channel, ...data) => {
     // whitelist channels
-    let validChannels = [
-      "controlWindow",
-      "controlLibrary",
-      "launchGame",
-      "browseGame",
-    ];
+    let validChannels = ["controlWindow", "controlLibrary"];
     if (validChannels.includes(channel)) {
       ipcRenderer.send(channel, ...data);
     }
   },
   invoke: (channel, ...data) => {
     // whitelist channels
-    let validChannels = ["showOpenDialog", "controlSyncService"];
+    let validChannels = ["showOpenDialog", "controlSyncService", "controlGame"];
     if (validChannels.includes(channel)) {
       return ipcRenderer.invoke(channel, ...data);
     }
