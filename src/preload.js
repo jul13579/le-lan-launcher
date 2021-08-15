@@ -7,8 +7,7 @@ contextBridge.exposeInMainWorld("ipcRenderer", {
     // whitelist channels
     let validChannels = [
       "controlWindow",
-      "watchLibrary",
-      "unwatchLibrary",
+      "controlLibrary",
       "launchGame",
       "browseGame",
     ];
@@ -18,12 +17,7 @@ contextBridge.exposeInMainWorld("ipcRenderer", {
   },
   invoke: (channel, ...data) => {
     // whitelist channels
-    let validChannels = [
-      "showOpenDialog",
-      "controlSyncService",
-      "readLibrary",
-      "deleteGame",
-    ];
+    let validChannels = ["showOpenDialog", "controlSyncService"];
     if (validChannels.includes(channel)) {
       return ipcRenderer.invoke(channel, ...data);
     }

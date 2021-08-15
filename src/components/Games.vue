@@ -65,6 +65,7 @@ import { mapState } from "vuex";
 import { SelfBuildingSquareSpinner } from "epic-spinners";
 
 import SyncServiceController from "../controllers/SyncServiceRendererController";
+import LibraryOperations from "../enums/LibraryOperations";
 import online from "../mixins/online";
 import defaultFolderconfig, {
   gamelibDirId,
@@ -100,7 +101,7 @@ export default {
     this.getConfig();
 
     window.ipcRenderer.on("library", (event, lib) => (this.lib = lib));
-    window.ipcRenderer.send("watchLibrary", this.libConfigPath);
+    window.ipcRenderer.send("controlLibrary", LibraryOperations.WATCH, this.libConfigPath);
 
     window.ipcRenderer.on("game", (event, debugMsgObj) => {
       this.debugMessages.push(debugMsgObj);
@@ -108,7 +109,7 @@ export default {
   },
   destroyed() {
     clearInterval(configInterval);
-    window.ipcRenderer.send("unwatchLibrary", this.libConfigPath);
+    window.ipcRenderer.send("controlLibrary", LibraryOperations.UNWATCH, this.libConfigPath);
   },
   computed: {
     nasDevice() {

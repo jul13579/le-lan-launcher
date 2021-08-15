@@ -11,6 +11,7 @@ import SyncServiceController from "./controllers/SyncServiceMainController";
 import LibraryController from "./controllers/LibraryController";
 import GameController from "./controllers/GameMainController";
 import SyncServiceOperations from "./enums/SyncServiceOperations";
+import LibraryOperations from "./enums/LibraryOperations";
 
 const isDevelopment = process.env.NODE_ENV !== "production";
 
@@ -150,15 +151,16 @@ ipcMain.handle("controlSyncService", (event, action, ...args) => {
   return SyncServiceController[action](...args);
 });
 
-ipcMain.on("watchLibrary", (event, ...args) =>
-  LibraryController.watch(win, ...args)
-);
-ipcMain.on("unwatchLibrary", (event, ...args) =>
-  LibraryController.unwatch(...args)
-);
-ipcMain.handle("readLibrary", (event, ...args) =>
-  LibraryController.read(...args)
-);
+// eslint-disable-next-line no-unused-vars
+ipcMain.on("controlLibrary", (event, action, ...args) => {
+  // ! Do not process request, if the action is not included in the enum!
+  if (!Object.values(LibraryOperations).includes(action)) return;
+  // Add the `win` argument if the action is `WATCH`
+  if (action == LibraryOperations.WATCH) {
+    args = [win, ...args];
+  }
+  LibraryController[action](...args);
+});
 
 ipcMain.on("launchGame", (event, ...args) => {
   GameController.launch(win, ...args);
