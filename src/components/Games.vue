@@ -65,7 +65,6 @@ import { mapState } from "vuex";
 import { SelfBuildingSquareSpinner } from "epic-spinners";
 
 import SyncServiceController from "../controllers/SyncServiceRendererController";
-import LibraryOperations from "../enums/LibraryOperations";
 import online from "../mixins/online";
 import defaultFolderconfig, {
   gamelibDirId,
@@ -76,6 +75,8 @@ import defaultFolderconfig, {
 import GameEntry from "./GameEntry";
 import Console from "./Console.vue";
 import GameOperations from "../enums/GameOperations";
+import LibraryController from "../controllers/LibraryRendererController";
+import GameController from "../controllers/GameRendererController";
 
 let configInterval;
 
@@ -97,28 +98,24 @@ export default {
     };
   },
   beforeMount() {
-    clearInterval(configInterval);
+    // Setup periodic config fetch task
     configInterval = setInterval(this.getConfig, 5000);
     this.getConfig();
 
-    window.ipcRenderer.on("library", (event, lib) => (this.lib = lib));
-    window.ipcRenderer.send(
-      "controlLibrary",
-      LibraryOperations.WATCH,
-      this.libConfigPath
+    // Setup library watcher
+    LibraryController.watch(
+      this.libConfigPath,
+      (event, lib) => (this.lib = lib)
     );
 
-    window.ipcRenderer.on("game", (event, debugMsgObj) => {
+    // Setup handler for game debug messages
+    GameController.onDebugMsg((event, debugMsgObj) => {
       this.debugMessages.push(debugMsgObj);
     });
   },
   destroyed() {
     clearInterval(configInterval);
-    window.ipcRenderer.send(
-      "controlLibrary",
-      LibraryOperations.UNWATCH,
-      this.libConfigPath
-    );
+    LibraryController.unwatch(this.libConfigPath);
   },
   computed: {
     nasDevice() {
@@ -144,6 +141,7 @@ export default {
   },
   methods: {
     getConfig() {
+      // Abort if service is not online
       if (!this.online) {
         return;
       }
