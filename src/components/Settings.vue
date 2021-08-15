@@ -123,7 +123,7 @@
           max-width="400"
         >
           <template v-slot:activator="{ on }">
-            <v-switch @change="(input) => $store.commit('debug', input)">
+            <v-switch v-model="debug">
               <template v-slot:label>
                 <span v-on="on">{{$t('settings.debug')}}</span>
               </template>
@@ -203,13 +203,18 @@ export default {
       langs: require("../localization/langs").default,
     };
   },
-  computed: mapState([
-    "playerName",
-    "homeDir",
-    "nas",
-    "locale",
-    "backgroundHue",
-  ]),
+  computed: {
+    // Manually setup a two-way computed prop for debug, as v-switch does not correctly react to the `value` prop
+    debug: {
+      get() {
+        return this.$store.state.debug;
+      },
+      set(val) {
+        this.$store.commit("debug", val);
+      },
+    },
+    ...mapState(["playerName", "homeDir", "nas", "locale", "backgroundHue"]),
+  },
   created() {
     this.discovery();
     clearInterval(discoveryInterval);
