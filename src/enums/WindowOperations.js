@@ -1,5 +1,10 @@
+/**
+ * Enum for window operations.
+ * @readonly
+ * @enum {String}
+ */
 export default {
-  MINIMIZE: "MINIMIZE",
-  MAXIMIZE: "MAXIMIZE",
-  CLOSE: "CLOSE",
+  MINIMIZE: "minimize",
+  MAXIMIZE: "maximize",
+  CLOSE: "close",
 };
