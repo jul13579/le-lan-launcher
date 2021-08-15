@@ -2,8 +2,18 @@ import { spawn } from "child_process";
 import path from "path";
 import parse from "xml-parser";
 import fs from "fs";
+import { BrowserWindow } from "electron";
 
+/**
+ * Controller for the sync-service.
+ * This is only to be used by the main process, as it depends on electron and node functionalities.
+ */
 export default class SyncServiceMainController {
+  /**
+   * Starts a new process of the sync-service using the specified directory as home directory.
+   * @param {BrowserWindow} win The BrowserWindow
+   * @param {String} homeDir The sync-service home directory
+   */
   static start(win, homeDir) {
     if (homeDir) {
       let binPath = path.join(__dirname, "../syncthing");
@@ -35,9 +45,24 @@ export default class SyncServiceMainController {
       });
     }
   }
+
+  /**
+   * Stops the sync-service using `SIGTERM`.
+   * @returns `true` if stop succeeded, else `false`
+   */
   static stop() {
+    // If we have no process handle of the sync-service, always return `true`
+    if (!this.syncServiceProcess) {
+      return true;
+    }
     return this.syncServiceProcess.kill("SIGTERM");
   }
+
+  /**
+   * Get the API key of the sync-service from its configuration file.
+   * @param {String} homeDir The sync-service home directory
+   * @returns The key in order to access the REST API of the sync-service
+   */
   static async getApiKey(homeDir) {
     const xml = parse(
       fs.readFileSync(path.join(homeDir, "config.xml"), { encoding: "utf8" })
