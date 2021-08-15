@@ -120,6 +120,7 @@ import WindowOperations from "./enums/WindowOperations";
 import { mapState } from "vuex";
 
 import hsl from "hsl-to-hex";
+import Mutations from "./enums/Mutations";
 
 let pingIntervalHandle;
 let unsubscribeCallback;
@@ -161,35 +162,19 @@ export default {
     this.$vuetify.theme.themes.dark.primary = this.primaryColor;
 
     // Setup notification handles
-    unsubscribeCallback = this.$store.subscribe(
-      function (mutation) {
-        switch (mutation.type) {
-          case "theme":
-            this.$toasted.success(this.$t("toast.theme"));
-            break;
-          case "backgroundHue":
-            this.$toasted.success(this.$t("toast.backgroundHue"));
-            this.$vuetify.theme.themes.dark.primary = this.primaryColor;
-            break;
-          case "playerName":
-            this.$toasted.success(this.$t("toast.playerName"));
-            break;
-          case "homeDir":
-            this.$toasted.success(this.$t("toast.homeDir"));
-            break;
-          case "nas":
-            this.$toasted.success(this.$t("toast.nas"));
-            break;
-          case "locale":
-            this.$i18n.locale = mutation.payload;
-            this.$toasted.success(this.$t("toast.locale"));
-            break;
-          case "debug":
-            this.$toasted.success(this.$t("toast.debug"));
-        }
-      }.bind(this)
-    );
+    unsubscribeCallback = this.$store.subscribe((mutation) => {
+      switch (mutation.type) {
+        case Mutations.BACKGROUND_HUE:
+          this.$vuetify.theme.themes.dark.primary = this.primaryColor;
+          break;
+        case Mutations.LOCALE:
+          this.$i18n.locale = mutation.payload;
+          break;
+      }
+      this.$toasted.success(this.$t(`toast.${mutation.type}`));
+    });
 
+    // Start sync-service on app start
     SyncServiceController.System.start(this.homeDir);
 
     // Setup global service status poller
