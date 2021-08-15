@@ -1,4 +1,5 @@
 import axios from "axios";
+import SyncServiceOperations from "../enums/SyncServiceOperations";
 import store from "../store";
 
 const host = "http://localhost:8384/rest";
@@ -13,7 +14,11 @@ store.subscribe((mutation) => {
 export default {
   System: {
     start: (homeDir) => {
-      return window.ipcRenderer.invoke("startSyncService", homeDir);
+      return window.ipcRenderer.invoke(
+        "controlSyncService",
+        SyncServiceOperations.START,
+        homeDir
+      );
     },
     restart: () => {
       return axios.post(host + "/system/restart");
@@ -22,7 +27,10 @@ export default {
       return axios.post(host + "/system/shutdown");
     },
     getApiKey: () => {
-      return window.ipcRenderer.invoke("getApiKey");
+      return window.ipcRenderer.invoke(
+        "controlSyncService",
+        SyncServiceOperations.GET_API_KEY
+      );
     },
     ping: () => {
       return axios.get(host + "/system/ping");

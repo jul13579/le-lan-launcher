@@ -10,6 +10,7 @@ import WindowConfig from "./config/window";
 import SyncServiceController from "./controllers/SyncServiceMainController";
 import LibraryController from "./controllers/LibraryController";
 import GameController from "./controllers/GameMainController";
+import SyncServiceOperations from "./enums/SyncServiceOperations";
 
 const isDevelopment = process.env.NODE_ENV !== "production";
 
@@ -138,12 +139,16 @@ function shutdown() {
 /* -------------------------------------------------------------------------- */
 /*                              IPC Configuration                             */
 /* -------------------------------------------------------------------------- */
-ipcMain.handle("startSyncService", (event, ...args) =>
-  SyncServiceController.start(win, ...args)
-);
-ipcMain.handle("getApiKey", (event, ...args) =>
-  SyncServiceController.getApiKey(...args)
-);
+// eslint-disable-next-line no-unused-vars
+ipcMain.handle("controlSyncService", (event, action, ...args) => {
+  // ! Do not process request, if the action is not included in the enum!
+  if (!Object.values(SyncServiceOperations).includes(action)) return;
+  // Add the `win` argument if the action is `START`
+  if (action == SyncServiceOperations.START) {
+    args = [win, ...args];
+  }
+  return SyncServiceController[action](...args);
+});
 
 ipcMain.on("watchLibrary", (event, ...args) =>
   LibraryController.watch(win, ...args)

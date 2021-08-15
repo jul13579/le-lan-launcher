@@ -3,6 +3,7 @@ import path from "path";
 import parse from "xml-parser";
 import fs from "fs";
 import { BrowserWindow } from "electron";
+import SyncServiceOperations from "../enums/SyncServiceOperations";
 
 /**
  * Controller for the sync-service.
@@ -14,7 +15,7 @@ export default class SyncServiceMainController {
    * @param {BrowserWindow} win The BrowserWindow
    * @param {String} homeDir The sync-service home directory
    */
-  static start(win, homeDir) {
+  static [SyncServiceOperations.START](win, homeDir) {
     if (homeDir) {
       let binPath = path.join(__dirname, "../syncthing");
       let args = ["-no-browser", "-home=" + homeDir];
@@ -47,6 +48,19 @@ export default class SyncServiceMainController {
   }
 
   /**
+   * Get the API key of the sync-service from its configuration file.
+   * @param {String} homeDir The sync-service home directory
+   * @returns The key in order to access the REST API of the sync-service
+   */
+  static async [SyncServiceOperations.GET_API_KEY](homeDir) {
+    const xml = parse(
+      fs.readFileSync(path.join(homeDir, "config.xml"), { encoding: "utf8" })
+    );
+    const gui = xml.root.children.find((item) => item.name == "gui");
+    return gui.children.find((item) => item.name == "apikey").content;
+  }
+
+  /**
    * Stops the sync-service using `SIGTERM`.
    * @returns `true` if stop succeeded, else `false`
    */
@@ -56,18 +70,5 @@ export default class SyncServiceMainController {
       return true;
     }
     return this.syncServiceProcess.kill("SIGTERM");
-  }
-
-  /**
-   * Get the API key of the sync-service from its configuration file.
-   * @param {String} homeDir The sync-service home directory
-   * @returns The key in order to access the REST API of the sync-service
-   */
-  static async getApiKey(homeDir) {
-    const xml = parse(
-      fs.readFileSync(path.join(homeDir, "config.xml"), { encoding: "utf8" })
-    );
-    const gui = xml.root.children.find((item) => item.name == "gui");
-    return gui.children.find((item) => item.name == "apikey").content;
   }
 }

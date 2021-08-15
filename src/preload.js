@@ -20,8 +20,7 @@ contextBridge.exposeInMainWorld("ipcRenderer", {
     // whitelist channels
     let validChannels = [
       "showOpenDialog",
-      "startSyncService",
-      "getApiKey",
+      "controlSyncService",
       "readLibrary",
       "deleteGame",
     ];

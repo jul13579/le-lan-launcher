@@ -158,6 +158,7 @@ import FixedWidthMenu from "./FixedWidthMenu.vue";
 import SyncServiceController from "../controllers/SyncServiceRendererController";
 import online from "../mixins/online";
 import Console from "./Console.vue";
+import SyncServiceRendererController from "../controllers/SyncServiceRendererController";
 
 let statisticsInterval;
 
@@ -210,11 +211,9 @@ export default {
       if (messageObj.message.match(/GUI and API listening on/)) {
         this.$toasted.success(this.$t("toast.service.success.start"));
         if (!this.testApiAccess()) {
-          window.ipcRenderer
-            .invoke("getApiKey", this.homeDir)
-            .then((apiKey) => {
-              this.$store.commit("apiKey", apiKey);
-            });
+          SyncServiceRendererController.System.getApiKey().then((apiKey) => {
+            this.$store.commit("apiKey", apiKey);
+          });
         }
       }
       if (
