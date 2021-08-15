@@ -294,7 +294,6 @@ export default {
         })
         .catch();
     },
-    // eslint-disable-next-line no-unused-vars
     deleteGame(game) {
       let gameFolder = this.getGameFolder(game);
       this.config.folders.splice(this.getGameFolderIndex(game), 1);
@@ -315,7 +314,6 @@ export default {
         })
         .catch();
     },
-    // eslint-disable-next-line no-unused-vars
     browseGame(game) {
       window.ipcRenderer.invoke(
         "controlGame",
@@ -332,7 +330,6 @@ export default {
         })
         .catch();
     },
-    // eslint-disable-next-line no-unused-vars
     execute(game, config, launch) {
       if (this.debug) {
         this.debugMessages = [];
