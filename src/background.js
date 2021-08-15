@@ -143,8 +143,6 @@ function shutdown() {
 /* -------------------------------------------------------------------------- */
 // eslint-disable-next-line no-unused-vars
 ipcMain.handle("controlSyncService", (event, action, ...args) => {
-  // ! Do not process request, if the action is not included in the enum!
-  if (!Object.values(SyncServiceOperations).includes(action)) return;
   // Add the `win` argument if the action is `START`
   if (action == SyncServiceOperations.START) {
     args = [win, ...args];
@@ -154,8 +152,6 @@ ipcMain.handle("controlSyncService", (event, action, ...args) => {
 
 // eslint-disable-next-line no-unused-vars
 ipcMain.on("controlLibrary", (event, action, ...args) => {
-  // ! Do not process request, if the action is not included in the enum!
-  if (!Object.values(LibraryOperations).includes(action)) return;
   // Add the `win` argument if the action is `WATCH`
   if (action == LibraryOperations.WATCH) {
     args = [win, ...args];
@@ -165,8 +161,6 @@ ipcMain.on("controlLibrary", (event, action, ...args) => {
 
 // eslint-disable-next-line no-unused-vars
 ipcMain.handle("controlGame", (event, action, ...args) => {
-  // ! Do not process request, if the action is not included in the enum!
-  if (!Object.values(GameOperations).includes(action)) return;
   // Add the `win` argument if the action is `LAUNCH`
   if (action == GameOperations.LAUNCH) {
     args = [win, ...args];
@@ -176,8 +170,6 @@ ipcMain.handle("controlGame", (event, action, ...args) => {
 
 // eslint-disable-next-line no-unused-vars
 ipcMain.on("controlWindow", async (event, action) => {
-  // ! Do not process request, if the action is not included in the enum!
-  if (!Object.values(WindowOperations).includes(action)) return;
   // Unmaximize on `MAXIMIZE` if window is maximized
   if (action == WindowOperations.MAXIMIZE && win.isMaximized()) {
     action = "unmaximize";
