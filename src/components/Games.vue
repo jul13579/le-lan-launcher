@@ -319,6 +319,7 @@ export default {
     // eslint-disable-next-line no-unused-vars
     execute(game, config, launch) {
       if (this.debug) {
+        this.debugMessages = [];
         this.debugDialog = true;
       }
       window.ipcRenderer.send("launchGame", game, config, launch, this.debug);
