@@ -31,7 +31,7 @@
           @delete="deleteGame(item)"
           @browse="browseGame(item)"
           @reset="resetGame(item)"
-          @execute="(launch) => execute(getGameFolder(item), item, launch)"
+          @execute="execute"
         />
       </div>
     </template>

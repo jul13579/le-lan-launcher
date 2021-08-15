@@ -176,7 +176,8 @@ export default {
     gameMenuButtons() {
       let buttons = [
         {
-          click: () => this.$emit("execute", this.value.launch),
+          click: () =>
+            this.$emit("execute", this.config, this.value, this.value.launch),
           show: true,
           icon: "mdi-play",
           text: this.$t("gameEntry.play"),
