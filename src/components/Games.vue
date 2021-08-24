@@ -192,23 +192,17 @@ export default {
         const folders = response.data;
 
         Object.entries(folders).forEach(([id, pendingFolderConfig]) => {
-          // If library folder is among pending folders, add it to shared folders
-          if (id == gamelibDirId) {
-            this.config.folders.push(
-              this.getFolderObj(
-                gamelibDirId,
-                Object.values(pendingFolderConfig.offeredBy)[0].label
-              )
-            );
-            SyncServiceController.System.setConfig(this.config).catch();
-            return;
-          }
-
-          // Else add folder to ignored folders
           const { label, time } = Object.values(
             pendingFolderConfig.offeredBy
           )[0];
-          this.nasDevice.ignoredFolders.push({ id, label, time });
+
+          // If library folder is among pending folders, add it to shared folders
+          if (id == gamelibDirId) {
+            this.config.folders.push(this.getFolderObj(gamelibDirId, label));
+          } else {
+            // Else add folder to ignored folders
+            this.nasDevice.ignoredFolders.push({ id, label, time });
+          }
         });
 
         if (Object.entries(folders).length > 0) {
