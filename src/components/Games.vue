@@ -170,6 +170,7 @@ export default {
         })
         .catch();
 
+      // Hide pending folders
       SyncServiceController.Cluster.pendingFolders().then((response) => {
         const folders = response.data;
 
@@ -199,7 +200,7 @@ export default {
       });
 
       // Get initial folder states and last event id
-      if (Object.keys(this.folderStatus).length == 0) {
+      if (Object.entries(this.folderStatus).length == 0) {
         this.folders.forEach((folder) => {
           // Only get status of game directories, not the library!
           if (folder.id != gamelibDirId) {
