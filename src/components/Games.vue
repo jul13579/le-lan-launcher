@@ -107,38 +107,55 @@ export default {
     });
   },
   destroyed() {
-    LibraryController.unwatch(this.libConfigPath);
+    // Unwatch library if `this.libConfigPath` is set
+    if (this.libConfigPath) LibraryController.unwatch(this.libConfigPath);
+
+    // Cancel periodic config-fetch-task
     clearInterval(configInterval);
   },
   computed: {
+    // List of devices present in config
     devices() {
       return this.config.devices || [];
     },
+    // List of folders present in config
     folders() {
       return this.config.folders || [];
     },
+    // Device object of currently configured NAS device
     nasDevice() {
-      return this.devices.find((device) => device.deviceID == this.nas) || {};
+      return (
+        this.devices.find((device) => device.deviceID == this.nas) || undefined
+      );
     },
+    // Folder object of library folder
     libFolder() {
-      return this.folders.find((folder) => folder.id == gamelibDirId) || {};
+      return (
+        this.folders.find((folder) => folder.id == gamelibDirId) || undefined
+      );
     },
+    // Library folder path
     libFolderPath() {
+      if (!this.libFolder) return undefined;
       return `${this.homeDir}/${this.libFolder.label}`;
     },
+    // Library config path
     libConfigPath() {
+      if (!this.libFolderPath) return undefined;
       return `${this.libFolderPath}/${gamelibConfig}`;
     },
     ...mapState(["nas", "homeDir", "debug"]),
   },
   watch: {
     nas() {
+      // Immediately refresh config if the NAS ID changed
       this.getConfig();
     },
-    libConfigPath(val, oldVal) {
+    libConfigPath(newVal, oldVal) {
       // Since `libConfigPath` is not statically defined, setup watcher when the prop changes.
-      LibraryController.unwatch(oldVal);
-      LibraryController.watch(val, (event, lib) => (this.lib = lib));
+      if (oldVal) LibraryController.unwatch(oldVal);
+      if (newVal)
+        LibraryController.watch(newVal, (event, lib) => (this.lib = lib));
     },
   },
   methods: {
