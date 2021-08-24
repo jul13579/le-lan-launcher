@@ -66,7 +66,7 @@ import { SelfBuildingSquareSpinner } from "epic-spinners";
 
 import SyncServiceController from "../controllers/SyncServiceRendererController";
 import online from "../mixins/online";
-import defaultFolderconfig, {
+import defaultFolderConfig, {
   gamelibDirId,
   gamelibConfig,
 } from "../config/folder";
@@ -266,7 +266,7 @@ export default {
     // Get folder object to be used in config
     getFolderObj(id, label) {
       return {
-        ...defaultFolderconfig,
+        ...defaultFolderConfig,
         path: `${this.homeDir}/${label}`,
         id: id,
         label: label,
