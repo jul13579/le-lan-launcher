@@ -211,22 +211,19 @@ export default {
         }
       });
 
-      // Get initial folder states and last event id
-      if (Object.entries(this.folderStatus).length == 0) {
-        this.folders.forEach((folder) => {
-          // Only get status of game directories, not the library!
-          if (folder.id != gamelibDirId) {
-            SyncServiceController.DB.folderStatus(folder.id)
-              .then((response) => {
-                this.folderStatus[folder.id] = response.data;
-              })
-              .catch();
-          }
-        });
-        SyncServiceController.Events.latest().then((response) => {
-          this.lastEventId = response.data[0].id;
-        });
-      } else {
+      // Get initial folder states for folder that or not yet part of `this.folderStatus`
+      // ! This is necessary for instances where folder states did not change since the app started (e.g. after startup)
+      this.folders.forEach((folder) => {
+        if (Object.keys(this.folderStatus).includes(folder.id)) return;
+        SyncServiceController.DB.folderStatus(folder.id)
+          .then((response) => {
+            this.folderStatus[folder.id] = response.data;
+          })
+          .catch();
+      });
+
+      // Update folder sync states if `this.lastEventId` is set
+      if (this.lastEventId) {
         // Update folder states using events
         SyncServiceController.Events.since(this.lastEventId)
           .then((response) => {
@@ -251,12 +248,18 @@ export default {
                   this.folderStatus[eventData.folder].state = eventData.to;
                   break;
                 case SyncEvents.FOLDER_REJECTED:
-                  this.folderStatus[eventData.folder] = null;
+                  delete this.folderStatus[eventData.folder];
                   break;
               }
             }
           })
           .catch();
+      }
+      // Else init lastEventId by fetching the latest event
+      else {
+        SyncServiceController.Events.latest().then((response) => {
+          this.lastEventId = response.data[0].id;
+        });
       }
     },
 
