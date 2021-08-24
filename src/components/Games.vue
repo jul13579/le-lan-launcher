@@ -73,6 +73,7 @@ import defaultFolderconfig, {
 
 import GameEntry from "./GameEntry";
 import Console from "./Console.vue";
+import SyncEvents from "../enums/SyncEvents";
 import GameOperations from "../enums/GameOperations";
 import LibraryController from "../controllers/LibraryRendererController";
 import GameController from "../controllers/GameRendererController";
@@ -230,26 +231,28 @@ export default {
         SyncServiceController.Events.since(this.lastEventId)
           .then((response) => {
             // Catches empty arrays
-            if (response.data != false) {
-              // Update last event id
-              this.lastEventId = response.data[response.data.length - 1].id;
+            if (response.data == false) return;
 
-              for (var folderEvent of response.data) {
-                let eventData = folderEvent.data;
-                switch (folderEvent.type) {
-                  case "FolderSummary":
-                    this.folderStatus[eventData.folder] = eventData.summary;
-                    break;
-                  case "StateChanged":
-                    if (!this.folderStatus[eventData.folder]) {
-                      continue; // Skip state update if there is no folder data present
-                    }
-                    this.folderStatus[eventData.folder].state = eventData.to;
-                    break;
-                  case "FolderRejected":
-                    this.folderStatus[eventData.folder] = null;
-                    break;
-                }
+            // Update last event id
+            this.lastEventId = Math.max(
+              ...response.data.map((event) => event.id)
+            );
+
+            for (var folderEvent of response.data) {
+              let eventData = folderEvent.data;
+              switch (folderEvent.type) {
+                case SyncEvents.FOLDER_SUMMARY:
+                  this.folderStatus[eventData.folder] = eventData.summary;
+                  break;
+                case SyncEvents.STATE_CHANGED:
+                  if (!this.folderStatus[eventData.folder]) {
+                    continue; // Skip state update if there is no folder data present
+                  }
+                  this.folderStatus[eventData.folder].state = eventData.to;
+                  break;
+                case SyncEvents.FOLDER_REJECTED:
+                  this.folderStatus[eventData.folder] = null;
+                  break;
               }
             }
           })
