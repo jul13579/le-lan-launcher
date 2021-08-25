@@ -18,7 +18,11 @@ export default class SyncServiceMainController {
   static [SyncServiceOperations.START](win, homeDir) {
     if (homeDir) {
       let binPath = path.join(__dirname, "../syncthing");
-      let args = ["-no-browser", "-home=" + homeDir];
+      let args = [
+        "-no-browser",
+        `-home=${homeDir}`,
+        `-logfile=${path.join(homeDir, "syncthing.log")}`,
+      ];
       if (process.platform == "win32") {
         binPath += ".exe";
         args.push("-no-console");
