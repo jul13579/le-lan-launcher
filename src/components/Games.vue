@@ -159,6 +159,15 @@ export default {
     },
   },
   methods: {
+    /**
+     * Periodic task that includes the following operations:
+     * - Fetch Syncthing config
+     * - Add NAS to device list if not already included
+     * - Hide all pending folders from the Syncthing GUI
+     * - Add library folder to list of synchronized folders
+     * - Fetch initial folder status for all synchronized folders
+     * - Fetch latest event ID to init folder event processing 
+     */
     getConfig() {
       // Abort if service is not online
       if (!this.online) {
@@ -264,7 +273,11 @@ export default {
       }
     },
 
-    // Get folder object to be used in config
+    /**
+     * Create a new Syncthing folder configuration object
+     * @param id The id of the folder
+     * @param label The label of the folder
+     */
     newSyncFolderObject(id, label) {
       return {
         ...defaultFolderConfig,

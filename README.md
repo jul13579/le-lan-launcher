@@ -48,8 +48,8 @@ Inside this folder, place the game cover images (ideally 600x900px in size) and 
 {
   "games": [
     {
-      "id": "bv2",                              // Folder id
-      "title": "Babo Violent 2",                // Game title
+      "id": "bv2",                              // Folder id (has to match Syncthing folder id)
+      "title": "Babo Violent 2",                // Game title (has to match Syncthing folder name)
       "cover": "bv2.jpg",                       // Game cover image
       "launch": {                               // Launch config
         "exe": "Bv2Launcher,2.exe"              // Executable path
