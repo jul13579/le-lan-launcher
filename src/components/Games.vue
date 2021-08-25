@@ -166,7 +166,7 @@ export default {
      * - Hide all pending folders from the Syncthing GUI
      * - Add library folder to list of synchronized folders
      * - Fetch initial folder status for all synchronized folders
-     * - Fetch latest event ID to init folder event processing 
+     * - Fetch latest event ID to init folder event processing
      */
     getConfig() {
       // Abort if service is not online
@@ -275,8 +275,9 @@ export default {
 
     /**
      * Create a new Syncthing folder configuration object
-     * @param id The id of the folder
-     * @param label The label of the folder
+     * @param {String} id The id of the folder
+     * @param {String} label The label of the folder
+     * @returns {Object} The Syncthing folder object
      */
     newSyncFolderObject(id, label) {
       return {
@@ -294,12 +295,19 @@ export default {
       };
     },
 
-    // Get the config of the sync folder by the game config
+    /**
+     * Get the Syncthing folder config for a given game
+     * @param {Object} gameConfig The config object of the game
+     * @returns {Object} The Syncthing folder object for the given game
+     */
     getSyncFolderConfig(gameConfig) {
       return this.folders.find((folder) => folder.id == gameConfig.id);
     },
 
-    // Game actions
+    /**
+     * Queue a game for syncing
+     * @param {Object} gameConfig The config object of the game
+     */
     downloadGame(gameConfig) {
       this.config.folders.push(
         this.newSyncFolderObject(gameConfig.id, gameConfig.title)
@@ -313,7 +321,12 @@ export default {
         .catch();
     },
 
-    // (Un)Pause a game sync
+    /**
+     * Pause/Unpause a game from syncing
+     * @param {Object} gameConfig The config object of the game
+     * @param {Object} syncFolderConfig The Syncthing config object of the folder
+     * @param {Boolean} pause Wether to pause (true) or unpause (false)
+     */
     unPauseGame(gameConfig, syncFolderConfig, pause) {
       syncFolderConfig.paused = pause;
       SyncServiceController.System.setConfig(this.config)
@@ -331,7 +344,11 @@ export default {
         .catch();
     },
 
-    // Delete a game
+    /**
+     * Remove a game from the sync queue
+     * @param {Object} gameConfig The config object of the game
+     * @param {Object} syncFolderConfig The Syncthing config object of the folder
+     */
     deleteGame(gameConfig, syncFolderConfig) {
       this.config.folders = this.config.folders.filter(
         (folder) => folder.id != gameConfig.id
@@ -356,7 +373,10 @@ export default {
         .catch();
     },
 
-    // Browse a game folder
+    /**
+     * Browse the files of a game
+     * @param {Object} syncFolderConfig The Syncthing config object of the folder
+     */
     browseGame(syncFolderConfig) {
       window.ipcRenderer.invoke(
         "controlGame",
@@ -365,7 +385,11 @@ export default {
       );
     },
 
-    // Reset data of a game
+    /**
+     * Reset the files of a game to their original state
+     * @param {Object} gameConfig The config object of the game
+     * @param {Object} syncFolderConfig The Syncthing config object of the folder
+     */
     resetGame(gameConfig, syncFolderConfig) {
       SyncServiceController.DB.revertFolder(syncFolderConfig.id)
         .then(() => {
@@ -376,7 +400,12 @@ export default {
         .catch();
     },
 
-    // Launch a game
+    /**
+     * Launch an executable of a game
+     * @param {Object} gameConfig The config object of the game
+     * @param {Object} syncFolderConfig The Syncthing config object of the folder
+     * @param {Object} launchConfig The config of the executable to launch
+     */
     execute(gameConfig, syncFolderConfig, launchConfig) {
       if (this.debug) {
         this.debugMessages = [];
