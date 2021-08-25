@@ -11,6 +11,10 @@ store.subscribe((mutation) => {
   }
 });
 
+/**
+ * Sync-service controller module.
+ * This is only to be used by the renderer process.
+ */
 export default {
   System: {
     start: (homeDir) => {
