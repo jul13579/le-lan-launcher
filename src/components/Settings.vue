@@ -171,7 +171,7 @@
           :item-text="(device) => device[0]"
           :error="nas == false"
           @change="(input) => $store.commit(require('../enums/Mutations').default.NAS, input)"
-          :no-data-text="$t('settings.alerts.discovery')"
+          :no-data-text="$t('settings.alerts.discoveryTask')"
           :error-messages="!online ? $t('settings.alerts.service') : null"
         />
       </v-col>
@@ -204,7 +204,7 @@ export default {
     };
   },
   computed: {
-    // Manually setup a two-way computed prop for debug, as v-switch does not correctly react to the `value` prop
+    // Manually setup a two-way computed prop for debug setting, as v-switch does not correctly react to the `value` prop
     debug: {
       get() {
         return this.$store.state.debug;
@@ -216,10 +216,10 @@ export default {
     ...mapState(["playerName", "homeDir", "nas", "locale", "backgroundHue"]),
   },
   created() {
-    this.discovery();
+    this.discoveryTask();
     clearInterval(discoveryInterval);
     if (this.online) {
-      discoveryInterval = setInterval(this.discovery, 5000);
+      discoveryInterval = setInterval(this.discoveryTask, 5000);
     }
   },
   beforeMount() {
@@ -231,19 +231,28 @@ export default {
   watch: {
     online(online) {
       if (online) {
-        discoveryInterval = setInterval(this.discovery, 5000);
+        discoveryInterval = setInterval(this.discoveryTask, 5000);
       } else {
         clearInterval(discoveryInterval);
       }
     },
   },
   methods: {
+    /**
+     * Open the electron file-chooser-dialog with the specified options
+     * @param {Function} callback The function to call when a file was picked
+     * @param {Object} options The options object for the electron file chooser
+     */
     openFileChooser(callback, options) {
       window.ipcRenderer.invoke("showOpenDialog", options).then((result) => {
         if (!result.canceled) callback(result);
       });
     },
-    discovery() {
+
+    /**
+     * Periodic task to fetch discovered Syncthing devices
+     */
+    discoveryTask() {
       SyncServiceController.System.getDiscovery()
         .then((response) => {
           this.devices = response.data;
