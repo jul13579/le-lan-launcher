@@ -23,14 +23,14 @@
           :key="index"
           :libFolderPath="libFolderPath"
           :gameConfig="item"
-          :syncFolderConfig="getGameFolder(item)"
+          :syncFolderConfig="getSyncFolderConfig(item)"
           :syncFolderStatus="folderStatus[item.id] || {}"
-          @download="downloadGame(item)"
-          @pause="unPauseGame(item, true)"
-          @resume="unPauseGame(item, false)"
-          @delete="deleteGame(item)"
-          @browse="browseGame(item)"
-          @reset="resetGame(item)"
+          @download="downloadGame"
+          @pause="(...args) => unPauseGame(...args, true)"
+          @resume="(...args) => unPauseGame(...args, false)"
+          @delete="deleteGame"
+          @browse="browseGame"
+          @reset="resetGame"
           @execute="execute"
         />
       </div>
@@ -199,7 +199,9 @@ export default {
 
           // If library folder is among pending folders, add it to shared folders
           if (id == gamelibDirId) {
-            this.config.folders.push(this.getFolderObj(gamelibDirId, label));
+            this.config.folders.push(
+              this.newSyncFolderObject(gamelibDirId, label)
+            );
           } else {
             // Else add folder to ignored folders
             this.nasDevice.ignoredFolders.push({ id, label, time });
@@ -264,7 +266,7 @@ export default {
     },
 
     // Get folder object to be used in config
-    getFolderObj(id, label) {
+    newSyncFolderObject(id, label) {
       return {
         ...defaultFolderConfig,
         path: `${this.homeDir}/${label}`,
@@ -280,76 +282,90 @@ export default {
       };
     },
 
+    // Get the config of the sync folder by the game config
+    getSyncFolderConfig(gameConfig) {
+      return this.folders.find((folder) => folder.id == gameConfig.id);
+    },
+
     // Game actions
-    downloadGame(game) {
-      this.config.folders.push(this.getFolderObj(game.id, game.title));
+    downloadGame(gameConfig) {
+      this.config.folders.push(
+        this.newSyncFolderObject(gameConfig.id, gameConfig.title)
+      );
       SyncServiceController.System.setConfig(this.config)
         .then(() => {
           this.$toasted.success(
-            this.$t("toast.download.started", { gameTitle: game.title })
+            this.$t("toast.download.started", { gameTitle: gameConfig.title })
           );
         })
         .catch();
     },
-    getGameFolder(game) {
-      return this.folders.find((folder) => folder.id == game.id);
-    },
-    getGameFolderIndex(game) {
-      return this.folders.indexOf(this.getGameFolder(game));
-    },
-    unPauseGame(game, pause) {
-      this.config.folders[this.getGameFolderIndex(game)].paused = pause;
+
+    // (Un)Pause a game sync
+    unPauseGame(gameConfig, syncFolderConfig, pause) {
+      syncFolderConfig.paused = pause;
       SyncServiceController.System.setConfig(this.config)
         .then(() => {
           if (pause) {
             this.$toasted.success(
-              this.$t("toast.download.paused", { gameTitle: game.title })
+              this.$t("toast.download.paused", { gameTitle: gameConfig.title })
             );
           } else {
             this.$toasted.success(
-              this.$t("toast.download.resumed", { gameTitle: game.title })
+              this.$t("toast.download.resumed", { gameTitle: gameConfig.title })
             );
           }
         })
         .catch();
     },
-    deleteGame(game) {
-      let gameFolder = this.getGameFolder(game);
-      this.config.folders.splice(this.getGameFolderIndex(game), 1);
+
+    // Delete a game
+    deleteGame(gameConfig, syncFolderConfig) {
+      this.config.folders = this.config.folders.filter(
+        (folder) => folder.id != gameConfig.id
+      );
       SyncServiceController.System.setConfig(this.config)
         .then(() => {
           this.$toasted.success(
-            this.$t("toast.game.delete.success", { gameTitle: game.title })
+            this.$t("toast.game.delete.success", {
+              gameTitle: gameConfig.title,
+            })
           );
           window.ipcRenderer
-            .invoke("controlGame", GameOperations.DELETE, gameFolder)
+            .invoke("controlGame", GameOperations.DELETE, syncFolderConfig)
             .then((error) => {
               if (error)
                 this.$toasted.success(
                   this.$t("toast.game.delete.error", { error: error })
                 );
             });
-          this.folderStatus[game.id] = null;
+          this.folderStatus[gameConfig.id] = null;
         })
         .catch();
     },
-    browseGame(game) {
+
+    // Browse a game folder
+    browseGame(syncFolderConfig) {
       window.ipcRenderer.invoke(
         "controlGame",
         GameOperations.BROWSE,
-        this.getGameFolder(game)
+        syncFolderConfig
       );
     },
-    resetGame(game) {
-      SyncServiceController.DB.revertFolder(game.id)
+
+    // Reset data of a game
+    resetGame(gameConfig, syncFolderConfig) {
+      SyncServiceController.DB.revertFolder(syncFolderConfig.id)
         .then(() => {
           this.$toasted.success(
-            this.$t("toast.game.reset", { gameTitle: game.title })
+            this.$t("toast.game.reset", { gameTitle: gameConfig.title })
           );
         })
         .catch();
     },
-    execute(game, config, launch) {
+
+    // Launch a game
+    execute(gameConfig, syncFolderConfig, launchConfig) {
       if (this.debug) {
         this.debugMessages = [];
         this.debugDialog = true;
@@ -357,9 +373,9 @@ export default {
       window.ipcRenderer.invoke(
         "controlGame",
         GameOperations.LAUNCH,
-        game,
-        config,
-        launch,
+        gameConfig,
+        syncFolderConfig,
+        launchConfig,
         this.debug
       );
     },

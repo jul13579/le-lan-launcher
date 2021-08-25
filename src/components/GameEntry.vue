@@ -152,22 +152,24 @@ export default {
     downloadButtons() {
       return [
         {
-          click: () => this.$emit("download"),
+          click: () => this.$emit("download", this.gameConfig),
           show: !this.subscribed,
           icon: "mdi-download",
         },
         {
-          click: () => this.$emit("pause"),
+          click: () =>
+            this.$emit("pause", this.gameConfig, this.syncFolderConfig),
           show: this.syncFolderConfig && !this.syncFolderConfig.paused,
           icon: "mdi-pause",
         },
         {
-          click: () => this.$emit("resume"),
+          click: () =>
+            this.$emit("resume", this.gameConfig, this.syncFolderConfig),
           show: this.syncFolderConfig && this.syncFolderConfig.paused,
           icon: "mdi-chevron-double-right",
         },
         {
-          click: () => this.$emit("delete"),
+          click: () => this.$emit("delete", this.gameConfig. this.syncFolderConfig),
           show: this.subscribed,
           icon: "mdi-close",
         },
@@ -177,37 +179,44 @@ export default {
       let buttons = [
         {
           click: () =>
-            this.$emit("execute", this.syncFolderConfig, this.gameConfig, this.gameConfig.launch),
+            this.$emit(
+              "execute",
+              this.syncFolderConfig,
+              this.gameConfig,
+              this.gameConfig.launch
+            ),
           show: true,
           icon: "mdi-play",
           text: this.$t("gameEntry.play"),
         },
         {
-          click: () => this.$emit("pause"),
+          click: () =>
+            this.$emit("pause", this.gameConfig, this.syncFolderConfig),
           show: this.syncFolderConfig && !this.syncFolderConfig.paused,
           icon: "mdi-pause",
           text: this.$t("gameEntry.pause"),
         },
         {
-          click: () => this.$emit("resume"),
+          click: () =>
+            this.$emit("resume", this.gameConfig, this.syncFolderConfig),
           show: this.syncFolderConfig && this.syncFolderConfig.paused,
           icon: "mdi-chevron-double-right",
           text: this.$t("gameEntry.resume"),
         },
         {
-          click: () => this.$emit("reset"),
+          click: () => this.$emit("reset", this.gameConfig, this.syncFolderConfig),
           show: this.syncFolderStatus.receiveOnlyTotalItems > 0,
           icon: "mdi-backup-restore",
           text: this.$t("gameEntry.reset"),
         },
         {
-          click: () => this.$emit("browse"),
+          click: () => this.$emit("browse", this.syncFolderConfig),
           show: true,
           icon: "mdi-folder-open",
           text: this.$t("gameEntry.browse"),
         },
         {
-          click: () => this.$emit("delete"),
+          click: () => this.$emit("delete", this.gameConfig, this.syncFolderConfig),
           show: true,
           icon: "mdi-delete",
           text: this.$t("gameEntry.delete"),
