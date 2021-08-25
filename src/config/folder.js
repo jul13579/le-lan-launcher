@@ -3,7 +3,7 @@ const gamelibConfig = "library.json"; // The name of the library JSON file insid
 
 export { gamelibDirId, gamelibConfig };
 
-// Default syncthing folder configuration applied by client
+// Default Syncthing folder configuration
 export default {
   type: "receiveonly",
   rescanIntervalS: 3600,
