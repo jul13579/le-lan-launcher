@@ -59,6 +59,7 @@ export default class GameController {
   /**
    * Delete a game.
    * @param {Object} gameFolder The sync-service folder config
+   * @returns {String} Error if error was encountered
    */
   static [GameOperations.DELETE](gameFolder) {
     fs.rmdir(gameFolder.path, { recursive: true }, (error) => {
