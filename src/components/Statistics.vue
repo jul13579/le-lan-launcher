@@ -206,7 +206,14 @@ export default {
       }
     },
   },
-  created() {
+  beforeMount() {
+    // Setup periodic task to fetch sync-service status
+    clearInterval(statisticsInterval);
+    if (this.online) {
+      statisticsInterval = setInterval(this.getStatus, 5000);
+    }
+
+    // Setup IPC handler for sync-service startup notifications
     window.ipcRenderer.on("syncService", (event, messageObj) => {
       this.syncthingMessages.push(messageObj);
       if (messageObj.message.match(/GUI and API listening on/)) {
@@ -225,16 +232,15 @@ export default {
       }
     });
   },
-  beforeMount() {
-    clearInterval(statisticsInterval);
-    if (this.online) {
-      statisticsInterval = setInterval(this.getStatus, 5000);
-    }
-  },
   destroyed() {
     clearInterval(statisticsInterval);
   },
   methods: {
+    /**
+     * Test API access
+     * @returns {Boolean} Indicating successful API access
+     * @async
+     */
     async testApiAccess() {
       if (!this.apiKey) {
         return false;
@@ -242,6 +248,10 @@ export default {
         return await SyncServiceController.System.ping();
       }
     },
+
+    /**
+     * Periodic task to fetch Syncthing status (e.g. bandwidth)
+     */
     getStatus() {
       SyncServiceController.System.status()
         .then((response) => {
@@ -267,11 +277,19 @@ export default {
         })
         .catch();
     },
+
+    /**
+     * Start the sync-service process
+     */
     startService() {
       if (!this.online) {
         SyncServiceController.System.start(this.homeDir);
       }
     },
+
+    /**
+     * Restart the sync-service process
+     */
     restartService() {
       if (this.online) {
         SyncServiceController.System.restart().then((success) => {
@@ -283,6 +301,10 @@ export default {
         });
       }
     },
+
+    /**
+     * Stop the sync-service process
+     */
     stopService() {
       if (this.online) {
         SyncServiceController.System.stop().then((success) => {
