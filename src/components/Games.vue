@@ -76,7 +76,6 @@ import Console from "./Console.vue";
 import SyncEvents from "../enums/SyncEvents";
 import GameOperations from "../enums/GameOperations";
 import LibraryController from "../controllers/LibraryRendererController";
-import GameController from "../controllers/GameRendererController";
 
 let configInterval;
 
@@ -103,7 +102,7 @@ export default {
     this.getConfig();
 
     // Setup handler for game debug messages
-    GameController.onDebugMsg((event, debugMsgObj) => {
+    window.ipcRenderer.on("game", (event, debugMsgObj) => {
       this.debugMessages.push(debugMsgObj);
     });
   },
