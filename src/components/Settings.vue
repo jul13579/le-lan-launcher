@@ -171,7 +171,7 @@
           :item-text="(device) => device[0]"
           :error="nas == false"
           @change="(input) => $store.commit(require('../enums/Mutations').default.NAS, input)"
-          :no-data-text="$t('settings.alerts.discoveryTask')"
+          :no-data-text="$t('settings.alerts.discovery')"
           :error-messages="!online ? $t('settings.alerts.service') : null"
         />
       </v-col>
