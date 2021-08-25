@@ -116,7 +116,7 @@ export default {
 
     /**
      * Create a queue of given length filled with 0 values
-     * @param length The length of the queue to generate
+     * @param {Number} length The length of the queue to generate
      * @returns {Array} An array with specified queue length, filled with 0s
      */
     createQueue(length) {
@@ -132,7 +132,7 @@ export default {
 
     /**
      * Enqueue a value into the chart
-     * @param value The value to enqueue
+     * @param {Number} value The value to enqueue
      */
     enqueue(value) {
       let data = this.chart.data.datasets[0].data;
