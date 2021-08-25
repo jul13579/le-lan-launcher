@@ -1,4 +1,3 @@
-import { BrowserWindow } from "electron";
 import fs from "fs";
 import LibraryOperations from "../enums/LibraryOperations";
 

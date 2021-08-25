@@ -144,7 +144,7 @@ export default {
       if (!this.libFolderPath) return undefined;
       return `${this.libFolderPath}/${gamelibConfig}`;
     },
-    ...mapState(["nas", "homeDir", "debug"]),
+    ...mapState(["nas", "homeDir", "playerName", "debug"]),
   },
   watch: {
     nas() {
@@ -417,6 +417,7 @@ export default {
         gameConfig,
         syncFolderConfig,
         launchConfig,
+        this.playerName,
         this.debug
       );
     },

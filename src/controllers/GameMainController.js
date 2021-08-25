@@ -17,8 +17,8 @@ export default class GameController {
    * @param {Object} launch The launch config.
    * @param {Boolean} debug State of debug mode.
    */
-  static [GameOperations.LAUNCH](win, game, config, launch, debug) {
-    this._setPlayerName(game, config);
+  static [GameOperations.LAUNCH](win, game, config, launch, playerName, debug) {
+    this._setPlayerName(game, config, playerName);
     let gameProcess = spawn(path.join(game.path, launch.exe), launch.args, {
       cwd: game.path,
       detached: true, // Spawn executable detached, so it stays open if launcher is closed.
@@ -71,9 +71,10 @@ export default class GameController {
    * Set the player name according for a specific game.
    * @param {Object} game The sync-service folder config.
    * @param {Object} config The game object of the library config file.
+   * @param {String} playerName The user's playername.
    * @private
    */
-  static _setPlayerName(game, config) {
+  static _setPlayerName(game, config, playerName) {
     if (!config.nameConfig) {
       return;
     }
@@ -87,10 +88,10 @@ export default class GameController {
     if (nameConfig.regex) {
       nameFileContents = nameFileContents.replace(
         new RegExp(nameConfig.regex),
-        store.state.playerName
+        playerName
       );
     } else {
-      nameFileContents = store.state.playerName;
+      nameFileContents = playerName;
     }
     fs.writeFileSync(filePath, nameFileContents, { encoding: "utf8" });
   }

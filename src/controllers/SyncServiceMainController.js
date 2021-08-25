@@ -2,7 +2,6 @@ import { spawn } from "child_process";
 import path from "path";
 import parse from "xml-parser";
 import fs from "fs";
-import { BrowserWindow } from "electron";
 import SyncServiceOperations from "../enums/SyncServiceOperations";
 
 /**

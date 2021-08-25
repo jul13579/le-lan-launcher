@@ -118,12 +118,13 @@ if (isDevelopment) {
  */
 function registerFileProtocol(protocolName) {
   protocol.registerFileProtocol(protocolName, (request, callback) => {
-    const url = request.url.replace(new RegExp(`^${protocolName}:\//`), "");
+    const url = request.url.replace(new RegExp(`^${protocolName}://`), "");
     // Decode URL to prevent errors when loading filenames with UTF-8 chars or chars like "#"
     const decodedUrl = decodeURI(url); // Needed in case URL contains spaces
     try {
       return callback(decodedUrl);
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.error(
         "ERROR: registerLocalResourceProtocol: Could not get file path:",
         error
