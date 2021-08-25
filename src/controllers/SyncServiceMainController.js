@@ -51,7 +51,7 @@ export default class SyncServiceMainController {
   /**
    * Get the API key of the sync-service from its configuration file.
    * @param {String} homeDir The sync-service home directory
-   * @returns The key in order to access the REST API of the sync-service
+   * @returns {String} The key of the REST API of the sync-service
    */
   static async [SyncServiceOperations.GET_API_KEY](homeDir) {
     const xml = parse(
@@ -63,7 +63,7 @@ export default class SyncServiceMainController {
 
   /**
    * Stops the sync-service using `SIGTERM`.
-   * @returns `true` if stop succeeded, else `false`
+   * @returns {Boolean} Indicating successful service termination
    */
   static stop() {
     // If we have no process handle of the sync-service, always return `true`
