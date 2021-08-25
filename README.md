@@ -1,6 +1,7 @@
 # :video_game: LEGC LAN Launcher
 
 ![Build](https://github.com/jul13579/le-lan-launcher/workflows/Build/badge.svg?branch=master)
+![Lint](https://github.com/jul13579/le-lan-launcher/workflows/Lint/badge.svg?branch=master)
 
 ![Launcher preview](preview.png "Launcher preview")
 <sup><sub>(Shown games are examples and not included in the launcher. The launcher does not include **ANY** games by itself)</sup></sub>
