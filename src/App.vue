@@ -123,7 +123,7 @@ import hsl from "hsl-to-hex";
 import Mutations from "./enums/Mutations";
 
 let pingIntervalHandle;
-let unsubscribeCallback;
+let storeSubscriptionCallback;
 
 export default {
   name: "app",
@@ -162,7 +162,7 @@ export default {
     this.$vuetify.theme.themes.dark.primary = this.primaryColor;
 
     // Setup notification handles
-    unsubscribeCallback = this.$store.subscribe((mutation) => {
+    storeSubscriptionCallback = this.$store.subscribe((mutation) => {
       switch (mutation.type) {
         case Mutations.BACKGROUND_HUE:
           this.$vuetify.theme.themes.dark.primary = this.primaryColor;
@@ -187,9 +187,12 @@ export default {
   destroyed() {
     window.ipcRenderer.removeAllListeners();
     clearInterval(pingIntervalHandle);
-    unsubscribeCallback();
+    storeSubscriptionCallback();
   },
   methods: {
+    /**
+     * Ping service and set `online` state attribute accordingly.
+     */
     pingService() {
       SyncServiceController.System.ping()
         .then(() => {
@@ -199,15 +202,32 @@ export default {
           this.online = false;
         });
     },
+
+    /**
+     * Send window operations to main process.
+     * @param {String} action The window action
+     */
     sendWindowControl(action) {
       window.ipcRenderer.send("controlWindow", action);
     },
+    
+    /**
+     * Minimize window.
+     */
     minimizeWindow() {
       this.sendWindowControl(WindowOperations.MINIMIZE);
     },
+
+    /**
+     * Maximize window.
+     */
     maximizeWindow() {
       this.sendWindowControl(WindowOperations.MAXIMIZE);
     },
+
+    /**
+     * Close Window.
+     */
     closeWindow() {
       this.sendWindowControl(WindowOperations.CLOSE);
     },
