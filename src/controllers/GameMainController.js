@@ -52,7 +52,7 @@ export default class GameController {
    * Open the install folder of a game in the file explorer.
    * @param {Object} gameFolder The sync-service folder config
    */
-  static browse(gameFolder) {
+  static [GameOperations.BROWSE](gameFolder) {
     shell.openPath(gameFolder.path);
   }
 
@@ -60,7 +60,7 @@ export default class GameController {
    * Delete a game.
    * @param {Object} gameFolder The sync-service folder config
    */
-  static delete(gameFolder) {
+  static [GameOperations.DELETE](gameFolder) {
     fs.rmdir(gameFolder.path, { recursive: true }, (error) => {
       if (error) return error;
     });

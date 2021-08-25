@@ -43,6 +43,7 @@ export default class SyncServiceMainController {
           type: "stdout",
           message: `Process exited with exit code ${code}`,
         });
+        this.syncServiceProcess = undefined;
       });
     }
   }
