@@ -66,7 +66,7 @@ $hover-animation: 0.2s ease-in-out;
         :class="downloadProgress >= 1 ? 'installed' : ''"
       >
         <v-img
-          :src="`game://${libFolderPath}/${value.cover}`"
+          :src="`game://${libFolderPath}/${gameConfig.cover}`"
           :aspect-ratio="600/900"
           eager
         />
@@ -80,12 +80,12 @@ $hover-animation: 0.2s ease-in-out;
           class="download d-flex flex-column justify-center align-center"
           v-if="downloadProgress < 1"
         >
-          <!-- If game is subscribed but there is no status yet, show loader -->
+          <!-- If game is subscribed but there is no syncFolderStatus yet, show loader -->
           <v-btn
             fab
             x-large
             @click="$emit('download')"
-            v-if="subscribed && Object.keys(status).length == 0"
+            v-if="subscribed && Object.keys(syncFolderStatus).length == 0"
             loading
           />
           <!-- Else show applicable download buttons -->
@@ -135,18 +135,18 @@ $hover-animation: 0.2s ease-in-out;
 <script>
 export default {
   props: {
-    value: Object,
     libFolderPath: String,
-    config: Object,
-    status: Object,
+    gameConfig: Object,
+    syncFolderConfig: Object,
+    syncFolderStatus: Object,
   },
   computed: {
     subscribed() {
-      return this.config != null;
+      return this.syncFolderConfig != null;
     },
     downloadProgress() {
-      return this.subscribed && this.status.globalBytes > 0
-        ? this.status.inSyncBytes / this.status.globalBytes
+      return this.subscribed && this.syncFolderStatus.globalBytes > 0
+        ? this.syncFolderStatus.inSyncBytes / this.syncFolderStatus.globalBytes
         : 0;
     },
     downloadButtons() {
@@ -158,12 +158,12 @@ export default {
         },
         {
           click: () => this.$emit("pause"),
-          show: this.config && !this.config.paused,
+          show: this.syncFolderConfig && !this.syncFolderConfig.paused,
           icon: "mdi-pause",
         },
         {
           click: () => this.$emit("resume"),
-          show: this.config && this.config.paused,
+          show: this.syncFolderConfig && this.syncFolderConfig.paused,
           icon: "mdi-chevron-double-right",
         },
         {
@@ -177,26 +177,26 @@ export default {
       let buttons = [
         {
           click: () =>
-            this.$emit("execute", this.config, this.value, this.value.launch),
+            this.$emit("execute", this.syncFolderConfig, this.gameConfig, this.gameConfig.launch),
           show: true,
           icon: "mdi-play",
           text: this.$t("gameEntry.play"),
         },
         {
           click: () => this.$emit("pause"),
-          show: this.config && !this.config.paused,
+          show: this.syncFolderConfig && !this.syncFolderConfig.paused,
           icon: "mdi-pause",
           text: this.$t("gameEntry.pause"),
         },
         {
           click: () => this.$emit("resume"),
-          show: this.config && this.config.paused,
+          show: this.syncFolderConfig && this.syncFolderConfig.paused,
           icon: "mdi-chevron-double-right",
           text: this.$t("gameEntry.resume"),
         },
         {
           click: () => this.$emit("reset"),
-          show: this.status.receiveOnlyTotalItems > 0,
+          show: this.syncFolderStatus.receiveOnlyTotalItems > 0,
           icon: "mdi-backup-restore",
           text: this.$t("gameEntry.reset"),
         },
@@ -214,7 +214,7 @@ export default {
         },
       ];
 
-      (this.value.moreLaunchs || []).forEach((item) => {
+      (this.gameConfig.moreLaunchs || []).forEach((item) => {
         buttons.splice(-2, 0, {
           click: () => this.$emit("execute", item),
           show: true,

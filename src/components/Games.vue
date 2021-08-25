@@ -21,10 +21,10 @@
         <game-entry
           v-for="(item, index) in lib.games"
           :key="index"
-          :value="item"
           :libFolderPath="libFolderPath"
-          :config="getGameFolder(item)"
-          :status="folderStatus[item.id] || {}"
+          :gameConfig="item"
+          :syncFolderConfig="getGameFolder(item)"
+          :syncFolderStatus="folderStatus[item.id] || {}"
           @download="downloadGame(item)"
           @pause="unPauseGame(item, true)"
           @resume="unPauseGame(item, false)"
