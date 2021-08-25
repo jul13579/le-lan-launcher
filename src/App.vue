@@ -170,6 +170,9 @@ export default {
         case Mutations.LOCALE:
           this.$i18n.locale = mutation.payload;
           break;
+        case Mutations.API_KEY:
+          // Skip showing a toast message for API key mutations
+          return;
       }
       this.$toasted.success(this.$t(`toast.${mutation.type}`));
     });
@@ -210,7 +213,7 @@ export default {
     sendWindowControl(action) {
       window.ipcRenderer.send("controlWindow", action);
     },
-    
+
     /**
      * Minimize window.
      */

@@ -30,10 +30,11 @@ export default {
     stop: () => {
       return axios.post(host + "/system/shutdown");
     },
-    getApiKey: () => {
+    getApiKey: (homeDir) => {
       return window.ipcRenderer.invoke(
         "controlSyncService",
-        SyncServiceOperations.GET_API_KEY
+        SyncServiceOperations.GET_API_KEY,
+        homeDir
       );
     },
     ping: () => {
