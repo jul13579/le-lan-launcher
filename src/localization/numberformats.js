@@ -1,7 +1,7 @@
 import langs from "./langs";
 
 /**
- * Configuration of bandwidth number formats
+ * Configuration of bandwidth number formats.
  */
 const commonNumberFormats = {
   mbps: {

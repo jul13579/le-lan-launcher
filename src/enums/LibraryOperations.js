@@ -1,5 +1,5 @@
 /**
- * Enum for library operations
+ * Enum for library operations.
  * @readonly
  * @enum {String}
  */

@@ -106,8 +106,8 @@ export default {
   },
   methods: {
     /**
-     * Update the chart with the current value
-     * This method is used by {@link setInterval} to be executed every {@link taskPeriod} milliseconds
+     * Update the chart with the current value.
+     * This method is used by {@link setInterval} to be executed every {@link taskPeriod} milliseconds.
      */
     chartUpdater() {
       this.enqueue(this.value);
@@ -115,9 +115,9 @@ export default {
     },
 
     /**
-     * Create a queue of given length filled with 0 values
-     * @param {Number} length The length of the queue to generate
-     * @returns {Array} An array with specified queue length, filled with 0s
+     * Create a queue of given length filled with 0 values.
+     * @param {Number} length The length of the queue to generate.
+     * @returns {Array} An array with specified queue length, filled with 0s.
      */
     createQueue(length) {
       return Array.from(new Array(length)).map((item, index) => {
@@ -131,8 +131,8 @@ export default {
     },
 
     /**
-     * Enqueue a value into the chart
-     * @param {Number} value The value to enqueue
+     * Enqueue a value into the chart.
+     * @param {Number} value The value to enqueue.
      */
     enqueue(value) {
       let data = this.chart.data.datasets[0].data;
@@ -143,8 +143,8 @@ export default {
     },
 
     /**
-     * Get locale-sensitive Y-axis unit name
-     * @returns {String} The unit of the axis in localized form
+     * Get locale-sensitive Y-axis unit name.
+     * @returns {String} The unit of the axis in localized form.
      */
     getYAxesUnit() {
       let locale = this.$i18n.locale;

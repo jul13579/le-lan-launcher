@@ -1,5 +1,5 @@
 /**
- * Enum for sync-service operations
+ * Enum for sync-service operations.
  * @readonly
  * @enum {String}
  */

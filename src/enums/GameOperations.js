@@ -1,5 +1,5 @@
 /**
- * Operations for games
+ * Operations for games.
  * @readonly
  * @enum {String}
  */

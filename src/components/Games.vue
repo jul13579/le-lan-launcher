@@ -274,10 +274,10 @@ export default {
     },
 
     /**
-     * Create a new Syncthing folder configuration object
-     * @param {String} id The id of the folder
-     * @param {String} label The label of the folder
-     * @returns {Object} The Syncthing folder object
+     * Create a new Syncthing folder configuration object.
+     * @param {String} id The id of the folder.
+     * @param {String} label The label of the folder.
+     * @returns {Object} The Syncthing folder object.
      */
     newSyncFolderObject(id, label) {
       return {
@@ -296,17 +296,17 @@ export default {
     },
 
     /**
-     * Get the Syncthing folder config for a given game
-     * @param {Object} gameConfig The config object of the game
-     * @returns {Object} The Syncthing folder object for the given game
+     * Get the Syncthing folder config for a given game.
+     * @param {Object} gameConfig The config object of the game.
+     * @returns {Object} The Syncthing folder object for the given game.
      */
     getSyncFolderConfig(gameConfig) {
       return this.folders.find((folder) => folder.id == gameConfig.id);
     },
 
     /**
-     * Queue a game for syncing
-     * @param {Object} gameConfig The config object of the game
+     * Queue a game for syncing.
+     * @param {Object} gameConfig The config object of the game.
      */
     downloadGame(gameConfig) {
       this.config.folders.push(
@@ -322,10 +322,10 @@ export default {
     },
 
     /**
-     * Pause/Unpause a game from syncing
-     * @param {Object} gameConfig The config object of the game
-     * @param {Object} syncFolderConfig The Syncthing config object of the folder
-     * @param {Boolean} pause Wether to pause (true) or unpause (false)
+     * Pause/Unpause a game from syncing.
+     * @param {Object} gameConfig The config object of the game.
+     * @param {Object} syncFolderConfig The Syncthing config object of the folder.
+     * @param {Boolean} pause Wether to pause (true) or unpause (false).
      */
     unPauseGame(gameConfig, syncFolderConfig, pause) {
       syncFolderConfig.paused = pause;
@@ -345,9 +345,9 @@ export default {
     },
 
     /**
-     * Remove a game from the sync queue
-     * @param {Object} gameConfig The config object of the game
-     * @param {Object} syncFolderConfig The Syncthing config object of the folder
+     * Remove a game from the sync queue.
+     * @param {Object} gameConfig The config object of the game.
+     * @param {Object} syncFolderConfig The Syncthing config object of the folder.
      */
     deleteGame(gameConfig, syncFolderConfig) {
       this.config.folders = this.config.folders.filter(
@@ -374,8 +374,8 @@ export default {
     },
 
     /**
-     * Browse the files of a game
-     * @param {Object} syncFolderConfig The Syncthing config object of the folder
+     * Browse the files of a game.
+     * @param {Object} syncFolderConfig The Syncthing config object of the folder.
      */
     browseGame(syncFolderConfig) {
       window.ipcRenderer.invoke(
@@ -386,9 +386,9 @@ export default {
     },
 
     /**
-     * Reset the files of a game to their original state
-     * @param {Object} gameConfig The config object of the game
-     * @param {Object} syncFolderConfig The Syncthing config object of the folder
+     * Reset the files of a game to their original state.
+     * @param {Object} gameConfig The config object of the game.
+     * @param {Object} syncFolderConfig The Syncthing config object of the folder.
      */
     resetGame(gameConfig, syncFolderConfig) {
       SyncServiceController.DB.revertFolder(syncFolderConfig.id)
@@ -401,10 +401,10 @@ export default {
     },
 
     /**
-     * Launch an executable of a game
-     * @param {Object} gameConfig The config object of the game
-     * @param {Object} syncFolderConfig The Syncthing config object of the folder
-     * @param {Object} launchConfig The config of the executable to launch
+     * Launch an executable of a game.
+     * @param {Object} gameConfig The config object of the game.
+     * @param {Object} syncFolderConfig The Syncthing config object of the folder.
+     * @param {Object} launchConfig The config of the executable to launch.
      */
     execute(gameConfig, syncFolderConfig, launchConfig) {
       if (this.debug) {

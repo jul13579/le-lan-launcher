@@ -1,5 +1,5 @@
 /**
- * Enum for vuex store mutations
+ * Enum for vuex store mutations.
  * @readonly
  * @enum {String}
  */

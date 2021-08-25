@@ -10,8 +10,8 @@ export default class LibraryController {
   /**
    * Setup watcher on the library config file.
    * This will send updates to the renderer, if the library config file changes.
-   * @param {BrowserWindow} win The BrowserWindow
-   * @param {String} libConfigPath The path to the library config file
+   * @param {BrowserWindow} win The BrowserWindow.
+   * @param {String} libConfigPath The path to the library config file.
    */
   static [LibraryOperations.WATCH](win, libConfigPath) {
     // Setup library watcher
@@ -29,7 +29,7 @@ export default class LibraryController {
 
   /**
    * Unwatch the library config file.
-   * @param {String} libConfigPath The path to the library config file
+   * @param {String} libConfigPath The path to the library config file.
    */
   static [LibraryOperations.UNWATCH](libConfigPath) {
     fs.unwatchFile(libConfigPath, this.libraryWatcher);
@@ -38,8 +38,8 @@ export default class LibraryController {
   /**
    * Read the library config file.
    * The game entries will be sorted by game title.
-   * @param {String} libConfigPath The path to the library config file
-   * @returns The contents of the library config file
+   * @param {String} libConfigPath The path to the library config file.
+   * @returns The contents of the library config file.
    * @private
    */
   static _read(libConfigPath) {

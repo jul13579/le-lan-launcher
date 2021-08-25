@@ -12,8 +12,8 @@ import SyncServiceOperations from "../enums/SyncServiceOperations";
 export default class SyncServiceMainController {
   /**
    * Starts a new process of the sync-service using the specified directory as home directory.
-   * @param {BrowserWindow} win The BrowserWindow
-   * @param {String} homeDir The sync-service home directory
+   * @param {BrowserWindow} win The BrowserWindow.
+   * @param {String} homeDir The sync-service home directory.
    */
   static [SyncServiceOperations.START](win, homeDir) {
     if (homeDir) {
@@ -50,8 +50,8 @@ export default class SyncServiceMainController {
 
   /**
    * Get the API key of the sync-service from its configuration file.
-   * @param {String} homeDir The sync-service home directory
-   * @returns {String} The key of the REST API of the sync-service
+   * @param {String} homeDir The sync-service home directory.
+   * @returns {String} The key of the REST API of the sync-service.
    */
   static async [SyncServiceOperations.GET_API_KEY](homeDir) {
     const xml = parse(
@@ -63,7 +63,7 @@ export default class SyncServiceMainController {
 
   /**
    * Stops the sync-service using `SIGTERM`.
-   * @returns {Boolean} Indicating successful service termination
+   * @returns {Boolean} Indicating successful service termination.
    */
   static stop() {
     // If we have no process handle of the sync-service, always return `true`

@@ -237,8 +237,8 @@ export default {
   },
   methods: {
     /**
-     * Test API access
-     * @returns {Boolean} Indicating successful API access
+     * Test API access.
+     * @returns {Boolean} Indicating successful API access.
      * @async
      */
     async testApiAccess() {
@@ -250,7 +250,7 @@ export default {
     },
 
     /**
-     * Periodic task to fetch Syncthing status (e.g. bandwidth)
+     * Periodic task to fetch Syncthing status (e.g. bandwidth).
      */
     getStatus() {
       SyncServiceController.System.status()
@@ -279,7 +279,7 @@ export default {
     },
 
     /**
-     * Start the sync-service process
+     * Start the sync-service process.
      */
     startService() {
       if (!this.online) {
@@ -288,7 +288,7 @@ export default {
     },
 
     /**
-     * Restart the sync-service process
+     * Restart the sync-service process.
      */
     restartService() {
       if (this.online) {
@@ -303,7 +303,7 @@ export default {
     },
 
     /**
-     * Stop the sync-service process
+     * Stop the sync-service process.
      */
     stopService() {
       if (this.online) {

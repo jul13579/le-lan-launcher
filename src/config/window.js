@@ -1,5 +1,5 @@
 /**
- * Window configuration of launcher
+ * Window configuration of launcher.
  * @readonly
  */
 export default {

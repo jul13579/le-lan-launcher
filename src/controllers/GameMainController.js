@@ -11,11 +11,11 @@ import GameOperations from "../enums/GameOperations";
 export default class GameController {
   /**
    * Launch a game.
-   * @param {BrowserWindow} win The BrowserWindow
-   * @param {Object} game The sync-service folder config
-   * @param {Object} config The game object of the library config file
-   * @param {Object} launch The launch config
-   * @param {Boolean} debug State of debug mode
+   * @param {BrowserWindow} win The BrowserWindow.
+   * @param {Object} game The sync-service folder config.
+   * @param {Object} config The game object of the library config file.
+   * @param {Object} launch The launch config.
+   * @param {Boolean} debug State of debug mode.
    */
   static [GameOperations.LAUNCH](win, game, config, launch, debug) {
     this._setPlayerName(game, config);
@@ -50,7 +50,7 @@ export default class GameController {
 
   /**
    * Open the install folder of a game in the file explorer.
-   * @param {Object} gameFolder The sync-service folder config
+   * @param {Object} gameFolder The sync-service folder config.
    */
   static [GameOperations.BROWSE](gameFolder) {
     shell.openPath(gameFolder.path);
@@ -58,8 +58,8 @@ export default class GameController {
 
   /**
    * Delete a game.
-   * @param {Object} gameFolder The sync-service folder config
-   * @returns {String} Error if error was encountered
+   * @param {Object} gameFolder The sync-service folder config.
+   * @returns {String} Error if error was encountered.
    */
   static [GameOperations.DELETE](gameFolder) {
     fs.rmdir(gameFolder.path, { recursive: true }, (error) => {
@@ -69,8 +69,8 @@ export default class GameController {
 
   /**
    * Set the player name according for a specific game.
-   * @param {Object} game The sync-service folder config
-   * @param {Object} config The game object of the library config file
+   * @param {Object} game The sync-service folder config.
+   * @param {Object} config The game object of the library config file.
    * @private
    */
   static _setPlayerName(game, config) {

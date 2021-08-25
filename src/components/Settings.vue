@@ -239,9 +239,9 @@ export default {
   },
   methods: {
     /**
-     * Open the electron file-chooser-dialog with the specified options
-     * @param {Function} callback The function to call when a file was picked
-     * @param {Object} options The options object for the electron file chooser
+     * Open the electron file-chooser-dialog with the specified options.
+     * @param {Function} callback The function to call when a file was picked.
+     * @param {Object} options The options object for the electron file chooser.
      */
     openFileChooser(callback, options) {
       window.ipcRenderer.invoke("showOpenDialog", options).then((result) => {
@@ -250,7 +250,7 @@ export default {
     },
 
     /**
-     * Periodic task to fetch discovered Syncthing devices
+     * Periodic task to fetch discovered Syncthing devices.
      */
     discoveryTask() {
       SyncServiceController.System.getDiscovery()

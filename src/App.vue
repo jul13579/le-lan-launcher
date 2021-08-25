@@ -205,7 +205,7 @@ export default {
 
     /**
      * Send window operations to main process.
-     * @param {String} action The window action
+     * @param {String} action The window action.
      */
     sendWindowControl(action) {
       window.ipcRenderer.send("controlWindow", action);
