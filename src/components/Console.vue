@@ -11,7 +11,7 @@
   <div
     class="console"
     ref="console"
-    :style="{maxHeight}"
+    style="max-height: 150px"
   >
     <span
       v-for="(item, index) in messages"
@@ -31,10 +31,6 @@ export default {
     messages: {
       type: Array,
       default: new Array(),
-    },
-    maxHeight: {
-      type: String,
-      default: "200px",
     },
   },
   beforeUpdate() {

@@ -41,7 +41,7 @@
 
 // Components with backdrop filter
 .v-app-bar,
-.v-footer,
+.v-footer .backdrop,
 .v-list {
   backdrop-filter: blur(10px);
 }

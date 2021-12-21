@@ -1,10 +1,61 @@
 <style lang="scss" scoped>
 .statistics {
+  background: none;
   cursor: pointer;
-  transition: box-shadow .1s linear;
+
+  & > div {
+    width: 100%;
+    height: 100%;
+    position: relative;
+  }
+
+  $popup-height: 250px;
+  .popup {
+    width: 100%;
+    height: $popup-height;
+    padding: 0px;
+    padding-bottom: 66px;
+    position: absolute;
+    z-index: -1;
+    transition: top 0.1s linear !important;
+    top: 0px;
+    box-sizing: content-box;
+
+    & > .container {
+      opacity: 0;
+      box-sizing: border-box;
+      height: 100%;
+      max-height: 100%;
+      overflow: hidden;
+      transition: opacity 0.1s linear;
+
+      .row {
+        height: 100%;
+        max-height: 100%;
+
+        .col {
+          height: 100%;
+          max-height: 100%;
+          overflow: hidden;
+        }
+      }
+
+      .v-card {
+        background: none !important;
+        border: none !important;
+        box-shadow: none !important;
+      }
+    }
+  }
 
   &:hover {
-    box-shadow: 0px 0px 20px 0px #9d9d9d;
+    .popup {
+      top: -$popup-height;
+
+      & > .container {
+        opacity: 1;
+      }
+    }
   }
 }
 </style>
@@ -13,27 +64,21 @@
   <v-footer
     fixed
     :height="66"
-    class="statistics"
+    class="statistics pa-0"
   >
-    <v-container
-      class="py-0 d-flex"
-      style="height: 100%"
-    >
-      <v-row
-        no-gutters
-        sytle="height: 100%"
-      >
-        <fixed-width-menu
-          top
-          offset-y
-          open-on-hover
-          transition="slide-y-reverse-transition"
+    <div class="d-flex">
+      <div class="d-flex flex-grow-1">
+        <v-container
+          class="py-0 d-flex"
+          style="height: 100%"
         >
-          <template v-slot:activator="{ on }">
+          <v-row
+            no-gutters
+            sytle="height: 100%"
+          >
             <v-col
               cols="4"
               class="d-flex justify-center align-center"
-              v-on="on"
             >
               <template v-if="nasConnected">
                 <div>
@@ -51,53 +96,9 @@
                 </div>
               </template>
             </v-col>
-          </template>
-          <v-card class="text-center">
-            <v-card-title class="justify-center">
-              <span v-html="$t('statistics.service_controls')"></span>
-              <v-spacer></v-spacer>
-              <v-btn
-                icon
-                color="green"
-                :disabled="online || !homeDir"
-                @click="startService"
-              >
-                <v-icon>mdi-play</v-icon>
-              </v-btn>
-              <v-btn
-                icon
-                color="yellow"
-                :disabled="!online"
-                @click="restartService"
-              >
-                <v-icon>mdi-restart</v-icon>
-              </v-btn>
-              <v-btn
-                icon
-                color="red"
-                :disabled="!online"
-                @click="stopService"
-              >
-                <v-icon>mdi-stop</v-icon>
-              </v-btn>
-            </v-card-title>
-            <v-card-text>
-              <console v-model="syncthingMessages" />
-            </v-card-text>
-          </v-card>
-        </fixed-width-menu>
-        <v-menu
-          top
-          offset-y
-          open-on-hover
-          transition="slide-y-reverse-transition"
-          eager
-        >
-          <template v-slot:activator="{ on }">
             <v-col
               cols="4"
               class="d-flex justify-center align-center"
-              v-on="on"
             >
               <v-icon
                 class="mx-2"
@@ -108,31 +109,9 @@
                 format="mbps"
               ></i18n-n>
             </v-col>
-          </template>
-          <v-card class="text-center">
-            <v-card-title class="justify-center">
-              <span v-html="$t('statistics.download_speed')"></span>
-            </v-card-title>
-            <v-card-text>
-              <bar-chart
-                :value="inbps / 1024**2"
-                unit="mbps"
-              />
-            </v-card-text>
-          </v-card>
-        </v-menu>
-        <v-menu
-          top
-          offset-y
-          open-on-hover
-          transition="slide-y-reverse-transition"
-          eager
-        >
-          <template v-slot:activator="{ on }">
             <v-col
               cols="4"
               class="d-flex justify-center align-center"
-              v-on="on"
             >
               <v-icon
                 class="mx-2"
@@ -143,28 +122,95 @@
                 format="mbps"
               ></i18n-n>
             </v-col>
-          </template>
-          <v-card class="text-center">
-            <v-card-title class="justify-center">
-              <span v-html="$t('statistics.upload_speed')"></span>
-            </v-card-title>
-            <v-card-text>
-              <bar-chart
-                :value="outbps / 1024**2"
-                unit="mbps"
-              />
-            </v-card-text>
-          </v-card>
-        </v-menu>
-      </v-row>
-    </v-container>
+          </v-row>
+        </v-container>
+      </div>
+      <div class="d-flex popup v-footer theme--dark backdrop">
+        <v-container>
+          <v-row
+            no-gutters
+            sytle="height: 100%"
+          >
+            <v-col
+              cols="4"
+              class="px-1"
+            >
+              <v-card class="text-center">
+                <v-card-title class="justify-center">
+                  <span v-html="$t('statistics.service_controls')"></span>
+                  <v-spacer></v-spacer>
+                  <v-btn
+                    icon
+                    color="green"
+                    :disabled="online || !homeDir"
+                    @click="startService"
+                  >
+                    <v-icon>mdi-play</v-icon>
+                  </v-btn>
+                  <v-btn
+                    icon
+                    color="yellow"
+                    :disabled="!online"
+                    @click="restartService"
+                  >
+                    <v-icon>mdi-restart</v-icon>
+                  </v-btn>
+                  <v-btn
+                    icon
+                    color="red"
+                    :disabled="!online"
+                    @click="stopService"
+                  >
+                    <v-icon>mdi-stop</v-icon>
+                  </v-btn>
+                </v-card-title>
+                <v-card-text>
+                  <console v-model="syncthingMessages"/>
+                </v-card-text>
+              </v-card>
+            </v-col>
+            <v-col
+              cols="4"
+              class="px-1"
+            >
+              <v-card class="text-center">
+                <v-card-title class="justify-center">
+                  <span v-html="$t('statistics.download_speed')"></span>
+                </v-card-title>
+                <v-card-text>
+                  <bar-chart
+                    :value="inbps / 1024**2"
+                    unit="mbps"
+                  />
+                </v-card-text>
+              </v-card>
+            </v-col>
+            <v-col
+              cols="4"
+              class="px-1"
+            >
+              <v-card class="text-center">
+                <v-card-title class="justify-center">
+                  <span v-html="$t('statistics.upload_speed')"></span>
+                </v-card-title>
+                <v-card-text>
+                  <bar-chart
+                    :value="outbps / 1024**2"
+                    unit="mbps"
+                  />
+                </v-card-text>
+              </v-card>
+            </v-col>
+          </v-row>
+        </v-container>
+      </div>
+    </div>
   </v-footer>
 </template>
 
 <script>
 import { mapState } from "vuex";
 import BarChart from "./BarChart";
-import FixedWidthMenu from "./FixedWidthMenu.vue";
 
 import SyncServiceController from "../controllers/SyncServiceRendererController";
 import online from "../mixins/online";
@@ -184,7 +230,6 @@ export default {
   components: {
     BarChart,
     Console,
-    FixedWidthMenu,
   },
   data() {
     return {
