@@ -169,7 +169,7 @@ export default {
           icon: "mdi-chevron-double-right",
         },
         {
-          click: () => this.$emit("delete", this.gameConfig. this.syncFolderConfig),
+          click: () => this.$emit("delete", this.gameConfig, this.syncFolderConfig),
           show: this.subscribed,
           icon: "mdi-close",
         },
