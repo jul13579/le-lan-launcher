@@ -1,8 +1,19 @@
+<style lang="scss" scoped>
+.statistics {
+  cursor: pointer;
+  transition: box-shadow .1s linear;
+
+  &:hover {
+    box-shadow: 0px 0px 20px 0px #9d9d9d;
+  }
+}
+</style>
+
 <template>
   <v-footer
     fixed
     :height="66"
-    style="cursor: default"
+    class="statistics"
   >
     <v-container
       class="py-0 d-flex"
@@ -218,10 +229,12 @@ export default {
       this.syncthingMessages.push(messageObj);
       if (messageObj.message.match(/GUI and API listening on/)) {
         this.$toasted.success(this.$t("toast.service.success.start"));
-        if (!await this.testApiAccess()) {
-          SyncServiceRendererController.System.getApiKey(this.homeDir).then((apiKey) => {
-            this.$store.commit(Mutations.API_KEY, apiKey);
-          });
+        if (!(await this.testApiAccess())) {
+          SyncServiceRendererController.System.getApiKey(this.homeDir).then(
+            (apiKey) => {
+              this.$store.commit(Mutations.API_KEY, apiKey);
+            }
+          );
         }
       }
       if (
