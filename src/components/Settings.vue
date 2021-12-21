@@ -236,6 +236,11 @@ export default {
         clearInterval(discoveryInterval);
       }
     },
+    homeDir(homeDir) {
+      if (!this.online && !!homeDir) {
+        SyncServiceController.System.start(homeDir);
+      }
+    }
   },
   methods: {
     /**
