@@ -1,8 +1,9 @@
 <template>
-  <div style="width: 350px; height: 150px">
+  <div ref="chartContainer" style="width: 100%; height: 150px">
+    <!-- Chart width will be at maximum the container's width. It is responsive -->
     <canvas
       ref="chart"
-      width="350"
+      width="500"
       height="150"
     ></canvas>
   </div>
@@ -24,6 +25,7 @@ import { mapState } from "vuex";
 Chart.register(BarController, BarElement, PointElement, LinearScale, TimeScale);
 Chart.defaults.datasets.type = "line";
 Chart.defaults.font.family = "'Roboto', sans-serif";
+Chart.defaults.maintainAspectRatio = false;
 
 // Configuration constants for quart queue length and update period in milliseconds
 const queueLength = 30;
@@ -57,7 +59,6 @@ export default {
     },
   },
   mounted() {
-    // Create objects here, so we dont have to deep clone them from global consts
     let data = {
       datasets: [
         {
