@@ -62,7 +62,7 @@ export default class GameController {
    * @returns {String} Error if error was encountered.
    */
   static [GameOperations.DELETE](gameFolder) {
-    fs.rmdir(gameFolder.path, { recursive: true }, (error) => {
+    fs.rm(gameFolder.path, { recursive: true }, (error) => {
       if (error) return error;
     });
   }
