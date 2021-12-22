@@ -43,6 +43,11 @@ export default class SyncServiceMainController {
           this.apiKey = gui.children.find(
             (item) => item.name == "apikey"
           ).content;
+
+          win.webContents.send(
+            "setApiKey",
+            this.apiKey
+          );
         }
 
         win.webContents.send("syncService", {
@@ -50,12 +55,14 @@ export default class SyncServiceMainController {
           message: `${data}`,
         });
       });
+
       syncServiceProcess.stderr.on("data", (data) => {
         win.webContents.send("syncService", {
           type: "stderr",
           message: `${data}`,
         });
       });
+      
       syncServiceProcess.on("exit", (code) => {
         win.webContents.send("syncService", {
           type: "stdout",
@@ -63,13 +70,5 @@ export default class SyncServiceMainController {
         });
       });
     }
-  }
-
-  /**
-   * Get the API key of the sync-service from its configuration file.
-   * @returns {String} The key of the REST API of the sync-service.
-   */
-  static [SyncServiceOperations.GET_API_KEY]() {
-    return this.apiKey;
   }
 }

@@ -24,6 +24,7 @@ export default {
       reset: "Repairing game files: {gameTitle}",
     },
     service: {
+      starting: "Service is starting...",
       success: {
         start: "Service started",
         stop: "Service is shutting down...",
@@ -34,6 +35,10 @@ export default {
         restart: "Error restarting service",
         stop: "Error stopping service",
       },
+      connection: {
+        connected: "Connected to service",
+        disconnected: "Disconnected from service"
+      }
     },
     debug: "Debug mode saved",
   },

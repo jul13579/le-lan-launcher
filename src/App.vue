@@ -121,7 +121,7 @@ import { mapState } from "vuex";
 
 import hsl from "hsl-to-hex";
 import Mutations from "./enums/Mutations";
-import SyncServiceRendererController from './controllers/SyncServiceRendererController';
+import SyncServiceRendererController from "./controllers/SyncServiceRendererController";
 
 let pingIntervalHandle;
 let storeSubscriptionCallback;
@@ -158,7 +158,23 @@ export default {
       "locale",
     ]),
   },
+  watch: {
+    online(newVal, oldVal) {
+      if (newVal != oldVal) {
+        if (newVal) {
+          this.$toasted.success(this.$t("toast.service.connection.connected"));
+        } else {
+          this.$toasted.error(this.$t("toast.service.connection.disconnected"));
+        }
+      }
+    },
+  },
   beforeMount() {
+    // Setup API key handler
+    window.ipcRenderer.on("setApiKey", async (event, apiKey) => {
+      this.$store.commit(Mutations.API_KEY, apiKey);
+    });
+
     // Set vuetify primary color
     this.$vuetify.theme.themes.dark.primary = this.primaryColor;
 
@@ -188,7 +204,10 @@ export default {
     // Set initial tab
     this.activeTab = this.setupCompleted ? 0 : 1;
 
-    window.addEventListener('beforeunload', async () => await SyncServiceRendererController.System.stop());
+    window.addEventListener(
+      "beforeunload",
+      async () => await SyncServiceRendererController.System.stop()
+    );
   },
   destroyed() {
     window.ipcRenderer.removeAllListeners();

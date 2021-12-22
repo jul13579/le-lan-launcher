@@ -5,5 +5,4 @@
  */
 export default {
   START: "start",
-  GET_API_KEY: "getApiKey",
 };

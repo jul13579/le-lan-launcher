@@ -24,6 +24,7 @@ export default {
       reset: "Repariere Spiel: {gameTitle}",
     },
     service: {
+      starting: "Service wird gestartet...",
       success: {
         start: "Service gestartet",
         stop: "Service wird beendet...",
@@ -34,6 +35,10 @@ export default {
         restart: "Fehler beim Neustarten des Services",
         stop: "Fehler beim Stoppen des Services",
       },
+      connection: {
+        connected: "Verbindung zu Service hergestellt",
+        disconnected: "Verbindung zu Service verloren"
+      }
     },
     debug: "Debug-Modus gespeichert",
   },

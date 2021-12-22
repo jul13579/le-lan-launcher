@@ -215,8 +215,6 @@ import BarChart from "./BarChart";
 import SyncServiceController from "../controllers/SyncServiceRendererController";
 import online from "../mixins/online";
 import Console from "./Console.vue";
-import SyncServiceRendererController from "../controllers/SyncServiceRendererController";
-import Mutations from "../enums/Mutations";
 
 let statisticsInterval;
 
@@ -272,41 +270,12 @@ export default {
     // Setup IPC handler for sync-service startup notifications
     window.ipcRenderer.on("syncService", async (event, messageObj) => {
       this.syncthingMessages.push(messageObj);
-      if (messageObj.message.match(/GUI and API listening on/)) {
-        this.$toasted.success(this.$t("toast.service.success.start"));
-        if (!(await this.testApiAccess())) {
-          SyncServiceRendererController.System.getApiKey().then(
-            (apiKey) => {
-              this.$store.commit(Mutations.API_KEY, apiKey);
-            }
-          );
-        }
-      }
-      if (
-        messageObj.message.match(/exit status [1-9][0-9]*/) &&
-        !this.testApiAccess()
-      ) {
-        this.$toasted.error(this.$t("toast.service.error.start"));
-      }
     });
   },
   destroyed() {
     clearInterval(statisticsInterval);
   },
   methods: {
-    /**
-     * Test API access.
-     * @returns {Boolean} Indicating successful API access.
-     * @async
-     */
-    async testApiAccess() {
-      if (!this.apiKey) {
-        return false;
-      } else {
-        return await SyncServiceController.System.ping();
-      }
-    },
-
     /**
      * Periodic task to fetch Syncthing status (e.g. bandwidth).
      */
@@ -341,6 +310,7 @@ export default {
      */
     startService() {
       if (!this.online) {
+        this.$toasted.success(this.$t("toast.service.starting"));
         SyncServiceController.System.start(this.homeDir);
       }
     },
