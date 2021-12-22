@@ -3,7 +3,6 @@ import path from "path";
 import parse from "xml-parser";
 import fs from "fs";
 import SyncServiceOperations from "../enums/SyncServiceOperations";
-import axios from "axios";
 
 /**
  * Controller for the sync-service.
@@ -34,7 +33,7 @@ export default class SyncServiceMainController {
 
       syncServiceProcess.stdout.on("data", (data) => {
         // Get API key if we notice that the sync service has booted
-        if (data.match(/GUI and API listening on/)) {
+        if (`${data}`.match(/GUI and API listening on/)) {
           const xml = parse(
             fs.readFileSync(path.join(homeDir, "config.xml"), {
               encoding: "utf8",
@@ -72,15 +71,5 @@ export default class SyncServiceMainController {
    */
   static [SyncServiceOperations.GET_API_KEY]() {
     return this.apiKey;
-  }
-
-  /**
-   * Stops the sync-service using `SIGTERM`.
-   * @returns {Boolean} Indicating successful service termination.
-   */
-  static stop() {
-    axios.post(host + "/system/shutdown", null, {
-      headers: { "X-API-Key": this.apiKey },
-    });
   }
 }

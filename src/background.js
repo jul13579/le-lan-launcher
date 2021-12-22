@@ -134,9 +134,7 @@ function registerFileProtocol(protocolName) {
 }
 
 function shutdown() {
-  if (SyncServiceController.stop()) {
-    app.quit();
-  }
+  app.quit();
 }
 
 /* -------------------------------------------------------------------------- */

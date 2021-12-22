@@ -1,8 +1,8 @@
 import axios from "axios";
+import { host } from "../config/service";
 import SyncServiceOperations from "../enums/SyncServiceOperations";
 import store from "../store";
 
-const host = "http://localhost:8384/rest";
 axios.defaults.headers.common["X-API-Key"] = store.state.apiKey;
 
 store.subscribe((mutation) => {
@@ -77,3 +77,5 @@ export default {
     },
   },
 };
+
+export { host };

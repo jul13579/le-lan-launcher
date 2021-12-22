@@ -121,6 +121,7 @@ import { mapState } from "vuex";
 
 import hsl from "hsl-to-hex";
 import Mutations from "./enums/Mutations";
+import SyncServiceRendererController from './controllers/SyncServiceRendererController';
 
 let pingIntervalHandle;
 let storeSubscriptionCallback;
@@ -186,6 +187,8 @@ export default {
 
     // Set initial tab
     this.activeTab = this.setupCompleted ? 0 : 1;
+
+    window.addEventListener('beforeunload', async () => await SyncServiceRendererController.System.stop());
   },
   destroyed() {
     window.ipcRenderer.removeAllListeners();
