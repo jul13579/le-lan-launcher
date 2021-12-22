@@ -57,6 +57,12 @@
       }
     }
   }
+
+  .header {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
 }
 </style>
 
@@ -136,8 +142,8 @@
               class="px-1"
             >
               <v-card class="text-center">
-                <v-card-title class="justify-center">
-                  <span v-html="$t('statistics.service_controls')"></span>
+                <v-card-title class="justify-center flex-nowrap">
+                  <span class="header" v-html="$t('statistics.service_controls')"></span>
                   <v-spacer></v-spacer>
                   <v-btn
                     icon
