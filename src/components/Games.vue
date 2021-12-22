@@ -144,7 +144,10 @@ export default {
       if (!this.libFolderPath) return undefined;
       return `${this.libFolderPath}/${gamelibConfig}`;
     },
-    ...mapState(["nas", "homeDir", "playerName", "debug"]),
+    homeDir() {
+      return this.$store.state.homeDir.replace(/\\/g, '/');
+    },
+    ...mapState(["nas", "playerName", "debug"]),
   },
   watch: {
     nas() {
