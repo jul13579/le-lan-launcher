@@ -275,7 +275,7 @@ export default {
       if (messageObj.message.match(/GUI and API listening on/)) {
         this.$toasted.success(this.$t("toast.service.success.start"));
         if (!(await this.testApiAccess())) {
-          SyncServiceRendererController.System.getApiKey(this.homeDir).then(
+          SyncServiceRendererController.System.getApiKey().then(
             (apiKey) => {
               this.$store.commit(Mutations.API_KEY, apiKey);
             }

@@ -3,6 +3,7 @@ import path from "path";
 import parse from "xml-parser";
 import fs from "fs";
 import SyncServiceOperations from "../enums/SyncServiceOperations";
+import axios from "axios";
 
 /**
  * Controller for the sync-service.
@@ -16,6 +17,8 @@ export default class SyncServiceMainController {
    */
   static [SyncServiceOperations.START](win, homeDir) {
     if (homeDir) {
+      this.homeDir = homeDir;
+
       let binPath = path.join(__dirname, "../syncthing");
       let args = [
         "-no-browser",
@@ -27,41 +30,48 @@ export default class SyncServiceMainController {
         args.push("-no-console");
       }
 
-      this.syncServiceProcess = spawn(binPath, args, {});
+      let syncServiceProcess = spawn(binPath, args, {});
 
-      this.syncServiceProcess.stdout.on("data", (data) => {
+      syncServiceProcess.stdout.on("data", (data) => {
+        // Get API key if we notice that the sync service has booted
+        if (data.match(/GUI and API listening on/)) {
+          const xml = parse(
+            fs.readFileSync(path.join(homeDir, "config.xml"), {
+              encoding: "utf8",
+            })
+          );
+          const gui = xml.root.children.find((item) => item.name == "gui");
+          this.apiKey = gui.children.find(
+            (item) => item.name == "apikey"
+          ).content;
+        }
+
         win.webContents.send("syncService", {
           type: "stdout",
           message: `${data}`,
         });
       });
-      this.syncServiceProcess.stderr.on("data", (data) => {
+      syncServiceProcess.stderr.on("data", (data) => {
         win.webContents.send("syncService", {
           type: "stderr",
           message: `${data}`,
         });
       });
-      this.syncServiceProcess.on("exit", (code) => {
+      syncServiceProcess.on("exit", (code) => {
         win.webContents.send("syncService", {
           type: "stdout",
           message: `Process exited with exit code ${code}`,
         });
-        this.syncServiceProcess = undefined;
       });
     }
   }
 
   /**
    * Get the API key of the sync-service from its configuration file.
-   * @param {String} homeDir The sync-service home directory.
    * @returns {String} The key of the REST API of the sync-service.
    */
-  static async [SyncServiceOperations.GET_API_KEY](homeDir) {
-    const xml = parse(
-      fs.readFileSync(path.join(homeDir, "config.xml"), { encoding: "utf8" })
-    );
-    const gui = xml.root.children.find((item) => item.name == "gui");
-    return gui.children.find((item) => item.name == "apikey").content;
+  static [SyncServiceOperations.GET_API_KEY]() {
+    return this.apiKey;
   }
 
   /**
@@ -69,10 +79,8 @@ export default class SyncServiceMainController {
    * @returns {Boolean} Indicating successful service termination.
    */
   static stop() {
-    // If we have no process handle of the sync-service, always return `true`
-    if (!this.syncServiceProcess) {
-      return true;
-    }
-    return this.syncServiceProcess.kill("SIGTERM");
+    axios.post(host + "/system/shutdown", null, {
+      headers: { "X-API-Key": this.apiKey },
+    });
   }
 }
