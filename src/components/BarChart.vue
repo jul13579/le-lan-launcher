@@ -89,6 +89,10 @@ export default {
           ticks: {
             precision: 2, // Round step size to 2 decimal places
           },
+          grid: {
+            drawBorder: false,
+            color: 'rgba(255,255,255,.1)',
+          },
         },
       },
     };
