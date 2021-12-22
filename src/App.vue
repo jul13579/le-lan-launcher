@@ -225,6 +225,13 @@ export default {
         })
         .catch(() => {
           this.online = false;
+
+          // Get current API key if ping fails
+          SyncServiceRendererController.System.getApiKey(this.homeDir).then(
+            (apiKey) => {
+              this.$store.commit(Mutations.API_KEY, apiKey);
+            }
+          );
         });
     },
 

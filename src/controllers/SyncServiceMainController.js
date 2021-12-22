@@ -34,20 +34,8 @@ export default class SyncServiceMainController {
       syncServiceProcess.stdout.on("data", (data) => {
         // Get API key if we notice that the sync service has booted
         if (!this.apiKey && `${data}`.match(/GUI and API listening on/)) {
-          const xml = parse(
-            fs.readFileSync(path.join(homeDir, "config.xml"), {
-              encoding: "utf8",
-            })
-          );
-          const gui = xml.root.children.find((item) => item.name == "gui");
-          this.apiKey = gui.children.find(
-            (item) => item.name == "apikey"
-          ).content;
-
-          win.webContents.send(
-            "setApiKey",
-            this.apiKey
-          );
+          this.apiKey = this._readApiKey(homeDir);
+          win.webContents.send("setApiKey", this.apiKey);
         }
 
         win.webContents.send("syncService", {
@@ -62,7 +50,7 @@ export default class SyncServiceMainController {
           message: `${data}`,
         });
       });
-      
+
       syncServiceProcess.on("exit", (code) => {
         win.webContents.send("syncService", {
           type: "stdout",
@@ -70,5 +58,25 @@ export default class SyncServiceMainController {
         });
       });
     }
+  }
+
+  static _readApiKey(homeDir) {
+    const xml = parse(
+      fs.readFileSync(path.join(homeDir, "config.xml"), {
+        encoding: "utf8",
+      })
+    );
+    const gui = xml.root.children.find((item) => item.name == "gui");
+    return gui.children.find((item) => item.name == "apikey").content;
+  }
+
+  /**
+   * Get the API key of the sync-service from its configuration file.
+   * @returns {String} The key of the REST API of the sync-service.
+   */
+  static [SyncServiceOperations.GET_API_KEY](homeDir) {
+    console.log(homeDir);
+    this.apiKey = this._readApiKey(homeDir);
+    return this.apiKey;
   }
 }
