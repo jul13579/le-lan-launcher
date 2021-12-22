@@ -33,7 +33,7 @@ export default class SyncServiceMainController {
 
       syncServiceProcess.stdout.on("data", (data) => {
         // Get API key if we notice that the sync service has booted
-        if (`${data}`.match(/GUI and API listening on/)) {
+        if (!this.apiKey && `${data}`.match(/GUI and API listening on/)) {
           const xml = parse(
             fs.readFileSync(path.join(homeDir, "config.xml"), {
               encoding: "utf8",
