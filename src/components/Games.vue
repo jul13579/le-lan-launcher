@@ -267,13 +267,13 @@ export default {
               }
             }
 
-            let progresses = Object.values(this.$refs.gameEntries)
-              .filter((game) => game.subscribed)
-              .map((game) => game.downloadProgress);
-            let average =
-              progresses.reduce((i1, i2) => i1 + i2, 0) / progresses.length;
-            if (average > 0 && average < 1) {
-              window.ipcRenderer.send("setProgress", average);
+            let progress = Math.min(
+              ...Object.values(this.$refs.gameEntries)
+                .filter((game) => game.subscribed)
+                .map((game) => game.downloadProgress)
+            );
+            if (progress > 0 && progress < 1) {
+              window.ipcRenderer.send("setProgress", progress);
             } else {
               // Disable progress bar
               window.ipcRenderer.send("setProgress", -1);
