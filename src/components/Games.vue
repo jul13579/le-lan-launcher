@@ -20,6 +20,7 @@
       <div class="d-flex flex-wrap justify-center">
         <game-entry
           v-for="(item, index) in lib.games"
+          ref="gameEntries"
           :key="index"
           :libFolderPath="libFolderPath"
           :gameConfig="item"
@@ -145,7 +146,7 @@ export default {
       return `${this.libFolderPath}/${gamelibConfig}`;
     },
     homeDir() {
-      return this.$store.state.homeDir.replace(/\\/g, '/');
+      return this.$store.state.homeDir.replace(/\\/g, "/");
     },
     ...mapState(["nas", "playerName", "debug"]),
   },
@@ -264,6 +265,18 @@ export default {
                   delete this.folderStatus[eventData.folder];
                   break;
               }
+            }
+
+            let progresses = Object.values(this.$refs.gameEntries)
+              .filter((game) => game.subscribed)
+              .map((game) => game.downloadProgress);
+            let average =
+              progresses.reduce((i1, i2) => i1 + i2, 0) / progresses.length;
+            if (average > 0 && average < 1) {
+              window.ipcRenderer.send("setProgress", average);
+            } else {
+              // Disable progress bar
+              window.ipcRenderer.send("setProgress", -1);
             }
           })
           .catch();

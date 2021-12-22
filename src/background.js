@@ -180,3 +180,5 @@ ipcMain.on("controlWindow", async (event, action) => {
 ipcMain.handle("showOpenDialog", (event, options) =>
   dialog.showOpenDialog(options)
 );
+
+ipcMain.on("setProgress", (event, progress) => win.setProgressBar(progress))

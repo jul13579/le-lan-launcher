@@ -5,7 +5,7 @@ import { contextBridge, ipcRenderer } from "electron";
 contextBridge.exposeInMainWorld("ipcRenderer", {
   send: (channel, ...data) => {
     // whitelist channels
-    let validChannels = ["controlWindow", "controlLibrary"];
+    let validChannels = ["controlWindow", "controlLibrary", "setProgress"];
     if (validChannels.includes(channel)) {
       ipcRenderer.send(channel, ...data);
     }
