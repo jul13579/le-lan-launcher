@@ -143,7 +143,10 @@
             >
               <v-card class="text-center">
                 <v-card-title class="justify-center flex-nowrap">
-                  <span class="header" v-html="$t('statistics.service_controls')"></span>
+                  <span
+                    class="header"
+                    v-html="$t('statistics.service_controls')"
+                  ></span>
                   <v-spacer></v-spacer>
                   <v-btn
                     icon
@@ -171,7 +174,7 @@
                   </v-btn>
                 </v-card-title>
                 <v-card-text>
-                  <console v-model="syncthingMessages"/>
+                  <console v-model="syncthingMessages" />
                 </v-card-text>
               </v-card>
             </v-col>
@@ -193,7 +196,7 @@
                     />
                   </v-card-text>
                 </v-card>
-              </v-col>  
+              </v-col>
             </template>
           </v-row>
         </v-container>
@@ -298,7 +301,7 @@ export default {
         })
         .catch()
         .then(() => {
-          this.$refs.barchart.forEach(chart => chart.updateChart());  
+          this.$refs.barchart.forEach((chart) => chart.updateChart());
         });
     },
 
