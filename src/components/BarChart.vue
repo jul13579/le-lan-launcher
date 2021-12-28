@@ -16,13 +16,12 @@ import {
   BarElement,
   PointElement,
   LinearScale,
-  TimeScale,
+  CategoryScale
 } from "chart.js";
-import "chartjs-adapter-date-fns";
 import { mapState } from "vuex";
 
 // Common options for all charts
-Chart.register(BarController, BarElement, PointElement, LinearScale, TimeScale);
+Chart.register(BarController, BarElement, PointElement, LinearScale, CategoryScale);
 Chart.defaults.datasets.type = "line";
 Chart.defaults.font.family = "'Roboto', sans-serif";
 Chart.defaults.maintainAspectRatio = false;
@@ -69,15 +68,9 @@ export default {
     let options = {
       scales: {
         x: {
-          display: false,
-          type: "time",
-          time: {
-            unit: "second",
-            displayFormats: {
-              second: "mm:ss",
-            },
-            stepSize: 5,
-          },
+          type: 'category',
+          labels: new Array(queueLength).fill(''),
+          display: false
         },
         y: {
           title: {
@@ -123,14 +116,7 @@ export default {
      * @returns {Array} An array with specified queue length, filled with 0s.
      */
     createQueue(length) {
-      return Array.from(new Array(length)).map((item, index) => {
-        let object = {
-          // Create objects in taskPeriod steps, so the diagram is always populated
-          x: new Date() - (length - (index + 1)) * taskPeriod,
-          y: 0,
-        };
-        return object;
-      });
+      return Array.from(new Array(length)).fill(0);
     },
 
     /**
@@ -142,7 +128,7 @@ export default {
       while (data.length >= queueLength) {
         data.shift();
       }
-      data.push({ x: new Date(), y: value });
+      data.push(value);
     },
 
     /**
