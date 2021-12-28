@@ -141,7 +141,7 @@ export default {
      */
     enqueue(value) {
       let data = this.chart.data.datasets[0].data;
-      if (data.length >= queueLength) {
+      while (data.length >= queueLength) {
         data.shift();
       }
       data.push({ x: new Date(), y: value });
