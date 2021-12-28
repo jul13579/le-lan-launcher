@@ -102,9 +102,6 @@ export default {
       data,
       options,
     });
-
-    // ! Use periodic task to update chart, becuase multiple equal numbers in this.value wont trigger a watcher
-    updaterInterval = setInterval(this.chartUpdater, taskPeriod);
   },
   destroyed() {
     clearInterval(updaterInterval);
@@ -114,9 +111,11 @@ export default {
      * Update the chart with the current value.
      * This method is used by {@link setInterval} to be executed every {@link taskPeriod} milliseconds.
      */
-    chartUpdater() {
-      this.enqueue(this.value);
-      this.chart.update();
+    updateChart() {
+      this.$nextTick(() => {
+        this.enqueue(this.value);
+        this.chart.update();
+      });
     },
 
     /**

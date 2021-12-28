@@ -175,38 +175,26 @@
                 </v-card-text>
               </v-card>
             </v-col>
-            <v-col
-              cols="4"
-              class="px-1"
-            >
-              <v-card class="text-center">
-                <v-card-title class="justify-center">
-                  <span v-html="$t('statistics.download_speed')"></span>
-                </v-card-title>
-                <v-card-text>
-                  <bar-chart
-                    :value="inbps / 1024**2"
-                    unit="mbps"
-                  />
-                </v-card-text>
-              </v-card>
-            </v-col>
-            <v-col
-              cols="4"
-              class="px-1"
-            >
-              <v-card class="text-center">
-                <v-card-title class="justify-center">
-                  <span v-html="$t('statistics.upload_speed')"></span>
-                </v-card-title>
-                <v-card-text>
-                  <bar-chart
-                    :value="outbps / 1024**2"
-                    unit="mbps"
-                  />
-                </v-card-text>
-              </v-card>
-            </v-col>
+            <template v-for="(item, index) in [{headline: 'statistics.download_speed', value: inbps / 1024**2}, {headline: 'statistics.upload_speed', value: outbps / 1024**2}]">
+              <v-col
+                :key="index"
+                cols="4"
+                class="px-1"
+              >
+                <v-card class="text-center">
+                  <v-card-title class="justify-center">
+                    <span v-html="$t(item.headline)"></span>
+                  </v-card-title>
+                  <v-card-text>
+                    <bar-chart
+                      ref="barchart"
+                      :value="item.value"
+                      unit="mbps"
+                    />
+                  </v-card-text>
+                </v-card>
+              </v-col>  
+            </template>
           </v-row>
         </v-container>
       </div>
@@ -308,7 +296,10 @@ export default {
             outBytesTotal: this.connections.total.outBytesTotal,
           };
         })
-        .catch();
+        .catch()
+        .then(() => {
+          this.$refs.barchart.forEach(chart => chart.updateChart());  
+        });
     },
 
     /**
