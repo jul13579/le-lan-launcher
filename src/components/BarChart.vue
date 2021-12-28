@@ -29,7 +29,6 @@ Chart.defaults.maintainAspectRatio = false;
 
 // Configuration constants for quart queue length and update period in milliseconds
 const queueLength = 30;
-const taskPeriod = 5000;
 
 // Chart update handle
 let updaterInterval;
