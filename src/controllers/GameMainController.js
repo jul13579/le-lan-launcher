@@ -75,7 +75,7 @@ export default class GameController {
    * @private
    */
   static _setPlayerName(game, config, playerName) {
-    if (!config.nameConfig) {
+    if (!config || !config.nameConfig) {
       return;
     }
     let nameConfig = config.nameConfig;
