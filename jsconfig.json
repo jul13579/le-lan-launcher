@@ -1,6 +1,9 @@
 {
     "vueCompilerOptions": {
-        "target": 2
+        "target": 2,
+        "extensions": [
+            ".vue"
+        ]
     },
     "compilerOptions": {
         "target": "es5",
