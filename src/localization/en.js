@@ -75,6 +75,7 @@ export default {
     language: "Language",
     playerName: "Playername",
     homeDir: "Library path",
+    chooseHomeDir: "Choose directory",
     nas: "NAS ID",
     alerts: {
       discovery: "Please wait a moment while online devices are discovered...",

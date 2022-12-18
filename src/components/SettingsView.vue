@@ -147,19 +147,18 @@
         />
       </v-col>
       <v-col cols="4">
-        <v-text-field
-          :label="$t('settings.homeDir')"
-          @click="
-            openFileChooser(
-              (result) =>
-                $store.commit(require('../enums/Mutations').default.HOME_DIR, result.filePaths[0]),
-              { properties: ['openDirectory'] }
-            )
-          "
-          :value="homeDir"
-          :disabled="online"
-          :error="homeDir == false"
-        />
+        <div class="d-flex align-baseline">
+          <v-text-field
+            :label="$t('settings.homeDir')"
+            @click="setHomeDir"
+            :readonly="true"
+            :value="homeDir"
+            :disabled="online"
+            :error="homeDir == false"
+            class="mr-2"
+          />
+          <v-btn @click="setHomeDir" :disabled="online" color="primary">{{$t('settings.chooseHomeDir')}}</v-btn>
+        </div>
       </v-col>
       <v-col cols="5">
         <v-select
@@ -252,6 +251,16 @@ export default {
       window.ipcRenderer.invoke("showOpenDialog", options).then((result) => {
         if (!result.canceled) callback(result);
       });
+    },
+
+    setHomeDir() {
+      this.openFileChooser(
+        (result) => {
+          this.$refs.homeDirInput.blur();
+          this.$store.commit(require('../enums/Mutations').default.HOME_DIR, result.filePaths[0]);
+        },
+        { properties: ['openDirectory'] }
+      )
     },
 
     /**
