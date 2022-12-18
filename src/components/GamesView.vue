@@ -73,7 +73,7 @@
             icon
             @click="debugDialog = false"
           >
-            <v-icon>mdi-close</v-icon>
+            <v-icon>{{ icons.mdiClose }}</v-icon>
           </v-btn>
         </v-card-title>
         <v-card-text>
@@ -87,21 +87,21 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mdiClose } from "@mdi/js";
 import { SelfBuildingSquareSpinner } from "epic-spinners";
+import { mapState } from "vuex";
 
+import defaultFolderConfig, {
+gamelibConfig, gamelibDirId
+} from "../config/folder";
 import SyncServiceController from "../controllers/SyncServiceRendererController";
 import online from "../mixins/online";
-import defaultFolderConfig, {
-  gamelibDirId,
-  gamelibConfig,
-} from "../config/folder";
 
-import GameEntry from "./GameEntry";
-import ConsoleView from "./ConsoleView.vue";
-import SyncEvents from "../enums/SyncEvents";
-import GameOperations from "../enums/GameOperations";
 import LibraryController from "../controllers/LibraryRendererController";
+import GameOperations from "../enums/GameOperations";
+import SyncEvents from "../enums/SyncEvents";
+import ConsoleView from "./ConsoleView.vue";
+import GameEntry from "./GameEntry";
 
 let configInterval;
 
@@ -145,6 +145,11 @@ export default {
     clearInterval(configInterval);
   },
   computed: {
+    icons() {
+      return {
+        mdiClose,
+      }
+    },
     // List of devices present in config
     devices() {
       return this.config.devices || [];

@@ -80,7 +80,7 @@
         "
       >
         <span style="padding-bottom: 100%"></span>
-        <v-icon x-large>mdi-image-search</v-icon>
+        <v-icon x-large>{{ icons.mdiImageSearch }}</v-icon>
       </div>
     </div>
 
@@ -179,8 +179,9 @@
 </template>
 
 <script>
-import online from "../mixins/online";
+import { mdiImageSearch } from "@mdi/js";
 import { mapState } from "vuex";
+import online from "../mixins/online";
 
 import SyncServiceController from "../controllers/SyncServiceRendererController";
 
@@ -203,6 +204,11 @@ export default {
     };
   },
   computed: {
+    icons() {
+      return {
+        mdiImageSearch,
+      }
+    },
     // Manually setup a two-way computed prop for debug setting, as v-switch does not correctly react to the `value` prop
     debug: {
       get() {

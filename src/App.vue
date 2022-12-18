@@ -55,20 +55,20 @@
         icon
         @click="minimizeWindow()"
       >
-        <v-icon>mdi-window-minimize</v-icon>
+        <v-icon>{{ icons.mdiWindowMinimize }}</v-icon>
       </v-btn>
       <v-btn
         icon
         @click="maximizeWindow()"
       >
-        <v-icon>mdi-window-maximize</v-icon>
+        <v-icon>{{ icons.mdiWindowMaximize }}</v-icon>
       </v-btn>
       <v-btn
         icon
         class="justify-self-end"
         @click="closeWindow()"
       >
-        <v-icon>mdi-close</v-icon>
+        <v-icon>{{ icons.mdiClose }}</v-icon>
       </v-btn>
 
       <template v-slot:extension>
@@ -79,10 +79,10 @@
           :key="locale"
         >
           <v-tab :disabled="!setupCompleted">
-            <v-icon left>mdi-gamepad</v-icon>{{ $t("nav.library") }}
+            <v-icon left>{{ icons.mdiGamepad }}</v-icon>{{ $t("nav.library") }}
           </v-tab>
           <v-tab>
-            <v-icon left>mdi-cog</v-icon>{{ $t("nav.settings") }}
+            <v-icon left>{{ icons.mdiCog }}</v-icon>{{ $t("nav.settings") }}
           </v-tab>
         </v-tabs>
       </template>
@@ -112,16 +112,17 @@
 </template>
 
 <script>
-import SettingsView from "./components/SettingsView";
+import { mdiClose, mdiCog, mdiGamepad, mdiWindowMaximize, mdiWindowMinimize } from "@mdi/js";
+import { mapState } from "vuex";
 import GamesView from "./components/GamesView";
 import ServiceStatistics from "./components/ServiceStatistics";
+import SettingsView from "./components/SettingsView";
 import SyncServiceController from "./controllers/SyncServiceRendererController";
 import WindowOperations from "./enums/WindowOperations";
-import { mapState } from "vuex";
 
 import hsl from "hsl-to-hex";
-import Mutations from "./enums/Mutations";
 import SyncServiceRendererController from "./controllers/SyncServiceRendererController";
+import Mutations from "./enums/Mutations";
 
 let pingIntervalHandle;
 let storeSubscriptionCallback;
@@ -141,6 +142,15 @@ export default {
     };
   },
   computed: {
+    icons() {
+      return {
+        mdiWindowMinimize,
+        mdiWindowMaximize,
+        mdiClose,
+        mdiGamepad,
+        mdiCog
+      }
+    },
     setupCompleted() {
       return (
         this.playerName != false && this.homeDir != false && this.nas != false

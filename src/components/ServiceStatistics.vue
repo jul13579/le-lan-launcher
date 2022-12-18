@@ -88,17 +88,17 @@
             >
               <template v-if="nasConnected">
                 <div>
-                  <v-icon class="mx-2">mdi-cloud-check</v-icon>
+                  <v-icon class="mx-2">{{ icons.mdiCloudCheck }}</v-icon>
                 </div>
               </template>
               <template v-else-if="!nasConnected && online">
                 <div>
-                  <v-icon class="mx-2">mdi-cloud-search</v-icon>
+                  <v-icon class="mx-2">{{ icons.mdiCloudSearch }}</v-icon>
                 </div>
               </template>
               <template v-else>
                 <div>
-                  <v-icon class="mx-2">mdi-cloud-off-outline</v-icon>
+                  <v-icon class="mx-2">{{ icons.mdiCloudOffOutline }}</v-icon>
                 </div>
               </template>
             </v-col>
@@ -109,7 +109,7 @@
               <v-icon
                 class="mx-2"
                 color="green"
-              >mdi-download</v-icon>
+              >{{ icons.mdiDownload }}</v-icon>
               <i18n-n
                 :value="inbps / 1024**2"
                 format="mbps"
@@ -122,7 +122,7 @@
               <v-icon
                 class="mx-2"
                 color="red"
-              >mdi-upload</v-icon>
+              >{{ icons.mdiUpload }}</v-icon>
               <i18n-n
                 :value="outbps / 1024**2"
                 format="mbps"
@@ -148,7 +148,7 @@
                     v-html="$t('statistics.service_controls')"
                   ></span>
                   <v-btn icon @click="openSyncthingUI()">
-                    <v-icon>mdi-open-in-new</v-icon>
+                    <v-icon>{{ icons.mdiOpenInNew }}</v-icon>
                   </v-btn>
                   <v-spacer></v-spacer>
                   <v-btn
@@ -157,7 +157,7 @@
                     :disabled="online || !homeDir"
                     @click="startService"
                   >
-                    <v-icon>mdi-play</v-icon>
+                    <v-icon>{{ icons.mdiPlay }}</v-icon>
                   </v-btn>
                   <v-btn
                     icon
@@ -165,7 +165,7 @@
                     :disabled="!online"
                     @click="restartService"
                   >
-                    <v-icon>mdi-restart</v-icon>
+                    <v-icon>{{ icons.mdiRestart }}</v-icon>
                   </v-btn>
                   <v-btn
                     icon
@@ -173,7 +173,7 @@
                     :disabled="!online"
                     @click="stopService"
                   >
-                    <v-icon>mdi-stop</v-icon>
+                    <v-icon>{{ icons.mdiStop }}</v-icon>
                   </v-btn>
                 </v-card-title>
                 <v-card-text>
@@ -209,6 +209,7 @@
 </template>
 
 <script>
+import { mdiCloudCheck, mdiCloudOffOutline, mdiCloudSearch, mdiDownload, mdiOpenInNew, mdiPlay, mdiRestart, mdiStop, mdiUpload } from "@mdi/js";
 import { mapState } from "vuex";
 import BarChart from "./BarChart";
 
@@ -244,6 +245,19 @@ export default {
     };
   },
   computed: {
+    icons() {
+      return {
+        mdiCloudCheck,
+        mdiCloudSearch,
+        mdiCloudOffOutline,
+        mdiDownload,
+        mdiUpload,
+        mdiOpenInNew,
+        mdiPlay,
+        mdiRestart,
+        mdiStop,
+      }
+    },
     nasConnected() {
       return (this.connections.connections[this.nas] || {}).connected;
     },

@@ -19,7 +19,6 @@
   },
   "main": "background.js",
   "dependencies": {
-    "@mdi/font": "^7.1.96",
     "axios": "^1.2.1",
     "chart.js": "^3.6.2",
     "core-js": "^3.26.1",
@@ -37,6 +36,7 @@
   "devDependencies": {
     "@babel/core": "^7.12.16",
     "@babel/eslint-parser": "^7.12.16",
+    "@mdi/js": "^7.1.96",
     "@volar-plugins/vetur": "^0.1.0",
     "@vue/cli-plugin-babel": "~5.0.8",
     "@vue/cli-plugin-eslint": "~5.0.8",

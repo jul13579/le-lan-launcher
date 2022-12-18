@@ -133,6 +133,8 @@ $hover-animation: 0.2s ease-in-out;
 </template>
 
 <script>
+import { mdiBackupRestore, mdiChevronDoubleRight, mdiClose, mdiDelete, mdiDotsHorizontal, mdiDownload, mdiFolderOpen, mdiPause, mdiPlay } from "@mdi/js";
+
 export default {
   props: {
     libFolderPath: String,
@@ -154,24 +156,24 @@ export default {
         {
           click: () => this.$emit("download", this.gameConfig),
           show: !this.subscribed,
-          icon: "mdi-download",
+          icon: mdiDownload,
         },
         {
           click: () =>
             this.$emit("pause", this.gameConfig, this.syncFolderConfig),
           show: this.syncFolderConfig && !this.syncFolderConfig.paused,
-          icon: "mdi-pause",
+          icon: mdiPause,
         },
         {
           click: () =>
             this.$emit("resume", this.gameConfig, this.syncFolderConfig),
           show: this.syncFolderConfig && this.syncFolderConfig.paused,
-          icon: "mdi-chevron-double-right",
+          icon: mdiChevronDoubleRight,
         },
         {
           click: () => this.$emit("delete", this.gameConfig, this.syncFolderConfig),
           show: this.subscribed,
-          icon: "mdi-close",
+          icon: mdiClose,
         },
       ];
     },
@@ -186,39 +188,39 @@ export default {
               this.gameConfig.launch.exe
             ),
           show: true,
-          icon: "mdi-play",
+          icon: mdiPlay,
           text: this.$t("gameEntry.play"),
         },
         {
           click: () =>
             this.$emit("pause", this.gameConfig, this.syncFolderConfig),
           show: this.syncFolderConfig && !this.syncFolderConfig.paused,
-          icon: "mdi-pause",
+          icon: mdiPause,
           text: this.$t("gameEntry.pause"),
         },
         {
           click: () =>
             this.$emit("resume", this.gameConfig, this.syncFolderConfig),
           show: this.syncFolderConfig && this.syncFolderConfig.paused,
-          icon: "mdi-chevron-double-right",
+          icon: mdiChevronDoubleRight,
           text: this.$t("gameEntry.resume"),
         },
         {
           click: () => this.$emit("reset", this.gameConfig, this.syncFolderConfig),
           show: this.syncFolderStatus.receiveOnlyTotalItems > 0,
-          icon: "mdi-backup-restore",
+          icon: mdiBackupRestore,
           text: this.$t("gameEntry.reset"),
         },
         {
           click: () => this.$emit("browse", this.syncFolderConfig),
           show: true,
-          icon: "mdi-folder-open",
+          icon: mdiFolderOpen,
           text: this.$t("gameEntry.browse"),
         },
         {
           click: () => this.$emit("delete", this.gameConfig, this.syncFolderConfig),
           show: true,
-          icon: "mdi-delete",
+          icon: mdiDelete,
           text: this.$t("gameEntry.delete"),
         },
       ];
@@ -227,7 +229,7 @@ export default {
         buttons.splice(-2, 0, {
           click: () => this.$emit("execute", this.syncFolderConfig, this.gameConfig, item.exe),
           show: true,
-          icon: "mdi-dots-horizontal",
+          icon: mdiDotsHorizontal,
           text: item.text,
         });
       });
