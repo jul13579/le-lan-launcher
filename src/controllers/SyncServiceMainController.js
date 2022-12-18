@@ -39,27 +39,36 @@ export default class SyncServiceMainController {
           win.webContents.send("setApiKey", this.apiKey);
         }
 
-        if (!win || !win.webContents) return;
-        win.webContents.send("syncService", {
-          type: "stdout",
-          message: `${data}`,
-        });
+        try {
+          win.webContents.send("syncService", {
+            type: "stdout",
+            message: `${data}`,
+          });
+        } catch (e) {
+          // when closing the app `win.webContents` might already be destroyed
+        }
       });
 
       syncServiceProcess.stderr.on("data", (data) => {
-        if (!win || !win.webContents) return;
-        win.webContents.send("syncService", {
-          type: "stderr",
-          message: `${data}`,
-        });
+        try {
+          win.webContents.send("syncService", {
+            type: "stderr",
+            message: `${data}`,
+          });
+        } catch (e) {
+          // when closing the app `win.webContents` might already be destroyed
+        }
       });
 
       syncServiceProcess.on("exit", (code) => {
-        if (!win || !win.webContents) return;
-        win.webContents.send("syncService", {
-          type: "stdout",
-          message: `Process exited with exit code ${code}`,
-        });
+        try {
+          win.webContents.send("syncService", {
+            type: "stdout",
+            message: `Process exited with exit code ${code}`,
+          });
+        } catch (e) {
+          // when closing the app `win.webContents` might already be destroyed
+        }
       });
     }
   }
