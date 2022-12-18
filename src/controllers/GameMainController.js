@@ -20,7 +20,6 @@ export default class GameController {
    */
   static [GameOperations.LAUNCH](win, game, config, executable, playerName, debug) {
     this._setPlayerName(game, config, playerName);
-    console.log(executable);
     let gameProcess = spawn(path.normalize(executable), [
       path.normalize(game.path),
       game.id,

@@ -76,7 +76,6 @@ export default class SyncServiceMainController {
    * @returns {String} The key of the REST API of the sync-service.
    */
   static [SyncServiceOperations.GET_API_KEY](homeDir) {
-    console.log(homeDir);
     this.apiKey = this._readApiKey(homeDir);
     return this.apiKey;
   }
