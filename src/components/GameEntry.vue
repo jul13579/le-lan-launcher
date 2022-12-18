@@ -183,7 +183,7 @@ export default {
               "execute",
               this.syncFolderConfig,
               this.gameConfig,
-              this.gameConfig.launch
+              this.gameConfig.launch.exe
             ),
           show: true,
           icon: "mdi-play",
@@ -225,7 +225,7 @@ export default {
 
       (this.gameConfig.moreLaunchs || []).forEach((item) => {
         buttons.splice(-2, 0, {
-          click: () => this.$emit("execute", this.syncFolderConfig, this.gameConfig, item),
+          click: () => this.$emit("execute", this.syncFolderConfig, this.gameConfig, item.exe),
           show: true,
           icon: "mdi-dots-horizontal",
           text: item.text,

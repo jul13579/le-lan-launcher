@@ -420,9 +420,9 @@ export default {
      * Launch an executable of a game.
      * @param {Object} gameConfig The config object of the game.
      * @param {Object} syncFolderConfig The Syncthing config object of the folder.
-     * @param {Object} launchConfig The config of the executable to launch.
+     * @param {String} executable The executable to run.
      */
-    execute(gameConfig, syncFolderConfig, launchConfig) {
+    execute(gameConfig, syncFolderConfig, executable) {
       if (this.debug) {
         this.debugMessages = [];
         this.debugDialog = true;
@@ -432,7 +432,7 @@ export default {
         GameOperations.LAUNCH,
         gameConfig,
         syncFolderConfig,
-        launchConfig,
+        executable,
         this.playerName,
         this.debug
       );

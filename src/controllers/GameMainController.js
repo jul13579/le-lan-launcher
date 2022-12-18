@@ -14,12 +14,18 @@ export default class GameController {
    * @param {BrowserWindow} win The BrowserWindow.
    * @param {Object} game The sync-service folder config.
    * @param {Object} config The game object of the library config file.
-   * @param {Object} launch The launch config.
+   * @param {String} executable The executable to run
+   * @param {String} playerName The name of the player
    * @param {Boolean} debug State of debug mode.
    */
-  static [GameOperations.LAUNCH](win, game, config, launch, playerName, debug) {
+  static [GameOperations.LAUNCH](win, game, config, executable, playerName, debug) {
     this._setPlayerName(game, config, playerName);
-    let gameProcess = spawn(path.join(game.path, launch.exe), launch.args, {
+    console.log(executable);
+    let gameProcess = spawn(path.normalize(executable), [
+      path.normalize(game.path),
+      game.id,
+      playerName,
+    ], {
       cwd: game.path,
       detached: true, // Spawn executable detached, so it stays open if launcher is closed.
     });
