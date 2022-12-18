@@ -75,6 +75,11 @@ Most of the config should be pretty self-explanatory.
 * *moreLaunchs*: There may be situations, where it is convenient to have a second "play" button that spawns the same executable with different parameters or even spawns a different executable. In such cases, *moreLaunchs* allows to specify such launch configs and lets you even specify a button text.
 * *nameConfig*: For games that store the player's name in a human readable file, *nameConfig* lets you specify the path to this configuration file. In case this config file does not reside inside the games folder, you can specify an environment variable using *env* after which the given file path is interpreted relative to the resolved environment variable. If the player's name is the only content of the configuration file, you should omit the *regex* attribute, as it is used for search-replacing the player's name inside the configuration file. The regex has to be specified in a way that only the to-be-replaced playername inside the file is matched.
 
+All executables will be launched with the following arguments:
+1. Game directory path / the Syncthing shared directory path
+2. Game ID / the Syncthing shared directory ID
+3. Player name
+
 ### Tips
 * If you need to run an executable with some arguments, create a script to do so and call the script from the launch configuration.
 
