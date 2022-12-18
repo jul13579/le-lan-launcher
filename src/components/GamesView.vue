@@ -78,7 +78,7 @@
         </v-card-title>
         <v-card-text>
           <div class="d-flex flex-column">
-            <console v-model="debugMessages" />
+            <console-view v-model="debugMessages" />
           </div>
         </v-card-text>
       </v-card>
@@ -98,7 +98,7 @@ import defaultFolderConfig, {
 } from "../config/folder";
 
 import GameEntry from "./GameEntry";
-import Console from "./Console.vue";
+import ConsoleView from "./ConsoleView.vue";
 import SyncEvents from "../enums/SyncEvents";
 import GameOperations from "../enums/GameOperations";
 import LibraryController from "../controllers/LibraryRendererController";
@@ -110,7 +110,7 @@ export default {
   components: {
     SelfBuildingSquareSpinner,
     GameEntry,
-    Console,
+    ConsoleView,
   },
   data() {
     return {

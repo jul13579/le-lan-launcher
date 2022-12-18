@@ -177,7 +177,7 @@
                   </v-btn>
                 </v-card-title>
                 <v-card-text>
-                  <console v-model="syncthingMessages" />
+                  <console-view v-model="syncthingMessages" />
                 </v-card-text>
               </v-card>
             </v-col>
@@ -214,7 +214,7 @@ import BarChart from "./BarChart";
 
 import SyncServiceController from "../controllers/SyncServiceRendererController";
 import online from "../mixins/online";
-import Console from "./Console.vue";
+import ConsoleView from "./ConsoleView.vue";
 
 let statisticsInterval;
 
@@ -227,7 +227,7 @@ export default {
   mixins: [online],
   components: {
     BarChart,
-    Console,
+    ConsoleView,
   },
   data() {
     return {

@@ -98,23 +98,23 @@
           style="background-color: unset"
         >
           <v-tab-item>
-            <games :online="online" />
+            <games-view :online="online" />
           </v-tab-item>
           <v-tab-item>
-            <settings :online="online"></settings>
+            <settings-view :online="online" />
           </v-tab-item>
         </v-tabs-items>
       </v-container>
     </v-main>
 
-    <statistics :online="online"></statistics>
+    <service-statistics :online="online"></service-statistics>
   </v-app>
 </template>
 
 <script>
-import Settings from "./components/Settings";
-import Games from "./components/Games";
-import Statistics from "./components/Statistics";
+import SettingsView from "./components/SettingsView";
+import GamesView from "./components/GamesView";
+import ServiceStatistics from "./components/ServiceStatistics";
 import SyncServiceController from "./controllers/SyncServiceRendererController";
 import WindowOperations from "./enums/WindowOperations";
 import { mapState } from "vuex";
@@ -129,9 +129,9 @@ let storeSubscriptionCallback;
 export default {
   name: "app",
   components: {
-    Settings,
-    Games,
-    Statistics,
+    SettingsView,
+    GamesView,
+    ServiceStatistics,
   },
   data() {
     return {
