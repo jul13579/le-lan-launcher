@@ -17,6 +17,12 @@ store.subscribe((mutation) => {
  */
 export default {
   System: {
+    openSyncthingUI: () => {
+      return window.ipcRenderer.invoke(
+        "controlSyncService",
+        SyncServiceOperations.OPEN_SYNCTHING_UI
+      );
+    },
     start: (homeDir) => {
       return window.ipcRenderer.invoke(
         "controlSyncService",

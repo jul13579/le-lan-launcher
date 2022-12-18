@@ -1,7 +1,8 @@
 import { spawn } from "child_process";
+import { shell } from "electron";
+import fs from "fs";
 import path from "path";
 import parse from "xml-parser";
-import fs from "fs";
 import SyncServiceOperations from "../enums/SyncServiceOperations";
 
 /**
@@ -78,5 +79,12 @@ export default class SyncServiceMainController {
     console.log(homeDir);
     this.apiKey = this._readApiKey(homeDir);
     return this.apiKey;
+  }
+
+  /**
+   * Open the Syncthing UI in the system's default browser.
+   */
+  static [SyncServiceOperations.OPEN_SYNCTHING_UI]() {
+    shell.openExternal("https://localhost:8384/");
   }
 }

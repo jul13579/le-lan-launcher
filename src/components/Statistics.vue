@@ -147,6 +147,9 @@
                     class="header"
                     v-html="$t('statistics.service_controls')"
                   ></span>
+                  <v-btn icon @click="openSyncthingUI()">
+                    <v-icon>mdi-open-in-new</v-icon>
+                  </v-btn>
                   <v-spacer></v-spacer>
                   <v-btn
                     icon
@@ -303,6 +306,13 @@ export default {
         .then(() => {
           this.$refs.barchart.forEach((chart) => chart.updateChart());
         });
+    },
+
+    /**
+     * Open the sync-service UI in the system's default browser
+     */
+    openSyncthingUI() {
+      SyncServiceController.System.openSyncthingUI();
     },
 
     /**
