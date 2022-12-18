@@ -39,6 +39,7 @@ export default class SyncServiceMainController {
           win.webContents.send("setApiKey", this.apiKey);
         }
 
+        if (!win) return;
         win.webContents.send("syncService", {
           type: "stdout",
           message: `${data}`,
@@ -46,6 +47,7 @@ export default class SyncServiceMainController {
       });
 
       syncServiceProcess.stderr.on("data", (data) => {
+        if (!win) return;
         win.webContents.send("syncService", {
           type: "stderr",
           message: `${data}`,
@@ -53,6 +55,7 @@ export default class SyncServiceMainController {
       });
 
       syncServiceProcess.on("exit", (code) => {
+        if (!win) return;
         win.webContents.send("syncService", {
           type: "stdout",
           message: `Process exited with exit code ${code}`,
