@@ -86,6 +86,10 @@ export default {
   },
   games: {
     lib_loading: "Spielebibliothek wird abgerufen...",
+    deleteDialog: {
+      title: "{gameTitle} löschen?",
+      message: "Möchtest du {gameTitle} wirklich löschen?",
+    },
   },
   gameEntry: {
     download: "Herunterladen",
@@ -95,5 +99,9 @@ export default {
     resume: "Fortsetzen",
     browse: "Durchsuchen",
     delete: "Löschen",
+  },
+  cardActions: {
+    cancel: "Cancel",
+    delete: "Delete",
   },
 };

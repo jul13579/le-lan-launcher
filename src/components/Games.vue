@@ -1,5 +1,6 @@
 <template>
   <v-container>
+    <!-- Loading animation -->
     <template v-if="!(lib && lib.games)">
       <div
         style="height: calc(100vh - 230px)"
@@ -16,6 +17,8 @@
         ></div>
       </div>
     </template>
+
+    <!-- Game list -->
     <template v-else>
       <div class="d-flex flex-wrap justify-center">
         <game-entry
@@ -36,6 +39,28 @@
         />
       </div>
     </template>
+
+    <!-- Delete dialog -->
+    <v-dialog v-model="deleteDialog.show" max-width="500">
+      <v-card>
+        <v-card-title>
+          {{$t("games.deleteDialog.title", { gameTitle: deleteDialog.gameConfig.title })}}
+        </v-card-title>
+        <v-card-text>
+          <b>{{$t("games.deleteDialog.message", { gameTitle: deleteDialog.gameConfig.title })}}</b>
+        </v-card-text>
+        <v-card-actions class="justify-end">
+          <v-btn @click="deleteDialog.show = false">
+            {{$t("cardActions.cancel")}}
+          </v-btn>
+          <v-btn color="error" @click="deleteDialog.confirmCb">
+            {{$t("cardActions.delete")}}
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
+    <!-- Debug dialog -->
     <v-dialog
       max-width="600"
       v-model="debugDialog"
@@ -93,6 +118,11 @@ export default {
       lib: {},
       lastEventId: 0,
       folderStatus: {},
+      deleteDialog: {
+        show: false,
+        gameConfig: {},
+        confirmCb: () => {},
+      },
       debugDialog: false,
       debugMessages: [],
     };
@@ -366,27 +396,32 @@ export default {
      * @param {Object} syncFolderConfig The Syncthing config object of the folder.
      */
     deleteGame(gameConfig, syncFolderConfig) {
-      this.config.folders = this.config.folders.filter(
-        (folder) => folder.id != gameConfig.id
-      );
-      SyncServiceController.System.setConfig(this.config)
-        .then(() => {
-          this.$toasted.success(
-            this.$t("toast.game.delete.success", {
-              gameTitle: gameConfig.title,
-            })
-          );
-          window.ipcRenderer
-            .invoke("controlGame", GameOperations.DELETE, syncFolderConfig)
-            .then((error) => {
-              if (error)
-                this.$toasted.success(
-                  this.$t("toast.game.delete.error", { error: error })
-                );
-            });
-          this.folderStatus[gameConfig.id] = null;
-        })
-        .catch();
+      this.deleteDialog.gameConfig = {...gameConfig};
+      this.deleteDialog.show = true;
+      this.deleteDialog.confirmCb = () => {
+        this.deleteDialog.show = false;
+        this.config.folders = this.config.folders.filter(
+          (folder) => folder.id != gameConfig.id
+        );
+        SyncServiceController.System.setConfig(this.config)
+          .then(() => {
+            this.$toasted.success(
+              this.$t("toast.game.delete.success", {
+                gameTitle: gameConfig.title,
+              })
+            );
+            window.ipcRenderer
+              .invoke("controlGame", GameOperations.DELETE, syncFolderConfig)
+              .then((error) => {
+                if (error)
+                  this.$toasted.success(
+                    this.$t("toast.game.delete.error", { error: error })
+                  );
+              });
+            this.folderStatus[gameConfig.id] = null;
+          })
+          .catch();
+      }
     },
 
     /**
