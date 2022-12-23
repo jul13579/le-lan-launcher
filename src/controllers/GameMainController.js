@@ -58,7 +58,7 @@ export default class GameController {
    * @param {Object} gameFolder The sync-service folder config.
    */
   static [GameOperations.BROWSE](gameFolder) {
-    shell.openPath(gameFolder.path);
+    shell.openPath(path.normalize(gameFolder.path));
   }
 
   /**
