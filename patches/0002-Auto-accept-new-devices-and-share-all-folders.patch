@@ -1,22 +1,20 @@
-From 0d412c29f5d2991e40637533cbc6094c7e5b2dcc Mon Sep 17 00:00:00 2001
-From: Julian Lehrhuber <jl@lerry.de>
-Date: Mon, 10 Feb 2020 09:32:58 +0100
-Subject: [PATCH 3/3] Auto-accept new devices and share all folders
+commit 4b647ba24b4a8f0c5ea02ce02475e8c8895ac5ba
+Author: Julian Lehrhuber <jl@lerry.de>
+Date:   Mon Feb 10 09:32:58 2020 +0100
 
-This helps in a headless scenario, where e.g. a NAS should accept
-clients on its own
----
- lib/model/model.go | 32 ++++++++++++++++----------------
- 1 file changed, 16 insertions(+), 16 deletions(-)
+    Auto-accept new devices and share all folders
+    
+    This helps in a headless scenario, where e.g. a NAS should accept
+    clients on its own
 
 diff --git a/lib/model/model.go b/lib/model/model.go
-index c02ecfd8..81deac82 100644
+index 24b37ece8..649848018 100644
 --- a/lib/model/model.go
 +++ b/lib/model/model.go
-@@ -2130,23 +2130,23 @@ func (m *model) OnHello(remoteID protocol.DeviceID, addr net.Addr, hello protoco
- 
- 	cfg, ok := m.cfg.Device(remoteID)
- 	if !ok {
+@@ -2150,23 +2150,23 @@ func (m *model) setIgnores(cfg config.FolderConfiguration, content []string) err
+ // and add it to a list of known devices ahead of any checks.
+ func (m *model) OnHello(remoteID protocol.DeviceID, addr net.Addr, hello protocol.Hello) error {
+ 	if _, ok := m.cfg.Device(remoteID); !ok {
 -		if err := m.db.AddOrUpdatePendingDevice(remoteID, hello.DeviceName, addr.String()); err != nil {
 -			l.Warnf("Failed to persist pending device entry to database: %v", err)
 -		}
@@ -51,8 +49,5 @@ index c02ecfd8..81deac82 100644
 +		}
 +		return nil
  	}
- 
- 	if cfg.Paused {
--- 
-2.32.0
-
+ 	return nil
+ }

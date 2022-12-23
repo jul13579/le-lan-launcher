@@ -1,7 +1,7 @@
 #!/bin/bash
 
 SYNCTHING_DIR="syncthing-src"
-VERSION="v1.18.1"
+VERSION="v1.22.2"
 
 if [ ! -d "$SYNCTHING_DIR" ]; then
     echo "Cloning Syncthing..."

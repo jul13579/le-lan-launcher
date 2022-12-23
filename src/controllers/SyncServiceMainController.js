@@ -24,6 +24,7 @@ export default class SyncServiceMainController {
         "-no-browser",
         `-home=${homeDir}`,
         `-logfile=${path.join(homeDir, "syncthing.log")}`,
+        "-no-default-folder",
       ];
       if (process.platform == "win32") {
         binPath += ".exe";
