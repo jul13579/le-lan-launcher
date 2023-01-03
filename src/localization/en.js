@@ -55,9 +55,9 @@ export default {
         "You have to set a playername before you can access the game library!",
     },
     homeDirUnset: {
-      title: "Library path not set",
+      title: "Game library path not set",
       message:
-        "You have to set the library path before you can access the game library!",
+        "You have to set the game library path before you can access the game library!",
     },
     nasUnset: {
       title: "NAS ID not set",
@@ -74,7 +74,7 @@ export default {
       "If you have trouble integrating a game into this launcher, you can enable this mode. When starting an external executable, the launcher will display a window with the process' output log",
     language: "Language",
     playerName: "Playername",
-    homeDir: "Library path",
+    homeDir: "Game library path",
     chooseHomeDir: "Choose directory",
     nas: "NAS ID",
     alerts: {
