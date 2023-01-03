@@ -262,7 +262,6 @@ export default {
     setHomeDir() {
       this.openFileChooser(
         (result) => {
-          this.$refs.homeDirInput.blur();
           this.$store.commit(require('../enums/Mutations').default.HOME_DIR, result.filePaths[0]);
         },
         { properties: ['openDirectory'] }
