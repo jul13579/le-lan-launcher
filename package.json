@@ -1,6 +1,6 @@
 {
   "name": "legc-lan-launcher",
-  "version": "1.0.4-rc.1",
+  "version": "1.0.4-rc.2",
   "private": true,
   "description": "A launcher to provide content (e.g. games, but it can also be used for other stuff) in a P2P-manner to friends on a LAN-Party. It is no more than a frontend based on electron to control a slightly modified instance of Syncthing.",
   "author": {
