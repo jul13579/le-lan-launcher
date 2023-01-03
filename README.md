@@ -42,46 +42,60 @@ Download/clone the repo and run the desired build script:
 
 ## :wrench: Configuration
 ### Library
-Before the launcher can be used, a device should be set up to provide the game folders and the library. As the library also is realized using a shared folder, you have to set this up first. Therefore, start Syncthing on the device and setup a folder called "Library" with the folder ID **"gamelib" (this is important, as the launcher automatically subscribes to this folder to fetch the library)**.
+Before the launcher can be used, a device should be set up to provide the game folders and the library:
 
-Inside this folder, place the game cover images (ideally 600x900px in size) and a file called **library.json**. In this file you can setup the available games as follows:
-```
-{
-  "games": [
-    {
-      "id": "bv2",                              // Folder id (has to match Syncthing folder id)
-      "title": "Babo Violent 2",                // Game title (has to match Syncthing folder name)
-      "cover": "bv2.jpg",                       // Game cover image
-      "launch": {                               // Launch config
-        "exe": "Bv2Launcher,2.exe"              // Executable path
+* Start the built Syncthing binary on the device (e.g. NAS; Syncthing will be available on `https://localhost:8384` by default).
+
+* Configure a "send only" folder for each of your games. I recommend setting up every shared folder as "send only" on the NAS, since games might change e.g. configuration files which shouldn't make their way back to the NAS. Even though the Launcher subscribes to game folders using "receive only" I consider this to be a best practice.
+
+* Configure a folder called "Library" with the folder ID **"gamelib"**. This folder will automatically subscribed by the launcher using the folder ID. The folder ID can be modified in `src/config/folder.js` prior to building.
+
+* Inside the library folder, place the game cover images (ideally 600x900px in size) and a file called **library.json**. The name of this file can also be configured in `src/config/folder.js` prior to building. In this file you can setup the available games as follows:
+  ```
+  {
+    "games": [
+      {
+        "id": "bv2",                              // Folder id (has to match Syncthing folder id)
+        "title": "Babo Violent 2",                // Game title (has to match Syncthing folder name)
+        "cover": "bv2.jpg",                       // Game cover image
+        "launch": {                               // Launch config
+          "exe": "Bv2Launcher,2.exe"              // Executable path
+        },
+        "moreLaunchs": {                          // More launch configs (optional)
+          "text": "Foo"                           // Title for launch button
+          "exe": "Bv2Launcher,2.exe"              // Executable path
+        },
+        "nameConfig": {                           // Name config (optional)
+          "env": "foobar",                        // Env variable (optional)
+          "file": "main/bv2.cfg",                 // File path
+          "regex": "(?<=cl_playerName \")(.*)(?<!\")" // Replace regex (optional)
+        }
       },
-      "moreLaunchs": {                          // More launch configs (optional)
-        "text": "Foo"                           // Title for launch button
-        "exe": "Bv2Launcher,2.exe"              // Executable path
-      },
-      "nameConfig": {                           // Name config (optional)
-        "env": "foobar",                        // Env variable (optional)
-        "file": "main/bv2.cfg",                 // File path
-        "regex": "(?<=cl_playerName \")(.*)(?<!\")" // Replace regex (optional)
-      }
-    },
-    ...
-  ]
-}
-```
-Most of the config should be pretty self-explanatory.
-* *id*: The id specified in this field has to be the folder ID of the game, which you have to set up on the server/NAS/etc.
-* *launch*: specifies the executable to be spawned when clicking "play". The path is relative to the game's root folder
-* *moreLaunchs*: There may be situations, where it is convenient to have a second "play" button that spawns the same executable with different parameters or even spawns a different executable. In such cases, *moreLaunchs* allows to specify such launch configs and lets you even specify a button text.
-* *nameConfig*: For games that store the player's name in a human readable file, *nameConfig* lets you specify the path to this configuration file. In case this config file does not reside inside the games folder, you can specify an environment variable using *env* after which the given file path is interpreted relative to the resolved environment variable. If the player's name is the only content of the configuration file, you should omit the *regex* attribute, as it is used for search-replacing the player's name inside the configuration file. The regex has to be specified in a way that only the to-be-replaced playername inside the file is matched.
+      ...
+    ]
+  }
+  ```
+  Most of the config should be pretty self-explanatory.
+  * *id*: The id specified in this field has to be the folder ID of the game, which you have to set up on the server/NAS/etc.
+  * *launch*: specifies the executable to be spawned when clicking "play". The path is relative to the game's root folder
+  * *moreLaunchs*: There may be situations, where it is convenient to have a second "play" button that spawns the same executable with different parameters or even spawns a different executable. In such cases, *moreLaunchs* allows to specify such launch configs and lets you even specify a button text.
+  * *nameConfig*: For games that store the player's name in a human readable file, *nameConfig* lets you specify the path to this configuration file. In case this config file does not reside inside the games folder, you can specify an environment variable using *env* after which the given file path is interpreted relative to the resolved environment variable. If the player's name is the only content of the configuration file, you should omit the *regex* attribute, as it is used for search-replacing the player's name inside the configuration file. The regex has to be specified in a way that only the to-be-replaced playername inside the file is matched.
 
-All executables will be launched with the following arguments:
-1. Game directory path / the Syncthing shared directory path
-2. Game ID / the Syncthing shared directory ID
-3. Player name
+  All executables will be launched with the following arguments:
+  1. Game directory path / the Syncthing shared directory path
+  2. Game ID / the Syncthing shared directory ID
+  3. Player name
 
-### Tips
-* If you need to run an executable with some arguments, create a script to do so and call the script from the launch configuration.
+* Finally start up the launcher on a PC. On the first start you will be presented with the settings page. After specifying the game library path, the client's Syncthing instance should spin up.
+
+* After a short while you should be able to see available Syncthing devices in the "NAS ID" dropdown. Select the ID that belongs to your NAS.
+
+* Now navigate to the "Game Library" tab to start downloading your games from your NAS!
 
 ## :tada: Finished!
 That's it! I hope this LAN Launcher can be of use for more that just my people! :wink:
+
+## :bulb: Tips
+* If you need to run an executable with some arguments, create a script to do so and call the script from the launch configuration.
+* You are not required to run the patched Syncthing binary on either your NAS or the clients. If you want to bundle a different Syncthing binary in the launcher, just copy the binary in the project's root directory. You will however loose the modified default Syncthing arguments *and* be required to accept every new client pairing request on the NAS.
+* The above configuration by far is not the only one. Since the launcher mainly is only a custom Syncthing frontend you can pretty much do whatever Syncthing offers. I will however not provide any support for these configurations as I'm not using them myself.
