@@ -1,0 +1,37 @@
+commit 9ea7f42513615c8c49940751e3f5e8f4d5ec3ef1
+Author: Julian Lehrhuber <jl@lerry.de>
+Date:   Sat Jan 14 07:49:29 2023 +0100
+
+    Fix overwriting of locally changed files
+    
+    There's a misbehavior (potentially a bug?) in Syncthing, where a
+    receive-only folder would replace a locally changed file with the older
+    remote version of that file if the local file was written to for a
+    second time. It does not matter if the contents actually changed, a
+    simple "content save" is enough. E.g.:
+    
+    Original/remote file contents: "Testcontents"
+    Local file contents are now changed to: "Testcontents new"
+    => Syncthing up until now shows the file as out of sync, all good here.
+    Now the local file gets saved a second time with either the same or
+    different contents (doesn't matter).
+    => Syncthing will move the local file to a `.sync-conflict` file and
+    pull the original remote file to replace the locally changed one.
+
+diff --git a/lib/scanner/walk.go b/lib/scanner/walk.go
+index b155925ca..5b6ef72de 100644
+--- a/lib/scanner/walk.go
++++ b/lib/scanner/walk.go
+@@ -413,7 +413,11 @@ func (w *walker) walkRegular(ctx context.Context, relPath string, info fs.FileIn
+ 			l.Debugln(w, "unchanged:", curFile)
+ 			return nil
+ 		}
+-		if curFile.ShouldConflict() {
++		if curFile.ShouldConflict() &&
++			// If the folder is recv-only, don't drop other versions and cause
++			// a conflict. This would result in a pull of the old file, replacing
++			// the newer local file.
++			w.LocalFlags&protocol.FlagLocalReceiveOnly == 0 {
+ 			// The old file was invalid for whatever reason and probably not
+ 			// up to date with what was out there in the cluster. Drop all
+ 			// others from the version vector to indicate that we haven't

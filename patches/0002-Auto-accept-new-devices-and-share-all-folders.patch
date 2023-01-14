@@ -1,4 +1,4 @@
-commit 4b647ba24b4a8f0c5ea02ce02475e8c8895ac5ba
+commit 57c908e11ec91a07bed0081dd277b48bf74cedde
 Author: Julian Lehrhuber <jl@lerry.de>
 Date:   Mon Feb 10 09:32:58 2020 +0100
 
@@ -8,10 +8,10 @@ Date:   Mon Feb 10 09:32:58 2020 +0100
     clients on its own
 
 diff --git a/lib/model/model.go b/lib/model/model.go
-index 24b37ece8..649848018 100644
+index 47fdc35e9..51ca94853 100644
 --- a/lib/model/model.go
 +++ b/lib/model/model.go
-@@ -2150,23 +2150,23 @@ func (m *model) setIgnores(cfg config.FolderConfiguration, content []string) err
+@@ -2157,23 +2157,23 @@ func (m *model) setIgnores(cfg config.FolderConfiguration, content []string) err
  // and add it to a list of known devices ahead of any checks.
  func (m *model) OnHello(remoteID protocol.DeviceID, addr net.Addr, hello protocol.Hello) error {
  	if _, ok := m.cfg.Device(remoteID); !ok {

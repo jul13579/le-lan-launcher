@@ -1,4 +1,4 @@
-commit 970d7edf9ec35b12d233fd6e08c388db7d6964ad
+commit 82704c2467de043b47165f1404be830f633b7ae7
 Author: Julian Lehrhuber <jl@lerry.de>
 Date:   Mon Feb 10 09:31:01 2020 +0100
 
@@ -52,7 +52,7 @@ index a262593a2..08da4b4e8 100644
  	StunKeepaliveMinS           int      `protobuf:"varint,44,opt,name=stun_keepalive_min_s,json=stunKeepaliveMinS,proto3,casttype=int" json:"stunKeepaliveMinS" xml:"stunKeepaliveMinS" default:"20"`
  	RawStunServers              []string `protobuf:"bytes,45,rep,name=stun_servers,json=stunServers,proto3" json:"stunServers" xml:"stunServer" default:"default"`
 diff --git a/man/syncthing-config.5 b/man/syncthing-config.5
-index 8a685ff13..43617aeef 100644
+index dbce0498b..32e5f9eac 100644
 --- a/man/syncthing-config.5
 +++ b/man/syncthing-config.5
 @@ -173,22 +173,22 @@ may no longer correspond to the defaults.
