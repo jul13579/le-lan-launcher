@@ -19,7 +19,20 @@ export default class GameController {
    * @param {Boolean} debug State of debug mode.
    */
   static [GameOperations.LAUNCH](win, game, config, executable, playerName, debug) {
-    this._setPlayerName(game, config, playerName);
+    // Try setting the player name with the given configuration
+    try {
+      this._setPlayerName(game, config, playerName);
+    } catch (e) {
+      // There will be cases where this errors, e.g. if the configuration is not correct or the file in which the player
+      // name should be changed is not yet existing (because the game did not yet run). The game should however launch
+      // regardless of these errors, without having the player name set. Setting the player name should however work on
+      // the second launch of the game for this scenario.
+      win.webContents.send("game", {
+        type: "stderr",
+        message: `Could not set player name because of below exception:\n${e}`,
+      });
+    }
+
     let gameProcess = spawn(path.normalize(executable), [
       path.normalize(game.path),
       game.id,
