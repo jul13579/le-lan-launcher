@@ -11,13 +11,12 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "electron:build": "vue-cli-service electron:build --publish=never",
+    "electron:build": "vue-cli-service electron:build",
     "electron:generate-icons": "electron-icon-builder --input=./public/icon.png --output=build --flatten",
     "electron:serve": "vue-cli-service electron:serve",
     "postinstall": "electron-builder install-app-deps",
     "postuninstall": "electron-builder install-app-deps"
   },
-  "main": "background.js",
   "dependencies": {
     "axios": "^1.6.7",
     "chart.js": "^4.4.1",
@@ -42,6 +41,7 @@
     "@vue/cli-plugin-eslint": "~5.0.8",
     "@vue/cli-service": "~5.0.8",
     "@vue/compiler-dom": "^3.4.18",
+    "@vue/typescript": "^1.8.20",
     "electron": "^28.2.2",
     "electron-devtools-installer": "^3.2.0",
     "electron-icon-builder": "^2.0.1",
@@ -50,7 +50,7 @@
     "sass": "^1.70.0",
     "sass-loader": "^13.3.3",
     "vue": "^3.4.18",
-    "vue-cli-plugin-electron-builder": "^2.1.1",
+    "vue-cli-plugin-electron-builder": "~2.1.1",
     "vue-cli-plugin-vuetify": "^2.5.8",
     "vue-template-compiler": "^2.7.16"
   },
