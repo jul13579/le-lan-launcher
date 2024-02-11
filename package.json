@@ -20,7 +20,7 @@
   "main": "background.js",
   "dependencies": {
     "axios": "^1.6.7",
-    "chart.js": "^3.6.2",
+    "chart.js": "^4.4.1",
     "core-js": "^3.35.1",
     "epic-spinners": "^1.1.0",
     "hsl-to-hex": "^1.0.0",
