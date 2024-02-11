@@ -1,4 +1,4 @@
-commit 82704c2467de043b47165f1404be830f633b7ae7
+commit dd4e989a80efa8dca1836c8ce4e3ad86712d12f5
 Author: Julian Lehrhuber <jl@lerry.de>
 Date:   Mon Feb 10 09:31:01 2020 +0100
 
@@ -11,7 +11,7 @@ Date:   Mon Feb 10 09:31:01 2020 +0100
     Set urSeen to 3
 
 diff --git a/lib/config/optionsconfiguration.pb.go b/lib/config/optionsconfiguration.pb.go
-index a262593a2..08da4b4e8 100644
+index 2d9d0360c..5214b3dd6 100644
 --- a/lib/config/optionsconfiguration.pb.go
 +++ b/lib/config/optionsconfiguration.pb.go
 @@ -27,22 +27,22 @@ const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
@@ -52,10 +52,10 @@ index a262593a2..08da4b4e8 100644
  	StunKeepaliveMinS           int      `protobuf:"varint,44,opt,name=stun_keepalive_min_s,json=stunKeepaliveMinS,proto3,casttype=int" json:"stunKeepaliveMinS" xml:"stunKeepaliveMinS" default:"20"`
  	RawStunServers              []string `protobuf:"bytes,45,rep,name=stun_servers,json=stunServers,proto3" json:"stunServers" xml:"stunServer" default:"default"`
 diff --git a/man/syncthing-config.5 b/man/syncthing-config.5
-index dbce0498b..32e5f9eac 100644
+index d6b3c2c1a..22f5133b0 100644
 --- a/man/syncthing-config.5
 +++ b/man/syncthing-config.5
-@@ -173,22 +173,22 @@ may no longer correspond to the defaults.
+@@ -179,22 +179,22 @@ may no longer correspond to the defaults.
      <options>
          <listenAddress>default</listenAddress>
          <globalAnnounceServer>default</globalAnnounceServer>
@@ -83,7 +83,7 @@ index dbce0498b..32e5f9eac 100644
          <urUniqueID></urUniqueID>
          <urURL>https://data.syncthing.net/newdata</urURL>
          <urPostInsecurely>false</urPostInsecurely>
-@@ -209,7 +209,7 @@ may no longer correspond to the defaults.
+@@ -214,7 +214,7 @@ may no longer correspond to the defaults.
          <setLowPriority>true</setLowPriority>
          <maxFolderConcurrency>0</maxFolderConcurrency>
          <crashReportingURL>https://crash.syncthing.net/newcrash</crashReportingURL>
@@ -92,7 +92,7 @@ index dbce0498b..32e5f9eac 100644
          <stunKeepaliveStartS>180</stunKeepaliveStartS>
          <stunKeepaliveMinS>20</stunKeepaliveMinS>
          <stunServer>default</stunServer>
-@@ -1121,22 +1121,22 @@ Search filter for user searches.
+@@ -1155,22 +1155,22 @@ Search filter for user searches.
  <options>
      <listenAddress>default</listenAddress>
      <globalAnnounceServer>default</globalAnnounceServer>
@@ -121,7 +121,7 @@ index dbce0498b..32e5f9eac 100644
      <urURL>https://data.syncthing.net/newdata</urURL>
      <urPostInsecurely>false</urPostInsecurely>
 diff --git a/proto/lib/config/optionsconfiguration.proto b/proto/lib/config/optionsconfiguration.proto
-index 9981191f6..34fddc1fe 100644
+index 0e2474695..6a30657b9 100644
 --- a/proto/lib/config/optionsconfiguration.proto
 +++ b/proto/lib/config/optionsconfiguration.proto
 @@ -10,22 +10,22 @@ import "ext.proto";
