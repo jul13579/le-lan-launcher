@@ -1,7 +1,7 @@
 @echo off
 
 set SYNCTHING_DIR="syncthing-src"
-set VERSION="v1.23.0"
+set VERSION="v1.27.3"
 
 if exist %SYNCTHING_DIR% goto build
 :cloneSyncthing
