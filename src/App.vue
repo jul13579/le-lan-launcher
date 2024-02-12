@@ -36,7 +36,7 @@
     }" />
 
     <v-app-bar app elevate-on-scroll class="justify-center">
-      <v-avatar class="mr-2"><img :src="require('../public/icon.png')" /></v-avatar>
+      <v-avatar class="mr-2" image="/icon.png" />
       <v-spacer></v-spacer>
       <v-toolbar-title class="centered"><span>LAN-Launcher</span></v-toolbar-title>
       <v-spacer></v-spacer>
@@ -66,18 +66,18 @@
 
     <v-main>
       <v-container fluid style="margin-bottom: 66px">
-        <v-tabs-items v-model="activeTab" style="background-color: unset">
-          <v-tab-item>
-            <games-view :online="online" />
-          </v-tab-item>
-          <v-tab-item>
-            <settings-view :online="online" />
-          </v-tab-item>
-        </v-tabs-items>
+        <v-window v-model="activeTab" style="background-color: unset">
+          <v-window-item :value="0">
+            <!-- <games-view :online="online" /> -->
+          </v-window-item>
+          <v-window-item :value="1">
+            <!-- <settings-view :online="online" /> -->
+          </v-window-item>
+        </v-window>
       </v-container>
     </v-main>
 
-    <service-statistics :online="online"></service-statistics>
+    <!-- <service-statistics :online="online"></service-statistics> -->
   </v-app>
 </template>
 
