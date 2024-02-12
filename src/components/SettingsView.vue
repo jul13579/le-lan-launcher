@@ -15,13 +15,13 @@
 
 <template>
   <v-container>
-    <v-alert type="error" border="start" :title="$t('errors.playerNameUnset.title')" v-if="playerName == false">
+    <v-alert type="error" variant="tonal" border="start" class="my-1" :title="$t('errors.playerNameUnset.title')" v-if="playerName == false">
       {{ $t("errors.playerNameUnset.message") }}
     </v-alert>
-    <v-alert type="error" border="start" :title="$t('errors.homeDirUnset.title')" v-if="homeDir == false">
+    <v-alert type="error" variant="tonal" border="start" class="my-1" :title="$t('errors.homeDirUnset.title')" v-if="homeDir == false">
       {{ $t("errors.homeDirUnset.message") }}
     </v-alert>
-    <v-alert type="error" border="start" :title="$t('errors.nasUnset.title')" v-if="nas == false">
+    <v-alert type="error" variant="tonal" border="start" class="my-1" :title="$t('errors.nasUnset.title')" v-if="nas == false">
       {{ $t("errors.nasUnset.message") }}
     </v-alert>
     <div class="text-h4">{{ $t("settings.theme") }}</div>
