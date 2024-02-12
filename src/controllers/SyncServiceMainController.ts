@@ -23,7 +23,7 @@ export default class SyncServiceMainController {
       this.homeDir = homeDir;
 
       let binPath = path.join(__dirname, "../syncthing");
-      let args = [
+      const args = [
         "-no-browser",
         `-home=${homeDir}`,
         `-logfile=${path.join(homeDir, "syncthing.log")}`,
@@ -34,7 +34,7 @@ export default class SyncServiceMainController {
         args.push("-no-console");
       }
 
-      let syncServiceProcess = spawn(binPath, args, {});
+      const syncServiceProcess = spawn(binPath, args, {});
 
       syncServiceProcess.stdout.on("data", (data) => {
         // Get API key if we notice that the sync service has booted
