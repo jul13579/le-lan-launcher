@@ -111,18 +111,17 @@ import { onUnmounted } from "vue";
 let pingIntervalHandle: NodeJS.Timeout;
 let storeSubscriptionCallback: () => void;
 
-const activeTab = ref(1);
-const online = ref(false);
-const nasId = ref("");
-
 const vuetifyTheme = useTheme();
 const i18n = useI18n();
 const store = useStore();
 const { theme, playerName, homeDir, nas, backgroundHue, locale } = store.state;
 
 const setupCompleted = readonly(ref(!!playerName && !!homeDir && !!nas))
-
 const primaryColor = readonly(ref(hsl(backgroundHue, 100, 60)));
+
+const activeTab = ref(setupCompleted.value ? 0 : 1);
+const online = ref(false);
+const nasId = ref("");
 
 onBeforeMount(() => {
   // Setup API key handler
@@ -155,9 +154,6 @@ onBeforeMount(() => {
   // Setup global service status poller
   clearInterval(pingIntervalHandle);
   pingIntervalHandle = setInterval(pingService, 5000);
-
-  // Set initial tab
-  activeTab.value = setupCompleted ? 0 : 1;
 
   window.addEventListener(
     "beforeunload",
