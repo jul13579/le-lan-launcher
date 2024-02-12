@@ -6,6 +6,6 @@ enum WindowOperations {
   MAXIMIZE = "maximize",
   UNMAXIMIZE = "unmaximize",
   CLOSE = "close",
-};
+}
 
 export default WindowOperations

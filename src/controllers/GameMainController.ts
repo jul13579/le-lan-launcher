@@ -33,7 +33,7 @@ export default class GameController {
       });
     }
 
-    let gameProcess = spawn(path.normalize(executable), [
+    const gameProcess = spawn(path.normalize(executable), [
       path.normalize(gameFolder.path),
       gameFolder.id,
       playerName,
@@ -96,8 +96,8 @@ export default class GameController {
     if (!config || !config.nameConfig) {
       return;
     }
-    let nameConfig = config.nameConfig;
-    let filePath = path.resolve(
+    const nameConfig = config.nameConfig;
+    const filePath = path.resolve(
       gameFolder.path,
       nameConfig.env ? process.env[nameConfig.env] : "",
       nameConfig.file
