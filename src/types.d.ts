@@ -12,8 +12,14 @@ declare namespace Electron {
   }
 }
 
-declare interface Window {
+interface IpcRendererWindow {
   ipcRenderer: Electron.IpcRenderer;
+}
+
+interface Window extends IpcRendererWindow {}
+
+declare module ".vue" {
+  interface Window extends IpcRendererWindow {}
 }
 
 type GameFolder = {
