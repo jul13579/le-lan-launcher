@@ -4,9 +4,17 @@
 declare const MAIN_WINDOW_VITE_DEV_SERVER_URL: string;
 declare const MAIN_WINDOW_VITE_NAME: string;
 
+// Overwrite `removeAllListeners` signature to allow optionally typed `channel` argument.
+namespace Electron {
+  interface IpcRenderer
+    extends Omit<import("electron").IpcRenderer, "removeAllListeners"> {
+    removeAllListeners(channel?: string): this;
+  }
+}
+
 declare global {
   interface Window {
-    ipcRenderer: import("electron").IpcRenderer;
+    ipcRenderer: Electron.IpcRenderer;
   }
 }
 
