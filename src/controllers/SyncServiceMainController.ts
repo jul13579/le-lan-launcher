@@ -20,7 +20,7 @@ export default class SyncServiceMainController {
    */
   static [SyncServiceOperations.START](win: BrowserWindow, homeDir: string) {
     if (homeDir) {
-      this.homeDir = homeDir;
+      SyncServiceMainController.homeDir = homeDir;
 
       let binPath = path.join(__dirname, "../syncthing");
       const args = [
@@ -38,9 +38,13 @@ export default class SyncServiceMainController {
 
       syncServiceProcess.stdout.on("data", (data) => {
         // Get API key if we notice that the sync service has booted
-        if (!this.apiKey && `${data}`.match(/GUI and API listening on/)) {
-          this.apiKey = this._readApiKey(homeDir);
-          win.webContents.send("setApiKey", this.apiKey);
+        if (
+          !SyncServiceMainController.apiKey &&
+          `${data}`.match(/GUI and API listening on/)
+        ) {
+          SyncServiceMainController.apiKey =
+            SyncServiceMainController._readApiKey(homeDir);
+          win.webContents.send("setApiKey", SyncServiceMainController.apiKey);
         }
 
         try {
@@ -92,8 +96,9 @@ export default class SyncServiceMainController {
    * @returns {String} The key of the REST API of the sync-service.
    */
   static [SyncServiceOperations.GET_API_KEY](homeDir: string) {
-    this.apiKey = this._readApiKey(homeDir);
-    return this.apiKey;
+    SyncServiceMainController.apiKey =
+      SyncServiceMainController._readApiKey(homeDir);
+    return SyncServiceMainController.apiKey;
   }
 
   /**

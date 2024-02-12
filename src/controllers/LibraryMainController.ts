@@ -18,12 +18,12 @@ export default class LibraryController {
     // ! Use fs.watchFile as it handles ENOENT (file not existing) and also calls listener when file is created
     fs.watchFile(libConfigPath, (curr) => {
       if (curr.size > 0) {
-        win.webContents.send("library", this._read(libConfigPath));
+        win.webContents.send("library", LibraryController._read(libConfigPath));
       }
     });
     // If library was already existing before app start, we have to fetch the library config now
     if (fs.existsSync(libConfigPath)) {
-      win.webContents.send("library", this._read(libConfigPath));
+      win.webContents.send("library", LibraryController._read(libConfigPath));
     }
   }
 

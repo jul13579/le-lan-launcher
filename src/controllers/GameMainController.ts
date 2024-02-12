@@ -18,10 +18,17 @@ export default class GameController {
    * @param {string} playerName The name of the player
    * @param {boolean} debug State of debug mode.
    */
-  static [GameOperations.LAUNCH](win: BrowserWindow, gameFolder: GameFolder, config: Config, executable: string, playerName: string, debug: boolean) {
+  static [GameOperations.LAUNCH](
+    win: BrowserWindow,
+    gameFolder: GameFolder,
+    config: Config,
+    executable: string,
+    playerName: string,
+    debug: boolean
+  ) {
     // Try setting the player name with the given configuration
     try {
-      this._setPlayerName(gameFolder, config, playerName);
+      GameController._setPlayerName(gameFolder, config, playerName);
     } catch (e) {
       // There will be cases where this errors, e.g. if the configuration is not correct or the file in which the player
       // name should be changed is not yet existing (because the game did not yet run). The game should however launch
@@ -33,14 +40,14 @@ export default class GameController {
       });
     }
 
-    const gameProcess = spawn(path.normalize(executable), [
-      path.normalize(gameFolder.path),
-      gameFolder.id,
-      playerName,
-    ], {
-      cwd: gameFolder.path,
-      detached: true, // Spawn executable detached, so it stays open if launcher is closed.
-    });
+    const gameProcess = spawn(
+      path.normalize(executable),
+      [path.normalize(gameFolder.path), gameFolder.id, playerName],
+      {
+        cwd: gameFolder.path,
+        detached: true, // Spawn executable detached, so it stays open if launcher is closed.
+      }
+    );
 
     if (!debug) {
       return;
@@ -92,7 +99,11 @@ export default class GameController {
    * @param {string} playerName The user's playername.
    * @private
    */
-  private static _setPlayerName(gameFolder: GameFolder, config: Config, playerName: string) {
+  private static _setPlayerName(
+    gameFolder: GameFolder,
+    config: Config,
+    playerName: string
+  ) {
     if (!config || !config.nameConfig) {
       return;
     }
