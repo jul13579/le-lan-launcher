@@ -1,9 +1,7 @@
-import Vue from "vue";
-import Vuex from "vuex";
+import { createStore } from "vuex";
 import VuexPersistence from "vuex-persist";
 import Mutations from "./enums/Mutations";
-
-Vue.use(Vuex);
+import langs from "./localization/langs";
 
 const defaultBackgroundHue = 265;
 const defaultLocale = "en";
@@ -13,19 +11,33 @@ const vuexLocal = new VuexPersistence({
   storage: window.localStorage,
 });
 
-export default new Vuex.Store({
-  state: {
-    backgroundHue: defaultBackgroundHue,
-    theme: {
-      cover: false,
-      path: defaultTheme,
-    },
-    playerName: "",
-    homeDir: "",
-    apiKey: "",
-    nas: "",
-    locale: defaultLocale,
-    debug: false,
+export default createStore<{
+  backgroundHue: number;
+  theme: {
+    cover: boolean;
+    path: string;
+  };
+  playerName: string;
+  homeDir: string;
+  apiKey: string;
+  nas: string;
+  locale: keyof typeof langs;
+  debug: boolean;
+}>({
+  state() {
+    return {
+      backgroundHue: defaultBackgroundHue,
+      theme: {
+        cover: false,
+        path: defaultTheme,
+      },
+      playerName: "",
+      homeDir: "",
+      apiKey: "",
+      nas: "",
+      locale: defaultLocale,
+      debug: false,
+    };
   },
   mutations: {
     [Mutations.BACKGROUND_HUE](state, color) {
