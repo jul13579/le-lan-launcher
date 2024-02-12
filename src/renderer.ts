@@ -1,6 +1,6 @@
-import Vue from "vue";
+import { createApp } from "vue";
 import Toasted from "vue-toasted";
-import VueI18n from "vue-i18n";
+import { createI18n } from "vue-i18n";
 
 import vuetify from "./plugins/vuetify";
 
@@ -15,23 +15,25 @@ import numberFormats from "./localization/numberformats";
 import "roboto-fontface/css/roboto/roboto-fontface.css";
 import "./sass/app.scss";
 
-Vue.use(Toasted, {
-  position: "bottom-center",
-  duration: 5000,
-});
-Vue.use(VueI18n);
+// Vue.use(Toasted, {
+//   position: "bottom-center",
+//   duration: 5000,
+// });
 
-const i18n = new VueI18n({
+const i18n = createI18n({
   locale: store.state.locale, // set locale
   numberFormats,
   messages: langs, // set locale messages
 });
 
-Vue.config.productionTip = false;
+// Vue.config.productionTip = false;
 
-new Vue({
-  vuetify,
-  store,
-  i18n,
-  render: (h) => h(App),
-}).$mount("#app");
+const app = createApp({
+  App,
+});
+
+app.use(i18n);
+app.use(store);
+app.use(vuetify);
+
+app.mount("#app");
