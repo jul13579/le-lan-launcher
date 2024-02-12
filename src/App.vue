@@ -21,14 +21,7 @@
 }
 
 .v-toolbar-title {
-  &.centered {
-    position: absolute;
-    display: flex;
-    left: 0px;
-    width: 100%;
-    justify-content: center;
-    letter-spacing: 5px;
-  }
+  letter-spacing: 5px;
 }
 </style>
 
@@ -46,7 +39,7 @@
     <v-app-bar scroll-behavior="elevate" class="justify-center">
       <v-avatar image="/icon.png" />
       <v-spacer />
-      <v-app-bar-title class="centered"><span>LAN-Launcher</span></v-app-bar-title>
+      <v-app-bar-title class="w-100 d-flex justify-center position-absolute"><span>LAN-Launcher</span></v-app-bar-title>
       <v-spacer />
 
       <v-btn icon @click="minimizeWindow()">
