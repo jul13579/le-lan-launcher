@@ -12,7 +12,11 @@
   }
 }
 
-.v-toolbar__content > *:first-child {
+.v-toolbar {
+  background: rgba(var(--v-theme-surface), .45);
+}
+
+.v-toolbar__content>*:first-child {
   margin-inline-start: 10px;
 }
 
@@ -58,11 +62,11 @@
       <template v-slot:extension>
         <!-- Force re-render of tabs on locale change, else tab indicator width is wrong -->
         <v-tabs centered v-model="activeTab" :key="locale">
-          <v-tab :disabled="!setupCompleted">
-            <v-icon left :icon="mdiGamepad" />{{ $t("nav.library") }}
+          <v-tab :disabled="!setupCompleted" :prepend-icon="mdiGamepad">
+            {{ $t("nav.library") }}
           </v-tab>
-          <v-tab>
-            <v-icon left :icon="mdiCog" />{{ $t("nav.settings") }}
+          <v-tab :prepend-icon="mdiCog">
+            {{ $t("nav.settings") }}
           </v-tab>
         </v-tabs>
       </template>
