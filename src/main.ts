@@ -1,37 +1,186 @@
-import Vue from "vue";
-import Toasted from "vue-toasted";
-import VueI18n from "vue-i18n";
+"use strict";
 
-import vuetify from "./plugins/vuetify";
+import { app, protocol, BrowserWindow, ipcMain, dialog } from "electron";
+import installExtension, { VUEJS_DEVTOOLS } from "electron-devtools-installer";
+import path from "path";
 
-// Components
-import App from "./App.vue";
+import WindowOperations from "./enums/WindowOperations";
+import WindowConfig from "./config/window";
+import SyncServiceController from "./controllers/SyncServiceMainController";
+import LibraryController from "./controllers/LibraryMainController";
+import GameController from "./controllers/GameMainController";
+import SyncServiceOperations from "./enums/SyncServiceOperations";
+import LibraryOperations from "./enums/LibraryOperations";
+import GameOperations from "./enums/GameOperations";
 
-import store from "./store";
-import langs from "./localization/langs";
-import numberFormats from "./localization/numberformats";
+// Handle creating/removing shortcuts on Windows when installing/uninstalling.
+if (require('electron-squirrel-startup')) {
+  app.quit();
+}
 
-// Styles
-import "roboto-fontface/css/roboto/roboto-fontface.css";
-import "./sass/app.scss";
+const isDevelopment = process.env.NODE_ENV !== "production";
 
-Vue.use(Toasted, {
-  position: "bottom-center",
-  duration: 5000,
+// Keep a global reference of the window object, if you don't, the window will
+// be closed automatically when the JavaScript object is garbage collected.
+let win;
+
+// Scheme must be registered before the app is ready
+protocol.registerSchemesAsPrivileged([
+  { scheme: "app", privileges: { secure: true, standard: true } },
+]);
+
+async function createWindow() {
+  // Create the browser window.
+  win = new BrowserWindow({
+    width: WindowConfig.MIN_WIDTH,
+    height: WindowConfig.MIN_HEIGHT,
+    minWidth: WindowConfig.MIN_WIDTH,
+    minHeight: WindowConfig.MIN_HEIGHT,
+    frame: false,
+    title: "[|LE|] LAN-Launcher",
+    icon: './images/icons/icon.png',
+    webPreferences: {
+      webSecurity: true,
+      preload: path.join(__dirname, "preload.js"),
+      // Use pluginOptions.nodeIntegration, leave this alone
+      // See https://nklayman.github.io/vue-cli-plugin-electron-builder/guide/security.html#node-integration for more info
+      nodeIntegration: process.env.ELECTRON_NODE_INTEGRATION,
+      contextIsolation: !process.env.ELECTRON_NODE_INTEGRATION,
+    },
+  });
+
+  win.removeMenu();
+
+  if (MAIN_WINDOW_VITE_DEV_SERVER_URL) {
+    // Load the url of the dev server if in development mode
+    await win.loadURL(MAIN_WINDOW_VITE_DEV_SERVER_URL);
+    if (!process.env.IS_TEST) {
+      win.maximize();
+      win.webContents.openDevTools();
+    }
+  } else {
+    win.loadFile(path.join(__dirname, `../renderer/${MAIN_WINDOW_VITE_NAME}/index.html`));
+  }
+}
+
+// Quit when all windows are closed.
+app.on("window-all-closed", () => {
+  // On macOS it is common for applications and their menu bar
+  // to stay active until the user quits explicitly with Cmd + Q
+  if (process.platform !== "darwin") {
+    shutdown();
+  }
 });
-Vue.use(VueI18n);
 
-const i18n = new VueI18n({
-  locale: store.state.locale, // set locale
-  numberFormats,
-  messages: langs, // set locale messages
+app.on("activate", () => {
+  // On macOS it's common to re-create a window in the app when the
+  // dock icon is clicked and there are no other windows open.
+  if (BrowserWindow.getAllWindows().length === 0) createWindow();
 });
 
-Vue.config.productionTip = false;
+// This method will be called when Electron has finished
+// initialization and is ready to create browser windows.
+// Some APIs can only be used after this event occurs.
+app.on("ready", async () => {
+  if (isDevelopment && !process.env.IS_TEST) {
+    // Install Vue Devtools
+    try {
+      await installExtension(VUEJS_DEVTOOLS);
+    } catch (e) {
+      // eslint-disable-next-line no-console
+      console.error("Vue Devtools failed to install:", e.toString());
+    }
+  }
 
-new Vue({
-  vuetify,
-  store,
-  i18n,
-  render: (h) => h(App),
-}).$mount("#app");
+  // Register file protocols to load external game thumbnails and theme background images
+  registerFileProtocol("game");
+  registerFileProtocol("theme");
+
+  createWindow();
+});
+
+// Exit cleanly on request from parent process in development mode.
+if (isDevelopment) {
+  if (process.platform === "win32") {
+    process.on("message", (data) => {
+      if (data === "graceful-exit") {
+        shutdown();
+      }
+    });
+  } else {
+    process.on("SIGTERM", () => {
+      shutdown();
+    });
+  }
+}
+
+/**
+ * Shorthand function to register an arbitrary protocol to use in the app.
+ * @param {String} protocolName The name of the protocol.
+ */
+function registerFileProtocol(protocolName) {
+  protocol.registerFileProtocol(protocolName, (request, callback) => {
+    const url = request.url.replace(new RegExp(`^${protocolName}://`), "");
+    // Decode URL to prevent errors when loading filenames with UTF-8 chars or chars like "#"
+    const decodedUrl = decodeURI(url); // Needed in case URL contains spaces
+    try {
+      return callback(decodedUrl);
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error(
+        "ERROR: registerLocalResourceProtocol: Could not get file path:",
+        error
+      );
+    }
+  });
+}
+
+function shutdown() {
+  app.quit();
+}
+
+/* -------------------------------------------------------------------------- */
+/*                              IPC Configuration                             */
+/* -------------------------------------------------------------------------- */
+// eslint-disable-next-line no-unused-vars
+ipcMain.handle("controlSyncService", (event, action, ...args) => {
+  // Add the `win` argument if the action is `START`
+  if (action == SyncServiceOperations.START) {
+    args = [win, ...args];
+  }
+  return SyncServiceController[action](...args);
+});
+
+// eslint-disable-next-line no-unused-vars
+ipcMain.on("controlLibrary", (event, action, ...args) => {
+  // Add the `win` argument if the action is `WATCH`
+  if (action == LibraryOperations.WATCH) {
+    args = [win, ...args];
+  }
+  LibraryController[action](...args);
+});
+
+// eslint-disable-next-line no-unused-vars
+ipcMain.handle("controlGame", (event, action, ...args) => {
+  // Add the `win` argument if the action is `LAUNCH`
+  if (action == GameOperations.LAUNCH) {
+    args = [win, ...args];
+  }
+  return GameController[action](...args);
+});
+
+// eslint-disable-next-line no-unused-vars
+ipcMain.on("controlWindow", async (event, action) => {
+  // Unmaximize on `MAXIMIZE` if window is maximized
+  if (action == WindowOperations.MAXIMIZE && win.isMaximized()) {
+    action = "unmaximize";
+  }
+  win[action]();
+});
+
+// eslint-disable-next-line no-unused-vars
+ipcMain.handle("showOpenDialog", (event, options) =>
+  dialog.showOpenDialog(options)
+);
+
+ipcMain.on("setProgress", (event, progress) => win.setProgressBar(progress))
