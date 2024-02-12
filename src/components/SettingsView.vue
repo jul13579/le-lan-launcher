@@ -72,8 +72,8 @@
     <div class="text-h4">{{ $t("settings.environment") }}</div>
     <v-row>
       <v-col cols="3">
-        <v-select :label="$t('settings.language')" :model-value="locale" :items="langs"
-          :item-title="(lang) => $t(`langs.${lang}`)" @change="(input) => store.commit(Mutations.LOCALE, input)" />
+        <v-select :label="$t('settings.language')" v-model="locale" :items="langs"
+          :item-title="(lang) => $t(`langs.${lang}`)" :item-value="(lang) => lang" />
       </v-col>
       <v-col cols="5" class="offset-4">
         <v-tooltip top max-width="400">
@@ -138,12 +138,20 @@ const textures = [
 ];
 
 const store = useStore();
-const { playerName, homeDir, nas, locale, backgroundHue } = store.state;
+const { playerName, homeDir, nas, backgroundHue } = store.state;
 
 const sliderValue = ref(backgroundHue);
 const devices = ref([]);
 const langs = Object.keys(_langs);
 
+const locale = computed({
+  get() {
+    return store.state.locale;
+  },
+  set(value) {
+    store.commit(Mutations.LOCALE, value);
+  }
+})
 const debug = computed({
   get() {
     return store.state.debug
