@@ -120,7 +120,7 @@ const i18n = useI18n();
 const store = useStore();
 const { theme, playerName, homeDir, nas, backgroundHue, locale } = store.state;
 
-const setupCompleted = readonly(ref(playerName !== false && homeDir !== false && nas !== false))
+const setupCompleted = readonly(ref(!!playerName && !!homeDir && !!nas))
 
 const primaryColor = readonly(ref(hsl(backgroundHue, 100, 60)));
 
