@@ -12,6 +12,10 @@
   }
 }
 
+.v-toolbar__content > *:first-child {
+  margin-inline-start: 10px;
+}
+
 .v-toolbar-title {
   &.centered {
     position: absolute;
@@ -36,10 +40,10 @@
     }" />
 
     <v-app-bar scroll-behavior="elevate" class="justify-center">
-      <v-avatar class="mr-2" image="/icon.png" />
-      <v-spacer></v-spacer>
+      <v-avatar image="/icon.png" />
+      <v-spacer />
       <v-app-bar-title class="centered"><span>LAN-Launcher</span></v-app-bar-title>
-      <v-spacer></v-spacer>
+      <v-spacer />
 
       <v-btn icon @click="minimizeWindow()">
         <v-icon :icon="mdiWindowMinimize" />
@@ -47,7 +51,7 @@
       <v-btn icon @click="maximizeWindow()">
         <v-icon :icon="mdiWindowMaximize" />
       </v-btn>
-      <v-btn icon class="justify-self-end" @click="closeWindow()">
+      <v-btn icon @click="closeWindow()">
         <v-icon :icon="mdiClose" />
       </v-btn>
 
