@@ -1,5 +1,5 @@
 import { spawn } from "child_process";
-import { shell } from "electron";
+import { BrowserWindow, shell } from "electron";
 import fs from "fs";
 import path from "path";
 import parse from "xml-parser";
@@ -10,12 +10,15 @@ import SyncServiceOperations from "../enums/SyncServiceOperations";
  * This is only to be used by the main process, as it depends on electron and node functionalities.
  */
 export default class SyncServiceMainController {
+  private static homeDir: string;
+  private static apiKey: any;
+
   /**
    * Starts a new process of the sync-service using the specified directory as home directory.
    * @param {BrowserWindow} win The BrowserWindow.
-   * @param {String} homeDir The sync-service home directory.
+   * @param {string} homeDir The sync-service home directory.
    */
-  static [SyncServiceOperations.START](win, homeDir) {
+  static [SyncServiceOperations.START](win: BrowserWindow, homeDir: string) {
     if (homeDir) {
       this.homeDir = homeDir;
 
@@ -74,7 +77,7 @@ export default class SyncServiceMainController {
     }
   }
 
-  static _readApiKey(homeDir) {
+  private static _readApiKey(homeDir: string) {
     const xml = parse(
       fs.readFileSync(path.join(homeDir, "config.xml"), {
         encoding: "utf8",
@@ -88,7 +91,7 @@ export default class SyncServiceMainController {
    * Get the API key of the sync-service from its configuration file.
    * @returns {String} The key of the REST API of the sync-service.
    */
-  static [SyncServiceOperations.GET_API_KEY](homeDir) {
+  static [SyncServiceOperations.GET_API_KEY](homeDir: string) {
     this.apiKey = this._readApiKey(homeDir);
     return this.apiKey;
   }

@@ -4,6 +4,7 @@
 enum WindowOperations {
   MINIMIZE = "minimize",
   MAXIMIZE = "maximize",
+  UNMAXIMIZE = "unmaximize",
   CLOSE = "close",
 };
 

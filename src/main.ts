@@ -22,7 +22,7 @@ const isDevelopment = process.env.NODE_ENV !== "production";
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
-let win;
+let win: BrowserWindow;
 
 // Scheme must be registered before the app is ready
 protocol.registerSchemesAsPrivileged([
@@ -44,7 +44,7 @@ async function createWindow() {
       preload: path.join(__dirname, "preload.js"),
       // Use pluginOptions.nodeIntegration, leave this alone
       // See https://nklayman.github.io/vue-cli-plugin-electron-builder/guide/security.html#node-integration for more info
-      nodeIntegration: process.env.ELECTRON_NODE_INTEGRATION,
+      nodeIntegration: !!process.env.ELECTRON_NODE_INTEGRATION,
       contextIsolation: !process.env.ELECTRON_NODE_INTEGRATION,
     },
   });
@@ -116,9 +116,9 @@ if (isDevelopment) {
 
 /**
  * Shorthand function to register an arbitrary protocol to use in the app.
- * @param {String} protocolName The name of the protocol.
+ * @param {string} protocolName The name of the protocol.
  */
-function registerFileProtocol(protocolName) {
+function registerFileProtocol(protocolName: string) {
   protocol.registerFileProtocol(protocolName, (request, callback) => {
     const url = request.url.replace(new RegExp(`^${protocolName}://`), "");
     // Decode URL to prevent errors when loading filenames with UTF-8 chars or chars like "#"
@@ -143,37 +143,37 @@ function shutdown() {
 /*                              IPC Configuration                             */
 /* -------------------------------------------------------------------------- */
 // eslint-disable-next-line no-unused-vars
-ipcMain.handle("controlSyncService", (event, action, ...args) => {
+ipcMain.handle("controlSyncService", (event, action: SyncServiceOperations, ...args) => {
   // Add the `win` argument if the action is `START`
   if (action == SyncServiceOperations.START) {
     args = [win, ...args];
   }
-  return SyncServiceController[action](...args);
+  return SyncServiceController[action].apply(null, args);
 });
 
 // eslint-disable-next-line no-unused-vars
-ipcMain.on("controlLibrary", (event, action, ...args) => {
+ipcMain.on("controlLibrary", (event, action: LibraryOperations, ...args) => {
   // Add the `win` argument if the action is `WATCH`
   if (action == LibraryOperations.WATCH) {
     args = [win, ...args];
   }
-  LibraryController[action](...args);
+  LibraryController[action].apply(null, args);
 });
 
 // eslint-disable-next-line no-unused-vars
-ipcMain.handle("controlGame", (event, action, ...args) => {
+ipcMain.handle("controlGame", (event, action: GameOperations, ...args) => {
   // Add the `win` argument if the action is `LAUNCH`
   if (action == GameOperations.LAUNCH) {
     args = [win, ...args];
   }
-  return GameController[action](...args);
+  return GameController[action].apply(null, args);
 });
 
 // eslint-disable-next-line no-unused-vars
-ipcMain.on("controlWindow", async (event, action) => {
+ipcMain.on("controlWindow", async (event, action: WindowOperations) => {
   // Unmaximize on `MAXIMIZE` if window is maximized
   if (action == WindowOperations.MAXIMIZE && win.isMaximized()) {
-    action = "unmaximize";
+    action = WindowOperations.UNMAXIMIZE;
   }
   win[action]();
 });
