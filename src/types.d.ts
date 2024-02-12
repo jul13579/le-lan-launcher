@@ -12,10 +12,8 @@ declare namespace Electron {
   }
 }
 
-declare global {
-  interface Window {
-    ipcRenderer: Electron.IpcRenderer;
-  }
+declare interface Window {
+  ipcRenderer: Electron.IpcRenderer;
 }
 
 type GameFolder = {
