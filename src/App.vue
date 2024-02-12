@@ -140,7 +140,7 @@ onBeforeMount(() => {
         Object.assign(vuetifyTheme.themes.value, { dark: { colors: { primary: primaryColor } } })
         break;
       case Mutations.LOCALE:
-        i18n.locale = mutation.payload;
+        i18n.locale.value = mutation.payload;
         break;
       case Mutations.API_KEY:
         // Skip showing a toast message for API key mutations
