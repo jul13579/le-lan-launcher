@@ -37,8 +37,8 @@ export default {
       },
       connection: {
         connected: "Verbindung zu Service hergestellt",
-        disconnected: "Verbindung zu Service verloren"
-      }
+        disconnected: "Verbindung zu Service verloren",
+      },
     },
     debug: "Debug-Modus gespeichert",
   },
@@ -105,4 +105,4 @@ export default {
     cancel: "Cancel",
     delete: "Delete",
   },
-};
+} as const;

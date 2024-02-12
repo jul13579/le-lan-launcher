@@ -104,4 +104,4 @@ export default {
     cancel: "Cancel",
     delete: "Delete",
   }
-};
+} as const;
