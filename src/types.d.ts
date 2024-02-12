@@ -5,7 +5,7 @@ declare const MAIN_WINDOW_VITE_DEV_SERVER_URL: string;
 declare const MAIN_WINDOW_VITE_NAME: string;
 
 // Overwrite `removeAllListeners` signature to allow optionally typed `channel` argument.
-namespace Electron {
+declare namespace Electron {
   interface IpcRenderer
     extends Omit<import("electron").IpcRenderer, "removeAllListeners"> {
     removeAllListeners(channel?: string): this;
