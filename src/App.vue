@@ -191,15 +191,15 @@ onUnmounted(() => {
 function pingService() {
   SyncServiceController.System.ping()
     .then(() => {
-      this.online = true;
+      online.value = true;
     })
     .catch(() => {
-      this.online = false;
+      online.value = false;
 
       // Get current API key if ping fails
-      SyncServiceRendererController.System.getApiKey(this.homeDir).then(
+      SyncServiceRendererController.System.getApiKey(homeDir).then(
         (apiKey) => {
-          this.$store.commit(Mutations.API_KEY, apiKey);
+          store.commit(Mutations.API_KEY, apiKey);
         }
       );
     });
@@ -217,20 +217,20 @@ function sendWindowControl(action: WindowOperations) {
  * Minimize window.
  */
 function minimizeWindow() {
-  this.sendWindowControl(WindowOperations.MINIMIZE);
+  sendWindowControl(WindowOperations.MINIMIZE);
 };
 
 /**
  * Maximize window.
  */
 function maximizeWindow() {
-  this.sendWindowControl(WindowOperations.MAXIMIZE);
+  sendWindowControl(WindowOperations.MAXIMIZE);
 };
 
 /**
  * Close Window.
  */
 function closeWindow() {
-  this.sendWindowControl(WindowOperations.CLOSE);
+  sendWindowControl(WindowOperations.CLOSE);
 };
 </script>
