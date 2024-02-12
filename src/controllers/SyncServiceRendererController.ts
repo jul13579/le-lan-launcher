@@ -2,6 +2,7 @@ import axios from "axios";
 import { host } from "../config/service";
 import SyncServiceOperations from "../enums/SyncServiceOperations";
 import store from "../store";
+import { Config } from "src/types";
 
 axios.defaults.headers.common["X-API-Key"] = store.state.apiKey;
 
@@ -23,7 +24,7 @@ export default {
         SyncServiceOperations.OPEN_SYNCTHING_UI
       );
     },
-    start: (homeDir) => {
+    start: (homeDir: string) => {
       return window.ipcRenderer.invoke(
         "controlSyncService",
         SyncServiceOperations.START,
@@ -36,7 +37,7 @@ export default {
     stop: () => {
       return axios.post(host + "/system/shutdown");
     },
-    getApiKey: (homeDir) => {
+    getApiKey: (homeDir: string) => {
       return window.ipcRenderer.invoke(
         "controlSyncService",
         SyncServiceOperations.GET_API_KEY,
@@ -52,7 +53,7 @@ export default {
     getConfig: () => {
       return axios.get(host + "/system/config");
     },
-    setConfig: (config) => {
+    setConfig: (config: Config) => {
       return axios.post(host + "/system/config", config);
     },
     connections: () => {
@@ -63,10 +64,10 @@ export default {
     },
   },
   DB: {
-    folderStatus: (folder) => {
+    folderStatus: (folder: string) => {
       return axios.get(host + "/db/status?folder=" + folder);
     },
-    revertFolder: (folder) => {
+    revertFolder: (folder: string) => {
       return axios.post(host + "/db/revert?folder=" + folder);
     },
   },
@@ -76,7 +77,7 @@ export default {
     },
   },
   Events: {
-    since: (lastSeenID) => {
+    since: (lastSeenID: string) => {
       return axios.get(host + "/events?timeout=1&since=" + lastSeenID);
     },
     latest: () => {

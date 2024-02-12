@@ -4,6 +4,12 @@
 declare const MAIN_WINDOW_VITE_DEV_SERVER_URL: string;
 declare const MAIN_WINDOW_VITE_NAME: string;
 
+declare global {
+  interface Window {
+    ipcRenderer: import("electron").IpcRenderer;
+  }
+}
+
 declare type GameFolder = {
   id: string;
   path: string;

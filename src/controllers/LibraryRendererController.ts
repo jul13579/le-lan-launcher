@@ -1,3 +1,4 @@
+import { IpcRenderer } from "electron";
 import LibraryOperations from "../enums/LibraryOperations";
 
 /**
@@ -7,10 +8,10 @@ import LibraryOperations from "../enums/LibraryOperations";
 export default class LibraryController {
   /**
    * Setup library watcher.
-   * @param {String} libConfigPath The path to the library config file to watch.
+   * @param {string} libConfigPath The path to the library config file to watch.
    * @param {Function} callback The function to call when library config changed.
    */
-  static watch(libConfigPath, callback) {
+  static watch(libConfigPath: string, callback: Parameters<IpcRenderer['on']>[1]) {
     window.ipcRenderer.on("library", callback);
     window.ipcRenderer.send(
       "controlLibrary",
@@ -21,9 +22,9 @@ export default class LibraryController {
 
   /**
    * Tear-down library watcher.
-   * @param {String} libConfigPath The path to the config file to unwatch.
+   * @param {string} libConfigPath The path to the config file to unwatch.
    */
-  static unwatch(libConfigPath) {
+  static unwatch(libConfigPath: string) {
     window.ipcRenderer.send(
       "controlLibrary",
       LibraryOperations.UNWATCH,
