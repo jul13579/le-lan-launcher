@@ -10,11 +10,11 @@ declare global {
   }
 }
 
-declare type GameFolder = {
+type GameFolder = {
   id: string;
   path: string;
 };
 
-declare type Config = {
+type Config = {
   nameConfig: any;
 };
