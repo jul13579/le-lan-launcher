@@ -4,6 +4,7 @@ import numberFormats from "../localization/numberformats";
 
 const createI18n = (store: { state: { locale: keyof typeof langs } }) =>
   _createI18n({
+    legacy: false,
     locale: store.state.locale, // set locale
     numberFormats,
     messages: langs, // set locale messages
