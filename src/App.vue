@@ -211,9 +211,9 @@ function pingService() {
 
 /**
  * Send window operations to main process.
- * @param {String} action The window action.
+ * @param {WindowOperations} action The window action.
  */
-function sendWindowControl(action) {
+function sendWindowControl(action: WindowOperations) {
   window.ipcRenderer.send("controlWindow", action);
 };
 
