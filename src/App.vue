@@ -12,7 +12,7 @@
   }
 }
 
-.v-toolbar__title {
+.v-toolbar-title {
   &.centered {
     position: absolute;
     display: flex;
@@ -35,30 +35,30 @@
       backgroundSize: theme.cover ? 'cover' : 'initial',
     }" />
 
-    <v-app-bar app elevate-on-scroll class="justify-center">
+    <v-app-bar scroll-behavior="elevate" class="justify-center">
       <v-avatar class="mr-2" image="/icon.png" />
       <v-spacer></v-spacer>
-      <v-toolbar-title class="centered"><span>LAN-Launcher</span></v-toolbar-title>
+      <v-app-bar-title class="centered"><span>LAN-Launcher</span></v-app-bar-title>
       <v-spacer></v-spacer>
 
       <v-btn icon @click="minimizeWindow()">
-        <v-icon>{{ icons.mdiWindowMinimize }}</v-icon>
+        <v-icon :icon="mdiWindowMinimize" />
       </v-btn>
       <v-btn icon @click="maximizeWindow()">
-        <v-icon>{{ icons.mdiWindowMaximize }}</v-icon>
+        <v-icon :icon="mdiWindowMaximize" />
       </v-btn>
       <v-btn icon class="justify-self-end" @click="closeWindow()">
-        <v-icon>{{ icons.mdiClose }}</v-icon>
+        <v-icon :icon="mdiClose" />
       </v-btn>
 
       <template v-slot:extension>
         <!-- Force re-render of tabs on locale change, else tab indicator width is wrong -->
         <v-tabs centered v-model="activeTab" :key="locale">
           <v-tab :disabled="!setupCompleted">
-            <v-icon left>{{ icons.mdiGamepad }}</v-icon>{{ $t("nav.library") }}
+            <v-icon left :icon="mdiGamepad" />{{ $t("nav.library") }}
           </v-tab>
           <v-tab>
-            <v-icon left>{{ icons.mdiCog }}</v-icon>{{ $t("nav.settings") }}
+            <v-icon left :icon="mdiCog" />{{ $t("nav.settings") }}
           </v-tab>
         </v-tabs>
       </template>
@@ -111,14 +111,6 @@ const vuetifyTheme = useTheme();
 const i18n = useI18n();
 const store = useStore();
 const { theme, playerName, homeDir, nas, backgroundHue, locale } = store.state;
-
-const icons = {
-  mdiWindowMinimize,
-  mdiWindowMaximize,
-  mdiClose,
-  mdiGamepad,
-  mdiCog
-};
 
 const setupCompleted = readonly(ref(playerName !== false && homeDir !== false && nas !== false))
 
