@@ -1,7 +1,7 @@
 import { createStore } from "vuex";
 import VuexPersistence from "vuex-persist";
-import Mutations from "./enums/Mutations";
-import langs from "./localization/langs";
+import Mutations from "../enums/Mutations";
+import langs from "../localization/langs";
 
 const defaultBackgroundHue = 265;
 const defaultLocale = "en";
