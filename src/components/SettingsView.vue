@@ -15,13 +15,16 @@
 
 <template>
   <v-container>
-    <v-alert type="error" variant="tonal" border="start" class="my-1" :title="$t('errors.playerNameUnset.title')" v-if="playerName == false">
+    <v-alert type="error" variant="tonal" border="start" class="my-1" :title="$t('errors.playerNameUnset.title')"
+      v-if="playerName == false">
       {{ $t("errors.playerNameUnset.message") }}
     </v-alert>
-    <v-alert type="error" variant="tonal" border="start" class="my-1" :title="$t('errors.homeDirUnset.title')" v-if="homeDir == false">
+    <v-alert type="error" variant="tonal" border="start" class="my-1" :title="$t('errors.homeDirUnset.title')"
+      v-if="homeDir == false">
       {{ $t("errors.homeDirUnset.message") }}
     </v-alert>
-    <v-alert type="error" variant="tonal" border="start" class="my-1" :title="$t('errors.nasUnset.title')" v-if="nas == false">
+    <v-alert type="error" variant="tonal" border="start" class="my-1" :title="$t('errors.nasUnset.title')"
+      v-if="nas == false">
       {{ $t("errors.nasUnset.message") }}
     </v-alert>
     <div class="text-h4">{{ $t("settings.theme") }}</div>
@@ -69,9 +72,8 @@
     <div class="text-h4">{{ $t("settings.environment") }}</div>
     <v-row>
       <v-col cols="3">
-        <v-select :label="$t('settings.language')" :value="locale" :items="Object.entries(langs)"
-          :item-text="(lang) => lang[1].lang" :item-value="(lang) => lang[0]"
-          @change="(input) => store.commit(Mutations.LOCALE, input)" />
+        <v-select :label="$t('settings.language')" :model-value="locale" :items="langs"
+          :item-title="(lang) => $t(`langs.${lang}`)" @change="(input) => store.commit(Mutations.LOCALE, input)" />
       </v-col>
       <v-col cols="5" class="offset-4">
         <v-tooltip top max-width="400">
@@ -103,8 +105,7 @@
       <v-col cols="5">
         <v-select :disabled="!online" :label="$t('settings.nas')" :value="nas" :items="Object.entries(devices)"
           :item-value="(device) => device[0]" :item-text="(device) => device[0]" :error="nas == false"
-          @change="(input) => store.commit(Mutations.NAS, input)"
-          :no-data-text="$t('settings.alerts.discovery')"
+          @change="(input) => store.commit(Mutations.NAS, input)" :no-data-text="$t('settings.alerts.discovery')"
           :error-messages="!online ? $t('settings.alerts.service') : null" />
       </v-col>
     </v-row>
