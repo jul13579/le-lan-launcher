@@ -1,5 +1,5 @@
 import { createApp } from "vue";
-import Toasted from "vue-toasted";
+// import Toasted from "vue-toasted";
 import { createI18n } from "vue-i18n";
 
 import vuetify from "./plugins/vuetify";
