@@ -2,7 +2,6 @@ import axios from "axios";
 import { host } from "../config/service";
 import SyncServiceOperations from "../enums/SyncServiceOperations";
 import store from "../store";
-import { Config } from "src/types";
 
 axios.defaults.headers.common["X-API-Key"] = store.state.apiKey;
 
