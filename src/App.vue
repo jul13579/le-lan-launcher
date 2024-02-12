@@ -131,13 +131,13 @@ onBeforeMount(() => {
   });
 
   // Set vuetify primary color
-  Object.assign(vuetifyTheme.themes.value, { dark: { colors: { primary: primaryColor } } })
+  vuetifyTheme.themes.value.dark.colors.primary = primaryColor.value;
 
   // Setup notification handles
   storeSubscriptionCallback = store.subscribe((mutation) => {
     switch (mutation.type) {
       case Mutations.BACKGROUND_HUE:
-        Object.assign(vuetifyTheme.themes.value, { dark: { colors: { primary: primaryColor } } })
+        vuetifyTheme.themes.value.dark.colors.primary = primaryColor.value;
         break;
       case Mutations.LOCALE:
         i18n.locale.value = mutation.payload;
