@@ -61,7 +61,7 @@
 
       <template v-slot:extension>
         <!-- Force re-render of tabs on locale change, else tab indicator width is wrong -->
-        <v-tabs centered v-model="activeTab" :key="locale">
+        <v-tabs align-tabs="center" class="w-100" v-model="activeTab" :key="locale">
           <v-tab :disabled="!setupCompleted" :prepend-icon="mdiGamepad">
             {{ $t("nav.library") }}
           </v-tab>
