@@ -44,6 +44,7 @@
     "@types/xml-parser": "^1.2.33",
     "@typescript-eslint/eslint-plugin": "^5.62.0",
     "@typescript-eslint/parser": "^5.62.0",
+    "@vitejs/plugin-vue": "^5.0.4",
     "@volar-plugins/vetur": "^2.0.0",
     "electron": "^28.2.2",
     "electron-devtools-installer": "^3.2.0",
