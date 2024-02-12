@@ -1,5 +1,5 @@
 import { spawn } from "child_process";
-import { shell } from "electron";
+import { BrowserWindow, shell } from "electron";
 import fs from "fs";
 import path from "path";
 import GameOperations from "../enums/GameOperations";
@@ -12,16 +12,16 @@ export default class GameController {
   /**
    * Launch a game.
    * @param {BrowserWindow} win The BrowserWindow.
-   * @param {Object} game The sync-service folder config.
-   * @param {Object} config The game object of the library config file.
-   * @param {String} executable The executable to run
-   * @param {String} playerName The name of the player
-   * @param {Boolean} debug State of debug mode.
+   * @param {GameFolder} gameFolder The sync-service folder config.
+   * @param {Config} config The game object of the library config file.
+   * @param {string} executable The executable to run
+   * @param {string} playerName The name of the player
+   * @param {boolean} debug State of debug mode.
    */
-  static [GameOperations.LAUNCH](win, game, config, executable, playerName, debug) {
+  static [GameOperations.LAUNCH](win: BrowserWindow, gameFolder: GameFolder, config: Config, executable: string, playerName: string, debug: boolean) {
     // Try setting the player name with the given configuration
     try {
-      this._setPlayerName(game, config, playerName);
+      this._setPlayerName(gameFolder, config, playerName);
     } catch (e) {
       // There will be cases where this errors, e.g. if the configuration is not correct or the file in which the player
       // name should be changed is not yet existing (because the game did not yet run). The game should however launch
@@ -34,11 +34,11 @@ export default class GameController {
     }
 
     let gameProcess = spawn(path.normalize(executable), [
-      path.normalize(game.path),
-      game.id,
+      path.normalize(gameFolder.path),
+      gameFolder.id,
       playerName,
     ], {
-      cwd: game.path,
+      cwd: gameFolder.path,
       detached: true, // Spawn executable detached, so it stays open if launcher is closed.
     });
 
@@ -68,18 +68,18 @@ export default class GameController {
 
   /**
    * Open the install folder of a game in the file explorer.
-   * @param {Object} gameFolder The sync-service folder config.
+   * @param {GameFolder} gameFolder The sync-service folder config.
    */
-  static [GameOperations.BROWSE](gameFolder) {
+  static [GameOperations.BROWSE](gameFolder: GameFolder) {
     shell.openPath(path.normalize(gameFolder.path));
   }
 
   /**
    * Delete a game.
-   * @param {Object} gameFolder The sync-service folder config.
+   * @param {GameFolder} gameFolder The sync-service folder config.
    * @returns {String} Error if error was encountered.
    */
-  static [GameOperations.DELETE](gameFolder) {
+  static [GameOperations.DELETE](gameFolder: GameFolder) {
     fs.rm(gameFolder.path, { recursive: true }, (error) => {
       if (error) return error;
     });
@@ -87,18 +87,18 @@ export default class GameController {
 
   /**
    * Set the player name according for a specific game.
-   * @param {Object} game The sync-service folder config.
-   * @param {Object} config The game object of the library config file.
-   * @param {String} playerName The user's playername.
+   * @param {GameFolder} gameFolder The sync-service folder config.
+   * @param {Config} config The game object of the library config file.
+   * @param {string} playerName The user's playername.
    * @private
    */
-  static _setPlayerName(game, config, playerName) {
+  private static _setPlayerName(gameFolder: GameFolder, config: Config, playerName: string) {
     if (!config || !config.nameConfig) {
       return;
     }
     let nameConfig = config.nameConfig;
     let filePath = path.resolve(
-      game.path,
+      gameFolder.path,
       nameConfig.env ? process.env[nameConfig.env] : "",
       nameConfig.file
     );

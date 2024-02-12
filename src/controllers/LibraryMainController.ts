@@ -1,5 +1,6 @@
 import fs from "fs";
 import LibraryOperations from "../enums/LibraryOperations";
+import { BrowserWindow } from "electron";
 
 /**
  * Controller for game library.
@@ -10,12 +11,12 @@ export default class LibraryController {
    * Setup watcher on the library config file.
    * This will send updates to the renderer, if the library config file changes.
    * @param {BrowserWindow} win The BrowserWindow.
-   * @param {String} libConfigPath The path to the library config file.
+   * @param {string} libConfigPath The path to the library config file.
    */
-  static [LibraryOperations.WATCH](win, libConfigPath) {
+  static [LibraryOperations.WATCH](win: BrowserWindow, libConfigPath: string) {
     // Setup library watcher
     // ! Use fs.watchFile as it handles ENOENT (file not existing) and also calls listener when file is created
-    this.libraryWatcher = fs.watchFile(libConfigPath, (curr) => {
+    fs.watchFile(libConfigPath, (curr) => {
       if (curr.size > 0) {
         win.webContents.send("library", this._read(libConfigPath));
       }
@@ -28,22 +29,22 @@ export default class LibraryController {
 
   /**
    * Unwatch the library config file.
-   * @param {String} libConfigPath The path to the library config file.
+   * @param {string} libConfigPath The path to the library config file.
    */
-  static [LibraryOperations.UNWATCH](libConfigPath) {
-    fs.unwatchFile(libConfigPath, this.libraryWatcher);
+  static [LibraryOperations.UNWATCH](libConfigPath: string) {
+    fs.unwatchFile(libConfigPath);
   }
 
   /**
    * Read the library config file.
    * The game entries will be sorted by game title.
-   * @param {String} libConfigPath The path to the library config file.
+   * @param {string} libConfigPath The path to the library config file.
    * @returns The contents of the library config file.
    * @private
    */
-  static _read(libConfigPath) {
-    const lib = JSON.parse(fs.readFileSync(libConfigPath));
-    lib.games.sort((game1, game2) => {
+  static _read(libConfigPath: string) {
+    const lib = JSON.parse(fs.readFileSync(libConfigPath).toString());
+    lib.games.sort((game1: { title: string }, game2: typeof game1) => {
       if (game1.title < game2.title) {
         return -1;
       }
