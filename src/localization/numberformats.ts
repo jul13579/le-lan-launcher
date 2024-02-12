@@ -16,11 +16,12 @@ const commonNumberFormats = {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
   },
-};
+} as const;
 
-let numberFormats = {};
-for (var lang in langs) {
-  numberFormats[lang] = commonNumberFormats;
-}
+const numberFormats = Object.fromEntries(
+  Object.entries(langs).map(([lang]) => [lang, commonNumberFormats])
+) as {
+  [k in keyof typeof langs]: typeof commonNumberFormats;
+};
 
 export default numberFormats;
