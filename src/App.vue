@@ -72,7 +72,7 @@
             <!-- <games-view :online="online" /> -->
           </v-window-item>
           <v-window-item :value="1">
-            <!-- <settings-view :online="online" /> -->
+            <settings-view :online="online" />
           </v-window-item>
         </v-window>
       </v-container>
@@ -87,7 +87,7 @@ import { mdiClose, mdiCog, mdiGamepad, mdiWindowMaximize, mdiWindowMinimize } fr
 import { useStore } from "vuex";
 // import GamesView from "./components/GamesView";
 // import ServiceStatistics from "./components/ServiceStatistics";
-// import SettingsView from "./components/SettingsView";
+import SettingsView from "./components/SettingsView.vue";
 import SyncServiceController from "./controllers/SyncServiceRendererController";
 import WindowOperations from "./enums/WindowOperations";
 
