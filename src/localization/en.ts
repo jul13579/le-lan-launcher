@@ -1,5 +1,8 @@
 export default {
-  lang: "English",
+  langs: {
+    en: "English",
+    de: "German",
+  },
   nav: {
     settings: "Settings",
     library: "Game library",
@@ -37,8 +40,8 @@ export default {
       },
       connection: {
         connected: "Connected to service",
-        disconnected: "Disconnected from service"
-      }
+        disconnected: "Disconnected from service",
+      },
     },
     debug: "Debug mode saved",
   },
@@ -103,5 +106,5 @@ export default {
   cardActions: {
     cancel: "Cancel",
     delete: "Delete",
-  }
+  },
 } as const;

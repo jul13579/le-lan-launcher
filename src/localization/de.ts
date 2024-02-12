@@ -1,5 +1,8 @@
 export default {
-  lang: "Deutsch",
+  langs: {
+    en: "Englisch",
+    de: "Deutsch",
+  },
   nav: {
     settings: "Einstellungen",
     library: "Spielebibliothek",
