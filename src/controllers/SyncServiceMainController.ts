@@ -11,7 +11,7 @@ import SyncServiceOperations from "../enums/SyncServiceOperations";
  */
 export default class SyncServiceMainController {
   private static homeDir: string;
-  private static apiKey: any;
+  private static apiKey: string;
 
   /**
    * Starts a new process of the sync-service using the specified directory as home directory.
