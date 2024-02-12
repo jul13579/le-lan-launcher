@@ -12,7 +12,7 @@
   }
 }
 
-.v-toolbar {
+.v-app-bar.v-toolbar {
   background: rgba(var(--v-theme-surface), .45);
 }
 
