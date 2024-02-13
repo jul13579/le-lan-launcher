@@ -131,9 +131,9 @@ const { playerName, homeDir, nas } = store.state;
 const devices = ref([]);
 const langs = Object.keys(_langs);
 
-const backgroundHue = useComputedStoreAttribute<number>(StoreAttributes.BACKGROUND_HUE);
-const locale = useComputedStoreAttribute<string>(StoreAttributes.LOCALE);
-const debug = useComputedStoreAttribute<boolean>(StoreAttributes.DEBUG);
+const backgroundHue = useComputedStoreAttribute(StoreAttributes.BACKGROUND_HUE);
+const locale = useComputedStoreAttribute(StoreAttributes.LOCALE);
+const debug = useComputedStoreAttribute(StoreAttributes.DEBUG);
 
 onBeforeMount(() => {
   discoveryTask();

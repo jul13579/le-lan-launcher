@@ -79,7 +79,7 @@ let storeSubscriptionCallback: () => void;
 const vuetifyTheme = useTheme();
 const i18n = useI18n();
 const store = useStore<Store>();
-const backgroundHue = useComputedStoreAttribute<number>(StoreAttributes.BACKGROUND_HUE);
+const backgroundHue = useComputedStoreAttribute(StoreAttributes.BACKGROUND_HUE);
 const { theme, playerName, homeDir, nas, locale } = store.state;
 
 const setupCompleted = readonly(ref(!!playerName && !!homeDir && !!nas))
