@@ -124,7 +124,6 @@ const textures = [
 
 const store = useStore();
 
-// const sliderValue = ref(backgroundHue);
 const devices = ref([]);
 const langs = Object.keys(_langs);
 
