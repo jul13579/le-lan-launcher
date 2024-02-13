@@ -101,16 +101,13 @@
 import { mdiImageSearch } from "@mdi/js";
 
 import SyncServiceController from "../controllers/SyncServiceRendererController";
-import { ref } from "vue";
+import { ref, onBeforeMount, onUnmounted, watchEffect } from "vue";
 import { default as _langs } from "../localization/langs";
-import { useStore } from "vuex";
-import { onBeforeMount } from "vue";
-import { onUnmounted } from "vue";
-import { computed } from "vue";
 import Mutations from "../enums/Mutations";
-import { watchEffect } from "vue";
+import { useStore } from "vuex";
+import { useComputedStoreAttribute } from '../composables/useComputedStoreAttribute';
 
-let discoveryInterval: NodeJS.Timeout;
+let discoveryInterval: ReturnType<typeof setTimeout>;
 
 const { online } = defineProps(['online']);
 
@@ -129,22 +126,8 @@ const sliderValue = ref(backgroundHue);
 const devices = ref([]);
 const langs = Object.keys(_langs);
 
-const locale = computed({
-  get() {
-    return store.state.locale;
-  },
-  set(value) {
-    store.commit(Mutations.LOCALE, value);
-  }
-})
-const debug = computed({
-  get() {
-    return store.state.debug
-  },
-  set(value) {
-    store.commit(Mutations.DEBUG, value);
-  }
-})
+const locale = useComputedStoreAttribute('locale', Mutations.LOCALE);
+const debug = useComputedStoreAttribute('debug', Mutations.DEBUG);
 
 onBeforeMount(() => {
   discoveryTask();
