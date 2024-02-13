@@ -114,7 +114,9 @@ import { StoreAttributes } from "../plugins/store";
 
 let discoveryInterval: ReturnType<typeof setTimeout>;
 
-const { online } = defineProps(['online']);
+const { online } = defineProps<{
+  online: boolean
+}>();
 
 const textures = [
   "./funky-lines.png",
@@ -138,7 +140,7 @@ const debug = useComputedStoreAttribute(StoreAttributes.DEBUG);
 onBeforeMount(() => {
   discoveryTask();
   clearInterval(discoveryInterval);
-  if (online.value) {
+  if (online) {
     discoveryInterval = setInterval(discoveryTask, 5000);
   }
 });
