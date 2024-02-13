@@ -71,6 +71,7 @@ import { ref, readonly, onBeforeMount, onUnmounted } from "vue";
 import { useI18n } from "vue-i18n";
 import { useTheme } from "vuetify/lib/framework.mjs";
 import { Store, StoreAttributes } from "./plugins/store";
+import { useComputedStoreAttribute } from "./composables/useComputedStoreAttribute";
 
 let pingIntervalHandle: ReturnType<typeof setTimeout>;
 let storeSubscriptionCallback: () => void;
@@ -78,10 +79,10 @@ let storeSubscriptionCallback: () => void;
 const vuetifyTheme = useTheme();
 const i18n = useI18n();
 const store = useStore<Store>();
-const { theme, playerName, homeDir, nas, backgroundHue, locale } = store.state;
+const backgroundHue = useComputedStoreAttribute<number>(StoreAttributes.BACKGROUND_HUE);
+const { theme, playerName, homeDir, nas, locale } = store.state;
 
 const setupCompleted = readonly(ref(!!playerName && !!homeDir && !!nas))
-const primaryColor = readonly(ref(hsl(backgroundHue, 100, 60)));
 
 const activeTab = ref(setupCompleted.value ? 0 : 1);
 const online = ref(false);
@@ -93,17 +94,19 @@ onBeforeMount(() => {
     store.commit(StoreAttributes.API_KEY, apiKey);
   });
 
+  const primaryColor = (hue: number) => hsl(hue, 100, 60);
+
   // Set vuetify primary color
-  vuetifyTheme.themes.value.dark.colors.primary = primaryColor.value;
+  vuetifyTheme.themes.value.dark.colors.primary = primaryColor(backgroundHue.value);
 
   // Setup notification handles
-  storeSubscriptionCallback = store.subscribe((mutation) => {
-    switch (mutation.type) {
+  storeSubscriptionCallback = store.subscribe(({ type, payload }) => {
+    switch (type) {
       case StoreAttributes.BACKGROUND_HUE:
-        vuetifyTheme.themes.value.dark.colors.primary = primaryColor.value;
+        vuetifyTheme.themes.value.dark.colors.primary = primaryColor(payload);
         break;
       case StoreAttributes.LOCALE:
-        i18n.locale.value = mutation.payload;
+        i18n.locale.value = payload;
         break;
       case StoreAttributes.API_KEY:
         // Skip showing a toast message for API key mutations

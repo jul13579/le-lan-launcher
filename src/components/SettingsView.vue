@@ -1,24 +1,26 @@
 <template>
   <v-container>
-    <v-alert type="error" variant="tonal" border="start" class="my-1" :title="$t('errors.playerNameUnset.title')"
-      v-if="playerName == false">
+    <v-alert v-if="playerName == false" type="error" variant="tonal" border="start" class="my-1"
+      :title="$t('errors.playerNameUnset.title')">
       {{ $t("errors.playerNameUnset.message") }}
     </v-alert>
-    <v-alert type="error" variant="tonal" border="start" class="my-1" :title="$t('errors.homeDirUnset.title')"
-      v-if="homeDir == false">
+    <v-alert v-if="homeDir == false" type="error" variant="tonal" border="start" class="my-1"
+      :title="$t('errors.homeDirUnset.title')">
       {{ $t("errors.homeDirUnset.message") }}
     </v-alert>
-    <v-alert type="error" variant="tonal" border="start" class="my-1" :title="$t('errors.nasUnset.title')"
-      v-if="nas == false">
+    <v-alert v-if="nas == false" type="error" variant="tonal" border="start" class="my-1"
+      :title="$t('errors.nasUnset.title')">
       {{ $t("errors.nasUnset.message") }}
     </v-alert>
-    <div class="text-h4">{{ $t("settings.theme") }}</div>
+    <div class="text-h4">
+      {{ $t("settings.theme") }}
+    </div>
     <div class="d-flex mx-n3 flex-wrap">
-      <v-img v-for="(item, index) in textures" :key="index" class="themePreview ma-3" aspect-ratio="1" :src="item"
-        @click.native="() => {
+      <v-img v-for="(item, index) in textures" :key="index" class="themePreview ma-3" aspect-ratio="1" :src="item" eager
+        @click="() => {
           store.commit(StoreAttributes.THEME, { path: item, cover: false });
         }
-          " eager></v-img>
+          " />
       <div class="themePreview ma-3 bg-transparent-dark align-center justify-center"
         :style="{ border: `1px solid hsl(${backgroundHue}, 100%, 35%)` }" @click="
           openFileChooser(
@@ -38,60 +40,63 @@
             }
           )
           ">
-        <span style="padding-bottom: 100%"></span>
-        <v-icon x-large :icon="mdiImageSearch" />
+        <span style="padding-bottom: 100%" />
+        <v-icon size="x-large" :icon="mdiImageSearch" />
       </div>
     </div>
 
-    <div class="mt-5 text-h4">{{ $t("settings.backgroundHue") }}</div>
+    <div class="mt-5 text-h4">
+      {{ $t("settings.backgroundHue") }}
+    </div>
     <v-row>
       <v-col cols="12">
-        <v-slider :min="0" :max="360" thumb-label v-model="sliderValue" :color="'hsl(' + sliderValue + ', 100%, 50%)'"
-          @change="(input) => {
-            store.commit(StoreAttributes.BACKGROUND_HUE, input);
-          }
-            " />
+        <v-slider v-model="backgroundHue" :min="0" :max="360" thumb-label
+          :color="'hsl(' + backgroundHue + ', 100%, 50%)'" />
       </v-col>
     </v-row>
 
-    <div class="text-h4">{{ $t("settings.environment") }}</div>
+    <div class="text-h4">
+      {{ $t("settings.environment") }}
+    </div>
     <v-row>
       <v-col cols="3">
-        <v-select :label="$t('settings.language')" v-model="locale" :items="langs"
+        <v-select v-model="locale" :label="$t('settings.language')" :items="langs"
           :item-title="(lang) => $t(`langs.${lang}`)" :item-value="(lang) => lang" />
       </v-col>
       <v-col cols="5" class="offset-4">
-        <v-tooltip top max-width="400">
-          <template v-slot:activator="{ on }">
+        <v-tooltip location="top" max-width="400">
+          <template #activator="{ props }">
             <v-switch v-model="debug">
-              <template v-slot:label>
-                <span v-on="on">{{ $t('settings.debug') }}</span>
+              <template #label>
+                <span v-bind="props">{{ $t('settings.debug') }}</span>
               </template>
             </v-switch>
           </template>
-          <span v-html="$t('settings.debug_explanation')"></span>
+          <span v-html="$t('settings.debug_explanation')" />
         </v-tooltip>
       </v-col>
     </v-row>
     <v-row>
       <v-col cols="3">
-        <v-text-field :label="$t('settings.playerName')" :value="playerName" @blur="(event) => {
+        <v-text-field :label="$t('settings.playerName')" :model-value="playerName" :error="playerName == false" @blur="(event) => {
           store.commit(StoreAttributes.PLAYER_NAME, event.target.value);
         }
-          " :error="playerName == false" />
+          " />
       </v-col>
       <v-col cols="4">
         <div class="d-flex align-baseline">
-          <v-text-field :label="$t('settings.homeDir')" @click="setHomeDir" :readonly="true" :value="homeDir"
-            :disabled="online" :error="homeDir == false" class="mr-2" />
-          <v-btn @click="setHomeDir" :disabled="online" color="primary">{{ $t('settings.chooseHomeDir') }}</v-btn>
+          <v-text-field :label="$t('settings.homeDir')" :readonly="true" :model-value="homeDir" :disabled="online"
+            :error="homeDir == false" class="mr-2" @click="setHomeDir" />
+          <v-btn :disabled="online" color="primary" @click="setHomeDir">
+            {{ $t('settings.chooseHomeDir') }}
+          </v-btn>
         </div>
       </v-col>
       <v-col cols="5">
-        <v-select :disabled="!online" :label="$t('settings.nas')" :value="nas" :items="Object.entries(devices)"
-          :item-value="(device) => device[0]" :item-text="(device) => device[0]" :error="nas == false"
-          @change="(input) => store.commit(StoreAttributes.NAS, input)" :no-data-text="$t('settings.alerts.discovery')"
-          :error-messages="!online ? $t('settings.alerts.service') : null" />
+        <v-select :disabled="!online" :label="$t('settings.nas')" :model-value="nas" :items="Object.entries(devices)"
+          :item-value="(device) => device[0]" :item-title="(device) => device[0]" :error="nas == false"
+          :no-data-text="$t('settings.alerts.discovery')" :error-messages="!online ? $t('settings.alerts.service') : null"
+          @update:model-value="(input) => store.commit(StoreAttributes.NAS, input)" />
       </v-col>
     </v-row>
   </v-container>
@@ -120,14 +125,15 @@ const textures = [
 ];
 
 const store = useStore();
-const { playerName, homeDir, nas, backgroundHue } = store.state;
+const { playerName, homeDir, nas } = store.state;
 
-const sliderValue = ref(backgroundHue);
+// const sliderValue = ref(backgroundHue);
 const devices = ref([]);
 const langs = Object.keys(_langs);
 
-const locale = useComputedStoreAttribute(StoreAttributes.LOCALE);
-const debug = useComputedStoreAttribute(StoreAttributes.DEBUG);
+const backgroundHue = useComputedStoreAttribute<number>(StoreAttributes.BACKGROUND_HUE);
+const locale = useComputedStoreAttribute<string>(StoreAttributes.LOCALE);
+const debug = useComputedStoreAttribute<boolean>(StoreAttributes.DEBUG);
 
 onBeforeMount(() => {
   discoveryTask();

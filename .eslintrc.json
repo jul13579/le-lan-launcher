@@ -17,7 +17,8 @@
   "rules": {
     "vue/max-attributes-per-line": "off",
     "vue/first-attribute-linebreak": "off",
-    "vue/html-closing-bracket-newline": "off"
+    "vue/html-closing-bracket-newline": "off",
+    "vue/html-indent": "off"
   },
   "parser": "vue-eslint-parser",
   "parserOptions": {
