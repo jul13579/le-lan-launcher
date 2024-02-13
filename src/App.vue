@@ -53,7 +53,7 @@
       </v-container>
     </v-main>
 
-    <!-- <service-statistics :online="online"></service-statistics> -->
+    <service-statistics :online="online" />
   </v-app>
 </template>
 
@@ -61,7 +61,7 @@
 import { mdiClose, mdiCog, mdiGamepad, mdiWindowMaximize, mdiWindowMinimize } from "@mdi/js";
 import { useStore } from "vuex";
 // import GamesView from "./components/GamesView";
-// import ServiceStatistics from "./components/ServiceStatistics";
+import ServiceStatistics from "./components/ServiceStatistics.vue";
 import SettingsView from "./components/SettingsView.vue";
 import SyncServiceController from "./controllers/SyncServiceRendererController";
 import WindowOperations from "./enums/WindowOperations";

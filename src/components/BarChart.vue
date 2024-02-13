@@ -1,15 +1,11 @@
 <template>
   <div ref="chartContainer" style="width: 100%; height: 150px">
     <!-- Chart width will be at maximum the container's width. It is responsive -->
-    <canvas
-      ref="chart"
-      width="500"
-      height="150"
-    ></canvas>
+    <canvas ref="chartRef" width="500" height="150" />
   </div>
 </template>
 
-<script>
+<script setup lang="ts">
 import {
   Chart,
   BarController,
@@ -18,7 +14,10 @@ import {
   LinearScale,
   CategoryScale
 } from "chart.js";
-import { mapState } from "vuex";
+import { useComputedStoreAttribute } from "../composables/useComputedStoreAttribute";
+import { StoreAttributes } from "../plugins/store";
+import { defineProps, ref, onMounted, onUnmounted, watchEffect, nextTick } from "vue";
+import { useTheme } from "vuetify/lib/framework.mjs";
 
 // Common options for all charts
 Chart.register(BarController, BarElement, PointElement, LinearScale, CategoryScale);
@@ -30,122 +29,120 @@ Chart.defaults.maintainAspectRatio = false;
 const queueLength = 30;
 
 // Chart update handle
-let updaterInterval;
+let updaterInterval: ReturnType<typeof setTimeout>;
 
-export default {
-  props: {
-    value: Number, // Current value to be added to chart
-    unit: String, // vue-i18n number format key
-  },
-  data() {
-    return {
-      chart: null,
-    };
-  },
-  computed: {
-    ...mapState(["backgroundHue", "locale"]),
-  },
-  watch: {
-    backgroundHue() {
-      this.chart.data.datasets[0].backgroundColor =
-        this.$vuetify.theme.themes.dark.primary;
-      this.chart.update();
-    },
-    locale() {
-      this.chart.options.scales.y.title.text = this.getYAxesUnit();
-      this.chart.update();
-    },
-  },
-  mounted() {
-    let data = {
-      datasets: [
-        {
-          backgroundColor: this.$vuetify.theme.themes.dark.primary,
-          data: this.createQueue(queueLength),
+const { value, unit } = defineProps<{
+  value: number,
+  unit: string
+}>();
+
+const theme = useTheme();
+
+const chart = ref(null);
+const chartRef = ref(null);
+
+const backgroundHue = useComputedStoreAttribute(StoreAttributes.BACKGROUND_HUE);
+const locale = useComputedStoreAttribute(StoreAttributes.LOCALE);
+
+onMounted(() => {
+  let data = {
+    datasets: [
+      {
+        backgroundColor: theme.themes.value.dark.colors.primary,
+        data: createQueue(queueLength),
+      },
+    ],
+  };
+  let options = {
+    scales: {
+      x: {
+        type: 'category',
+        labels: new Array(queueLength).fill(''),
+        display: false
+      },
+      y: {
+        title: {
+          display: true,
+          text: getYAxesUnit(),
         },
-      ],
-    };
-    let options = {
-      scales: {
-        x: {
-          type: 'category',
-          labels: new Array(queueLength).fill(''),
-          display: false
+        min: 0,
+        ticks: {
+          precision: 2, // Round step size to 2 decimal places
         },
-        y: {
-          title: {
-            display: true,
-            text: this.getYAxesUnit(),
-          },
-          min: 0,
-          ticks: {
-            precision: 2, // Round step size to 2 decimal places
-          },
-          border: {
-            display: false,
-          },
-          grid: {
-            color: 'rgba(255,255,255,.1)',
-          },
+        border: {
+          display: false,
+        },
+        grid: {
+          color: 'rgba(255,255,255,.1)',
         },
       },
-    };
-
-    this.chart = new Chart(this.$refs.chart, {
-      type: "bar",
-      data,
-      options,
-    });
-  },
-  destroyed() {
-    clearInterval(updaterInterval);
-  },
-  methods: {
-    /**
-     * Update the chart with the current value.
-     * This method is used by {@link setInterval} to be executed every {@link taskPeriod} milliseconds.
-     */
-    updateChart() {
-      this.$nextTick(() => {
-        this.enqueue(this.value);
-        this.chart.update();
-      });
     },
+  };
 
-    /**
-     * Create a queue of given length filled with 0 values.
-     * @param {Number} length The length of the queue to generate.
-     * @returns {Array} An array with specified queue length, filled with 0s.
-     */
-    createQueue(length) {
-      return Array.from(new Array(length)).fill(0);
-    },
+  chart.value = new Chart(chartRef.value, {
+    type: "bar",
+    data,
+    options,
+  });
+})
 
-    /**
-     * Enqueue a value into the chart.
-     * @param {Number} value The value to enqueue.
-     */
-    enqueue(value) {
-      let data = this.chart.data.datasets[0].data;
-      while (data.length >= queueLength) {
-        data.shift();
-      }
-      data.push(value);
-    },
+onUnmounted(() => {
+  clearInterval(updaterInterval);
+})
 
-    /**
-     * Get locale-sensitive Y-axis unit name.
-     * @returns {String} The unit of the axis in localized form.
-     */
-    getYAxesUnit() {
-      let locale = this.$i18n.locale;
-      return new Intl.NumberFormat(
-        locale,
-        this.$i18n.numberFormats[locale][this.unit]
-      )
-        .formatToParts(0) // Use arbitrary number, we are only interested in unit
-        .find((item) => item.type == "unit").value;
-    },
-  },
-};
+watchEffect(() => {
+  chart.value.data.datasets[0].backgroundColor =
+    theme.themes.value.dark.colors.primary;
+  chart.value.update();
+})
+
+watchEffect(() => {
+  chart.value.options.scales.y.title.text = getYAxesUnit();
+  chart.value.update();
+})
+
+/**
+ * Update the chart with the current value.
+ * This method is used by {@link setInterval} to be executed every {@link taskPeriod} milliseconds.
+ */
+function updateChart() {
+  nextTick(() => {
+    enqueue(value);
+    chart.value.update();
+  });
+}
+
+/**
+ * Create a queue of given length filled with 0 values.
+ * @param {Number} length The length of the queue to generate.
+ * @returns {Array} An array with specified queue length, filled with 0s.
+ */
+function createQueue(length) {
+  return Array.from(new Array(length)).fill(0);
+}
+
+/**
+ * Enqueue a value into the chart.
+ * @param {number} value The value to enqueue.
+ */
+function enqueue(value: number) {
+  let data = chart.value.data.datasets[0].data;
+  while (data.length >= queueLength) {
+    data.shift();
+  }
+  data.push(value);
+}
+
+/**
+ * Get locale-sensitive Y-axis unit name.
+ * @returns {string} The unit of the axis in localized form.
+ */
+function getYAxesUnit() {
+  return new Intl.NumberFormat(
+    locale.value,
+    this.$i18n.numberFormats[locale.value][this.unit]
+  )
+    .formatToParts(0) // Use arbitrary number, we are only interested in unit
+    .find((item) => item.type == "unit").value;
+}
 </script>
