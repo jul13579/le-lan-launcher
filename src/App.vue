@@ -80,9 +80,13 @@ const vuetifyTheme = useTheme();
 const i18n = useI18n();
 const store = useStore<Store>();
 const backgroundHue = useComputedStoreAttribute(StoreAttributes.BACKGROUND_HUE);
-const { theme, playerName, homeDir, nas, locale } = store.state;
+const theme = useComputedStoreAttribute(StoreAttributes.THEME);
+const homeDir = useComputedStoreAttribute(StoreAttributes.HOME_DIR);
+const playerName = useComputedStoreAttribute(StoreAttributes.PLAYER_NAME);
+const nas = useComputedStoreAttribute(StoreAttributes.NAS);
+const locale = useComputedStoreAttribute(StoreAttributes.LOCALE);
 
-const setupCompleted = readonly(ref(!!playerName && !!homeDir && !!nas))
+const setupCompleted = readonly(ref(!!playerName.value && !!homeDir.value && !!nas.value))
 
 const activeTab = ref(setupCompleted.value ? 0 : 1);
 const online = ref(false);
@@ -116,7 +120,7 @@ onBeforeMount(() => {
   })
 
   // Start sync-service on app start
-  SyncServiceController.System.start(homeDir);
+  SyncServiceController.System.start(homeDir.value);
 
   // Setup global service status poller
   clearInterval(pingIntervalHandle);
@@ -164,7 +168,7 @@ function pingService() {
       online.value = false;
 
       // Get current API key if ping fails
-      SyncServiceController.System.getApiKey(homeDir).then(
+      SyncServiceController.System.getApiKey(homeDir.value).then(
         (apiKey) => {
           store.commit(StoreAttributes.API_KEY, apiKey);
         }
