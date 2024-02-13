@@ -42,6 +42,7 @@
     "@electron-forge/plugin-vite": "^7.2.0",
     "@mdi/js": "^7.4.47",
     "@types/hsl-to-hex": "^1.0.2",
+    "@types/node": "^20.11.17",
     "@types/xml-parser": "^1.2.33",
     "@typescript-eslint/eslint-plugin": "^6.21.0",
     "@typescript-eslint/parser": "^6.21.0",
