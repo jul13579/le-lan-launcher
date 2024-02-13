@@ -12,7 +12,9 @@
     <v-app-bar scroll-behavior="elevate" class="justify-center">
       <v-avatar image="/icon.png" />
       <v-spacer />
-      <v-app-bar-title class="w-100 d-flex justify-center position-absolute"><span>LAN-Launcher</span></v-app-bar-title>
+      <v-app-bar-title class="w-100 d-flex justify-center position-absolute">
+        <span>LAN-Launcher</span>
+      </v-app-bar-title>
       <v-spacer />
 
       <v-btn icon @click="minimizeWindow()">
@@ -25,9 +27,9 @@
         <v-icon :icon="mdiClose" />
       </v-btn>
 
-      <template v-slot:extension>
+      <template #extension>
         <!-- Force re-render of tabs on locale change, else tab indicator width is wrong -->
-        <v-tabs align-tabs="center" class="w-100" v-model="activeTab" :key="locale">
+        <v-tabs :key="locale" v-model="activeTab" align-tabs="center" class="w-100">
           <v-tab :disabled="!setupCompleted" :prepend-icon="mdiGamepad">
             {{ $t("nav.library") }}
           </v-tab>
@@ -65,14 +67,10 @@ import SyncServiceController from "./controllers/SyncServiceRendererController";
 import WindowOperations from "./enums/WindowOperations";
 
 import hsl from "hsl-to-hex";
-import SyncServiceRendererController from "./controllers/SyncServiceRendererController";
 import Mutations from "./enums/Mutations";
-import { ref } from "vue";
-import { readonly } from "vue";
-import { onBeforeMount } from "vue";
+import { ref, readonly, onBeforeMount, onUnmounted } from "vue";
 import { useI18n } from "vue-i18n";
 import { useTheme } from "vuetify/lib/framework.mjs";
-import { onUnmounted } from "vue";
 import { Store } from "./plugins/store";
 
 let pingIntervalHandle: ReturnType<typeof setTimeout>;
@@ -124,7 +122,7 @@ onBeforeMount(() => {
 
   window.addEventListener(
     "beforeunload",
-    async () => await SyncServiceRendererController.System.stop()
+    async () => await SyncServiceController.System.stop()
   );
 });
 
@@ -164,7 +162,7 @@ function pingService() {
       online.value = false;
 
       // Get current API key if ping fails
-      SyncServiceRendererController.System.getApiKey(homeDir).then(
+      SyncServiceController.System.getApiKey(homeDir).then(
         (apiKey) => {
           store.commit(Mutations.API_KEY, apiKey);
         }
