@@ -11,7 +11,7 @@ const vuexLocal = new VuexPersistence({
   storage: window.localStorage,
 });
 
-export default createStore<{
+export type Store = {
   backgroundHue: number;
   theme: {
     cover: boolean;
@@ -23,7 +23,9 @@ export default createStore<{
   nas: string;
   locale: keyof typeof langs;
   debug: boolean;
-}>({
+};
+
+export default createStore<Store>({
   state() {
     return {
       backgroundHue: defaultBackgroundHue,

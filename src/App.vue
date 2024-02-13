@@ -100,13 +100,14 @@ import { onBeforeMount } from "vue";
 import { useI18n } from "vue-i18n";
 import { useTheme } from "vuetify/lib/framework.mjs";
 import { onUnmounted } from "vue";
+import { Store } from "./plugins/store";
 
 let pingIntervalHandle: NodeJS.Timeout;
 let storeSubscriptionCallback: () => void;
 
 const vuetifyTheme = useTheme();
 const i18n = useI18n();
-const store = useStore();
+const store = useStore<Store>();
 const { theme, playerName, homeDir, nas, backgroundHue, locale } = store.state;
 
 const setupCompleted = readonly(ref(!!playerName && !!homeDir && !!nas))
