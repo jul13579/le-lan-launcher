@@ -65,7 +65,7 @@
       <v-col cols="5" class="offset-4">
         <v-tooltip location="top" max-width="400">
           <template #activator="{ props }">
-            <v-switch v-model="debug">
+            <v-switch v-model="debug" color="primary">
               <template #label>
                 <span v-bind="props">{{ $t('settings.debug') }}</span>
               </template>
