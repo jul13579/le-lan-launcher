@@ -1,18 +1,3 @@
-<style lang="scss" scoped>
-.themePreview {
-  border-radius: 10px;
-  cursor: pointer;
-  display: flex;
-  width: 200px;
-  max-width: 200px;
-  transition: transform 0.1s ease-in-out;
-
-  &:hover {
-    transform: scale(1.1);
-  }
-}
-</style>
-
 <template>
   <v-container>
     <v-alert type="error" variant="tonal" border="start" class="my-1" :title="$t('errors.playerNameUnset.title')"
@@ -218,3 +203,18 @@ function discoveryTask() {
     .catch();
 }
 </script>
+
+<style lang="scss" scoped>
+.themePreview {
+  border-radius: 10px;
+  cursor: pointer;
+  display: flex;
+  width: 200px;
+  max-width: 200px;
+  transition: transform 0.1s ease-in-out;
+
+  &:hover {
+    transform: scale(1.1);
+  }
+}
+</style>
