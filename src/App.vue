@@ -1,30 +1,3 @@
-<style lang="scss" scoped>
-// Styling for background ("theme")
-.themeWrapper {
-  position: fixed;
-  width: 100vw;
-  height: 100vh;
-  top: 0;
-  left: 0;
-
-  &.texture {
-    opacity: 0.1;
-  }
-}
-
-.v-app-bar.v-toolbar {
-  background: rgba(var(--v-theme-surface), .45);
-}
-
-.v-toolbar__content>*:first-child {
-  margin-inline-start: 10px;
-}
-
-.v-toolbar-title {
-  letter-spacing: 5px;
-}
-</style>
-
 <template>
   <v-app>
     <div class="themeWrapper bgColor" :style="{
@@ -102,7 +75,7 @@ import { useTheme } from "vuetify/lib/framework.mjs";
 import { onUnmounted } from "vue";
 import { Store } from "./plugins/store";
 
-let pingIntervalHandle: NodeJS.Timeout;
+let pingIntervalHandle: ReturnType<typeof setTimeout>;
 let storeSubscriptionCallback: () => void;
 
 const vuetifyTheme = useTheme();
@@ -197,7 +170,7 @@ function pingService() {
         }
       );
     });
-};
+}
 
 /**
  * Send window operations to main process.
@@ -205,26 +178,53 @@ function pingService() {
  */
 function sendWindowControl(action: WindowOperations) {
   window.ipcRenderer.send("controlWindow", action);
-};
+}
 
 /**
  * Minimize window.
  */
 function minimizeWindow() {
   sendWindowControl(WindowOperations.MINIMIZE);
-};
+}
 
 /**
  * Maximize window.
  */
 function maximizeWindow() {
   sendWindowControl(WindowOperations.MAXIMIZE);
-};
+}
 
 /**
  * Close Window.
  */
 function closeWindow() {
   sendWindowControl(WindowOperations.CLOSE);
-};
+}
 </script>
+
+<style lang="scss" scoped>
+// Styling for background ("theme")
+.themeWrapper {
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+  left: 0;
+
+  &.texture {
+    opacity: 0.1;
+  }
+}
+
+.v-app-bar.v-toolbar {
+  background: rgba(var(--v-theme-surface), .45);
+}
+
+.v-toolbar__content>*:first-child {
+  margin-inline-start: 10px;
+}
+
+.v-toolbar-title {
+  letter-spacing: 5px;
+}
+</style>
