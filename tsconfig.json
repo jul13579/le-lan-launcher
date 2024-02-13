@@ -10,7 +10,13 @@
     "baseUrl": ".",
     "outDir": "dist",
     "moduleResolution": "node",
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "lib": [
+      "DOM",
+      "ESNext",
+    ]
   },
-  "include": ["src"]
+  "include": [
+    "src"
+  ]
 }
