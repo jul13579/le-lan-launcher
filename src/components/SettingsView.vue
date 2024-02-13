@@ -16,14 +16,14 @@
     <div class="d-flex mx-n3 flex-wrap">
       <v-img v-for="(item, index) in textures" :key="index" class="themePreview ma-3" aspect-ratio="1" :src="item"
         @click.native="() => {
-          store.commit(Mutations.THEME, { path: item, cover: false });
+          store.commit(StoreAttributes.THEME, { path: item, cover: false });
         }
           " eager></v-img>
       <div class="themePreview ma-3 bg-transparent-dark align-center justify-center"
         :style="{ border: `1px solid hsl(${backgroundHue}, 100%, 35%)` }" @click="
           openFileChooser(
             (result) =>
-              store.commit(Mutations.THEME, {
+              store.commit(StoreAttributes.THEME, {
                 path: `theme://${result.filePaths[0].replace(/\\/g, '/')}`,
                 cover: true,
               }),
@@ -48,7 +48,7 @@
       <v-col cols="12">
         <v-slider :min="0" :max="360" thumb-label v-model="sliderValue" :color="'hsl(' + sliderValue + ', 100%, 50%)'"
           @change="(input) => {
-            store.commit(Mutations.BACKGROUND_HUE, input);
+            store.commit(StoreAttributes.BACKGROUND_HUE, input);
           }
             " />
       </v-col>
@@ -76,7 +76,7 @@
     <v-row>
       <v-col cols="3">
         <v-text-field :label="$t('settings.playerName')" :value="playerName" @blur="(event) => {
-          store.commit(Mutations.PLAYER_NAME, event.target.value);
+          store.commit(StoreAttributes.PLAYER_NAME, event.target.value);
         }
           " :error="playerName == false" />
       </v-col>
@@ -90,7 +90,7 @@
       <v-col cols="5">
         <v-select :disabled="!online" :label="$t('settings.nas')" :value="nas" :items="Object.entries(devices)"
           :item-value="(device) => device[0]" :item-text="(device) => device[0]" :error="nas == false"
-          @change="(input) => store.commit(Mutations.NAS, input)" :no-data-text="$t('settings.alerts.discovery')"
+          @change="(input) => store.commit(StoreAttributes.NAS, input)" :no-data-text="$t('settings.alerts.discovery')"
           :error-messages="!online ? $t('settings.alerts.service') : null" />
       </v-col>
     </v-row>
@@ -103,9 +103,9 @@ import { mdiImageSearch } from "@mdi/js";
 import SyncServiceController from "../controllers/SyncServiceRendererController";
 import { ref, onBeforeMount, onUnmounted, watchEffect } from "vue";
 import { default as _langs } from "../localization/langs";
-import Mutations from "../enums/Mutations";
 import { useStore } from "vuex";
 import { useComputedStoreAttribute } from '../composables/useComputedStoreAttribute';
+import { StoreAttributes } from "../plugins/store";
 
 let discoveryInterval: ReturnType<typeof setTimeout>;
 
@@ -126,8 +126,8 @@ const sliderValue = ref(backgroundHue);
 const devices = ref([]);
 const langs = Object.keys(_langs);
 
-const locale = useComputedStoreAttribute('locale', Mutations.LOCALE);
-const debug = useComputedStoreAttribute('debug', Mutations.DEBUG);
+const locale = useComputedStoreAttribute(StoreAttributes.LOCALE);
+const debug = useComputedStoreAttribute(StoreAttributes.DEBUG);
 
 onBeforeMount(() => {
   discoveryTask();
@@ -169,7 +169,7 @@ function openFileChooser(callback: (result: any) => void, options: any) {
 function setHomeDir() {
   openFileChooser(
     (result) => {
-      store.commit(Mutations.HOME_DIR, result.filePaths[0]);
+      store.commit(StoreAttributes.HOME_DIR, result.filePaths[0]);
     },
     { properties: ['openDirectory'] }
   )

@@ -1,6 +1,5 @@
 import { createStore } from "vuex";
 import { default as VuexPersistence } from "vuex-persist";
-import Mutations from "../enums/Mutations";
 import langs from "../localization/langs";
 
 const defaultBackgroundHue = 265;
@@ -11,18 +10,29 @@ const vuexLocal = new VuexPersistence({
   storage: localStorage,
 });
 
+export enum StoreAttributes {
+  BACKGROUND_HUE = "backgroundHue",
+  THEME = "theme",
+  PLAYER_NAME = "playerName",
+  HOME_DIR = "homeDir",
+  API_KEY = "apiKey",
+  NAS = "nas",
+  LOCALE = "locale",
+  DEBUG = "debug",
+}
+
 export type Store = {
-  backgroundHue: number;
-  theme: {
+  [StoreAttributes.BACKGROUND_HUE]: number;
+  [StoreAttributes.THEME]: {
     cover: boolean;
     path: string;
   };
-  playerName: string;
-  homeDir: string;
-  apiKey: string;
-  nas: string;
-  locale: keyof typeof langs;
-  debug: boolean;
+  [StoreAttributes.PLAYER_NAME]: string;
+  [StoreAttributes.HOME_DIR]: string;
+  [StoreAttributes.API_KEY]: string;
+  [StoreAttributes.NAS]: string;
+  [StoreAttributes.LOCALE]: keyof typeof langs;
+  [StoreAttributes.DEBUG]: boolean;
 };
 
 export default createStore<Store>({
@@ -42,16 +52,16 @@ export default createStore<Store>({
     };
   },
   mutations: {
-    [Mutations.BACKGROUND_HUE](state, color) {
+    [StoreAttributes.BACKGROUND_HUE](state, color) {
       state.backgroundHue = color;
     },
-    [Mutations.THEME](state, theme) {
+    [StoreAttributes.THEME](state, theme) {
       state.theme = theme;
     },
-    [Mutations.PLAYER_NAME](state, name) {
+    [StoreAttributes.PLAYER_NAME](state, name) {
       state.playerName = name;
     },
-    [Mutations.HOME_DIR](state, dir) {
+    [StoreAttributes.HOME_DIR](state, dir) {
       if (dir != false) {
         let setDir = dir;
         if (setDir.endsWith("/")) {
@@ -60,16 +70,16 @@ export default createStore<Store>({
         state.homeDir = setDir;
       }
     },
-    [Mutations.API_KEY](state, key) {
+    [StoreAttributes.API_KEY](state, key) {
       state.apiKey = key;
     },
-    [Mutations.NAS](state, id) {
+    [StoreAttributes.NAS](state, id) {
       state.nas = id;
     },
-    [Mutations.LOCALE](state, locale) {
+    [StoreAttributes.LOCALE](state, locale) {
       state.locale = locale;
     },
-    [Mutations.DEBUG](state, bool) {
+    [StoreAttributes.DEBUG](state, bool) {
       state.debug = bool;
     },
   },

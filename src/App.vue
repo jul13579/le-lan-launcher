@@ -67,11 +67,10 @@ import SyncServiceController from "./controllers/SyncServiceRendererController";
 import WindowOperations from "./enums/WindowOperations";
 
 import hsl from "hsl-to-hex";
-import Mutations from "./enums/Mutations";
 import { ref, readonly, onBeforeMount, onUnmounted } from "vue";
 import { useI18n } from "vue-i18n";
 import { useTheme } from "vuetify/lib/framework.mjs";
-import { Store } from "./plugins/store";
+import { Store, StoreAttributes } from "./plugins/store";
 
 let pingIntervalHandle: ReturnType<typeof setTimeout>;
 let storeSubscriptionCallback: () => void;
@@ -91,7 +90,7 @@ const nasId = ref("");
 onBeforeMount(() => {
   // Setup API key handler
   window.ipcRenderer.on("setApiKey", async (event, apiKey) => {
-    store.commit(Mutations.API_KEY, apiKey);
+    store.commit(StoreAttributes.API_KEY, apiKey);
   });
 
   // Set vuetify primary color
@@ -100,13 +99,13 @@ onBeforeMount(() => {
   // Setup notification handles
   storeSubscriptionCallback = store.subscribe((mutation) => {
     switch (mutation.type) {
-      case Mutations.BACKGROUND_HUE:
+      case StoreAttributes.BACKGROUND_HUE:
         vuetifyTheme.themes.value.dark.colors.primary = primaryColor.value;
         break;
-      case Mutations.LOCALE:
+      case StoreAttributes.LOCALE:
         i18n.locale.value = mutation.payload;
         break;
-      case Mutations.API_KEY:
+      case StoreAttributes.API_KEY:
         // Skip showing a toast message for API key mutations
         return;
     }
@@ -164,7 +163,7 @@ function pingService() {
       // Get current API key if ping fails
       SyncServiceController.System.getApiKey(homeDir).then(
         (apiKey) => {
-          store.commit(Mutations.API_KEY, apiKey);
+          store.commit(StoreAttributes.API_KEY, apiKey);
         }
       );
     });
