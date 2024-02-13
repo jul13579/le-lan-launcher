@@ -1,14 +1,14 @@
 <template>
   <v-container>
-    <v-alert v-if="playerName == false" type="error" variant="tonal" border="start" class="my-1"
+    <v-alert v-if="!playerName" type="error" variant="tonal" border="start" class="my-1"
       :title="$t('errors.playerNameUnset.title')">
       {{ $t("errors.playerNameUnset.message") }}
     </v-alert>
-    <v-alert v-if="homeDir == false" type="error" variant="tonal" border="start" class="my-1"
+    <v-alert v-if="!homeDir" type="error" variant="tonal" border="start" class="my-1"
       :title="$t('errors.homeDirUnset.title')">
       {{ $t("errors.homeDirUnset.message") }}
     </v-alert>
-    <v-alert v-if="nas == false" type="error" variant="tonal" border="start" class="my-1"
+    <v-alert v-if="!nas" type="error" variant="tonal" border="start" class="my-1"
       :title="$t('errors.nasUnset.title')">
       {{ $t("errors.nasUnset.message") }}
     </v-alert>
@@ -19,8 +19,7 @@
       <v-img v-for="(item, index) in textures" :key="index" class="themePreview ma-3" aspect-ratio="1" :src="item" eager
         @click="() => {
           store.commit(StoreAttributes.THEME, { path: item, cover: false });
-        }
-          " />
+        }" />
       <div class="themePreview ma-3 bg-transparent-dark align-center justify-center"
         :style="{ border: `1px solid hsl(${backgroundHue}, 100%, 35%)` }" @click="
           openFileChooser(
@@ -78,15 +77,12 @@
     </v-row>
     <v-row>
       <v-col cols="3">
-        <v-text-field :label="$t('settings.playerName')" :model-value="playerName" :error="playerName == false" @blur="(event) => {
-          store.commit(StoreAttributes.PLAYER_NAME, event.target.value);
-        }
-          " />
+        <v-text-field v-model="playerName" :label="$t('settings.playerName')" :error="!playerName" />
       </v-col>
       <v-col cols="4">
         <div class="d-flex align-baseline">
           <v-text-field :label="$t('settings.homeDir')" :readonly="true" :model-value="homeDir" :disabled="online"
-            :error="homeDir == false" class="mr-2" @click="setHomeDir" />
+            :error="!homeDir" class="mr-2" @click="setHomeDir" />
           <v-btn :disabled="online" color="primary" @click="setHomeDir">
             {{ $t('settings.chooseHomeDir') }}
           </v-btn>
@@ -94,7 +90,7 @@
       </v-col>
       <v-col cols="5">
         <v-select :disabled="!online" :label="$t('settings.nas')" :model-value="nas" :items="Object.entries(devices)"
-          :item-value="(device) => device[0]" :item-title="(device) => device[0]" :error="nas == false"
+          :item-value="(device) => device[0]" :item-title="(device) => device[0]" :error="!nas"
           :no-data-text="$t('settings.alerts.discovery')" :error-messages="!online ? $t('settings.alerts.service') : null"
           @update:model-value="(input) => store.commit(StoreAttributes.NAS, input)" />
       </v-col>
@@ -127,12 +123,14 @@ const textures = [
 ];
 
 const store = useStore();
-const { playerName, homeDir, nas } = store.state;
 
 // const sliderValue = ref(backgroundHue);
 const devices = ref([]);
 const langs = Object.keys(_langs);
 
+const playerName = useComputedStoreAttribute(StoreAttributes.PLAYER_NAME);
+const homeDir = useComputedStoreAttribute(StoreAttributes.HOME_DIR);
+const nas = useComputedStoreAttribute(StoreAttributes.NAS);
 const backgroundHue = useComputedStoreAttribute(StoreAttributes.BACKGROUND_HUE);
 const locale = useComputedStoreAttribute(StoreAttributes.LOCALE);
 const debug = useComputedStoreAttribute(StoreAttributes.DEBUG);
@@ -159,7 +157,7 @@ watchEffect(() => {
 
 watchEffect(() => {
   if (online && !!homeDir) {
-    SyncServiceController.System.start(homeDir);
+    SyncServiceController.System.start(homeDir.value);
   }
 });
 
