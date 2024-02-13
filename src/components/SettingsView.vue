@@ -8,8 +8,7 @@
       :title="$t('errors.homeDirUnset.title')">
       {{ $t("errors.homeDirUnset.message") }}
     </v-alert>
-    <v-alert v-if="!nas" type="error" variant="tonal" border="start" class="my-1"
-      :title="$t('errors.nasUnset.title')">
+    <v-alert v-if="!nas" type="error" variant="tonal" border="start" class="my-1" :title="$t('errors.nasUnset.title')">
       {{ $t("errors.nasUnset.message") }}
     </v-alert>
     <div class="text-h4">
@@ -165,9 +164,9 @@ watchEffect(() => {
  * @param {Function} callback The function to call when a file was picked.
  * @param {Object} options The options object for the electron file chooser.
  */
-function openFileChooser(callback: (result: any) => void, options: any) {
+function openFileChooser(callback: (result: { filePaths: Array<string> }) => void, options: unknown) {
   window.ipcRenderer.invoke("showOpenDialog", options).then((result) => {
-    if (!result.canceled) callback(result);
+    if (!result.canceled && result.filePaths) callback(result);
   });
 }
 
