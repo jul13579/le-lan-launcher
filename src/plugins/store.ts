@@ -1,5 +1,5 @@
 import { createStore } from "vuex";
-import VuexPersistence from "vuex-persist";
+import { default as VuexPersistence } from "vuex-persist";
 import Mutations from "../enums/Mutations";
 import langs from "../localization/langs";
 
@@ -8,7 +8,7 @@ const defaultLocale = "en";
 const defaultTheme = "./funky-lines.png";
 
 const vuexLocal = new VuexPersistence({
-  storage: window.localStorage,
+  storage: localStorage,
 });
 
 export type Store = {
