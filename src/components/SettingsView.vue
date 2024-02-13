@@ -72,7 +72,7 @@
               </template>
             </v-switch>
           </template>
-          <span v-html="$t('settings.debug_explanation')" />
+          <span>{{ $t('settings.debug_explanation') }}</span>
         </v-tooltip>
       </v-col>
     </v-row>
