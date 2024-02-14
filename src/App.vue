@@ -44,7 +44,7 @@
       <v-container fluid style="margin-bottom: 66px">
         <v-window v-model="activeTab" style="background-color: unset">
           <v-window-item :value="0">
-            <!-- <games-view :online="online" /> -->
+            <games-view :online="online" />
           </v-window-item>
           <v-window-item :value="1">
             <settings-view :online="online" />
@@ -60,7 +60,7 @@
 <script setup lang="ts">
 import { mdiClose, mdiCog, mdiGamepad, mdiWindowMaximize, mdiWindowMinimize } from "@mdi/js";
 import { useStore } from "vuex";
-// import GamesView from "./components/GamesView";
+import GamesView from "./components/GamesView.vue";
 import ServiceStatistics from "./components/ServiceStatistics.vue";
 import SettingsView from "./components/SettingsView.vue";
 import SyncServiceController from "./controllers/SyncServiceRendererController";
