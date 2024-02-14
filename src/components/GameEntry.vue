@@ -1,3 +1,149 @@
+<template>
+  <v-menu offset-x open-on-click transition="slide-x-transition">
+    <template #activator="{ props }">
+      <div class="gameEntry ma-3" :class="downloadProgress >= 1 ? 'installed' : ''">
+        <v-img :src="`game://${libFolderPath}/${gameConfig.cover}`" :aspect-ratio="600 / 900" eager />
+        <!-- Progress indicator -->
+        <div class="progress" :style="{ top: `${-downloadProgress * 100}%` }" />
+        <!-- Download buttons overlay. Only displayed when downloadProgress < 1, hence not completed -->
+        <div v-if="downloadProgress < 1" class="download d-flex flex-column justify-center align-center">
+          <!-- If game is subscribed but there is no syncFolderStatus yet, show loader -->
+          <v-btn v-if="subscribed && Object.keys(syncFolderStatus).length == 0" fab size="x-large" loading
+            @click="$emit('download')" />
+          <!-- Else show applicable download buttons -->
+          <template v-else>
+            <template v-for="(item, index) in downloadButtons">
+              <v-btn v-if="item.show" :key="index" fab size="x-large" @click="item.click">
+                <v-icon>{{ item.icon }}</v-icon>
+              </v-btn>
+            </template>
+          </template>
+        </div>
+        <div v-else class="glass" v-bind="props" />
+      </div>
+    </template>
+
+    <!-- Game menu -->
+    <v-card>
+      <div class="d-flex flex-column">
+        <template v-for="(item, index) in gameMenuButtons">
+          <v-btn v-if="item.show" :key="index" variant="text" block class="justify-start" @click="item.click">
+            <v-icon start>
+              {{ item.icon }}
+            </v-icon>{{ item.text }}
+          </v-btn>
+        </template>
+      </div>
+    </v-card>
+  </v-menu>
+</template>
+
+<script setup lang="ts">
+import { mdiBackupRestore, mdiChevronDoubleRight, mdiClose, mdiDelete, mdiDotsHorizontal, mdiDownload, mdiFolderOpen, mdiPause, mdiPlay } from "@mdi/js";
+import { computed, defineEmits, defineProps } from "vue";
+import { useI18n } from "vue-i18n";
+
+const { libFolderPath, gameConfig, syncFolderConfig, syncFolderStatus } = defineProps<{
+  libFolderPath: string,
+  gameConfig: any,
+  syncFolderConfig: any,
+  syncFolderStatus: any
+}>();
+
+const emit = defineEmits(['download', 'pause', 'resume', 'delete', 'execute', 'reset', 'browse']);
+
+const { t } = useI18n();
+
+const subscribed = computed(() => syncFolderConfig != null);
+const downloadProgress = computed(() => subscribed.value && syncFolderStatus.globalBytes > 0
+  ? syncFolderStatus.inSyncBytes / syncFolderStatus.globalBytes
+  : 0);
+const downloadButtons = [
+  {
+    click: () => emit("download", gameConfig),
+    show: !subscribed.value,
+    icon: mdiDownload,
+  },
+  {
+    click: () =>
+      emit("pause", gameConfig, syncFolderConfig),
+    show: syncFolderConfig && !syncFolderConfig.paused,
+    icon: mdiPause,
+  },
+  {
+    click: () =>
+      emit("resume", gameConfig, syncFolderConfig),
+    show: syncFolderConfig && syncFolderConfig.paused,
+    icon: mdiChevronDoubleRight,
+  },
+  {
+    click: () => emit("delete", gameConfig, syncFolderConfig),
+    show: subscribed.value,
+    icon: mdiClose,
+  },
+];
+
+const gameMenuButtons = computed(() => {
+  let buttons = [
+    {
+      click: () =>
+        emit(
+          "execute",
+          syncFolderConfig,
+          gameConfig,
+          gameConfig.launch.exe
+        ),
+      show: true,
+      icon: mdiPlay,
+      text: t("gameEntry.play"),
+    },
+    {
+      click: () =>
+        emit("pause", gameConfig, syncFolderConfig),
+      show: syncFolderConfig && !syncFolderConfig.paused,
+      icon: mdiPause,
+      text: t("gameEntry.pause"),
+    },
+    {
+      click: () =>
+        emit("resume", gameConfig, syncFolderConfig),
+      show: syncFolderConfig && syncFolderConfig.paused,
+      icon: mdiChevronDoubleRight,
+      text: t("gameEntry.resume"),
+    },
+    {
+      click: () => emit("reset", gameConfig, syncFolderConfig),
+      show: syncFolderStatus.receiveOnlyTotalItems > 0,
+      icon: mdiBackupRestore,
+      text: t("gameEntry.reset"),
+    },
+    {
+      click: () => emit("browse", syncFolderConfig),
+      show: true,
+      icon: mdiFolderOpen,
+      text: t("gameEntry.browse"),
+    },
+    {
+      click: () => emit("delete", gameConfig, syncFolderConfig),
+      show: true,
+      icon: mdiDelete,
+      text: t("gameEntry.delete"),
+    },
+  ];
+
+  (gameConfig.moreLaunchs || []).forEach((item) => {
+    buttons.splice(-2, 0, {
+      click: () => emit("execute", syncFolderConfig, gameConfig, item.exe),
+      show: true,
+      icon: mdiDotsHorizontal,
+      text: item.text,
+    });
+  });
+
+  return buttons;
+});
+</script>
+
 <style lang="scss" scoped>
 $hover-animation: 0.2s ease-in-out;
 
@@ -28,7 +174,7 @@ $hover-animation: 0.2s ease-in-out;
   }
 
   // Every child element that is not the game thumbnail is absolutely positioned => stacked on each other
-  & > :not(.v-image) {
+  &> :not(.v-image) {
     position: absolute;
     top: 0;
     left: 0;
@@ -53,189 +199,3 @@ $hover-animation: 0.2s ease-in-out;
   }
 }
 </style>
-
-<template>
-  <v-menu
-    offset-x
-    open-on-click
-    transition="slide-x-transition"
-  >
-    <template v-slot:activator="{ on }">
-      <div
-        class="gameEntry ma-3"
-        :class="downloadProgress >= 1 ? 'installed' : ''"
-      >
-        <v-img
-          :src="`game://${libFolderPath}/${gameConfig.cover}`"
-          :aspect-ratio="600/900"
-          eager
-        />
-        <!-- Progress indicator -->
-        <div
-          class="progress"
-          :style="{top: `${-downloadProgress*100}%`}"
-        ></div>
-        <!-- Download buttons overlay. Only displayed when downloadProgress < 1, hence not completed -->
-        <div
-          class="download d-flex flex-column justify-center align-center"
-          v-if="downloadProgress < 1"
-        >
-          <!-- If game is subscribed but there is no syncFolderStatus yet, show loader -->
-          <v-btn
-            fab
-            x-large
-            @click="$emit('download')"
-            v-if="subscribed && Object.keys(syncFolderStatus).length == 0"
-            loading
-          />
-          <!-- Else show applicable download buttons -->
-          <template v-else>
-            <template v-for="(item, index) in downloadButtons">
-              <v-btn
-                fab
-                x-large
-                @click="item.click"
-                v-if="item.show"
-                :key="index"
-              >
-                <v-icon>{{item.icon}}</v-icon>
-              </v-btn>
-            </template>
-          </template>
-        </div>
-        <div
-          v-else
-          class="glass"
-          v-on="on"
-        >
-        </div>
-      </div>
-    </template>
-
-    <!-- Game menu -->
-    <v-card>
-      <div class="d-flex flex-column">
-        <template v-for="(item, index) in gameMenuButtons">
-          <v-btn
-            text
-            block
-            @click="item.click"
-            v-if="item.show"
-            class="justify-start"
-            :key="index"
-          >
-            <v-icon left>{{item.icon}}</v-icon>{{item.text}}
-          </v-btn>
-        </template>
-      </div>
-    </v-card>
-  </v-menu>
-</template>
-
-<script>
-import { mdiBackupRestore, mdiChevronDoubleRight, mdiClose, mdiDelete, mdiDotsHorizontal, mdiDownload, mdiFolderOpen, mdiPause, mdiPlay } from "@mdi/js";
-
-export default {
-  props: {
-    libFolderPath: String,
-    gameConfig: Object,
-    syncFolderConfig: Object,
-    syncFolderStatus: Object,
-  },
-  computed: {
-    subscribed() {
-      return this.syncFolderConfig != null;
-    },
-    downloadProgress() {
-      return this.subscribed && this.syncFolderStatus.globalBytes > 0
-        ? this.syncFolderStatus.inSyncBytes / this.syncFolderStatus.globalBytes
-        : 0;
-    },
-    downloadButtons() {
-      return [
-        {
-          click: () => this.$emit("download", this.gameConfig),
-          show: !this.subscribed,
-          icon: mdiDownload,
-        },
-        {
-          click: () =>
-            this.$emit("pause", this.gameConfig, this.syncFolderConfig),
-          show: this.syncFolderConfig && !this.syncFolderConfig.paused,
-          icon: mdiPause,
-        },
-        {
-          click: () =>
-            this.$emit("resume", this.gameConfig, this.syncFolderConfig),
-          show: this.syncFolderConfig && this.syncFolderConfig.paused,
-          icon: mdiChevronDoubleRight,
-        },
-        {
-          click: () => this.$emit("delete", this.gameConfig, this.syncFolderConfig),
-          show: this.subscribed,
-          icon: mdiClose,
-        },
-      ];
-    },
-    gameMenuButtons() {
-      let buttons = [
-        {
-          click: () =>
-            this.$emit(
-              "execute",
-              this.syncFolderConfig,
-              this.gameConfig,
-              this.gameConfig.launch.exe
-            ),
-          show: true,
-          icon: mdiPlay,
-          text: this.$t("gameEntry.play"),
-        },
-        {
-          click: () =>
-            this.$emit("pause", this.gameConfig, this.syncFolderConfig),
-          show: this.syncFolderConfig && !this.syncFolderConfig.paused,
-          icon: mdiPause,
-          text: this.$t("gameEntry.pause"),
-        },
-        {
-          click: () =>
-            this.$emit("resume", this.gameConfig, this.syncFolderConfig),
-          show: this.syncFolderConfig && this.syncFolderConfig.paused,
-          icon: mdiChevronDoubleRight,
-          text: this.$t("gameEntry.resume"),
-        },
-        {
-          click: () => this.$emit("reset", this.gameConfig, this.syncFolderConfig),
-          show: this.syncFolderStatus.receiveOnlyTotalItems > 0,
-          icon: mdiBackupRestore,
-          text: this.$t("gameEntry.reset"),
-        },
-        {
-          click: () => this.$emit("browse", this.syncFolderConfig),
-          show: true,
-          icon: mdiFolderOpen,
-          text: this.$t("gameEntry.browse"),
-        },
-        {
-          click: () => this.$emit("delete", this.gameConfig, this.syncFolderConfig),
-          show: true,
-          icon: mdiDelete,
-          text: this.$t("gameEntry.delete"),
-        },
-      ];
-
-      (this.gameConfig.moreLaunchs || []).forEach((item) => {
-        buttons.splice(-2, 0, {
-          click: () => this.$emit("execute", this.syncFolderConfig, this.gameConfig, item.exe),
-          show: true,
-          icon: mdiDotsHorizontal,
-          text: item.text,
-        });
-      });
-
-      return buttons;
-    },
-  },
-};
-</script>
