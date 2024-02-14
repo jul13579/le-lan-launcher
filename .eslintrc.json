@@ -23,5 +23,10 @@
   "parser": "vue-eslint-parser",
   "parserOptions": {
     "parser": "@typescript-eslint/parser"
+  },
+  "settings": {
+    "import/resolver": {
+      "typescript": {} // depends on `eslint-import-resolver-typescript`; necessary to resolve `src/...` imports in `.vue` modules
+    }
   }
 }
