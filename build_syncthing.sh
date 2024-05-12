@@ -12,7 +12,6 @@ echo -e "\nPulling latest changes..."
 pushd $SYNCTHING_DIR
 git reset --hard
 git fetch
-git pull origin main
 
 echo -e "\nChecking out latest syncthing release tag ($VERSION)"
 git checkout $VERSION
@@ -29,4 +28,4 @@ go run build.go -version $VERSION-LEGC -no-upgrade build
 popd
 
 echo -e "Move binary into place..."
-mv $SYNCTHING_DIR/syncthing* ./
+mv $SYNCTHING_DIR/syncthing* ./public/
