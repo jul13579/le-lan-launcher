@@ -14,7 +14,6 @@ echo Pulling latest changes...
 pushd %SYNCTHING_DIR%
 git reset --hard
 git fetch
-git pull origin main
 
 echo.
 echo Checking out latest syncthing release tag (%VERSION%)
@@ -34,4 +33,4 @@ popd
 
 echo.
 echo Move binary into place...
-move %SYNCTHING_DIR%\syncthing* .\
+move %SYNCTHING_DIR%\syncthing* .\public\
