@@ -22,7 +22,7 @@ export default class SyncServiceMainController {
     if (homeDir) {
       SyncServiceMainController.homeDir = homeDir;
 
-      let binPath = path.join(__dirname, "../syncthing");
+      let binPath = path.join(__dirname, "./syncthing");
       const args = [
         "-no-browser",
         `-home=${homeDir}`,
