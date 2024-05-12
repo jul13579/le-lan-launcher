@@ -372,7 +372,7 @@ function deleteGame(gameConfig, syncFolderConfig) {
         window.ipcRenderer
           .invoke("controlGame", GameOperations.DELETE, syncFolderConfig)
           .then((error) => {
-            if (error)
+            if (error) {}
               // this.$toasted.success(
               //   this.$t("toast.game.delete.error", { error: error })
               // );
