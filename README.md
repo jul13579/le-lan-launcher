@@ -63,10 +63,10 @@ Before the launcher can be used, a device should be set up to provide the game f
         "launch": {                               // Launch config
           "exe": "Bv2Launcher,2.exe"              // Executable path
         },
-        "moreLaunchs": {                          // More launch configs (optional)
+        "moreLaunchs": [ {                          // More launch configs (optional)
           "text": "Foo"                           // Title for launch button
           "exe": "Bv2Launcher,2.exe"              // Executable path
-        },
+        } ],
         "nameConfig": {                           // Name config (optional)
           "env": "foobar",                        // Env variable (optional)
           "file": "main/bv2.cfg",                 // File path
