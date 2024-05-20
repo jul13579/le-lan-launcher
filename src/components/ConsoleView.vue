@@ -34,5 +34,6 @@ onBeforeUpdate(() => {
   overflow-y: auto;
   white-space: pre;
   text-align: left;
+  user-select: all;
 }
 </style>
