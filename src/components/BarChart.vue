@@ -18,6 +18,7 @@ import { useComputedStoreAttribute } from "../composables/useComputedStoreAttrib
 import { StoreAttributes } from "../plugins/store";
 import { defineProps, ref, onMounted, onUnmounted, watchEffect, nextTick } from "vue";
 import { useTheme } from "vuetify/lib/framework.mjs";
+import { useI18n } from "vue-i18n";
 
 // Common options for all charts
 Chart.register(BarController, BarElement, PointElement, LinearScale, CategoryScale);
@@ -37,8 +38,9 @@ const { value, unit } = defineProps<{
 }>();
 
 const theme = useTheme();
+const t = useI18n();
 
-const chart = ref(null);
+let chart: Chart;
 const chartRef = ref(null);
 
 const backgroundHue = useComputedStoreAttribute(StoreAttributes.BACKGROUND_HUE);
@@ -79,7 +81,7 @@ onMounted(() => {
     },
   };
 
-  chart.value = new Chart(chartRef.value, {
+  chart = new Chart(chartRef.value, {
     type: "bar",
     data,
     options,
@@ -91,14 +93,22 @@ onUnmounted(() => {
 })
 
 watchEffect(() => {
-  chart.value.data.datasets[0].backgroundColor =
+  if (!chart) {
+    return;
+  }
+
+  chart.data.datasets[0].backgroundColor =
     theme.themes.value.dark.colors.primary;
-  chart.value.update();
+  chart.update();
 })
 
 watchEffect(() => {
-  chart.value.options.scales.y.title.text = getYAxesUnit();
-  chart.value.update();
+  if (!chart) {
+    return;
+  }
+
+  chart.options.scales.y.title.text = getYAxesUnit();
+  chart.update();
 })
 
 /**
@@ -108,7 +118,7 @@ watchEffect(() => {
 function updateChart() {
   nextTick(() => {
     enqueue(value);
-    chart.value.update();
+    chart.update();
   });
 }
 
@@ -117,7 +127,7 @@ function updateChart() {
  * @param {Number} length The length of the queue to generate.
  * @returns {Array} An array with specified queue length, filled with 0s.
  */
-function createQueue(length) {
+function createQueue(length: number) {
   return Array.from(new Array(length)).fill(0);
 }
 
@@ -126,7 +136,7 @@ function createQueue(length) {
  * @param {number} value The value to enqueue.
  */
 function enqueue(value: number) {
-  let data = chart.value.data.datasets[0].data;
+  let data = chart.data.datasets[0].data;
   while (data.length >= queueLength) {
     data.shift();
   }
@@ -140,7 +150,7 @@ function enqueue(value: number) {
 function getYAxesUnit() {
   return new Intl.NumberFormat(
     locale.value,
-    this.$i18n.numberFormats[locale.value][this.unit]
+    t.numberFormats.value[locale.value][unit]
   )
     .formatToParts(0) // Use arbitrary number, we are only interested in unit
     .find((item) => item.type == "unit").value;

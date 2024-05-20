@@ -73,7 +73,7 @@
                 </v-card-text>
               </v-card>
             </v-col>
-            <!-- <template
+            <template
               v-for="(item, index) in [{ headline: 'statistics.download_speed', value: inbps / 1024 ** 2 }, { headline: 'statistics.upload_speed', value: outbps / 1024 ** 2 }]"
               :key="index">
               <v-col cols="4" class="px-1">
@@ -86,7 +86,7 @@
                   </v-card-text>
                 </v-card>
               </v-col>
-            </template> -->
+            </template>
           </v-row>
         </v-container>
       </div>
