@@ -9,7 +9,7 @@
       backgroundSize: theme.cover ? 'cover' : 'initial',
     }" />
 
-    <v-app-bar scroll-behavior="elevate" class="justify-center">
+    <v-app-bar scroll-behavior="elevate" class="justify-center backdrop">
       <v-avatar image="/icon.png" />
       <v-spacer />
       <v-app-bar-title class="w-100 d-flex justify-center position-absolute">
@@ -92,51 +92,51 @@ const activeTab = ref(setupCompleted.value ? 0 : 1);
 const online = ref(false);
 const nasId = ref("");
 
-onBeforeMount(() => {
-  // Setup API key handler
-  window.ipcRenderer.on("setApiKey", async (event, apiKey) => {
-    store.commit(StoreAttributes.API_KEY, apiKey);
-  });
+// onBeforeMount(() => {
+//   // Setup API key handler
+//   window.ipcRenderer.on("setApiKey", async (event, apiKey) => {
+//     store.commit(StoreAttributes.API_KEY, apiKey);
+//   });
 
-  const primaryColor = (hue: number) => hsl(hue, 100, 60);
+//   const primaryColor = (hue: number) => hsl(hue, 100, 60);
 
-  // Set vuetify primary color
-  vuetifyTheme.themes.value.dark.colors.primary = primaryColor(backgroundHue.value);
+//   // Set vuetify primary color
+//   vuetifyTheme.themes.value.dark.colors.primary = primaryColor(backgroundHue.value);
 
-  // Setup notification handles
-  storeSubscriptionCallback = store.subscribe(({ type, payload }) => {
-    switch (type) {
-      case StoreAttributes.BACKGROUND_HUE:
-        vuetifyTheme.themes.value.dark.colors.primary = primaryColor(payload);
-        break;
-      case StoreAttributes.LOCALE:
-        i18n.locale.value = payload;
-        break;
-      case StoreAttributes.API_KEY:
-        // Skip showing a toast message for API key mutations
-        return;
-    }
-    // this.$toasted.success(this.$t(`toast.${mutation.type}`));
-  })
+//   // Setup notification handles
+//   storeSubscriptionCallback = store.subscribe(({ type, payload }) => {
+//     switch (type) {
+//       case StoreAttributes.BACKGROUND_HUE:
+//         vuetifyTheme.themes.value.dark.colors.primary = primaryColor(payload);
+//         break;
+//       case StoreAttributes.LOCALE:
+//         i18n.locale.value = payload;
+//         break;
+//       case StoreAttributes.API_KEY:
+//         // Skip showing a toast message for API key mutations
+//         return;
+//     }
+//     // this.$toasted.success(this.$t(`toast.${mutation.type}`));
+//   })
 
-  // Start sync-service on app start
-  SyncServiceController.System.start(homeDir.value);
+//   // Start sync-service on app start
+//   SyncServiceController.System.start(homeDir.value);
 
-  // Setup global service status poller
-  clearInterval(pingIntervalHandle);
-  pingIntervalHandle = setInterval(pingService, 5000);
+//   // Setup global service status poller
+//   clearInterval(pingIntervalHandle);
+//   pingIntervalHandle = setInterval(pingService, 5000);
 
-  window.addEventListener(
-    "beforeunload",
-    async () => await SyncServiceController.System.stop()
-  );
-});
+//   window.addEventListener(
+//     "beforeunload",
+//     async () => await SyncServiceController.System.stop()
+//   );
+// });
 
-onUnmounted(() => {
-  window.ipcRenderer.removeAllListeners();
-  clearInterval(pingIntervalHandle);
-  storeSubscriptionCallback();
-});
+// onUnmounted(() => {
+//   window.ipcRenderer.removeAllListeners();
+//   clearInterval(pingIntervalHandle);
+//   storeSubscriptionCallback();
+// });
 
 // export default {
 //   name: "app",
@@ -218,10 +218,6 @@ function closeWindow() {
   &.texture {
     opacity: 0.1;
   }
-}
-
-.v-app-bar.v-toolbar {
-  background: rgba(var(--v-theme-surface), .45);
 }
 
 .v-toolbar__content>*:first-child {

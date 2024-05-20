@@ -1,5 +1,5 @@
-@import './variables.scss';
-@import 'vuetify/lib/styles/settings/_variables.scss';
+@import "./variables.scss";
+@import "vuetify/lib/styles/settings/_variables.scss";
 
 /* -------------------------------------------------------------------------- */
 /*                              Scrollbar styling                             */
@@ -43,8 +43,9 @@
 }
 
 // Components with backdrop filter
-.v-app-bar,
+.v-app-bar.backdrop,
 .v-footer .backdrop,
 .v-list {
+  background: rgba(var(--v-theme-surface), 0.45);
   backdrop-filter: blur(10px);
 }

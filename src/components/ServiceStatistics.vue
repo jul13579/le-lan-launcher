@@ -3,7 +3,7 @@
     <div class="d-flex">
       <div class="d-flex flex-grow-1">
         <v-container class="py-0 d-flex" style="height: 100%">
-          <v-row class="sytle" no-gutters>
+          <v-row no-gutters>
             <v-col cols="4" class="d-flex justify-center align-center">
               <template v-if="nasConnected">
                 <div>
@@ -42,37 +42,42 @@
           </v-row>
         </v-container>
       </div>
-      <div class="d-flex popup v-footer theme--dark backdrop">
+      <div class="d-flex popup backdrop">
         <v-container>
-          <v-row class="sytle" no-gutters>
+          <v-row no-gutters>
             <v-col cols="4" class="px-1">
-              <v-card class="text-center">
-                <v-card-title class="justify-center flex-nowrap">
-                  <span class="header">{{ $t('statistics.service_controls') }}</span>
-                  <v-btn icon @click="openSyncthingUI()">
-                    <v-icon>{{ mdiOpenInNew }}</v-icon>
-                  </v-btn>
-                  <v-spacer />
-                  <v-btn icon color="green" :disabled="online || !homeDir" @click="startService">
-                    <v-icon>{{ mdiPlay }}</v-icon>
-                  </v-btn>
-                  <v-btn icon color="yellow" :disabled="!online" @click="restartService">
-                    <v-icon>{{ mdiRestart }}</v-icon>
-                  </v-btn>
-                  <v-btn icon color="red" :disabled="!online" @click="stopService">
-                    <v-icon>{{ mdiStop }}</v-icon>
-                  </v-btn>
+              <v-card class="text-center" variant="text">
+                <v-card-title>
+                  <div class="d-flex w-100 justify-space-between flex-nowrap">
+                    <div class="d-flex align-center" style="min-width: 0%">
+                      <span class="header">{{ $t('statistics.service_controls') }}</span>
+                      <v-btn icon variant="text" @click="openSyncthingUI()">
+                        <v-icon>{{ mdiOpenInNew }}</v-icon>
+                      </v-btn>
+                    </div>
+                    <div>
+                      <v-btn icon variant="text" color="green" :disabled="online || !homeDir" @click="startService">
+                        <v-icon>{{ mdiPlay }}</v-icon>
+                      </v-btn>
+                      <v-btn icon variant="text" color="yellow" :disabled="!online" @click="restartService">
+                        <v-icon>{{ mdiRestart }}</v-icon>
+                      </v-btn>
+                      <v-btn icon variant="text" color="red" :disabled="!online" @click="stopService">
+                        <v-icon>{{ mdiStop }}</v-icon>
+                      </v-btn>
+                    </div>
+                  </div>
                 </v-card-title>
                 <v-card-text>
                   <console-view v-model="syncthingMessages" />
                 </v-card-text>
               </v-card>
             </v-col>
-            <template
+            <!-- <template
               v-for="(item, index) in [{ headline: 'statistics.download_speed', value: inbps / 1024 ** 2 }, { headline: 'statistics.upload_speed', value: outbps / 1024 ** 2 }]"
               :key="index">
               <v-col cols="4" class="px-1">
-                <v-card class="text-center">
+                <v-card class="text-center" variant="text">
                   <v-card-title class="justify-center">
                     <span>{{ $t(item.headline) }}</span>
                   </v-card-title>
@@ -81,7 +86,7 @@
                   </v-card-text>
                 </v-card>
               </v-col>
-            </template>
+            </template> -->
           </v-row>
         </v-container>
       </div>
@@ -237,12 +242,13 @@ function stopService() {
 <style lang="scss" scoped>
 .statistics {
   background: none;
-  cursor: pointer;
+  // cursor: pointer;
 
   &>div {
     width: 100%;
     height: 100%;
     position: relative;
+    user-select: none;
   }
 
   $popup-height: 250px;
@@ -258,7 +264,7 @@ function stopService() {
     top: 0px;
     box-sizing: content-box;
 
-    &>.container {
+    &>.v-container {
       opacity: 0;
       box-sizing: border-box;
       height: 100%;
@@ -289,7 +295,7 @@ function stopService() {
     .popup {
       top: -$popup-height;
 
-      &>.container {
+      &>.v-container {
         opacity: 1;
       }
     }
