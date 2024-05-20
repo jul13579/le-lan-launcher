@@ -92,45 +92,45 @@ const activeTab = ref(setupCompleted.value ? 0 : 1);
 const online = ref(false);
 const nasId = ref("");
 
-// onBeforeMount(() => {
-//   // Setup API key handler
-//   window.ipcRenderer.on("setApiKey", async (event, apiKey) => {
-//     store.commit(StoreAttributes.API_KEY, apiKey);
-//   });
+const getPrimaryColor = (hue: number) => hsl(hue, 100, 60);
 
-//   const primaryColor = (hue: number) => hsl(hue, 100, 60);
+onBeforeMount(() => {
+  // Setup API key handler
+  window.ipcRenderer.on("setApiKey", async (event, apiKey) => {
+    store.commit(StoreAttributes.API_KEY, apiKey);
+  });
 
-//   // Set vuetify primary color
-//   vuetifyTheme.themes.value.dark.colors.primary = primaryColor(backgroundHue.value);
+  // Set vuetify primary color
+  vuetifyTheme.themes.value.dark.colors.primary = getPrimaryColor(backgroundHue.value);
 
-//   // Setup notification handles
-//   storeSubscriptionCallback = store.subscribe(({ type, payload }) => {
-//     switch (type) {
-//       case StoreAttributes.BACKGROUND_HUE:
-//         vuetifyTheme.themes.value.dark.colors.primary = primaryColor(payload);
-//         break;
-//       case StoreAttributes.LOCALE:
-//         i18n.locale.value = payload;
-//         break;
-//       case StoreAttributes.API_KEY:
-//         // Skip showing a toast message for API key mutations
-//         return;
-//     }
-//     // this.$toasted.success(this.$t(`toast.${mutation.type}`));
-//   })
+  // Setup notification handles
+  storeSubscriptionCallback = store.subscribe(({ type, payload }) => {
+    switch (type) {
+      case StoreAttributes.BACKGROUND_HUE:
+        vuetifyTheme.themes.value.dark.colors.primary = getPrimaryColor(payload);
+        break;
+      case StoreAttributes.LOCALE:
+        i18n.locale.value = payload;
+        break;
+      case StoreAttributes.API_KEY:
+        // Skip showing a toast message for API key mutations
+        return;
+    }
+    // this.$toasted.success(this.$t(`toast.${mutation.type}`));
+  })
 
-//   // Start sync-service on app start
-//   SyncServiceController.System.start(homeDir.value);
+  // // Start sync-service on app start
+  // SyncServiceController.System.start(homeDir.value);
 
-//   // Setup global service status poller
-//   clearInterval(pingIntervalHandle);
-//   pingIntervalHandle = setInterval(pingService, 5000);
+  // // Setup global service status poller
+  // clearInterval(pingIntervalHandle);
+  // pingIntervalHandle = setInterval(pingService, 5000);
 
-//   window.addEventListener(
-//     "beforeunload",
-//     async () => await SyncServiceController.System.stop()
-//   );
-// });
+  // window.addEventListener(
+  //   "beforeunload",
+  //   async () => await SyncServiceController.System.stop()
+  // );
+});
 
 // onUnmounted(() => {
 //   window.ipcRenderer.removeAllListeners();

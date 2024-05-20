@@ -17,27 +17,27 @@
     <div class="d-flex mx-n3 flex-wrap">
       <v-img v-for="(item, index) in textures" :key="index" class="themePreview ma-3" aspect-ratio="1" :src="item" eager
         @click="() => {
-          store.commit(StoreAttributes.THEME, { path: item, cover: false });
-        }" />
+      store.commit(StoreAttributes.THEME, { path: item, cover: false });
+    }" />
       <div class="themePreview ma-3 bg-transparent-dark align-center justify-center"
-        :style="{ border: `1px solid hsl(${backgroundHue}, 100%, 35%)` }" @click="
-          openFileChooser(
-            (result) =>
-              store.commit(StoreAttributes.THEME, {
-                path: `theme://${result.filePaths[0].replace(/\\/g, '/')}`,
-                cover: true,
-              }),
+        :style="{ border: `1px solid ${vuetifyTheme.current.value.colors.primary}` }" @click="
+      openFileChooser(
+        (result) =>
+          store.commit(StoreAttributes.THEME, {
+            path: `theme://${result.filePaths[0].replace(/\\/g, '/')}`,
+            cover: true,
+          }),
+        {
+          properties: ['openFile'],
+          filters: [
             {
-              properties: ['openFile'],
-              filters: [
-                {
-                  name: $t('settings.images'),
-                  extensions: ['jpg', 'jpeg', 'png'],
-                },
-              ],
-            }
-          )
-          ">
+              name: $t('settings.images'),
+              extensions: ['jpg', 'jpeg', 'png'],
+            },
+          ],
+        }
+      )
+      ">
         <span style="padding-bottom: 100%" />
         <v-icon size="x-large" :icon="mdiImageSearch" />
       </div>
@@ -48,8 +48,7 @@
     </div>
     <v-row>
       <v-col cols="12">
-        <v-slider v-model="backgroundHue" :min="0" :max="360" thumb-label
-          :color="'hsl(' + backgroundHue + ', 100%, 50%)'" />
+        <v-slider v-model="backgroundHue" :min="0" :max="360" thumb-label color="primary" />
       </v-col>
     </v-row>
 
@@ -79,18 +78,22 @@
         <v-text-field v-model="playerName" :label="$t('settings.playerName')" :error="!playerName" />
       </v-col>
       <v-col cols="4">
-        <div class="d-flex align-baseline">
+        <div class="d-flex">
           <v-text-field :label="$t('settings.homeDir')" :readonly="true" :model-value="homeDir" :disabled="online"
-            :error="!homeDir" class="mr-2" @click="setHomeDir" />
-          <v-btn :disabled="online" color="primary" @click="setHomeDir">
-            {{ $t('settings.chooseHomeDir') }}
-          </v-btn>
+            :error="!homeDir" class="mr-2" @click="setHomeDir">
+            <template #append>
+              <v-btn color="primary" height="100%" @click="setHomeDir">
+                {{ $t('settings.chooseHomeDir') }}
+              </v-btn>
+            </template>
+          </v-text-field>
         </div>
       </v-col>
       <v-col cols="5">
         <v-select :disabled="!online" :label="$t('settings.nas')" :model-value="nas" :items="Object.entries(devices)"
           :item-value="(device) => device[0]" :item-title="(device) => device[0]" :error="!nas"
-          :no-data-text="$t('settings.alerts.discovery')" :error-messages="!online ? $t('settings.alerts.service') : null"
+          :no-data-text="$t('settings.alerts.discovery')"
+          :error-messages="!online ? $t('settings.alerts.service') : null"
           @update:model-value="(input) => store.commit(StoreAttributes.NAS, input)" />
       </v-col>
     </v-row>
@@ -106,6 +109,7 @@ import { default as _langs } from "../localization/langs";
 import { useStore } from "vuex";
 import { useComputedStoreAttribute } from '../composables/useComputedStoreAttribute';
 import { StoreAttributes } from "../plugins/store";
+import { useTheme } from "vuetify/lib/framework.mjs";
 
 let discoveryInterval: ReturnType<typeof setTimeout>;
 
@@ -122,6 +126,7 @@ const textures = [
 ];
 
 const store = useStore();
+const vuetifyTheme = useTheme();
 
 const devices = ref([]);
 const langs = Object.keys(_langs);
