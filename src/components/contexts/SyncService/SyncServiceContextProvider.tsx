@@ -1,16 +1,16 @@
 import axios from "axios";
 import { FunctionComponent, ReactNode, useEffect, useState } from "react";
-import { SyncthingServiceContext } from "./SyncthingServiceContext";
+import { SyncServiceContext } from "./SyncServiceContext";
 import { useSettingsService } from "../../../hooks/useSettingsService";
 import SyncServiceOperations from "../../../enums/SyncServiceOperations";
 import { host } from "../../../config/service";
 
-interface SyncthingServiceContextProviderProps {
+interface SyncServiceContextProviderProps {
   children: ReactNode;
 }
 
-export const SyncthingServiceContextProvider: FunctionComponent<
-  SyncthingServiceContextProviderProps
+export const SyncServiceContextProvider: FunctionComponent<
+  SyncServiceContextProviderProps
 > = ({ children }) => {
   /* -------------------------------------------------------------------------- */
   /*                                   Context                                  */
@@ -145,8 +145,8 @@ export const SyncthingServiceContextProvider: FunctionComponent<
     latestEvents,
   };
   return (
-    <SyncthingServiceContext.Provider value={state}>
+    <SyncServiceContext.Provider value={state}>
       {children}
-    </SyncthingServiceContext.Provider>
+    </SyncServiceContext.Provider>
   );
 };

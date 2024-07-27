@@ -1,5 +1,5 @@
 import { createRoot } from "react-dom/client";
-import { SyncthingServiceContextProvider } from "./components/contexts/SyncthingService/SyncthingServiceContextProvider";
+import { SyncServiceContextProvider } from "./components/contexts/SyncService/SyncServiceContextProvider";
 import { SettingsServiceContextProvider } from "./components/contexts/SettingsService/SettingsServiceContextProvider";
 
 function App() {
@@ -8,9 +8,9 @@ function App() {
   /* -------------------------------------------------------------------------- */
   return (
     <SettingsServiceContextProvider>
-      <SyncthingServiceContextProvider>
+      <SyncServiceContextProvider>
         <h1>Hello World</h1>
-      </SyncthingServiceContextProvider>
+      </SyncServiceContextProvider>
     </SettingsServiceContextProvider>
   );
 }
