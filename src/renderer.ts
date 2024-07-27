@@ -35,3 +35,5 @@
 //   i18n,
 //   render: (h) => h(App),
 // }).$mount("#app");
+
+import "./App";
