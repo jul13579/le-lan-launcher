@@ -8,7 +8,7 @@ interface SyncthingServiceContextProviderProps {
   children: ReactNode;
 }
 
-const SyncthingServiceContextProvider: FunctionComponent<
+export const SyncthingServiceContextProvider: FunctionComponent<
   SyncthingServiceContextProviderProps
 > = ({ children }) => {
   /* -------------------------------------------------------------------------- */
@@ -106,5 +106,3 @@ const SyncthingServiceContextProvider: FunctionComponent<
     </SyncthingServiceContext.Provider>
   );
 };
-
-export { SyncthingServiceContextProvider };
