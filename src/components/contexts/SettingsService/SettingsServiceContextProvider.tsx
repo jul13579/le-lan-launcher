@@ -1,6 +1,10 @@
-import { FunctionComponent, ReactNode, useState } from "react";
+import { FunctionComponent, ReactNode, useEffect, useState } from "react";
 import { SettingsServiceContext } from "./SettingsServiceContext";
 import { defaultBackgroundHue, defaultTheme } from "src/config/app";
+
+const initialConfig = JSON.parse(
+  localStorage.getItem("settings") ?? JSON.stringify({})
+);
 
 interface SettingsServiceContextProviderProps {
   children: ReactNode;
@@ -12,17 +16,38 @@ export const SettingsServiceContextProvider: FunctionComponent<
   /* -------------------------------------------------------------------------- */
   /*                                    State                                   */
   /* -------------------------------------------------------------------------- */
-  const [backgroundHue, setBackgroundHue] = useState(defaultBackgroundHue);
+  const [backgroundHue, setBackgroundHue] = useState(
+    initialConfig.background ?? defaultBackgroundHue
+  );
   const [theme, setTheme] = useState({
-    cover: false,
-    path: defaultTheme,
+    cover: initialConfig.theme?.cover ?? false,
+    path: initialConfig.theme?.path ?? defaultTheme,
   });
-  const [playerName, setPlayerName] = useState("");
-  const [homeDir, setHomeDir] = useState("");
-  const [apiKey, setApiKey] = useState("");
-  const [nas, setNas] = useState("");
-  const [locale, setLocale] = useState("");
-  const [debug, setDebug] = useState(false);
+  const [playerName, setPlayerName] = useState(initialConfig.playerName ?? "");
+  const [homeDir, setHomeDir] = useState(initialConfig.homeDir ?? "");
+  const [apiKey, setApiKey] = useState(initialConfig.apiKey ?? "");
+  const [nas, setNas] = useState(initialConfig.nas ?? "");
+  const [locale, setLocale] = useState(initialConfig.locale ?? "");
+  const [debug, setDebug] = useState(initialConfig.debug ?? false);
+
+  /* -------------------------------------------------------------------------- */
+  /*                             Component Lifecycle                            */
+  /* -------------------------------------------------------------------------- */
+  useEffect(() => {
+    localStorage.setItem(
+      "settings",
+      JSON.stringify({
+        backgroundHue,
+        theme,
+        playerName,
+        homeDir,
+        apiKey,
+        nas,
+        locale,
+        debug,
+      })
+    );
+  }, [backgroundHue, theme, playerName, homeDir, apiKey, nas, locale, debug]);
 
   /* -------------------------------------------------------------------------- */
   /*                                  Rendering                                 */
