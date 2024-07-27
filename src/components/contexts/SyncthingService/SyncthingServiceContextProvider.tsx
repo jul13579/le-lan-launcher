@@ -30,6 +30,25 @@ export const SyncthingServiceContextProvider: FunctionComponent<
     axios.defaults.headers.common["X-API-Key"] = apiKey;
   }, [apiKey]);
 
+  useEffect(() => {
+    const interval = setInterval(async () => {
+      try {
+        await ping();
+        
+        // If service is reachable, set both `online` and `started` to true
+        if (!online) {
+          setOnline(true);
+        }
+        if (!started) {
+          setStarted(true);
+        }
+      } catch (e) {
+        // Do nothing
+      }
+    }, 5000);
+    return () => clearInterval(interval);
+  }, []);
+
   /* -------------------------------------------------------------------------- */
   /*                             Instance Functions                             */
   /* -------------------------------------------------------------------------- */
