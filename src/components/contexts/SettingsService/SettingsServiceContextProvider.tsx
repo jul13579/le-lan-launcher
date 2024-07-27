@@ -1,5 +1,5 @@
 import { FunctionComponent, ReactNode, useEffect, useState } from "react";
-import { SettingsServiceContext } from "./SettingsServiceContext";
+import { Settings, SettingsServiceContext } from "./SettingsServiceContext";
 import { defaultBackgroundHue, defaultTheme } from "src/config/app";
 
 const initialConfig = JSON.parse(
@@ -16,19 +16,29 @@ export const SettingsServiceContextProvider: FunctionComponent<
   /* -------------------------------------------------------------------------- */
   /*                                    State                                   */
   /* -------------------------------------------------------------------------- */
-  const [backgroundHue, setBackgroundHue] = useState(
+  const [backgroundHue, setBackgroundHue] = useState<Settings["backgroundHue"]>(
     initialConfig.background ?? defaultBackgroundHue
   );
-  const [theme, setTheme] = useState({
+  const [theme, setTheme] = useState<Settings["theme"]>({
     cover: initialConfig.theme?.cover ?? false,
     path: initialConfig.theme?.path ?? defaultTheme,
   });
-  const [playerName, setPlayerName] = useState(initialConfig.playerName ?? "");
-  const [homeDir, setHomeDir] = useState(initialConfig.homeDir ?? "");
-  const [apiKey, setApiKey] = useState(initialConfig.apiKey ?? "");
-  const [nas, setNas] = useState(initialConfig.nas ?? "");
-  const [locale, setLocale] = useState(initialConfig.locale ?? "");
-  const [debug, setDebug] = useState(initialConfig.debug ?? false);
+  const [playerName, setPlayerName] = useState<Settings["playerName"]>(
+    initialConfig.playerName ?? ""
+  );
+  const [homeDir, setHomeDir] = useState<Settings["homeDir"]>(
+    initialConfig.homeDir ?? ""
+  );
+  const [apiKey, setApiKey] = useState<Settings["apiKey"]>(
+    initialConfig.apiKey ?? ""
+  );
+  const [nas, setNas] = useState<Settings["nas"]>(initialConfig.nas ?? "");
+  const [locale, setLocale] = useState<Settings["locale"]>(
+    initialConfig.locale ?? ""
+  );
+  const [debug, setDebug] = useState<Settings["debug"]>(
+    initialConfig.debug ?? false
+  );
 
   /* -------------------------------------------------------------------------- */
   /*                             Component Lifecycle                            */
