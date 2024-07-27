@@ -1,6 +1,6 @@
 import { FunctionComponent, ReactNode, useEffect, useState } from "react";
 import { Settings, SettingsServiceContext } from "./SettingsServiceContext";
-import { defaultBackgroundHue, defaultTheme } from "src/config/app";
+import { defaultBackgroundHue, defaultTheme } from "../../../config/app";
 
 const initialConfig = JSON.parse(
   localStorage.getItem("settings") ?? JSON.stringify({})

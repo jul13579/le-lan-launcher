@@ -1,9 +1,9 @@
 import axios from "axios";
 import { FunctionComponent, ReactNode, useEffect, useState } from "react";
-import { host } from "src/config/service";
-import SyncServiceOperations from "src/enums/SyncServiceOperations";
 import { SyncthingServiceContext } from "./SyncthingServiceContext";
-import { useSettingsService } from "src/hooks/useSettingsService";
+import { useSettingsService } from "../../../hooks/useSettingsService";
+import SyncServiceOperations from "../../../enums/SyncServiceOperations";
+import { host } from "../../../config/service";
 
 interface SyncthingServiceContextProviderProps {
   children: ReactNode;

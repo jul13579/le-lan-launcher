@@ -12,14 +12,5 @@
     "plugin:import/electron",
     "plugin:import/typescript"
   ],
-  "parser": "@typescript-eslint/parser",
-  "settings": {
-    "import/resolver": {
-      "node": {
-        "paths": [
-          "."
-        ]
-      }
-    }
-  }
+  "parser": "@typescript-eslint/parser"
 }
