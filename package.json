@@ -46,7 +46,8 @@
     "sass": "^1.70.0",
     "sass-loader": "^14.1.0",
     "ts-node": "^10.9.2",
-    "typescript": "^5.3.3"
+    "typescript": "^5.3.3",
+    "vite": "^5.3.5"
   },
   "browserslist": [
     "> 1%",
