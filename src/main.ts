@@ -1,7 +1,6 @@
 "use strict";
 
 import { app, BrowserWindow, dialog, ipcMain, protocol } from "electron";
-import installExtension, { REACT_DEVELOPER_TOOLS } from "electron-devtools-installer";
 import path from "path";
 
 import WindowConfig from "./config/window";
@@ -83,6 +82,8 @@ app.on("ready", async () => {
   if (isDevelopment && !process.env.IS_TEST) {
     // Install React.js Devtools
     try {
+      const electron_devtools_installer_module = await import('electron-devtools-installer');
+      const { default: installExtension, REACT_DEVELOPER_TOOLS } = electron_devtools_installer_module;
       await installExtension(REACT_DEVELOPER_TOOLS);
     } catch (e) {
       // eslint-disable-next-line no-console
