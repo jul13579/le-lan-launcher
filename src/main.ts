@@ -1,17 +1,17 @@
 "use strict";
 
-import { app, protocol, BrowserWindow, ipcMain, dialog } from "electron";
-import installExtension, { VUEJS_DEVTOOLS } from "electron-devtools-installer";
+import { app, BrowserWindow, dialog, ipcMain, protocol } from "electron";
+import installExtension, { REACT_DEVELOPER_TOOLS } from "electron-devtools-installer";
 import path from "path";
 
-import WindowOperations from "./enums/WindowOperations";
 import WindowConfig from "./config/window";
-import SyncServiceController from "./controllers/SyncServiceMainController";
-import LibraryController from "./controllers/LibraryMainController";
 import GameController from "./controllers/GameMainController";
-import SyncServiceOperations from "./enums/SyncServiceOperations";
-import LibraryOperations from "./enums/LibraryOperations";
+import LibraryController from "./controllers/LibraryMainController";
+import SyncServiceController from "./controllers/SyncServiceMainController";
 import GameOperations from "./enums/GameOperations";
+import LibraryOperations from "./enums/LibraryOperations";
+import SyncServiceOperations from "./enums/SyncServiceOperations";
+import WindowOperations from "./enums/WindowOperations";
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
@@ -81,12 +81,12 @@ app.on("activate", () => {
 // Some APIs can only be used after this event occurs.
 app.on("ready", async () => {
   if (isDevelopment && !process.env.IS_TEST) {
-    // Install Vue Devtools
+    // Install React.js Devtools
     try {
-      await installExtension(VUEJS_DEVTOOLS);
+      await installExtension(REACT_DEVELOPER_TOOLS);
     } catch (e) {
       // eslint-disable-next-line no-console
-      console.error("Vue Devtools failed to install:", e.toString());
+      console.error("React.js Devtools failed to install:", e.toString());
     }
   }
 
