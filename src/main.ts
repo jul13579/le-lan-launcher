@@ -13,7 +13,7 @@ import SyncServiceOperations from "./enums/SyncServiceOperations";
 import WindowOperations from "./enums/WindowOperations";
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
-if (require('electron-squirrel-startup')) {
+if (require("electron-squirrel-startup")) {
   app.quit();
 }
 
@@ -37,7 +37,7 @@ async function createWindow() {
     minHeight: WindowConfig.MIN_HEIGHT,
     frame: false,
     title: "[|LE|] LAN-Launcher",
-    icon: './images/icons/icon.png',
+    icon: "./images/icons/icon.png",
     webPreferences: {
       webSecurity: true,
       preload: path.join(__dirname, "preload.js"),
@@ -56,7 +56,9 @@ async function createWindow() {
       win.webContents.openDevTools();
     }
   } else {
-    win.loadFile(path.join(__dirname, `../renderer/${MAIN_WINDOW_VITE_NAME}/index.html`));
+    win.loadFile(
+      path.join(__dirname, `../renderer/${MAIN_WINDOW_VITE_NAME}/index.html`)
+    );
   }
 }
 
@@ -82,8 +84,11 @@ app.on("ready", async () => {
   if (isDevelopment && !process.env.IS_TEST) {
     // Install React.js Devtools
     try {
-      const electron_devtools_installer_module = await import('electron-devtools-installer');
-      const { default: installExtension, REACT_DEVELOPER_TOOLS } = electron_devtools_installer_module;
+      const electron_devtools_installer_module = await import(
+        "electron-devtools-installer"
+      );
+      const { default: installExtension, REACT_DEVELOPER_TOOLS } =
+        electron_devtools_installer_module;
       await installExtension(REACT_DEVELOPER_TOOLS);
     } catch (e) {
       console.error("React.js Devtools failed to install:", e.toString());
@@ -139,13 +144,16 @@ function shutdown() {
 /* -------------------------------------------------------------------------- */
 /*                              IPC Configuration                             */
 /* -------------------------------------------------------------------------- */
-ipcMain.handle("controlSyncService", (event, action: SyncServiceOperations, ...args) => {
-  // Add the `win` argument if the action is `START`
-  if (action == SyncServiceOperations.START) {
-    args = [win, ...args];
+ipcMain.handle(
+  "controlSyncService",
+  (event, action: SyncServiceOperations, ...args) => {
+    // Add the `win` argument if the action is `START`
+    if (action == SyncServiceOperations.START) {
+      args = [win, ...args];
+    }
+    return SyncServiceController[action].apply(null, args);
   }
-  return SyncServiceController[action].apply(null, args);
-});
+);
 
 ipcMain.on("controlLibrary", (event, action: LibraryOperations, ...args) => {
   // Add the `win` argument if the action is `WATCH`
@@ -175,4 +183,4 @@ ipcMain.handle("showOpenDialog", (event, options) =>
   dialog.showOpenDialog(options)
 );
 
-ipcMain.on("setProgress", (event, progress) => win.setProgressBar(progress))
+ipcMain.on("setProgress", (event, progress) => win.setProgressBar(progress));
