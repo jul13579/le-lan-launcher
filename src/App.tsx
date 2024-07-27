@@ -1,5 +1,5 @@
 import { createRoot } from "react-dom/client";
-import { SyncthingServiceContextProvider } from "./components/contexts/SyncthingServiceContext/SyncthingServiceContextProvider";
+import { SyncthingServiceContextProvider } from "./components/contexts/SyncthingService/SyncthingServiceContextProvider";
 
 function App() {
   /* -------------------------------------------------------------------------- */
