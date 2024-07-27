@@ -1,8 +1,9 @@
 import axios from "axios";
-import { FunctionComponent, ReactNode, useState } from "react";
+import { FunctionComponent, ReactNode, useEffect, useState } from "react";
 import { host } from "src/config/service";
 import SyncServiceOperations from "src/enums/SyncServiceOperations";
 import { SyncthingServiceContext } from "./SyncthingServiceContext";
+import { useSettingsService } from "src/hooks/useSettingsService";
 
 interface SyncthingServiceContextProviderProps {
   children: ReactNode;
@@ -12,10 +13,22 @@ export const SyncthingServiceContextProvider: FunctionComponent<
   SyncthingServiceContextProviderProps
 > = ({ children }) => {
   /* -------------------------------------------------------------------------- */
+  /*                                   Context                                  */
+  /* -------------------------------------------------------------------------- */
+  const { apiKey } = useSettingsService();
+
+  /* -------------------------------------------------------------------------- */
   /*                                    State                                   */
   /* -------------------------------------------------------------------------- */
   const [online, setOnline] = useState(false);
   const [started, setStarted] = useState(false);
+
+  /* -------------------------------------------------------------------------- */
+  /*                             Component Lifecycle                            */
+  /* -------------------------------------------------------------------------- */
+  useEffect(() => {
+    axios.defaults.headers.common["X-API-Key"] = apiKey;
+  }, [apiKey]);
 
   /* -------------------------------------------------------------------------- */
   /*                             Instance Functions                             */
