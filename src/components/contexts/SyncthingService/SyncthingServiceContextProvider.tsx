@@ -101,6 +101,7 @@ export const SyncthingServiceContextProvider: FunctionComponent<
     start,
     restart,
     stop,
+    getApiKey,
     ping,
     status,
     getConfig,
