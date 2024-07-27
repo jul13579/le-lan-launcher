@@ -34,7 +34,7 @@ export const SyncthingServiceContextProvider: FunctionComponent<
     const interval = setInterval(async () => {
       try {
         await ping();
-        
+
         // If service is reachable, set both `online` and `started` to true
         if (!online) {
           setOnline(true);
@@ -58,12 +58,23 @@ export const SyncthingServiceContextProvider: FunctionComponent<
       SyncServiceOperations.OPEN_SYNCTHING_UI
     );
   }
-  function start(homeDir: string) {
-    return window.ipcRenderer.invoke(
-      "controlSyncService",
-      SyncServiceOperations.START,
-      homeDir
-    );
+  async function start(homeDir: string) {
+    if (started) {
+      return;
+    }
+    try {
+      const retVal = await window.ipcRenderer.invoke(
+        "controlSyncService",
+        SyncServiceOperations.START,
+        homeDir
+      );
+      setStarted(true);
+      return retVal;
+    } catch (e) {
+      console.error(
+        `Encountered error when trying to start sync service: ${e}`
+      );
+    }
   }
   function restart() {
     return axios.post(host + "/system/restart");
