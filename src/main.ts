@@ -86,7 +86,6 @@ app.on("ready", async () => {
       const { default: installExtension, REACT_DEVELOPER_TOOLS } = electron_devtools_installer_module;
       await installExtension(REACT_DEVELOPER_TOOLS);
     } catch (e) {
-      // eslint-disable-next-line no-console
       console.error("React.js Devtools failed to install:", e.toString());
     }
   }
@@ -125,7 +124,6 @@ function registerFileProtocol(protocolName: string) {
     try {
       return callback(decodedUrl);
     } catch (error) {
-      // eslint-disable-next-line no-console
       console.error(
         "ERROR: registerLocalResourceProtocol: Could not get file path:",
         error
@@ -141,7 +139,6 @@ function shutdown() {
 /* -------------------------------------------------------------------------- */
 /*                              IPC Configuration                             */
 /* -------------------------------------------------------------------------- */
-// eslint-disable-next-line no-unused-vars
 ipcMain.handle("controlSyncService", (event, action: SyncServiceOperations, ...args) => {
   // Add the `win` argument if the action is `START`
   if (action == SyncServiceOperations.START) {
@@ -150,7 +147,6 @@ ipcMain.handle("controlSyncService", (event, action: SyncServiceOperations, ...a
   return SyncServiceController[action].apply(null, args);
 });
 
-// eslint-disable-next-line no-unused-vars
 ipcMain.on("controlLibrary", (event, action: LibraryOperations, ...args) => {
   // Add the `win` argument if the action is `WATCH`
   if (action == LibraryOperations.WATCH) {
@@ -159,7 +155,6 @@ ipcMain.on("controlLibrary", (event, action: LibraryOperations, ...args) => {
   LibraryController[action].apply(null, args);
 });
 
-// eslint-disable-next-line no-unused-vars
 ipcMain.handle("controlGame", (event, action: GameOperations, ...args) => {
   // Add the `win` argument if the action is `LAUNCH`
   if (action == GameOperations.LAUNCH) {
@@ -168,7 +163,6 @@ ipcMain.handle("controlGame", (event, action: GameOperations, ...args) => {
   return GameController[action].apply(null, args);
 });
 
-// eslint-disable-next-line no-unused-vars
 ipcMain.on("controlWindow", async (event, action: WindowOperations) => {
   // Unmaximize on `MAXIMIZE` if window is maximized
   if (action == WindowOperations.MAXIMIZE && win.isMaximized()) {
@@ -177,7 +171,6 @@ ipcMain.on("controlWindow", async (event, action: WindowOperations) => {
   win[action]();
 });
 
-// eslint-disable-next-line no-unused-vars
 ipcMain.handle("showOpenDialog", (event, options) =>
   dialog.showOpenDialog(options)
 );
