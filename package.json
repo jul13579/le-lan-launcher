@@ -21,6 +21,8 @@
     "@electron-forge/plugin-fuses": "^7.4.0",
     "@electron-forge/plugin-vite": "^7.4.0",
     "@electron/fuses": "^1.8.0",
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
     "@types/xml-parser": "^1.2.33",
     "@typescript-eslint/eslint-plugin": "^5.62.0",
     "@typescript-eslint/parser": "^5.62.0",
@@ -40,6 +42,8 @@
   "license": "GNU GPLv3",
   "dependencies": {
     "electron-squirrel-startup": "^1.0.1",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
     "xml-parser": "^1.2.1"
   }
 }
