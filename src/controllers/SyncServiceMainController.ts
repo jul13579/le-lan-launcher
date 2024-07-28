@@ -60,6 +60,10 @@ export function SyncServiceMainController(win: BrowserWindow) {
       });
 
       syncServiceProcess.on("exit", (code) => {
+        // Reset `homeDir` & `apiKey` variable when service exited
+        homeDir = undefined;
+        apiKey = undefined;
+        
         try {
           win.webContents.send("syncService", {
             type: "stdout",
