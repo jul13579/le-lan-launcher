@@ -8,18 +8,16 @@ import GameOperations from "../enums/GameOperations";
  * Controller for games.
  * This is only to be used by the main process, as it depends on electron and node functionalities.
  */
-export default class GameController {
+export function GameMainController(win: BrowserWindow) {
   /**
    * Launch a game.
-   * @param {BrowserWindow} win The BrowserWindow.
    * @param {GameFolder} gameFolder The sync-service folder config.
    * @param {Config} config The game object of the library config file.
    * @param {string} executable The executable to run
    * @param {string} playerName The name of the player
    * @param {boolean} debug State of debug mode.
    */
-  static [GameOperations.LAUNCH](
-    win: BrowserWindow,
+  function launch(
     gameFolder: GameFolder,
     config: Config,
     executable: string,
@@ -28,7 +26,7 @@ export default class GameController {
   ) {
     // Try setting the player name with the given configuration
     try {
-      GameController._setPlayerName(gameFolder, config, playerName);
+      _setPlayerName(gameFolder, config, playerName);
     } catch (e) {
       // There will be cases where this errors, e.g. if the configuration is not correct or the file in which the player
       // name should be changed is not yet existing (because the game did not yet run). The game should however launch
@@ -77,16 +75,16 @@ export default class GameController {
    * Open the install folder of a game in the file explorer.
    * @param {GameFolder} gameFolder The sync-service folder config.
    */
-  static [GameOperations.BROWSE](gameFolder: GameFolder) {
+  function browse(gameFolder: GameFolder) {
     shell.openPath(path.normalize(gameFolder.path));
   }
 
   /**
-   * Delete a game.
+   * Remove a game.
    * @param {GameFolder} gameFolder The sync-service folder config.
    * @returns {String} Error if error was encountered.
    */
-  static [GameOperations.DELETE](gameFolder: GameFolder) {
+  function remove(gameFolder: GameFolder) {
     fs.rm(gameFolder.path, { recursive: true }, (error) => {
       if (error) return error;
     });
@@ -99,7 +97,7 @@ export default class GameController {
    * @param {string} playerName The user's playername.
    * @private
    */
-  private static _setPlayerName(
+  function _setPlayerName(
     gameFolder: GameFolder,
     config: Config,
     playerName: string
@@ -124,4 +122,10 @@ export default class GameController {
     }
     fs.writeFileSync(filePath, nameFileContents, { encoding: "utf8" });
   }
+
+  return {
+    [GameOperations.LAUNCH]: launch,
+    [GameOperations.BROWSE]: browse,
+    [GameOperations.DELETE]: remove,
+  };
 }

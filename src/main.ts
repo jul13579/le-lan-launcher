@@ -4,7 +4,7 @@ import { app, BrowserWindow, dialog, ipcMain, protocol } from "electron";
 import path from "path";
 
 import WindowConfig from "./config/window";
-import GameController from "./controllers/GameMainController";
+import { GameMainController as GameController } from "./controllers/GameMainController";
 import { LibraryMainController as LibraryController } from "./controllers/LibraryMainController";
 import { SyncServiceMainController as SyncServiceController } from "./controllers/SyncServiceMainController";
 import GameOperations from "./enums/GameOperations";
@@ -157,12 +157,9 @@ ipcMain.on("controlLibrary", (event, action: LibraryOperations, ...args) => {
   libraryController[action].apply(null, args);
 });
 
+const gameController = GameController(win);
 ipcMain.handle("controlGame", (event, action: GameOperations, ...args) => {
-  // Add the `win` argument if the action is `LAUNCH`
-  if (action == GameOperations.LAUNCH) {
-    args = [win, ...args];
-  }
-  return GameController[action].apply(null, args);
+  return gameController[action].apply(null, args);
 });
 
 ipcMain.on("controlWindow", async (event, action: WindowOperations) => {
