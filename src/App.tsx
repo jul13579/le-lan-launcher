@@ -11,6 +11,7 @@ import {
   Avatar,
   Box,
   Button,
+  ButtonProps,
   CssBaseline,
   Tab,
   Tabs,
@@ -93,29 +94,35 @@ const App: FunctionComponent = () => {
           </AvatarBox>
           <ToolbarTitle>LAN - Launcher</ToolbarTitle>
           <WindowButtonsBox>
-            <WindowButton size="large" onClick={minimizeWindow}>
-              <Icon path={mdiWindowMinimize} size={1} />
-            </WindowButton>
-            <WindowButton size="large" onClick={maximizeWindow}>
-              <Icon path={mdiWindowMaximize} size={1} />
-            </WindowButton>
-            <WindowButton size="large" color="error" onClick={closeWindow}>
-              <Icon path={mdiClose} size={1} />
-            </WindowButton>
+            {[
+              [minimizeWindow, mdiWindowMinimize],
+              [maximizeWindow, mdiWindowMaximize],
+              [closeWindow, mdiClose, "error"],
+            ].map(
+              ([cb, icon, color]: [
+                () => void,
+                string,
+                ButtonProps["color"]
+              ]) => (
+                <WindowButton size="large" color={color} onClick={cb}>
+                  <Icon path={icon} size={1} />
+                </WindowButton>
+              )
+            )}
           </WindowButtonsBox>
         </AppBarRow>
         <AppBarRow>
           <Tabs>
-            <CustomTab
-              label={t("nav.library")}
-              icon={<Icon path={mdiGamepad} size={1} />}
-              iconPosition="start"
-            />
-            <CustomTab
-              label={t("nav.settings")}
-              icon={<Icon path={mdiCog} size={1} />}
-              iconPosition="start"
-            />
+            {[
+              [t("nav.library"), mdiGamepad],
+              [t("nav.settings"), mdiCog],
+            ].map(([text, icon]: [string, string]) => (
+              <CustomTab
+                label={text}
+                icon={<Icon path={icon} size={1} />}
+                iconPosition="start"
+              />
+            ))}
           </Tabs>
         </AppBarRow>
       </ProminentToolbar>
