@@ -1,9 +1,13 @@
-import { Alert, Box, Container, styled } from "@mui/material";
+import { Alert, Box, Container, styled, Theme } from "@mui/material";
 import { FunctionComponent } from "react";
 import { useTranslation } from "react-i18next";
 import { useSettingsService } from "../hooks/useSettingsService";
+import { bgTransparentDarkWithBlur } from "../App";
+import { mdiImageSearch } from "@mdi/js";
+import Icon from "@mdi/react";
+import { useFileChooser } from "../hooks/useFileChooser";
 
-const ThemeItem = styled("img")(({ theme }) => ({
+const ThemeItem = ({ theme }: { theme: Theme }) => ({
   margin: theme.spacing(3),
   borderRadius: 10,
   cursor: "pointer",
@@ -17,14 +21,54 @@ const ThemeItem = styled("img")(({ theme }) => ({
   ":hover": {
     transform: "scale(1.1)",
   },
-}));
+});
+
+const PredefinedThemeItem = styled("img")(ThemeItem);
+
+interface CustomBackgroundPickerProps {
+  hue: number;
+}
+const CustomBackgroundPicker = styled("div")<CustomBackgroundPickerProps>(
+  ({ hue: hue, theme }) => ({
+    ...ThemeItem({ theme }),
+    ...bgTransparentDarkWithBlur,
+    border: `1px solid hsl(${hue}, 100%, 35%)`,
+    alignItems: "center",
+    justifyContent: "center",
+  })
+);
 
 export const SettingsView: FunctionComponent = () => {
   /* -------------------------------------------------------------------------- */
   /*                                   Context                                  */
   /* -------------------------------------------------------------------------- */
   const { t } = useTranslation();
-  const { playerName, homeDir, nas, setTheme } = useSettingsService();
+  const { playerName, homeDir, nas, backgroundHue, setTheme } =
+    useSettingsService();
+  const { openFileChooser } = useFileChooser();
+
+  /* -------------------------------------------------------------------------- */
+  /*                             Instance Functions                             */
+  /* -------------------------------------------------------------------------- */
+  function selectCustomBackground() {
+    openFileChooser(
+      (result) => {
+        setTheme({
+          path: `theme://${result.filePaths[0].replace(/\\/g, "/")}`,
+          cover: true,
+        });
+      },
+      {
+        properties: ["openFile"],
+        filters: [
+          {
+            name: t("settings.images"),
+            extensions: ["jpg", "jpeg", "png"],
+          },
+        ],
+      }
+    );
+  }
 
   /* -------------------------------------------------------------------------- */
   /*                                  Rendering                                 */
@@ -37,8 +81,8 @@ export const SettingsView: FunctionComponent = () => {
         [!nas, t("errors.nasUnset.message")],
       ]
         .filter(([visible]) => !!visible)
-        .map(([, text]) => (
-          <Box my={1}>
+        .map(([, text], index) => (
+          <Box key={index} my={1}>
             <Alert severity="error">{text}</Alert>
           </Box>
         ))}
@@ -50,12 +94,19 @@ export const SettingsView: FunctionComponent = () => {
           "./prism.png",
           "./maze.png",
           "./unicorns.png",
-        ].map((texture) => (
-          <ThemeItem
+        ].map((texture, index) => (
+          <PredefinedThemeItem
+            key={index}
             src={texture}
             onClick={() => setTheme({ path: texture, cover: false })}
           />
         ))}
+        <CustomBackgroundPicker
+          hue={backgroundHue}
+          onClick={selectCustomBackground}
+        >
+          <Icon path={mdiImageSearch} size={2} />
+        </CustomBackgroundPicker>
       </Box>
     </Container>
   );
