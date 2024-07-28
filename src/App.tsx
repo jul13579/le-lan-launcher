@@ -35,11 +35,11 @@ export const bgTransparentDarkWithBlur = {
 };
 
 const noDrag = {
-  "-webkit-app-region": "no-drag",
+  WebkitAppRegion: "no-drag",
 };
 
 const DraggableAppBar = styled(AppBar)(() => ({
-  "-webkit-app-region": "drag",
+  WebkitAppRegion: "drag",
   position: "static",
 }));
 
