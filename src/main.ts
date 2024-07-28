@@ -5,7 +5,7 @@ import path from "path";
 
 import WindowConfig from "./config/window";
 import GameController from "./controllers/GameMainController";
-import LibraryController from "./controllers/LibraryMainController";
+import { LibraryMainController as LibraryController } from "./controllers/LibraryMainController";
 import { SyncServiceMainController as SyncServiceController } from "./controllers/SyncServiceMainController";
 import GameOperations from "./enums/GameOperations";
 import LibraryOperations from "./enums/LibraryOperations";
@@ -152,12 +152,9 @@ ipcMain.handle(
   }
 );
 
+const libraryController = LibraryController(win);
 ipcMain.on("controlLibrary", (event, action: LibraryOperations, ...args) => {
-  // Add the `win` argument if the action is `WATCH`
-  if (action == LibraryOperations.WATCH) {
-    args = [win, ...args];
-  }
-  LibraryController[action].apply(null, args);
+  libraryController[action].apply(null, args);
 });
 
 ipcMain.handle("controlGame", (event, action: GameOperations, ...args) => {
