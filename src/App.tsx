@@ -29,6 +29,11 @@ import { useTranslation } from "react-i18next";
 import { useSettingsService } from "./hooks/useSettingsService";
 import { ThemeBackground } from "./components/ThemeBackground";
 
+const DraggableAppBar = styled(AppBar)(() => ({
+  "-webkit-app-region": "drag",
+  position: "static",
+}));
+
 const ProminentToolbar = styled(Toolbar)(({ theme }) => ({
   display: "grid",
   gridTemplateColumns: "1fr",
@@ -51,6 +56,7 @@ const ToolbarTitle = styled(Typography)(() => ({
   letterSpacing: "5px",
   fontSize: "1.25rem",
   alignSelf: "center",
+  userSelect: "none",
 }));
 
 const AvatarBox = styled(Box)(({ theme }) => ({
@@ -61,6 +67,7 @@ const AvatarBox = styled(Box)(({ theme }) => ({
 }));
 
 const WindowButtonsBox = styled(Box)(() => ({
+  "-webkit-app-region": "no-drag",
   position: "absolute",
   top: 0,
   right: 0,
@@ -69,6 +76,10 @@ const WindowButtonsBox = styled(Box)(() => ({
 const WindowButton = styled(Button)(({ theme }) => ({
   borderRadius: 0,
   color: theme.palette.text.primary,
+}));
+
+const NonDraggableTabs = styled(Tabs)(() => ({
+  "-webkit-app-region": "no-drag",
 }));
 
 const CustomTab = styled(Tab)(() => ({
@@ -95,7 +106,7 @@ const App: FunctionComponent = () => {
   return (
     <>
       <ThemeBackground />
-      <AppBar position="static">
+      <DraggableAppBar>
         <ProminentToolbar>
           <AppBarRow>
             <AvatarBox>
@@ -125,7 +136,10 @@ const App: FunctionComponent = () => {
             </WindowButtonsBox>
           </AppBarRow>
           <AppBarRow>
-            <Tabs value={tab} onChange={(event, value) => setTab(value)}>
+            <NonDraggableTabs
+              value={tab}
+              onChange={(event, value) => setTab(value)}
+            >
               {[
                 [t("nav.library"), mdiGamepad, !setupCompleted],
                 [t("nav.settings"), mdiCog, false],
@@ -140,10 +154,10 @@ const App: FunctionComponent = () => {
                   />
                 )
               )}
-            </Tabs>
+            </NonDraggableTabs>
           </AppBarRow>
         </ProminentToolbar>
-      </AppBar>
+      </DraggableAppBar>
     </>
   );
 };
