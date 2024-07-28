@@ -42,7 +42,9 @@ export const SettingsServiceContextProvider: FunctionComponent<
     initialConfig.debug ?? false
   );
 
-  const [apiKey, setApiKey] = useState<string>(undefined);
+  const [apiKey, setApiKey] = useState<string>(
+    sessionStorage.getItem("apiKey") ?? undefined
+  );
 
   /* -------------------------------------------------------------------------- */
   /*                             Component Lifecycle                            */
@@ -61,6 +63,12 @@ export const SettingsServiceContextProvider: FunctionComponent<
       })
     );
   }, [backgroundHue, theme, playerName, homeDir, nas, locale, debug]);
+
+  useEffect(() => {
+    if (apiKey) {
+      sessionStorage.setItem("apiKey", apiKey);
+    }
+  }, [apiKey]);
 
   useEffect(() => {
     const listener = (event: IpcRendererEvent, apiKey: string) => {
