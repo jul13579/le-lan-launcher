@@ -3,13 +3,16 @@ import {
   Box,
   Container,
   FormControl,
+  FormControlLabel,
   Grid,
   InputLabel,
   MenuItem,
   Select,
   Slider,
   styled,
+  Switch,
   Theme,
+  Tooltip,
 } from "@mui/material";
 import { FunctionComponent } from "react";
 import { useTranslation } from "react-i18next";
@@ -62,9 +65,11 @@ export const SettingsView: FunctionComponent = () => {
     nas,
     backgroundHue,
     locale,
+    debug,
     setTheme,
     setBackgroundHue,
     setLocale,
+    setDebug,
   } = useSettingsService();
   const { openFileChooser } = useFileChooser();
 
@@ -145,7 +150,7 @@ export const SettingsView: FunctionComponent = () => {
 
       {/* Environment */}
       <h1>{t("settings.environment")}</h1>
-      <Grid container>
+      <Grid container spacing={2}>
         <Grid item xs={3}>
           <FormControl fullWidth>
             <InputLabel id="language-select-label">
@@ -164,6 +169,22 @@ export const SettingsView: FunctionComponent = () => {
               ))}
             </Select>
           </FormControl>
+        </Grid>
+        <Grid item xs={6} />
+        <Grid item xs={3}>
+          <Box display={"flex"} minHeight={"100%"}>
+            <Tooltip title={t("settings.debug_explanation")}>
+              <FormControlLabel
+                label={t("settings.debug")}
+                control={
+                  <Switch
+                    value={debug}
+                    onChange={(event, checked) => setDebug(checked)}
+                  />
+                }
+              />
+            </Tooltip>
+          </Box>
         </Grid>
       </Grid>
     </Container>
