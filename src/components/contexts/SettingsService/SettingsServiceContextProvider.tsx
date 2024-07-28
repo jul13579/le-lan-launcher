@@ -1,4 +1,4 @@
-import { FunctionComponent, ReactNode, useEffect, useState } from "react";
+import { FunctionComponent, ReactNode, useEffect, useMemo, useState } from "react";
 import { Settings, SettingsServiceContext } from "./SettingsServiceContext";
 import {
   defaultBackgroundHue,
@@ -44,6 +44,11 @@ export const SettingsServiceContextProvider: FunctionComponent<
 
   const [apiKey, setApiKey] = useState<string>(
     sessionStorage.getItem("apiKey") ?? undefined
+  );
+
+  const setupCompleted = useMemo(
+    () => !!playerName && !!homeDir && !!nas,
+    [playerName, homeDir, nas]
   );
 
   /* -------------------------------------------------------------------------- */
@@ -97,6 +102,7 @@ export const SettingsServiceContextProvider: FunctionComponent<
     debug,
     setDebug,
     apiKey,
+    setupCompleted
   };
   return (
     <SettingsServiceContext.Provider value={state}>

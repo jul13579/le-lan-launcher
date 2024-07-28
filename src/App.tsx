@@ -26,6 +26,7 @@ import { SyncServiceContextProvider } from "./components/contexts/SyncService/Sy
 import { CustomThemeProvider } from "./components/CustomThemeProvider";
 import { useWindowControls } from "./hooks/useWindowControls";
 import { useTranslation } from "react-i18next";
+import { useSettingsService } from "./hooks/useSettingsService";
 
 const ProminentToolbar = styled(Toolbar)(({ theme }) => ({
   display: "grid",
@@ -80,11 +81,12 @@ const App: FunctionComponent = () => {
   /* -------------------------------------------------------------------------- */
   const { t } = useTranslation();
   const { minimizeWindow, maximizeWindow, closeWindow } = useWindowControls();
+  const { setupCompleted } = useSettingsService();
 
   /* -------------------------------------------------------------------------- */
   /*                                    State                                   */
   /* -------------------------------------------------------------------------- */
-  const [tab, setTab] = useState(0);
+  const [tab, setTab] = useState(setupCompleted ? 0 : 1);
 
   /* -------------------------------------------------------------------------- */
   /*                                  Rendering                                 */
@@ -118,11 +120,12 @@ const App: FunctionComponent = () => {
         <AppBarRow>
           <Tabs value={tab} onChange={(event, value) => setTab(value)}>
             {[
-              [t("nav.library"), mdiGamepad],
-              [t("nav.settings"), mdiCog],
-            ].map(([text, icon]: [string, string]) => (
+              [t("nav.library"), mdiGamepad, !setupCompleted],
+              [t("nav.settings"), mdiCog, false],
+            ].map(([text, icon, disabled]: [string, string, boolean]) => (
               <CustomTab
                 label={text}
+                disabled={disabled}
                 icon={<Icon path={icon} size={1} />}
                 iconPosition="start"
               />

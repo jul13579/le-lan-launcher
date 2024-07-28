@@ -31,4 +31,5 @@ export const SettingsServiceContext = createContext<{
   debug: Settings["debug"];
   setDebug: Dispatch<SetStateAction<Settings["debug"]>>;
   apiKey: string;
+  setupCompleted: boolean;
 }>(null);
