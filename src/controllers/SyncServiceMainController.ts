@@ -9,24 +9,19 @@ import SyncServiceOperations from "../enums/SyncServiceOperations";
  * Controller for the sync-service.
  * This is only to be used by the main process, as it depends on electron and node functionalities.
  */
-export default class SyncServiceMainController {
-  private static homeDir: string;
-  private static apiKey: string;
+export function SyncServiceMainController(win: BrowserWindow) {
+  let homeDir: string;
+  let apiKey: string;
 
-  /**
-   * Starts a new process of the sync-service using the specified directory as home directory.
-   * @param {BrowserWindow} win The BrowserWindow.
-   * @param {string} homeDir The sync-service home directory.
-   */
-  static [SyncServiceOperations.START](win: BrowserWindow, homeDir: string) {
-    if (homeDir) {
-      SyncServiceMainController.homeDir = homeDir;
+  function startSyncService(_homeDir: string) {
+    if (_homeDir) {
+      homeDir = _homeDir;
 
       let binPath = path.join(__dirname, "../syncthing");
       const args = [
         "-no-browser",
-        `-home=${homeDir}`,
-        `-logfile=${path.join(homeDir, "syncthing.log")}`,
+        `-home=${_homeDir}`,
+        `-logfile=${path.join(_homeDir, "syncthing.log")}`,
         "-no-default-folder",
       ];
       if (process.platform == "win32") {
@@ -38,13 +33,9 @@ export default class SyncServiceMainController {
 
       syncServiceProcess.stdout.on("data", (data) => {
         // Get API key if we notice that the sync service has booted
-        if (
-          !SyncServiceMainController.apiKey &&
-          `${data}`.match(/GUI and API listening on/)
-        ) {
-          SyncServiceMainController.apiKey =
-            SyncServiceMainController._readApiKey(homeDir);
-          win.webContents.send("setApiKey", SyncServiceMainController.apiKey);
+        if (!apiKey && `${data}`.match(/GUI and API listening on/)) {
+          apiKey = _readApiKey(_homeDir);
+          win.webContents.send("setApiKey", apiKey);
         }
 
         try {
@@ -81,7 +72,7 @@ export default class SyncServiceMainController {
     }
   }
 
-  private static _readApiKey(homeDir: string) {
+  function _readApiKey(homeDir: string) {
     const xml = parse(
       fs.readFileSync(path.join(homeDir, "config.xml"), {
         encoding: "utf8",
@@ -91,20 +82,18 @@ export default class SyncServiceMainController {
     return gui.children.find((item) => item.name == "apikey").content;
   }
 
-  /**
-   * Get the API key of the sync-service from its configuration file.
-   * @returns {String} The key of the REST API of the sync-service.
-   */
-  static [SyncServiceOperations.GET_API_KEY](homeDir: string) {
-    SyncServiceMainController.apiKey =
-      SyncServiceMainController._readApiKey(homeDir);
-    return SyncServiceMainController.apiKey;
+  function getApiKey(homeDir: string) {
+    apiKey = _readApiKey(homeDir);
+    return apiKey;
   }
 
-  /**
-   * Open the Syncthing UI in the system's default browser.
-   */
-  static [SyncServiceOperations.OPEN_SYNCTHING_UI]() {
+  function openSyncthingUI() {
     shell.openExternal("https://localhost:8384/");
   }
+
+  return {
+    [SyncServiceOperations.START]: startSyncService,
+    [SyncServiceOperations.GET_API_KEY]: getApiKey,
+    [SyncServiceOperations.OPEN_SYNCTHING_UI]: openSyncthingUI,
+  };
 }

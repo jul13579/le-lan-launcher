@@ -6,7 +6,7 @@ import path from "path";
 import WindowConfig from "./config/window";
 import GameController from "./controllers/GameMainController";
 import LibraryController from "./controllers/LibraryMainController";
-import SyncServiceController from "./controllers/SyncServiceMainController";
+import { SyncServiceMainController as SyncServiceController } from "./controllers/SyncServiceMainController";
 import GameOperations from "./enums/GameOperations";
 import LibraryOperations from "./enums/LibraryOperations";
 import SyncServiceOperations from "./enums/SyncServiceOperations";
@@ -144,14 +144,11 @@ function shutdown() {
 /* -------------------------------------------------------------------------- */
 /*                              IPC Configuration                             */
 /* -------------------------------------------------------------------------- */
+const syncServiceController = SyncServiceController(win);
 ipcMain.handle(
   "controlSyncService",
   (event, action: SyncServiceOperations, ...args) => {
-    // Add the `win` argument if the action is `START`
-    if (action == SyncServiceOperations.START) {
-      args = [win, ...args];
-    }
-    return SyncServiceController[action].apply(null, args);
+    return syncServiceController[action].apply(null, args);
   }
 );
 
