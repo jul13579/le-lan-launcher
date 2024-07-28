@@ -21,13 +21,13 @@ import {
 } from "@mui/material";
 import { FunctionComponent, StrictMode, useState } from "react";
 import { createRoot } from "react-dom/client";
+import { useTranslation } from "react-i18next";
 import { SettingsServiceContextProvider } from "./components/contexts/SettingsService/SettingsServiceContextProvider";
 import { SyncServiceContextProvider } from "./components/contexts/SyncService/SyncServiceContextProvider";
 import { CustomThemeProvider } from "./components/CustomThemeProvider";
-import { useWindowControls } from "./hooks/useWindowControls";
-import { useTranslation } from "react-i18next";
-import { useSettingsService } from "./hooks/useSettingsService";
 import { ThemeBackground } from "./components/ThemeBackground";
+import { useSettingsService } from "./hooks/useSettingsService";
+import { useWindowControls } from "./hooks/useWindowControls";
 
 export const bgTransparentDarkWithBlur = {
   background: "rgba(0, 0, 0, 0.6)",
