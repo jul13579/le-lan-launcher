@@ -30,6 +30,8 @@ import { useSettingsService } from "./hooks/useSettingsService";
 import { useWindowControls } from "./hooks/useWindowControls";
 import { TabContext, TabPanel } from "@mui/lab";
 import { TabValue } from "./enums/TabValue";
+import { SettingsView } from "./components/SettingsView";
+import { GamesView } from "./components/GamesView";
 
 export const bgTransparentDarkWithBlur = {
   background: "rgba(0, 0, 0, 0.6)",
@@ -185,8 +187,12 @@ const App: FunctionComponent = () => {
           </AppBarRow>
         </ProminentToolbar>
       </DraggableAppBar>
-      <CustomTabPanel value={TabValue.GAMES}>Games</CustomTabPanel>
-      <CustomTabPanel value={TabValue.SETTINGS}>Settings</CustomTabPanel>
+      <CustomTabPanel value={TabValue.GAMES}>
+        <GamesView />
+      </CustomTabPanel>
+      <CustomTabPanel value={TabValue.SETTINGS}>
+        <SettingsView />
+      </CustomTabPanel>
     </TabContext>
   );
 };
