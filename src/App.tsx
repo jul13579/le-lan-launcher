@@ -29,12 +29,22 @@ import { useTranslation } from "react-i18next";
 import { useSettingsService } from "./hooks/useSettingsService";
 import { ThemeBackground } from "./components/ThemeBackground";
 
+export const bgTransparentDarkWithBlur = {
+  background: "rgba(0, 0, 0, 0.6)",
+  backdropFilter: "blur(10px)",
+};
+
+const noDrag = {
+  "-webkit-app-region": "no-drag",
+};
+
 const DraggableAppBar = styled(AppBar)(() => ({
   "-webkit-app-region": "drag",
   position: "static",
 }));
 
 const ProminentToolbar = styled(Toolbar)(({ theme }) => ({
+  ...bgTransparentDarkWithBlur,
   display: "grid",
   gridTemplateColumns: "1fr",
   gridTemplateRows: "1fr 1fr",
@@ -67,7 +77,7 @@ const AvatarBox = styled(Box)(({ theme }) => ({
 }));
 
 const WindowButtonsBox = styled(Box)(() => ({
-  "-webkit-app-region": "no-drag",
+  ...noDrag,
   position: "absolute",
   top: 0,
   right: 0,
@@ -79,7 +89,7 @@ const WindowButton = styled(Button)(({ theme }) => ({
 }));
 
 const NonDraggableTabs = styled(Tabs)(() => ({
-  "-webkit-app-region": "no-drag",
+  ...noDrag,
 }));
 
 const CustomTab = styled(Tab)(() => ({
