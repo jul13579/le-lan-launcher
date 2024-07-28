@@ -1,20 +1,20 @@
-import WindowOperations from "../enums/WindowOperations";
+import WindowOperation from "../enums/WindowOperation";
 
 export const useWindowControls = () => {
-  function sendWindowControl(action: WindowOperations) {
+  function sendWindowControl(action: WindowOperation) {
     window.ipcRenderer.send("controlWindow", action);
   }
 
   function minimizeWindow() {
-    sendWindowControl(WindowOperations.MINIMIZE);
+    sendWindowControl(WindowOperation.MINIMIZE);
   }
 
   function maximizeWindow() {
-    sendWindowControl(WindowOperations.MAXIMIZE);
+    sendWindowControl(WindowOperation.MAXIMIZE);
   }
 
   function closeWindow() {
-    sendWindowControl(WindowOperations.CLOSE);
+    sendWindowControl(WindowOperation.CLOSE);
   }
 
   return { minimizeWindow, maximizeWindow, closeWindow };

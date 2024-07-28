@@ -118,7 +118,7 @@ import GamesView from "./components/GamesView";
 import ServiceStatistics from "./components/ServiceStatistics";
 import SettingsView from "./components/SettingsView";
 import SyncServiceController from "./controllers/SyncServiceRendererController";
-import WindowOperations from "./enums/WindowOperations";
+import WindowOperation from "./enums/WindowOperation";
 
 import hsl from "hsl-to-hex";
 import SyncServiceRendererController from "./controllers/SyncServiceRendererController";
@@ -257,21 +257,21 @@ export default {
      * Minimize window.
      */
     minimizeWindow() {
-      this.sendWindowControl(WindowOperations.MINIMIZE);
+      this.sendWindowControl(WindowOperation.MINIMIZE);
     },
 
     /**
      * Maximize window.
      */
     maximizeWindow() {
-      this.sendWindowControl(WindowOperations.MAXIMIZE);
+      this.sendWindowControl(WindowOperation.MAXIMIZE);
     },
 
     /**
      * Close Window.
      */
     closeWindow() {
-      this.sendWindowControl(WindowOperations.CLOSE);
+      this.sendWindowControl(WindowOperation.CLOSE);
     },
   },
 };

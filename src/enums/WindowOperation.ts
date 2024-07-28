@@ -1,11 +1,11 @@
 /**
  * Enum for window operations.
  */
-enum WindowOperations {
+enum WindowOperation {
   MINIMIZE = "minimize",
   MAXIMIZE = "maximize",
   UNMAXIMIZE = "unmaximize",
   CLOSE = "close",
 }
 
-export default WindowOperations
+export default WindowOperation

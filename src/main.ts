@@ -10,7 +10,7 @@ import { SyncServiceMainController as SyncServiceController } from "./controller
 import GameOperations from "./enums/GameOperations";
 import LibraryOperations from "./enums/LibraryOperations";
 import SyncServiceOperations from "./enums/SyncServiceOperations";
-import WindowOperations from "./enums/WindowOperations";
+import WindowOperation from "./enums/WindowOperation";
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require("electron-squirrel-startup")) {
@@ -168,10 +168,10 @@ ipcMain.handle("controlGame", (event, action: GameOperations, ...args) => {
   return gameController[action].apply(null, args);
 });
 
-ipcMain.on("controlWindow", async (event, action: WindowOperations) => {
+ipcMain.on("controlWindow", async (event, action: WindowOperation) => {
   // Unmaximize on `MAXIMIZE` if window is maximized
-  if (action == WindowOperations.MAXIMIZE && win.isMaximized()) {
-    action = WindowOperations.UNMAXIMIZE;
+  if (action == WindowOperation.MAXIMIZE && win.isMaximized()) {
+    action = WindowOperation.UNMAXIMIZE;
   }
   win[action]();
 });
