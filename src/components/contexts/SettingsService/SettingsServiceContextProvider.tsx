@@ -1,6 +1,10 @@
 import { FunctionComponent, ReactNode, useEffect, useState } from "react";
 import { Settings, SettingsServiceContext } from "./SettingsServiceContext";
-import { defaultBackgroundHue, defaultTheme } from "../../../config/app";
+import {
+  defaultBackgroundHue,
+  defaultLocale,
+  defaultTheme,
+} from "../../../config/app";
 import { IpcRendererEvent } from "electron";
 
 const initialConfig = JSON.parse(
@@ -25,14 +29,14 @@ export const SettingsServiceContextProvider: FunctionComponent<
     path: initialConfig.theme?.path ?? defaultTheme,
   });
   const [playerName, setPlayerName] = useState<Settings["playerName"]>(
-    initialConfig.playerName ?? ""
+    initialConfig.playerName ?? undefined
   );
   const [homeDir, setHomeDir] = useState<Settings["homeDir"]>(
-    initialConfig.homeDir ?? ""
+    initialConfig.homeDir ?? undefined
   );
   const [nas, setNas] = useState<Settings["nas"]>(initialConfig.nas ?? "");
   const [locale, setLocale] = useState<Settings["locale"]>(
-    initialConfig.locale ?? ""
+    initialConfig.locale ?? defaultLocale
   );
   const [debug, setDebug] = useState<Settings["debug"]>(
     initialConfig.debug ?? false
