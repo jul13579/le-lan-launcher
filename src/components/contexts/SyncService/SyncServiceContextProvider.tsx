@@ -83,7 +83,7 @@ export const SyncServiceContextProvider: FunctionComponent<
     );
   }
   async function start() {
-    if (started) {
+    if (started || !homeDir) {
       return;
     }
     try {
