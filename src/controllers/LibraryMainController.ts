@@ -1,6 +1,6 @@
-import fs from "fs";
-import LibraryOperations from "../enums/LibraryOperations";
 import { BrowserWindow } from "electron";
+import { existsSync, readFileSync, unwatchFile, watchFile } from "fs";
+import LibraryOperations from "../enums/LibraryOperations";
 
 /**
  * Controller for game library.
@@ -19,13 +19,13 @@ export function LibraryMainController(win: BrowserWindow) {
   function watch(libConfigPath: string) {
     // Setup library watcher
     // ! Use fs.watchFile as it handles ENOENT (file not existing) and also calls listener when file is created
-    fs.watchFile(libConfigPath, (curr) => {
+    watchFile(libConfigPath, (curr) => {
       if (curr.size > 0) {
         _sendLibrary(libConfigPath);
       }
     });
     // If library was already existing before app start, we have to fetch the library config now
-    if (fs.existsSync(libConfigPath)) {
+    if (existsSync(libConfigPath)) {
       _sendLibrary(libConfigPath);
     }
   }
@@ -35,7 +35,7 @@ export function LibraryMainController(win: BrowserWindow) {
    * @param {string} libConfigPath The path to the library config file.
    */
   function unwatch(libConfigPath: string) {
-    fs.unwatchFile(libConfigPath);
+    unwatchFile(libConfigPath);
   }
 
   /**
@@ -46,7 +46,7 @@ export function LibraryMainController(win: BrowserWindow) {
    * @private
    */
   function _read(libConfigPath: string) {
-    const lib = JSON.parse(fs.readFileSync(libConfigPath).toString());
+    const lib = JSON.parse(readFileSync(libConfigPath).toString());
     lib.games.sort((game1: { title: string }, game2: typeof game1) => {
       if (game1.title < game2.title) {
         return -1;
