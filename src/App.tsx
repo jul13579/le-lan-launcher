@@ -19,7 +19,7 @@ import {
   Typography,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
-import { FunctionComponent, StrictMode } from "react";
+import { FunctionComponent, StrictMode, useState } from "react";
 import { createRoot } from "react-dom/client";
 import { SettingsServiceContextProvider } from "./components/contexts/SettingsService/SettingsServiceContextProvider";
 import { SyncServiceContextProvider } from "./components/contexts/SyncService/SyncServiceContextProvider";
@@ -79,8 +79,12 @@ const App: FunctionComponent = () => {
   /*                                   Context                                  */
   /* -------------------------------------------------------------------------- */
   const { t } = useTranslation();
-
   const { minimizeWindow, maximizeWindow, closeWindow } = useWindowControls();
+
+  /* -------------------------------------------------------------------------- */
+  /*                                    State                                   */
+  /* -------------------------------------------------------------------------- */
+  const [tab, setTab] = useState(0);
 
   /* -------------------------------------------------------------------------- */
   /*                                  Rendering                                 */
@@ -112,7 +116,7 @@ const App: FunctionComponent = () => {
           </WindowButtonsBox>
         </AppBarRow>
         <AppBarRow>
-          <Tabs>
+          <Tabs value={tab} onChange={(event, value) => setTab(value)}>
             {[
               [t("nav.library"), mdiGamepad],
               [t("nav.settings"), mdiCog],
