@@ -7,17 +7,6 @@ import LibraryOperations from "../enums/LibraryOperations";
  * This is only to be used by the main process, as it depends on node functionalities.
  */
 export function LibraryMainController(win: BrowserWindow) {
-  async function _sendLibrary(libConfigPath: string) {
-    try {
-      const lib = await _read(libConfigPath);
-      win.webContents.send("library", lib);
-    } catch (e) {
-      console.error(
-        `Unable to send the library configuration to the renderer: ${e}`
-      );
-    }
-  }
-
   /**
    * Setup watcher on the library config file.
    * This will send updates to the renderer, if the library config file changes.
@@ -72,6 +61,22 @@ export function LibraryMainController(win: BrowserWindow) {
         resolve(lib);
       });
     });
+  }
+
+  /**
+   * Send the library config to the renderer
+   * @param libConfigPath The path of the library config
+   * @private
+   */
+  async function _sendLibrary(libConfigPath: string) {
+    try {
+      const lib = await _read(libConfigPath);
+      win.webContents.send("library", lib);
+    } catch (e) {
+      console.error(
+        `Unable to send the library configuration to the renderer: ${e}`
+      );
+    }
   }
 
   return {
