@@ -14,7 +14,7 @@ import { createRoot } from "react-dom/client";
 import { SettingsServiceContextProvider } from "./components/contexts/SettingsService/SettingsServiceContextProvider";
 import { SyncServiceContextProvider } from "./components/contexts/SyncService/SyncServiceContextProvider";
 import { CustomThemeProvider } from "./components/CustomThemeProvider";
-import WindowOperations from "./enums/WindowOperations";
+import { useWindowControls } from "./hooks/useWindowControls";
 
 const ProminentToolbar = styled(Toolbar)(({ theme }) => ({
   alignItems: "flex-start",
@@ -31,21 +31,7 @@ const ToolbarTitle = styled(Typography)`
 `;
 
 const App: FunctionComponent = () => {
-  function sendWindowControl(action: WindowOperations) {
-    window.ipcRenderer.send("controlWindow", action);
-  }
-
-  function minimizeWindow() {
-    sendWindowControl(WindowOperations.MINIMIZE);
-  }
-
-  function maximizeWindow() {
-    sendWindowControl(WindowOperations.MAXIMIZE);
-  }
-
-  function closeWindow() {
-    sendWindowControl(WindowOperations.CLOSE);
-  }
+  const { minimizeWindow, maximizeWindow, closeWindow } = useWindowControls();
 
   /* -------------------------------------------------------------------------- */
   /*                                  Rendering                                 */
