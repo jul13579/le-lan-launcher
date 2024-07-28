@@ -11,6 +11,7 @@ import {
   Slider,
   styled,
   Switch,
+  TextField,
   Theme,
   Tooltip,
 } from "@mui/material";
@@ -70,6 +71,7 @@ export const SettingsView: FunctionComponent = () => {
     setBackgroundHue,
     setLocale,
     setDebug,
+    setPlayerName,
   } = useSettingsService();
   const { openFileChooser } = useFileChooser();
 
@@ -186,6 +188,17 @@ export const SettingsView: FunctionComponent = () => {
             </Tooltip>
           </Box>
         </Grid>
+        <Grid item xs={3}>
+          <TextField
+            fullWidth
+            label={t("settings.playerName")}
+            value={playerName}
+            error={!playerName}
+            onChange={(event) => setPlayerName(event.target.value)}
+          />
+        </Grid>
+        <Grid item xs={4}></Grid>
+        <Grid item xs={5}></Grid>
       </Grid>
     </Container>
   );
