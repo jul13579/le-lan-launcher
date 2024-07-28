@@ -6,6 +6,8 @@ import {
   Box,
   Button,
   CssBaseline,
+  Tab,
+  Tabs,
   Toolbar,
   Typography,
 } from "@mui/material";
@@ -22,14 +24,14 @@ const ProminentToolbar = styled(Toolbar)(({ theme }) => ({
   gridTemplateColumns: "1fr",
   gridTemplateRows: "1fr 1fr",
   paddingTop: theme.spacing(2),
-  paddingBottom: theme.spacing(2),
+  paddingBottom: theme.spacing(0),
   // Override media queries injected by theme.mixins.toolbar
   "@media all": {
     minHeight: 128,
   },
 }));
 
-const FirstAppBarRow = styled(Box)(() => ({
+const AppBarRow = styled(Box)(() => ({
   display: "flex",
   minWidth: "100%",
   justifyContent: "center",
@@ -68,33 +70,29 @@ const App: FunctionComponent = () => {
   return (
     <AppBar position="static">
       <ProminentToolbar>
-        <FirstAppBarRow>
+        <AppBarRow>
           <AvatarBox>
             <Avatar src="/icon.png" />
           </AvatarBox>
           <ToolbarTitle>LAN - Launcher</ToolbarTitle>
           <WindowButtonsBox>
-            <WindowButton
-              size="large"
-              onClick={minimizeWindow}
-            >
+            <WindowButton size="large" onClick={minimizeWindow}>
               <Icon path={mdiWindowMinimize} size={1} />
             </WindowButton>
-            <WindowButton
-              size="large"
-              onClick={maximizeWindow}
-            >
+            <WindowButton size="large" onClick={maximizeWindow}>
               <Icon path={mdiWindowMaximize} size={1} />
             </WindowButton>
-            <WindowButton
-              size="large"
-              color="error"
-              onClick={closeWindow}
-            >
+            <WindowButton size="large" color="error" onClick={closeWindow}>
               <Icon path={mdiClose} size={1} />
             </WindowButton>
           </WindowButtonsBox>
-        </FirstAppBarRow>
+        </AppBarRow>
+        <AppBarRow>
+          <Tabs>
+            <Tab label="First" />
+            <Tab label="Second" />
+          </Tabs>
+        </AppBarRow>
       </ProminentToolbar>
     </AppBar>
   );
