@@ -28,6 +28,8 @@ import { CustomThemeProvider } from "./components/CustomThemeProvider";
 import { ThemeBackground } from "./components/ThemeBackground";
 import { useSettingsService } from "./hooks/useSettingsService";
 import { useWindowControls } from "./hooks/useWindowControls";
+import { TabContext, TabPanel } from "@mui/lab";
+import { TabValue } from "./enums/TabValue";
 
 export const bgTransparentDarkWithBlur = {
   background: "rgba(0, 0, 0, 0.6)",
@@ -97,6 +99,10 @@ const CustomTab = styled(Tab)(() => ({
   lineHeight: 1,
 }));
 
+const CustomTabPanel = styled(TabPanel)(() => ({
+  position: "relative",
+}));
+
 const App: FunctionComponent = () => {
   /* -------------------------------------------------------------------------- */
   /*                                   Context                                  */
@@ -108,13 +114,15 @@ const App: FunctionComponent = () => {
   /* -------------------------------------------------------------------------- */
   /*                                    State                                   */
   /* -------------------------------------------------------------------------- */
-  const [tab, setTab] = useState(setupCompleted ? 0 : 1);
+  const [tab, setTab] = useState(
+    setupCompleted ? TabValue.GAMES : TabValue.SETTINGS
+  );
 
   /* -------------------------------------------------------------------------- */
   /*                                  Rendering                                 */
   /* -------------------------------------------------------------------------- */
   return (
-    <>
+    <TabContext value={tab}>
       <ThemeBackground />
       <DraggableAppBar>
         <ProminentToolbar>
@@ -151,12 +159,21 @@ const App: FunctionComponent = () => {
               onChange={(event, value) => setTab(value)}
             >
               {[
-                [t("nav.library"), mdiGamepad, !setupCompleted],
-                [t("nav.settings"), mdiCog, false],
+                [TabValue.GAMES, t("nav.library"), mdiGamepad, !setupCompleted],
+                [TabValue.SETTINGS, t("nav.settings"), mdiCog, false],
               ].map(
-                ([text, icon, disabled]: [string, string, boolean], index) => (
+                (
+                  [tabValue, text, icon, disabled]: [
+                    string,
+                    string,
+                    string,
+                    boolean
+                  ],
+                  index
+                ) => (
                   <CustomTab
                     key={index}
+                    value={tabValue}
                     label={text}
                     disabled={disabled}
                     icon={<Icon path={icon} size={1} />}
@@ -168,7 +185,9 @@ const App: FunctionComponent = () => {
           </AppBarRow>
         </ProminentToolbar>
       </DraggableAppBar>
-    </>
+      <CustomTabPanel value={TabValue.GAMES}>Games</CustomTabPanel>
+      <CustomTabPanel value={TabValue.SETTINGS}>Settings</CustomTabPanel>
+    </TabContext>
   );
 };
 

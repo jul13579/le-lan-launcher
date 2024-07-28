@@ -47,6 +47,7 @@
     "@fontsource/roboto": "^5.0.13",
     "@mdi/js": "^7.4.47",
     "@mdi/react": "^1.6.1",
+    "@mui/lab": "^5.0.0-alpha.173",
     "@mui/material": "^5.16.5",
     "@types/hsl-to-hex": "^1.0.2",
     "axios": "^1.7.2",
