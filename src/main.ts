@@ -1,7 +1,7 @@
 "use strict";
 
 import { app, BrowserWindow, dialog, ipcMain, protocol } from "electron";
-import path from "path";
+import { join } from "path";
 
 import WindowConfig from "./config/window";
 import { GameMainController as GameController } from "./controllers/GameMainController";
@@ -40,7 +40,7 @@ async function createWindow() {
     icon: "./images/icons/icon.png",
     webPreferences: {
       webSecurity: true,
-      preload: path.join(__dirname, "preload.js"),
+      preload: join(__dirname, "preload.js"),
       nodeIntegration: !!process.env.ELECTRON_NODE_INTEGRATION,
       contextIsolation: !process.env.ELECTRON_NODE_INTEGRATION,
     },
@@ -57,7 +57,7 @@ async function createWindow() {
     }
   } else {
     win.loadFile(
-      path.join(__dirname, `../renderer/${MAIN_WINDOW_VITE_NAME}/index.html`)
+      join(__dirname, `../renderer/${MAIN_WINDOW_VITE_NAME}/index.html`)
     );
   }
 }
