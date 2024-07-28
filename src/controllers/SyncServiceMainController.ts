@@ -1,7 +1,7 @@
 import { spawn } from "child_process";
 import { BrowserWindow, shell } from "electron";
-import fs from "fs";
-import path from "path";
+import { readFileSync } from "fs";
+import { join } from "path";
 import parse from "xml-parser";
 import SyncServiceOperations from "../enums/SyncServiceOperations";
 
@@ -32,11 +32,11 @@ export function SyncServiceMainController(win: BrowserWindow) {
     if (_homeDir) {
       homeDir = _homeDir;
 
-      let binPath = path.join(__dirname, "../syncthing");
+      let binPath = join(__dirname, "../syncthing");
       const args = [
         "-no-browser",
         `-home=${_homeDir}`,
-        `-logfile=${path.join(_homeDir, "syncthing.log")}`,
+        `-logfile=${join(_homeDir, "syncthing.log")}`,
         "-no-default-folder",
       ];
       if (process.platform == "win32") {
@@ -78,7 +78,7 @@ export function SyncServiceMainController(win: BrowserWindow) {
 
   function _readApiKey() {
     const xml = parse(
-      fs.readFileSync(path.join(homeDir, "config.xml"), {
+      readFileSync(join(homeDir, "config.xml"), {
         encoding: "utf8",
       })
     );
