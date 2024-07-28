@@ -1,4 +1,10 @@
-import { mdiClose, mdiWindowMaximize, mdiWindowMinimize } from "@mdi/js";
+import {
+  mdiClose,
+  mdiCog,
+  mdiGamepad,
+  mdiWindowMaximize,
+  mdiWindowMinimize,
+} from "@mdi/js";
 import Icon from "@mdi/react";
 import {
   AppBar,
@@ -18,6 +24,7 @@ import { SettingsServiceContextProvider } from "./components/contexts/SettingsSe
 import { SyncServiceContextProvider } from "./components/contexts/SyncService/SyncServiceContextProvider";
 import { CustomThemeProvider } from "./components/CustomThemeProvider";
 import { useWindowControls } from "./hooks/useWindowControls";
+import { useTranslation } from "react-i18next";
 
 const ProminentToolbar = styled(Toolbar)(({ theme }) => ({
   display: "grid",
@@ -27,7 +34,7 @@ const ProminentToolbar = styled(Toolbar)(({ theme }) => ({
   paddingBottom: theme.spacing(0),
   // Override media queries injected by theme.mixins.toolbar
   "@media all": {
-    minHeight: 128,
+    minHeight: 112,
   },
 }));
 
@@ -61,7 +68,17 @@ const WindowButton = styled(Button)(({ theme }) => ({
   color: theme.palette.text.primary,
 }));
 
+const CustomTab = styled(Tab)(() => ({
+  minHeight: 50,
+  lineHeight: 1,
+}));
+
 const App: FunctionComponent = () => {
+  /* -------------------------------------------------------------------------- */
+  /*                                   Context                                  */
+  /* -------------------------------------------------------------------------- */
+  const { t } = useTranslation();
+
   const { minimizeWindow, maximizeWindow, closeWindow } = useWindowControls();
 
   /* -------------------------------------------------------------------------- */
@@ -89,8 +106,16 @@ const App: FunctionComponent = () => {
         </AppBarRow>
         <AppBarRow>
           <Tabs>
-            <Tab label="First" />
-            <Tab label="Second" />
+            <CustomTab
+              label={t("nav.library")}
+              icon={<Icon path={mdiGamepad} size={1} />}
+              iconPosition="start"
+            />
+            <CustomTab
+              label={t("nav.settings")}
+              icon={<Icon path={mdiCog} size={1} />}
+              iconPosition="start"
+            />
           </Tabs>
         </AppBarRow>
       </ProminentToolbar>
