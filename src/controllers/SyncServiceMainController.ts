@@ -13,6 +13,17 @@ export function SyncServiceMainController(win: BrowserWindow) {
   let homeDir: string;
   let apiKey: string;
 
+  function _sendSyncServiceOutput(type: "stdout" | "stderr", message: string) {
+    try {
+      win.webContents.send("syncService", {
+        type,
+        message,
+      });
+    } catch (e) {
+      // when closing the app `win.webContents` might already be destroyed
+    }
+  }
+
   function startSyncService(_homeDir: string) {
     if (_homeDir) {
       homeDir = _homeDir;
@@ -38,40 +49,22 @@ export function SyncServiceMainController(win: BrowserWindow) {
           win.webContents.send("setApiKey", apiKey);
         }
 
-        try {
-          win.webContents.send("syncService", {
-            type: "stdout",
-            message: `${data}`,
-          });
-        } catch (e) {
-          // when closing the app `win.webContents` might already be destroyed
-        }
+        _sendSyncServiceOutput("stdout", `${data}`);
       });
 
       syncServiceProcess.stderr.on("data", (data) => {
-        try {
-          win.webContents.send("syncService", {
-            type: "stderr",
-            message: `${data}`,
-          });
-        } catch (e) {
-          // when closing the app `win.webContents` might already be destroyed
-        }
+        _sendSyncServiceOutput("stderr", `${data}`);
       });
 
       syncServiceProcess.on("exit", (code) => {
         // Reset `homeDir` & `apiKey` variable when service exited
         homeDir = undefined;
         apiKey = undefined;
-        
-        try {
-          win.webContents.send("syncService", {
-            type: "stdout",
-            message: `Process exited with exit code ${code}`,
-          });
-        } catch (e) {
-          // when closing the app `win.webContents` might already be destroyed
-        }
+
+        _sendSyncServiceOutput(
+          "stdout",
+          `Process exited with exit code ${code}`
+        );
       });
     }
   }
