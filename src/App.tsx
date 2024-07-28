@@ -4,6 +4,7 @@ import {
   AppBar,
   Avatar,
   Box,
+  Button,
   CssBaseline,
   IconButton,
   Toolbar,
@@ -45,9 +46,11 @@ const App: FunctionComponent = () => {
         <Box
           display={"flex"}
           minWidth={"100%"}
-          justifyContent={"space-between"}
+          justifyContent={"center"}
         >
-          <Avatar src="/icon.png" />
+          <Box position={"absolute"} top={0} left={0}>
+            <Avatar src="/icon.png" />
+          </Box>
           <ToolbarTitle
             letterSpacing={"5px"}
             fontSize={"1.25rem"}
@@ -55,16 +58,29 @@ const App: FunctionComponent = () => {
           >
             LAN - Launcher
           </ToolbarTitle>
-          <Box>
-            <IconButton onClick={minimizeWindow}>
+          <Box position={"absolute"} top={0} right={0}>
+            <Button
+              size="large"
+              sx={{ borderRadius: 0 }}
+              onClick={minimizeWindow}
+            >
               <Icon path={mdiWindowMinimize} size={1} />
-            </IconButton>
-            <IconButton onClick={maximizeWindow}>
+            </Button>
+            <Button
+              size="large"
+              sx={{ borderRadius: 0 }}
+              onClick={maximizeWindow}
+            >
               <Icon path={mdiWindowMaximize} size={1} />
-            </IconButton>
-            <IconButton onClick={closeWindow}>
+            </Button>
+            <Button
+              size="large"
+              color="error"
+              sx={{ borderRadius: 0 }}
+              onClick={closeWindow}
+            >
               <Icon path={mdiClose} size={1} />
-            </IconButton>
+            </Button>
           </Box>
         </Box>
       </ProminentToolbar>
