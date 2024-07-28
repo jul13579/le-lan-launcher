@@ -1,7 +1,7 @@
 import { spawn } from "child_process";
 import { BrowserWindow, shell } from "electron";
 import { rm, readFile, writeFile } from "fs";
-import path from "path";
+import { resolve as pathResolve, normalize } from "path";
 import GameOperations from "../enums/GameOperations";
 
 /**
@@ -39,8 +39,8 @@ export function GameMainController(win: BrowserWindow) {
     }
 
     const gameProcess = spawn(
-      path.normalize(executable),
-      [path.normalize(gameFolder.path), gameFolder.id, playerName],
+      normalize(executable),
+      [normalize(gameFolder.path), gameFolder.id, playerName],
       {
         cwd: gameFolder.path,
         detached: true, // Spawn executable detached, so it stays open if launcher is closed.
@@ -76,7 +76,7 @@ export function GameMainController(win: BrowserWindow) {
    * @param {GameFolder} gameFolder The sync-service folder config.
    */
   function browse(gameFolder: GameFolder) {
-    shell.openPath(path.normalize(gameFolder.path));
+    shell.openPath(normalize(gameFolder.path));
   }
 
   /**
@@ -107,7 +107,7 @@ export function GameMainController(win: BrowserWindow) {
     }
     return new Promise((resolve, reject) => {
       const nameConfig = game.nameConfig;
-      const filePath = path.resolve(
+      const filePath = pathResolve(
         gameFolder.path,
         nameConfig.env ? process.env[nameConfig.env] : "",
         nameConfig.file
