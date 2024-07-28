@@ -47,8 +47,10 @@
     "@mdi/js": "^7.4.47",
     "@mdi/react": "^1.6.1",
     "@mui/material": "^5.16.5",
+    "@types/hsl-to-hex": "^1.0.2",
     "axios": "^1.7.2",
     "electron-squirrel-startup": "^1.0.1",
+    "hsl-to-hex": "^1.0.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "xml-parser": "^1.2.1"
