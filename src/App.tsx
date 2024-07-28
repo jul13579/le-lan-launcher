@@ -1,29 +1,67 @@
+import { mdiClose, mdiWindowMaximize, mdiWindowMinimize } from "@mdi/js";
+import Icon from "@mdi/react";
+import {
+  AppBar,
+  Avatar,
+  CssBaseline,
+  IconButton,
+  Toolbar,
+  Typography,
+} from "@mui/material";
+import { styled } from "@mui/material/styles";
+import { FunctionComponent, StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import { SyncServiceContextProvider } from "./components/contexts/SyncService/SyncServiceContextProvider";
 import { SettingsServiceContextProvider } from "./components/contexts/SettingsService/SettingsServiceContextProvider";
-import { StrictMode } from "react";
-import { CssBaseline } from "@mui/material";
+import { SyncServiceContextProvider } from "./components/contexts/SyncService/SyncServiceContextProvider";
 import { CustomThemeProvider } from "./components/CustomThemeProvider";
 
-function App() {
+const ProminentToolbar = styled(Toolbar)(({ theme }) => ({
+  alignItems: "flex-start",
+  paddingTop: theme.spacing(2),
+  paddingBottom: theme.spacing(2),
+  // Override media queries injected by theme.mixins.toolbar
+  "@media all": {
+    minHeight: 128,
+  },
+}));
+
+const ToolbarTitle = styled(Typography)`
+  letter-spacing: 5px;
+`;
+
+const App: FunctionComponent = () => {
   /* -------------------------------------------------------------------------- */
   /*                                  Rendering                                 */
   /* -------------------------------------------------------------------------- */
   return (
-    <SettingsServiceContextProvider>
-      <SyncServiceContextProvider>
-        <CustomThemeProvider>
-          <h1>Hello World</h1>
-        </CustomThemeProvider>
-      </SyncServiceContextProvider>
-    </SettingsServiceContextProvider>
+    <AppBar position="static">
+      <ProminentToolbar>
+        <Avatar src="/icon.png" />
+        <ToolbarTitle>LAN - Launcher</ToolbarTitle>
+        <IconButton>
+          <Icon path={mdiWindowMinimize} size={1} />
+        </IconButton>
+        <IconButton>
+          <Icon path={mdiWindowMaximize} size={1} />
+        </IconButton>
+        <IconButton>
+          <Icon path={mdiClose} size={1} />
+        </IconButton>
+      </ProminentToolbar>
+    </AppBar>
   );
-}
+};
 
 const root = createRoot(document.getElementById("app"));
 root.render(
   <StrictMode>
-    <CssBaseline />
-    <App />
+    <SettingsServiceContextProvider>
+      <SyncServiceContextProvider>
+        <CustomThemeProvider>
+          <CssBaseline />
+          <App />
+        </CustomThemeProvider>
+      </SyncServiceContextProvider>
+    </SettingsServiceContextProvider>
   </StrictMode>
 );
