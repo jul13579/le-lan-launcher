@@ -6,7 +6,6 @@ import {
   Box,
   Button,
   CssBaseline,
-  IconButton,
   Toolbar,
   Typography,
 } from "@mui/material";
@@ -19,7 +18,9 @@ import { CustomThemeProvider } from "./components/CustomThemeProvider";
 import { useWindowControls } from "./hooks/useWindowControls";
 
 const ProminentToolbar = styled(Toolbar)(({ theme }) => ({
-  alignItems: "flex-start",
+  display: "grid",
+  gridTemplateColumns: "1fr",
+  gridTemplateRows: "1fr 1fr",
   paddingTop: theme.spacing(2),
   paddingBottom: theme.spacing(2),
   // Override media queries injected by theme.mixins.toolbar
@@ -28,10 +29,34 @@ const ProminentToolbar = styled(Toolbar)(({ theme }) => ({
   },
 }));
 
+const FirstAppBarRow = styled(Box)(() => ({
+  display: "flex",
+  minWidth: "100%",
+  justifyContent: "center",
+}));
+
 const ToolbarTitle = styled(Typography)(() => ({
   letterSpacing: "5px",
   fontSize: "1.25rem",
   alignSelf: "center",
+}));
+
+const AvatarBox = styled(Box)(({ theme }) => ({
+  position: "absolute",
+  top: 0,
+  left: 0,
+  padding: theme.spacing(2),
+}));
+
+const WindowButtonsBox = styled(Box)(() => ({
+  position: "absolute",
+  top: 0,
+  right: 0,
+}));
+
+const WindowButton = styled(Button)(({ theme }) => ({
+  borderRadius: 0,
+  color: theme.palette.text.primary,
 }));
 
 const App: FunctionComponent = () => {
@@ -43,46 +68,33 @@ const App: FunctionComponent = () => {
   return (
     <AppBar position="static">
       <ProminentToolbar>
-        <Box
-          display={"flex"}
-          minWidth={"100%"}
-          justifyContent={"center"}
-        >
-          <Box position={"absolute"} top={0} left={0}>
+        <FirstAppBarRow>
+          <AvatarBox>
             <Avatar src="/icon.png" />
-          </Box>
-          <ToolbarTitle
-            letterSpacing={"5px"}
-            fontSize={"1.25rem"}
-            alignSelf={"center"}
-          >
-            LAN - Launcher
-          </ToolbarTitle>
-          <Box position={"absolute"} top={0} right={0}>
-            <Button
+          </AvatarBox>
+          <ToolbarTitle>LAN - Launcher</ToolbarTitle>
+          <WindowButtonsBox>
+            <WindowButton
               size="large"
-              sx={{ borderRadius: 0 }}
               onClick={minimizeWindow}
             >
               <Icon path={mdiWindowMinimize} size={1} />
-            </Button>
-            <Button
+            </WindowButton>
+            <WindowButton
               size="large"
-              sx={{ borderRadius: 0 }}
               onClick={maximizeWindow}
             >
               <Icon path={mdiWindowMaximize} size={1} />
-            </Button>
-            <Button
+            </WindowButton>
+            <WindowButton
               size="large"
               color="error"
-              sx={{ borderRadius: 0 }}
               onClick={closeWindow}
             >
               <Icon path={mdiClose} size={1} />
-            </Button>
-          </Box>
-        </Box>
+            </WindowButton>
+          </WindowButtonsBox>
+        </FirstAppBarRow>
       </ProminentToolbar>
     </AppBar>
   );
