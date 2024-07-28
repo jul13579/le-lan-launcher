@@ -1,6 +1,7 @@
 import { createRoot } from "react-dom/client";
 import { SyncServiceContextProvider } from "./components/contexts/SyncService/SyncServiceContextProvider";
 import { SettingsServiceContextProvider } from "./components/contexts/SettingsService/SettingsServiceContextProvider";
+import { StrictMode } from "react";
 
 function App() {
   /* -------------------------------------------------------------------------- */
@@ -16,4 +17,8 @@ function App() {
 }
 
 const root = createRoot(document.body);
-root.render(<App />);
+root.render(
+  <StrictMode>
+    <App />
+  </StrictMode>
+);
