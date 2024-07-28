@@ -146,6 +146,8 @@ export const SyncServiceContextProvider: FunctionComponent<
   /*                                  Rendering                                 */
   /* -------------------------------------------------------------------------- */
   const state = {
+    started,
+    online,
     openSyncthingUI,
     start,
     restart,

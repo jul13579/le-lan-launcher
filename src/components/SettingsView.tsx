@@ -1,9 +1,11 @@
 import {
   Alert,
   Box,
+  Button,
   Container,
   FormControl,
   FormControlLabel,
+  FormGroup,
   Grid,
   InputLabel,
   MenuItem,
@@ -23,6 +25,7 @@ import { mdiImageSearch } from "@mdi/js";
 import Icon from "@mdi/react";
 import { useFileChooser } from "../hooks/useFileChooser";
 import langs from "../localization/langs";
+import { useSyncService } from "../hooks/useSyncService";
 
 const ThemeItem = ({ theme }: { theme: Theme }) => ({
   margin: theme.spacing(3),
@@ -72,7 +75,9 @@ export const SettingsView: FunctionComponent = () => {
     setLocale,
     setDebug,
     setPlayerName,
+    setHomeDir,
   } = useSettingsService();
+  const { started } = useSyncService();
   const { openFileChooser } = useFileChooser();
 
   /* -------------------------------------------------------------------------- */
@@ -95,6 +100,15 @@ export const SettingsView: FunctionComponent = () => {
           },
         ],
       }
+    );
+  }
+
+  function selectHomeDir() {
+    openFileChooser(
+      (result) => {
+        setHomeDir(result.filePaths[0]);
+      },
+      { properties: ["openDirectory"] }
     );
   }
 
@@ -197,7 +211,21 @@ export const SettingsView: FunctionComponent = () => {
             onChange={(event) => setPlayerName(event.target.value)}
           />
         </Grid>
-        <Grid item xs={4}></Grid>
+        <Grid item xs={4}>
+          <Box display={"flex"} minWidth={"100%"} minHeight={"100%"}>
+            <TextField
+              fullWidth
+              label={t("settings.homeDir")}
+              value={homeDir}
+              disabled={true}
+              error={!homeDir}
+              onClick={selectHomeDir}
+            />
+            <Button onClick={selectHomeDir} disabled={false} fullWidth>
+              {t("settings.chooseHomeDir")}
+            </Button>
+          </Box>
+        </Grid>
         <Grid item xs={5}></Grid>
       </Grid>
     </Container>
