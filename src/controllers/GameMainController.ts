@@ -1,6 +1,6 @@
 import { spawn } from "child_process";
 import { BrowserWindow, shell } from "electron";
-import fs from "fs";
+import { rm, readFileSync, writeFileSync } from "fs";
 import path from "path";
 import GameOperations from "../enums/GameOperations";
 
@@ -85,7 +85,7 @@ export function GameMainController(win: BrowserWindow) {
    * @returns {String} Error if error was encountered.
    */
   function remove(gameFolder: GameFolder) {
-    fs.rm(gameFolder.path, { recursive: true }, (error) => {
+    rm(gameFolder.path, { recursive: true }, (error) => {
       if (error) return error;
     });
   }
@@ -111,7 +111,7 @@ export function GameMainController(win: BrowserWindow) {
       nameConfig.env ? process.env[nameConfig.env] : "",
       nameConfig.file
     );
-    let nameFileContents = fs.readFileSync(filePath, { encoding: "utf8" });
+    let nameFileContents = readFileSync(filePath, { encoding: "utf8" });
     if (nameConfig.regex) {
       nameFileContents = nameFileContents.replace(
         new RegExp(nameConfig.regex),
@@ -120,7 +120,7 @@ export function GameMainController(win: BrowserWindow) {
     } else {
       nameFileContents = playerName;
     }
-    fs.writeFileSync(filePath, nameFileContents, { encoding: "utf8" });
+    writeFileSync(filePath, nameFileContents, { encoding: "utf8" });
   }
 
   return {
