@@ -32,7 +32,7 @@ export function SyncServiceMainController(win: BrowserWindow) {
     if (_homeDir) {
       homeDir = _homeDir;
 
-      let binPath = join(__dirname, "../syncthing");
+      let binPath = join(__dirname, "./syncthing");
       const args = [
         "-no-browser",
         `-home=${_homeDir}`,
