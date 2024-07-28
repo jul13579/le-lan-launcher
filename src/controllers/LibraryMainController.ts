@@ -7,6 +7,10 @@ import { BrowserWindow } from "electron";
  * This is only to be used by the main process, as it depends on node functionalities.
  */
 export function LibraryMainController(win: BrowserWindow) {
+  function _sendLibrary(libConfigPath: string) {
+    win.webContents.send("library", _read(libConfigPath));
+  }
+
   /**
    * Setup watcher on the library config file.
    * This will send updates to the renderer, if the library config file changes.
@@ -17,12 +21,12 @@ export function LibraryMainController(win: BrowserWindow) {
     // ! Use fs.watchFile as it handles ENOENT (file not existing) and also calls listener when file is created
     fs.watchFile(libConfigPath, (curr) => {
       if (curr.size > 0) {
-        win.webContents.send("library", _read(libConfigPath));
+        _sendLibrary(libConfigPath);
       }
     });
     // If library was already existing before app start, we have to fetch the library config now
     if (fs.existsSync(libConfigPath)) {
-      win.webContents.send("library", _read(libConfigPath));
+      _sendLibrary(libConfigPath);
     }
   }
 
