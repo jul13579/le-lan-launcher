@@ -16,7 +16,7 @@ function App() {
   );
 }
 
-const root = createRoot(document.body);
+const root = createRoot(document.getElementById("app"));
 root.render(
   <StrictMode>
     <App />
