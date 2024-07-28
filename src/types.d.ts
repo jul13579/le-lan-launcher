@@ -21,10 +21,6 @@ type GameFolder = {
   path: string;
 };
 
-type Config = {
-  nameConfig: any;
-};
-
 interface Game {
   id: string;
   title: string;

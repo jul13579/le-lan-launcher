@@ -12,21 +12,21 @@ export function GameMainController(win: BrowserWindow) {
   /**
    * Launch a game.
    * @param {GameFolder} gameFolder The sync-service folder config.
-   * @param {Config} config The game object of the library config file.
+   * @param {Game} game The game object of the library config file.
    * @param {string} executable The executable to run
    * @param {string} playerName The name of the player
    * @param {boolean} debug State of debug mode.
    */
   function launch(
     gameFolder: GameFolder,
-    config: Config,
+    game: Game,
     executable: string,
     playerName: string,
     debug: boolean
   ) {
     // Try setting the player name with the given configuration
     try {
-      _setPlayerName(gameFolder, config, playerName);
+      _setPlayerName(gameFolder, game, playerName);
     } catch (e) {
       // There will be cases where this errors, e.g. if the configuration is not correct or the file in which the player
       // name should be changed is not yet existing (because the game did not yet run). The game should however launch
@@ -93,19 +93,19 @@ export function GameMainController(win: BrowserWindow) {
   /**
    * Set the player name according for a specific game.
    * @param {GameFolder} gameFolder The sync-service folder config.
-   * @param {Config} config The game object of the library config file.
+   * @param {Game} game The game object of the library config file.
    * @param {string} playerName The user's playername.
    * @private
    */
   function _setPlayerName(
     gameFolder: GameFolder,
-    config: Config,
+    game: Game,
     playerName: string
   ) {
-    if (!config || !config.nameConfig) {
+    if (!game || !game.nameConfig) {
       return;
     }
-    const nameConfig = config.nameConfig;
+    const nameConfig = game.nameConfig;
     const filePath = path.resolve(
       gameFolder.path,
       nameConfig.env ? process.env[nameConfig.env] : "",
