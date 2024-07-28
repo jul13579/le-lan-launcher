@@ -17,6 +17,7 @@ export const CustomThemeProvider: FunctionComponent<
   }, [backgroundHue]);
   const theme = createTheme({
     palette: {
+      mode: "dark",
       primary: {
         main: backgroundColorHex,
       },
