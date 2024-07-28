@@ -1,6 +1,7 @@
 import { FunctionComponent, ReactNode, useEffect, useState } from "react";
 import { Settings, SettingsServiceContext } from "./SettingsServiceContext";
 import { defaultBackgroundHue, defaultTheme } from "../../../config/app";
+import { IpcRendererEvent } from "electron";
 
 const initialConfig = JSON.parse(
   localStorage.getItem("settings") ?? JSON.stringify({})
@@ -29,9 +30,6 @@ export const SettingsServiceContextProvider: FunctionComponent<
   const [homeDir, setHomeDir] = useState<Settings["homeDir"]>(
     initialConfig.homeDir ?? ""
   );
-  const [apiKey, setApiKey] = useState<Settings["apiKey"]>(
-    initialConfig.apiKey ?? ""
-  );
   const [nas, setNas] = useState<Settings["nas"]>(initialConfig.nas ?? "");
   const [locale, setLocale] = useState<Settings["locale"]>(
     initialConfig.locale ?? ""
@@ -39,6 +37,8 @@ export const SettingsServiceContextProvider: FunctionComponent<
   const [debug, setDebug] = useState<Settings["debug"]>(
     initialConfig.debug ?? false
   );
+
+  const [apiKey, setApiKey] = useState<string>(undefined);
 
   /* -------------------------------------------------------------------------- */
   /*                             Component Lifecycle                            */
@@ -51,13 +51,20 @@ export const SettingsServiceContextProvider: FunctionComponent<
         theme,
         playerName,
         homeDir,
-        apiKey,
         nas,
         locale,
         debug,
       })
     );
-  }, [backgroundHue, theme, playerName, homeDir, apiKey, nas, locale, debug]);
+  }, [backgroundHue, theme, playerName, homeDir, nas, locale, debug]);
+
+  useEffect(() => {
+    const listener = (event: IpcRendererEvent, apiKey: string) => {
+      setApiKey(apiKey);
+    };
+    window.ipcRenderer.on("setApiKey", listener);
+    () => window.ipcRenderer.removeListener("setApiKey", listener);
+  }, []);
 
   /* -------------------------------------------------------------------------- */
   /*                                  Rendering                                 */
@@ -71,14 +78,13 @@ export const SettingsServiceContextProvider: FunctionComponent<
     setPlayerName,
     homeDir,
     setHomeDir,
-    apiKey,
-    setApiKey,
     nas,
     setNas,
     locale,
     setLocale,
     debug,
     setDebug,
+    apiKey,
   };
   return (
     <SettingsServiceContext.Provider value={state}>

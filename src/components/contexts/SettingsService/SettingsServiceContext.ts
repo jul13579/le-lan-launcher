@@ -10,7 +10,6 @@ export interface Settings {
   theme: ThemeSettings;
   playerName: string;
   homeDir: string;
-  apiKey: string;
   nas: string;
   locale: string;
   debug: boolean;
@@ -25,12 +24,11 @@ export const SettingsServiceContext = createContext<{
   setPlayerName: Dispatch<SetStateAction<Settings["playerName"]>>;
   homeDir: Settings["homeDir"];
   setHomeDir: Dispatch<SetStateAction<Settings["homeDir"]>>;
-  apiKey: Settings["apiKey"];
-  setApiKey: Dispatch<SetStateAction<Settings["apiKey"]>>;
   nas: Settings["nas"];
   setNas: Dispatch<SetStateAction<Settings["nas"]>>;
   locale: Settings["locale"];
   setLocale: Dispatch<SetStateAction<Settings["locale"]>>;
   debug: Settings["debug"];
   setDebug: Dispatch<SetStateAction<Settings["debug"]>>;
+  apiKey: string;
 }>(null);
