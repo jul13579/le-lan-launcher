@@ -1,6 +1,6 @@
 import { spawn } from "child_process";
 import { BrowserWindow, shell } from "electron";
-import { readFileSync } from "fs";
+import { readFile } from "fs";
 import { join } from "path";
 import parse from "xml-parser";
 import SyncServiceOperations from "../enums/SyncServiceOperations";
@@ -46,10 +46,10 @@ export function SyncServiceMainController(win: BrowserWindow) {
 
       const syncServiceProcess = spawn(binPath, args, {});
 
-      syncServiceProcess.stdout.on("data", (data) => {
+      syncServiceProcess.stdout.on("data", async (data) => {
         // Get API key if we notice that the sync service has booted
         if (!apiKey && `${data}`.match(/GUI and API listening on/)) {
-          apiKey = _readApiKey();
+          apiKey = await _readApiKey();
           _sendApiKey(apiKey);
         }
 
@@ -77,13 +77,24 @@ export function SyncServiceMainController(win: BrowserWindow) {
   }
 
   function _readApiKey() {
-    const xml = parse(
-      readFileSync(join(homeDir, "config.xml"), {
-        encoding: "utf8",
-      })
-    );
-    const gui = xml.root.children.find((item) => item.name == "gui");
-    return gui.children.find((item) => item.name == "apikey").content;
+    return new Promise<string>((resolve, reject) => {
+      readFile(
+        join(homeDir, "config.xml"),
+        {
+          encoding: "utf8",
+        },
+        (err, data) => {
+          if (err) {
+            reject(err);
+            return;
+          }
+          const xml = parse(data);
+          const gui = xml.root.children.find((item) => item.name == "gui");
+          resolve(gui.children.find((item) => item.name == "apikey").content);
+          return;
+        }
+      );
+    });
   }
 
   function openSyncthingUI() {
