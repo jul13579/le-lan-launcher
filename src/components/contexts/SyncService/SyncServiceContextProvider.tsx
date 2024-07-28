@@ -31,23 +31,25 @@ export const SyncServiceContextProvider: FunctionComponent<
   }, [apiKey]);
 
   useEffect(() => {
-    const interval = setInterval(async () => {
-      try {
-        await ping();
+    if (apiKey) {
+      const interval = setInterval(async () => {
+        try {
+          await ping();
 
-        // If service is reachable, set both `online` and `started` to true
-        if (!online) {
-          setOnline(true);
+          // If service is reachable, set both `online` and `started` to true
+          if (!online) {
+            setOnline(true);
+          }
+          if (!started) {
+            setStarted(true);
+          }
+        } catch (e) {
+          // Do nothing
         }
-        if (!started) {
-          setStarted(true);
-        }
-      } catch (e) {
-        // Do nothing
-      }
-    }, 5000);
-    return () => clearInterval(interval);
-  }, []);
+      }, 5000);
+      return () => clearInterval(interval);
+    }
+  }, [apiKey]);
 
   /* -------------------------------------------------------------------------- */
   /*                             Instance Functions                             */
@@ -91,7 +93,7 @@ export const SyncServiceContextProvider: FunctionComponent<
   function getConfig() {
     return axios.get(host + "/system/config");
   }
-  function setConfig(config: Config) {
+  function setConfig(config: unknown) {
     return axios.post(host + "/system/config", config);
   }
   function connections() {
