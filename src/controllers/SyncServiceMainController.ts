@@ -29,51 +29,53 @@ export function SyncServiceMainController(win: BrowserWindow) {
   }
 
   function start(_homeDir: string) {
-    if (_homeDir) {
-      homeDir = _homeDir;
+    if (!_homeDir) {
+      return; // Don't try to start service if `_homeDir` is falsy
+    }
+    if (homeDir) {
+      return; // Don't try to start service if the `homeDir` is already set
+    }
 
-      let binPath = join(__dirname, "./syncthing");
-      const args = [
-        "-no-browser",
-        `-home=${_homeDir}`,
-        `-logfile=${join(_homeDir, "syncthing.log")}`,
-        "-no-default-folder",
-      ];
-      if (process.platform == "win32") {
-        binPath += ".exe";
-        args.push("-no-console");
+    homeDir = _homeDir;
+
+    let binPath = join(__dirname, "./syncthing");
+    const args = [
+      "-no-browser",
+      `-home=${_homeDir}`,
+      `-logfile=${join(_homeDir, "syncthing.log")}`,
+      "-no-default-folder",
+    ];
+    if (process.platform == "win32") {
+      binPath += ".exe";
+      args.push("-no-console");
+    }
+
+    const syncServiceProcess = spawn(binPath, args, {});
+
+    syncServiceProcess.stdout.on("data", async (data) => {
+      // Get API key if we notice that the sync service has booted
+      if (!apiKey && `${data}`.match(/GUI and API listening on/)) {
+        apiKey = await _readApiKey();
+        _sendApiKey(apiKey);
       }
 
-      const syncServiceProcess = spawn(binPath, args, {});
+      _sendSyncServiceOutput("stdout", `${data}`);
+    });
 
-      syncServiceProcess.stdout.on("data", async (data) => {
-        // Get API key if we notice that the sync service has booted
-        if (!apiKey && `${data}`.match(/GUI and API listening on/)) {
-          apiKey = await _readApiKey();
-          _sendApiKey(apiKey);
-        }
+    syncServiceProcess.stderr.on("data", (data) => {
+      _sendSyncServiceOutput("stderr", `${data}`);
+    });
 
-        _sendSyncServiceOutput("stdout", `${data}`);
-      });
+    syncServiceProcess.on("exit", (code) => {
+      // Reset `homeDir` & `apiKey` variable when service exited
+      homeDir = undefined;
+      apiKey = undefined;
 
-      syncServiceProcess.stderr.on("data", (data) => {
-        _sendSyncServiceOutput("stderr", `${data}`);
-      });
+      // Unset API key in renderer when service stopped
+      _sendApiKey(undefined);
 
-      syncServiceProcess.on("exit", (code) => {
-        // Reset `homeDir` & `apiKey` variable when service exited
-        homeDir = undefined;
-        apiKey = undefined;
-
-        // Unset API key in renderer when service stopped
-        _sendApiKey(undefined);
-
-        _sendSyncServiceOutput(
-          "stdout",
-          `Process exited with exit code ${code}`
-        );
-      });
-    }
+      _sendSyncServiceOutput("stdout", `Process exited with exit code ${code}`);
+    });
   }
 
   function _readApiKey() {
