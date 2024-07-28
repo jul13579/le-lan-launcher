@@ -13,12 +13,12 @@ import {
   Button,
   ButtonProps,
   CssBaseline,
+  styled,
   Tab,
   Tabs,
   Toolbar,
   Typography,
 } from "@mui/material";
-import { styled } from "@mui/material/styles";
 import { FunctionComponent, StrictMode, useState } from "react";
 import { createRoot } from "react-dom/client";
 import { SettingsServiceContextProvider } from "./components/contexts/SettingsService/SettingsServiceContextProvider";
@@ -27,6 +27,7 @@ import { CustomThemeProvider } from "./components/CustomThemeProvider";
 import { useWindowControls } from "./hooks/useWindowControls";
 import { useTranslation } from "react-i18next";
 import { useSettingsService } from "./hooks/useSettingsService";
+import { ThemeBackground } from "./components/ThemeBackground";
 
 const ProminentToolbar = styled(Toolbar)(({ theme }) => ({
   display: "grid",
@@ -92,48 +93,58 @@ const App: FunctionComponent = () => {
   /*                                  Rendering                                 */
   /* -------------------------------------------------------------------------- */
   return (
-    <AppBar position="static">
-      <ProminentToolbar>
-        <AppBarRow>
-          <AvatarBox>
-            <Avatar src="/icon.png" />
-          </AvatarBox>
-          <ToolbarTitle>LAN - Launcher</ToolbarTitle>
-          <WindowButtonsBox>
-            {[
-              [minimizeWindow, mdiWindowMinimize],
-              [maximizeWindow, mdiWindowMaximize],
-              [closeWindow, mdiClose, "error"],
-            ].map(
-              ([cb, icon, color]: [
-                () => void,
-                string,
-                ButtonProps["color"]
-              ]) => (
-                <WindowButton size="large" color={color} onClick={cb}>
-                  <Icon path={icon} size={1} />
-                </WindowButton>
-              )
-            )}
-          </WindowButtonsBox>
-        </AppBarRow>
-        <AppBarRow>
-          <Tabs value={tab} onChange={(event, value) => setTab(value)}>
-            {[
-              [t("nav.library"), mdiGamepad, !setupCompleted],
-              [t("nav.settings"), mdiCog, false],
-            ].map(([text, icon, disabled]: [string, string, boolean]) => (
-              <CustomTab
-                label={text}
-                disabled={disabled}
-                icon={<Icon path={icon} size={1} />}
-                iconPosition="start"
-              />
-            ))}
-          </Tabs>
-        </AppBarRow>
-      </ProminentToolbar>
-    </AppBar>
+    <>
+      <ThemeBackground />
+      <AppBar position="static">
+        <ProminentToolbar>
+          <AppBarRow>
+            <AvatarBox>
+              <Avatar src="/icon.png" />
+            </AvatarBox>
+            <ToolbarTitle>LAN - Launcher</ToolbarTitle>
+            <WindowButtonsBox>
+              {[
+                [minimizeWindow, mdiWindowMinimize],
+                [maximizeWindow, mdiWindowMaximize],
+                [closeWindow, mdiClose, "error"],
+              ].map(
+                (
+                  [cb, icon, color]: [() => void, string, ButtonProps["color"]],
+                  index
+                ) => (
+                  <WindowButton
+                    key={index}
+                    size="large"
+                    color={color}
+                    onClick={cb}
+                  >
+                    <Icon path={icon} size={1} />
+                  </WindowButton>
+                )
+              )}
+            </WindowButtonsBox>
+          </AppBarRow>
+          <AppBarRow>
+            <Tabs value={tab} onChange={(event, value) => setTab(value)}>
+              {[
+                [t("nav.library"), mdiGamepad, !setupCompleted],
+                [t("nav.settings"), mdiCog, false],
+              ].map(
+                ([text, icon, disabled]: [string, string, boolean], index) => (
+                  <CustomTab
+                    key={index}
+                    label={text}
+                    disabled={disabled}
+                    icon={<Icon path={icon} size={1} />}
+                    iconPosition="start"
+                  />
+                )
+              )}
+            </Tabs>
+          </AppBarRow>
+        </ProminentToolbar>
+      </AppBar>
+    </>
   );
 };
 
