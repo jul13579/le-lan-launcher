@@ -1,5 +1,5 @@
 import { BrowserWindow } from "electron";
-import { existsSync, readFileSync, unwatchFile, watchFile } from "fs";
+import { existsSync, readFile, unwatchFile, watchFile } from "fs";
 import LibraryOperations from "../enums/LibraryOperations";
 
 /**
@@ -7,8 +7,15 @@ import LibraryOperations from "../enums/LibraryOperations";
  * This is only to be used by the main process, as it depends on node functionalities.
  */
 export function LibraryMainController(win: BrowserWindow) {
-  function _sendLibrary(libConfigPath: string) {
-    win.webContents.send("library", _read(libConfigPath));
+  async function _sendLibrary(libConfigPath: string) {
+    try {
+      const lib = await _read(libConfigPath);
+      win.webContents.send("library", lib);
+    } catch (e) {
+      console.error(
+        `Unable to send the library configuration to the renderer: ${e}`
+      );
+    }
   }
 
   /**
@@ -46,17 +53,25 @@ export function LibraryMainController(win: BrowserWindow) {
    * @private
    */
   function _read(libConfigPath: string) {
-    const lib = JSON.parse(readFileSync(libConfigPath).toString());
-    lib.games.sort((game1: { title: string }, game2: typeof game1) => {
-      if (game1.title < game2.title) {
-        return -1;
-      }
-      if (game1.title > game2.title) {
-        return 1;
-      }
-      return 0;
+    return new Promise((resolve, reject) => {
+      readFile(libConfigPath, (err, data) => {
+        if (err) {
+          reject(err);
+          return;
+        }
+        const lib = JSON.parse(data.toString()) as Library;
+        lib.games.sort((game1, game2) => {
+          if (game1.title < game2.title) {
+            return -1;
+          }
+          if (game1.title > game2.title) {
+            return 1;
+          }
+          return 0;
+        });
+        resolve(lib);
+      });
     });
-    return lib;
   }
 
   return {

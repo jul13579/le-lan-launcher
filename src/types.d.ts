@@ -24,3 +24,25 @@ type GameFolder = {
 type Config = {
   nameConfig: any;
 };
+
+interface Game {
+  id: string;
+  title: string;
+  cover: string;
+  launch: {
+    exe: string;
+  };
+  moreLaunchs: {
+    text: string;
+    exe: string;
+  };
+  nameConfig: {
+    env: string;
+    file: string;
+    regex: RegExp;
+  };
+}
+
+interface Library {
+  games: Game[];
+}
