@@ -4,6 +4,7 @@ import { readFile } from "fs";
 import { join } from "path";
 import parse from "xml-parser";
 import SyncServiceOperations from "../enums/SyncServiceOperations";
+import { baseUrl } from "../config/service";
 
 /**
  * Controller for the sync-service.
@@ -110,7 +111,7 @@ export function SyncServiceMainController(win: BrowserWindow) {
   }
 
   function openSyncthingUI() {
-    shell.openExternal("https://localhost:8384/");
+    shell.openExternal(baseUrl);
   }
 
   return {

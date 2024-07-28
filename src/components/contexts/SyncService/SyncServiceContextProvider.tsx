@@ -3,7 +3,9 @@ import { FunctionComponent, ReactNode, useEffect, useState } from "react";
 import { SyncServiceContext } from "./SyncServiceContext";
 import { useSettingsService } from "../../../hooks/useSettingsService";
 import SyncServiceOperations from "../../../enums/SyncServiceOperations";
-import { host } from "../../../config/service";
+import { baseUrl } from "../../../config/service";
+
+const apiBase = `${baseUrl}/rest`;
 
 interface SyncServiceContextProviderProps {
   children: ReactNode;
@@ -101,43 +103,43 @@ export const SyncServiceContextProvider: FunctionComponent<
     }
   }
   function restart() {
-    return axios.post(host + "/system/restart");
+    return axios.post(`${apiBase}/system/restart`);
   }
   function stop() {
-    return axios.post(host + "/system/shutdown");
+    return axios.post(`${apiBase}/system/shutdown`);
   }
   function ping() {
-    return axios.get(host + "/system/ping");
+    return axios.get(`${apiBase}/system/ping`);
   }
   function status() {
-    return axios.get(host + "/system/status");
+    return axios.get(`${apiBase}/system/status`);
   }
   function getConfig() {
-    return axios.get(host + "/system/config");
+    return axios.get(`${apiBase}/system/config`);
   }
   function setConfig(config: unknown) {
-    return axios.post(host + "/system/config", config);
+    return axios.post(`${apiBase}/system/config`, config);
   }
   function connections() {
-    return axios.get(host + "/system/connections");
+    return axios.get(`${apiBase}/system/connections`);
   }
   function getDiscovery() {
-    return axios.get(host + "/system/discovery");
+    return axios.get(`${apiBase}/system/discovery`);
   }
   function folderStatus(folder: string) {
-    return axios.get(host + "/db/status?folder=" + folder);
+    return axios.get(`${apiBase}/db/status?folder=${folder}`);
   }
   function revertFolder(folder: string) {
-    return axios.post(host + "/db/revert?folder=" + folder);
+    return axios.post(`${apiBase}/db/revert?folder=${folder}`);
   }
   function pendingFolders() {
-    return axios.get(host + "/cluster/pending/folders");
+    return axios.get(`${apiBase}/cluster/pending/folders`);
   }
   function eventsSince(lastSeenID: string) {
-    return axios.get(host + "/events?timeout=1&since=" + lastSeenID);
+    return axios.get(`${apiBase}/events?timeout=1&since=${lastSeenID}`);
   }
   function latestEvents() {
-    return axios.get(host + "/events?limit=1");
+    return axios.get(`${apiBase}/events?limit=1`);
   }
 
   /* -------------------------------------------------------------------------- */

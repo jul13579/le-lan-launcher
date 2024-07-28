@@ -1,3 +1,3 @@
-const host = "http://localhost:8384/rest";
+const baseUrl = "http://localhost:8384";
 
-export { host };
+export { baseUrl };
