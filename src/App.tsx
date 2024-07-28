@@ -40,7 +40,7 @@ const App: FunctionComponent = () => {
     <AppBar position="static">
       <ProminentToolbar>
         <Avatar src="/icon.png" />
-        <ToolbarTitle>LAN - Launcher</ToolbarTitle>
+        <ToolbarTitle fontSize={"1.25rem"}>LAN - Launcher</ToolbarTitle>
         <IconButton onClick={minimizeWindow}>
           <Icon path={mdiWindowMinimize} size={1} />
         </IconButton>
