@@ -26,16 +26,27 @@ export const SyncServiceContextProvider: FunctionComponent<
   /* -------------------------------------------------------------------------- */
   /*                             Component Lifecycle                            */
   /* -------------------------------------------------------------------------- */
+  /**
+   * Automatically start sync service when home directory is set
+   */
   useEffect(() => {
     if (homeDir) {
       start();
     }
   }, [homeDir]);
 
+  /**
+   * Configure HTTP client authentication when the API key is set
+   */
   useEffect(() => {
-    axios.defaults.headers.common["X-API-Key"] = apiKey;
+    if (apiKey) {
+      axios.defaults.headers.common["X-API-Key"] = apiKey;
+    }
   }, [apiKey]);
 
+  /**
+   * Setup service pinging in 5s intervals
+   */
   useEffect(() => {
     if (apiKey) {
       const interval = setInterval(async () => {
