@@ -82,13 +82,6 @@ export const SyncServiceContextProvider: FunctionComponent<
   function stop() {
     return axios.post(host + "/system/shutdown");
   }
-  function getApiKey(homeDir: string) {
-    return window.ipcRenderer.invoke(
-      "controlSyncService",
-      SyncServiceOperations.GET_API_KEY,
-      homeDir
-    );
-  }
   function ping() {
     return axios.get(host + "/system/ping");
   }
@@ -131,7 +124,6 @@ export const SyncServiceContextProvider: FunctionComponent<
     start,
     restart,
     stop,
-    getApiKey,
     ping,
     status,
     getConfig,

@@ -3,7 +3,6 @@
  */
 enum SyncServiceOperations {
   START = "start",
-  GET_API_KEY = "getApiKey",
   OPEN_SYNCTHING_UI = "openSyncthingUI",
 }
 

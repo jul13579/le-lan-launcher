@@ -86,18 +86,12 @@ export function SyncServiceMainController(win: BrowserWindow) {
     return gui.children.find((item) => item.name == "apikey").content;
   }
 
-  function getApiKey() {
-    apiKey = _readApiKey();
-    return apiKey;
-  }
-
   function openSyncthingUI() {
     shell.openExternal("https://localhost:8384/");
   }
 
   return {
     [SyncServiceOperations.START]: startSyncService,
-    [SyncServiceOperations.GET_API_KEY]: getApiKey,
     [SyncServiceOperations.OPEN_SYNCTHING_UI]: openSyncthingUI,
   };
 }
