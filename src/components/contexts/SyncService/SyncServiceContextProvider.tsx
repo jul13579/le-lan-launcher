@@ -15,7 +15,7 @@ export const SyncServiceContextProvider: FunctionComponent<
   /* -------------------------------------------------------------------------- */
   /*                                   Context                                  */
   /* -------------------------------------------------------------------------- */
-  const { apiKey } = useSettingsService();
+  const { apiKey, homeDir } = useSettingsService();
 
   /* -------------------------------------------------------------------------- */
   /*                                    State                                   */
@@ -26,6 +26,12 @@ export const SyncServiceContextProvider: FunctionComponent<
   /* -------------------------------------------------------------------------- */
   /*                             Component Lifecycle                            */
   /* -------------------------------------------------------------------------- */
+  useEffect(() => {
+    if (homeDir) {
+      start();
+    }
+  }, [homeDir]);
+
   useEffect(() => {
     axios.defaults.headers.common["X-API-Key"] = apiKey;
   }, [apiKey]);
@@ -65,7 +71,7 @@ export const SyncServiceContextProvider: FunctionComponent<
       SyncServiceOperations.OPEN_SYNCTHING_UI
     );
   }
-  async function start(homeDir: string) {
+  async function start() {
     if (started) {
       return;
     }
