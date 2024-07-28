@@ -28,6 +28,10 @@ protocol.registerSchemesAsPrivileged([
   { scheme: "app", privileges: { secure: true, standard: true } },
 ]);
 
+let syncServiceController: ReturnType<typeof SyncServiceController>,
+  libraryController: ReturnType<typeof LibraryController>,
+  gameController: ReturnType<typeof GameController>;
+
 async function createWindow() {
   // Create the browser window.
   win = new BrowserWindow({
@@ -45,6 +49,10 @@ async function createWindow() {
       contextIsolation: !process.env.ELECTRON_NODE_INTEGRATION,
     },
   });
+
+  syncServiceController = SyncServiceController(win);
+  libraryController = LibraryController(win);
+  gameController = GameController(win);
 
   win.removeMenu();
 
@@ -144,7 +152,6 @@ function shutdown() {
 /* -------------------------------------------------------------------------- */
 /*                              IPC Configuration                             */
 /* -------------------------------------------------------------------------- */
-const syncServiceController = SyncServiceController(win);
 ipcMain.handle(
   "controlSyncService",
   (event, action: SyncServiceOperations, ...args) => {
@@ -152,12 +159,10 @@ ipcMain.handle(
   }
 );
 
-const libraryController = LibraryController(win);
 ipcMain.on("controlLibrary", (event, action: LibraryOperations, ...args) => {
   libraryController[action].apply(null, args);
 });
 
-const gameController = GameController(win);
 ipcMain.handle("controlGame", (event, action: GameOperations, ...args) => {
   return gameController[action].apply(null, args);
 });
