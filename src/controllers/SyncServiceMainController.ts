@@ -28,7 +28,7 @@ export function SyncServiceMainController(win: BrowserWindow) {
     win.webContents.send("setApiKey", apiKey);
   }
 
-  function startSyncService(_homeDir: string) {
+  function start(_homeDir: string) {
     if (_homeDir) {
       homeDir = _homeDir;
 
@@ -102,7 +102,7 @@ export function SyncServiceMainController(win: BrowserWindow) {
   }
 
   return {
-    [SyncServiceOperations.START]: startSyncService,
+    [SyncServiceOperations.START]: start,
     [SyncServiceOperations.OPEN_SYNCTHING_UI]: openSyncthingUI,
   };
 }
