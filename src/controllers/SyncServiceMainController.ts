@@ -24,6 +24,10 @@ export function SyncServiceMainController(win: BrowserWindow) {
     }
   }
 
+  function _sendApiKey(apiKey: string) {
+    win.webContents.send("setApiKey", apiKey);
+  }
+
   function startSyncService(_homeDir: string) {
     if (_homeDir) {
       homeDir = _homeDir;
@@ -46,7 +50,7 @@ export function SyncServiceMainController(win: BrowserWindow) {
         // Get API key if we notice that the sync service has booted
         if (!apiKey && `${data}`.match(/GUI and API listening on/)) {
           apiKey = _readApiKey();
-          win.webContents.send("setApiKey", apiKey);
+          _sendApiKey(apiKey);
         }
 
         _sendSyncServiceOutput("stdout", `${data}`);
@@ -60,6 +64,9 @@ export function SyncServiceMainController(win: BrowserWindow) {
         // Reset `homeDir` & `apiKey` variable when service exited
         homeDir = undefined;
         apiKey = undefined;
+
+        // Unset API key in renderer when service stopped
+        _sendApiKey(undefined);
 
         _sendSyncServiceOutput(
           "stdout",
