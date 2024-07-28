@@ -1,6 +1,6 @@
 import { spawn } from "child_process";
 import { BrowserWindow, shell } from "electron";
-import { rm, readFileSync, writeFileSync } from "fs";
+import { rm, readFile, writeFile } from "fs";
 import path from "path";
 import GameOperations from "../enums/GameOperations";
 
@@ -17,7 +17,7 @@ export function GameMainController(win: BrowserWindow) {
    * @param {string} playerName The name of the player
    * @param {boolean} debug State of debug mode.
    */
-  function launch(
+  async function launch(
     gameFolder: GameFolder,
     game: Game,
     executable: string,
@@ -26,7 +26,7 @@ export function GameMainController(win: BrowserWindow) {
   ) {
     // Try setting the player name with the given configuration
     try {
-      _setPlayerName(gameFolder, game, playerName);
+      await _setPlayerName(gameFolder, game, playerName);
     } catch (e) {
       // There will be cases where this errors, e.g. if the configuration is not correct or the file in which the player
       // name should be changed is not yet existing (because the game did not yet run). The game should however launch
@@ -102,25 +102,39 @@ export function GameMainController(win: BrowserWindow) {
     game: Game,
     playerName: string
   ) {
-    if (!game || !game.nameConfig) {
-      return;
+    if (!game.nameConfig) {
+      return Promise.resolve();
     }
-    const nameConfig = game.nameConfig;
-    const filePath = path.resolve(
-      gameFolder.path,
-      nameConfig.env ? process.env[nameConfig.env] : "",
-      nameConfig.file
-    );
-    let nameFileContents = readFileSync(filePath, { encoding: "utf8" });
-    if (nameConfig.regex) {
-      nameFileContents = nameFileContents.replace(
-        new RegExp(nameConfig.regex),
-        playerName
+    return new Promise((resolve, reject) => {
+      const nameConfig = game.nameConfig;
+      const filePath = path.resolve(
+        gameFolder.path,
+        nameConfig.env ? process.env[nameConfig.env] : "",
+        nameConfig.file
       );
-    } else {
-      nameFileContents = playerName;
-    }
-    writeFileSync(filePath, nameFileContents, { encoding: "utf8" });
+      readFile(filePath, { encoding: "utf8" }, (err, nameFileContents) => {
+        if (err) {
+          reject(err);
+          return;
+        }
+        if (nameConfig.regex) {
+          nameFileContents = nameFileContents.replace(
+            new RegExp(nameConfig.regex),
+            playerName
+          );
+        } else {
+          nameFileContents = playerName;
+        }
+        writeFile(filePath, nameFileContents, { encoding: "utf8" }, (err) => {
+          if (err) {
+            reject(err);
+            return;
+          }
+          resolve(undefined);
+          return;
+        });
+      });
+    });
   }
 
   return {
