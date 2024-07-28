@@ -34,7 +34,7 @@ export function SyncServiceMainController(win: BrowserWindow) {
       syncServiceProcess.stdout.on("data", (data) => {
         // Get API key if we notice that the sync service has booted
         if (!apiKey && `${data}`.match(/GUI and API listening on/)) {
-          apiKey = _readApiKey(_homeDir);
+          apiKey = _readApiKey();
           win.webContents.send("setApiKey", apiKey);
         }
 
@@ -72,7 +72,7 @@ export function SyncServiceMainController(win: BrowserWindow) {
     }
   }
 
-  function _readApiKey(homeDir: string) {
+  function _readApiKey() {
     const xml = parse(
       fs.readFileSync(path.join(homeDir, "config.xml"), {
         encoding: "utf8",
@@ -82,8 +82,8 @@ export function SyncServiceMainController(win: BrowserWindow) {
     return gui.children.find((item) => item.name == "apikey").content;
   }
 
-  function getApiKey(homeDir: string) {
-    apiKey = _readApiKey(homeDir);
+  function getApiKey() {
+    apiKey = _readApiKey();
     return apiKey;
   }
 
