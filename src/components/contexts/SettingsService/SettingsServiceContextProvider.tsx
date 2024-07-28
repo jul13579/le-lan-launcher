@@ -1,4 +1,10 @@
-import { FunctionComponent, ReactNode, useEffect, useMemo, useState } from "react";
+import {
+  FunctionComponent,
+  ReactNode,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import { Settings, SettingsServiceContext } from "./SettingsServiceContext";
 import {
   defaultBackgroundHue,
@@ -6,6 +12,7 @@ import {
   defaultTheme,
 } from "../../../config/app";
 import { IpcRendererEvent } from "electron";
+import { useTranslation } from "react-i18next";
 
 const initialConfig = JSON.parse(
   localStorage.getItem("settings") ?? JSON.stringify({})
@@ -18,6 +25,11 @@ interface SettingsServiceContextProviderProps {
 export const SettingsServiceContextProvider: FunctionComponent<
   SettingsServiceContextProviderProps
 > = ({ children }) => {
+  /* -------------------------------------------------------------------------- */
+  /*                                   Context                                  */
+  /* -------------------------------------------------------------------------- */
+  const { i18n } = useTranslation();
+
   /* -------------------------------------------------------------------------- */
   /*                                    State                                   */
   /* -------------------------------------------------------------------------- */
@@ -76,6 +88,10 @@ export const SettingsServiceContextProvider: FunctionComponent<
   }, [apiKey]);
 
   useEffect(() => {
+    i18n.changeLanguage(locale);
+  }, [locale]);
+
+  useEffect(() => {
     const listener = (event: IpcRendererEvent, apiKey: string) => {
       setApiKey(apiKey);
     };
@@ -102,7 +118,7 @@ export const SettingsServiceContextProvider: FunctionComponent<
     debug,
     setDebug,
     apiKey,
-    setupCompleted
+    setupCompleted,
   };
   return (
     <SettingsServiceContext.Provider value={state}>

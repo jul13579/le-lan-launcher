@@ -1,4 +1,16 @@
-import { Alert, Box, Container, Slider, styled, Theme } from "@mui/material";
+import {
+  Alert,
+  Box,
+  Container,
+  FormControl,
+  Grid,
+  InputLabel,
+  MenuItem,
+  Select,
+  Slider,
+  styled,
+  Theme,
+} from "@mui/material";
 import { FunctionComponent } from "react";
 import { useTranslation } from "react-i18next";
 import { useSettingsService } from "../hooks/useSettingsService";
@@ -6,6 +18,7 @@ import { bgTransparentDarkWithBlur } from "../App";
 import { mdiImageSearch } from "@mdi/js";
 import Icon from "@mdi/react";
 import { useFileChooser } from "../hooks/useFileChooser";
+import langs from "../localization/langs";
 
 const ThemeItem = ({ theme }: { theme: Theme }) => ({
   margin: theme.spacing(3),
@@ -48,8 +61,10 @@ export const SettingsView: FunctionComponent = () => {
     homeDir,
     nas,
     backgroundHue,
+    locale,
     setTheme,
     setBackgroundHue,
+    setLocale,
   } = useSettingsService();
   const { openFileChooser } = useFileChooser();
 
@@ -127,6 +142,30 @@ export const SettingsView: FunctionComponent = () => {
         value={backgroundHue}
         onChange={(event, value: number) => setBackgroundHue(value)}
       />
+
+      {/* Environment */}
+      <h1>{t("settings.environment")}</h1>
+      <Grid container>
+        <Grid item xs={3}>
+          <FormControl fullWidth>
+            <InputLabel id="language-select-label">
+              {t("settings.language")}
+            </InputLabel>
+            <Select
+              labelId="language-select-label"
+              label={t("settings.language")}
+              value={locale}
+              onChange={(event) => setLocale(event.target.value)}
+            >
+              {Object.keys(langs).map((lang, index) => (
+                <MenuItem key={index} value={lang}>
+                  {t(`langs.${lang}`)}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        </Grid>
+      </Grid>
     </Container>
   );
 };
