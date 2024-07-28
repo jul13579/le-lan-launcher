@@ -44,7 +44,12 @@ export const SyncServiceContextProvider: FunctionComponent<
             setStarted(true);
           }
         } catch (e) {
-          // Do nothing
+          if (online) {
+            setOnline(false);
+          }
+          if (started) {
+            setStarted(false);
+          }
         }
       }, 5000);
       return () => clearInterval(interval);
