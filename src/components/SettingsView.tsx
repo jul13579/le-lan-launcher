@@ -1,4 +1,4 @@
-import { Alert, Box, Container, styled, Theme } from "@mui/material";
+import { Alert, Box, Container, Slider, styled, Theme } from "@mui/material";
 import { FunctionComponent } from "react";
 import { useTranslation } from "react-i18next";
 import { useSettingsService } from "../hooks/useSettingsService";
@@ -43,8 +43,14 @@ export const SettingsView: FunctionComponent = () => {
   /*                                   Context                                  */
   /* -------------------------------------------------------------------------- */
   const { t } = useTranslation();
-  const { playerName, homeDir, nas, backgroundHue, setTheme } =
-    useSettingsService();
+  const {
+    playerName,
+    homeDir,
+    nas,
+    backgroundHue,
+    setTheme,
+    setBackgroundHue,
+  } = useSettingsService();
   const { openFileChooser } = useFileChooser();
 
   /* -------------------------------------------------------------------------- */
@@ -75,6 +81,7 @@ export const SettingsView: FunctionComponent = () => {
   /* -------------------------------------------------------------------------- */
   return (
     <Container>
+      {/* Alerts */}
       {[
         [!playerName, t("errors.playerNameUnset.message")],
         [!homeDir, t("errors.homeDirUnset.message")],
@@ -86,6 +93,8 @@ export const SettingsView: FunctionComponent = () => {
             <Alert severity="error">{text}</Alert>
           </Box>
         ))}
+
+      {/* Theme */}
       <h1>{t("settings.theme")}</h1>
       <Box display={"flex"} flexWrap={"wrap"}>
         {[
@@ -108,6 +117,16 @@ export const SettingsView: FunctionComponent = () => {
           <Icon path={mdiImageSearch} size={2} />
         </CustomBackgroundPicker>
       </Box>
+
+      {/* Background Hue Slider */}
+      <h1>{t("settings.backgroundHue")}</h1>
+      <Slider
+        min={0}
+        max={360}
+        valueLabelDisplay="auto"
+        value={backgroundHue}
+        onChange={(event, value: number) => setBackgroundHue(value)}
+      />
     </Container>
   );
 };
