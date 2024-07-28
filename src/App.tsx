@@ -14,6 +14,7 @@ import { createRoot } from "react-dom/client";
 import { SettingsServiceContextProvider } from "./components/contexts/SettingsService/SettingsServiceContextProvider";
 import { SyncServiceContextProvider } from "./components/contexts/SyncService/SyncServiceContextProvider";
 import { CustomThemeProvider } from "./components/CustomThemeProvider";
+import WindowOperations from "./enums/WindowOperations";
 
 const ProminentToolbar = styled(Toolbar)(({ theme }) => ({
   alignItems: "flex-start",
@@ -30,6 +31,22 @@ const ToolbarTitle = styled(Typography)`
 `;
 
 const App: FunctionComponent = () => {
+  function sendWindowControl(action: WindowOperations) {
+    window.ipcRenderer.send("controlWindow", action);
+  }
+
+  function minimizeWindow() {
+    sendWindowControl(WindowOperations.MINIMIZE);
+  }
+
+  function maximizeWindow() {
+    sendWindowControl(WindowOperations.MAXIMIZE);
+  }
+
+  function closeWindow() {
+    sendWindowControl(WindowOperations.CLOSE);
+  }
+
   /* -------------------------------------------------------------------------- */
   /*                                  Rendering                                 */
   /* -------------------------------------------------------------------------- */
@@ -38,13 +55,13 @@ const App: FunctionComponent = () => {
       <ProminentToolbar>
         <Avatar src="/icon.png" />
         <ToolbarTitle>LAN - Launcher</ToolbarTitle>
-        <IconButton>
+        <IconButton onClick={minimizeWindow}>
           <Icon path={mdiWindowMinimize} size={1} />
         </IconButton>
-        <IconButton>
+        <IconButton onClick={maximizeWindow}>
           <Icon path={mdiWindowMaximize} size={1} />
         </IconButton>
-        <IconButton>
+        <IconButton onClick={closeWindow}>
           <Icon path={mdiClose} size={1} />
         </IconButton>
       </ProminentToolbar>
