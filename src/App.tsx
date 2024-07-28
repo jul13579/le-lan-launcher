@@ -3,6 +3,7 @@ import Icon from "@mdi/react";
 import {
   AppBar,
   Avatar,
+  Box,
   CssBaseline,
   IconButton,
   Toolbar,
@@ -26,9 +27,11 @@ const ProminentToolbar = styled(Toolbar)(({ theme }) => ({
   },
 }));
 
-const ToolbarTitle = styled(Typography)`
-  letter-spacing: 5px;
-`;
+const ToolbarTitle = styled(Typography)(() => ({
+  letterSpacing: "5px",
+  fontSize: "1.25rem",
+  alignSelf: "center",
+}));
 
 const App: FunctionComponent = () => {
   const { minimizeWindow, maximizeWindow, closeWindow } = useWindowControls();
@@ -39,17 +42,31 @@ const App: FunctionComponent = () => {
   return (
     <AppBar position="static">
       <ProminentToolbar>
-        <Avatar src="/icon.png" />
-        <ToolbarTitle fontSize={"1.25rem"}>LAN - Launcher</ToolbarTitle>
-        <IconButton onClick={minimizeWindow}>
-          <Icon path={mdiWindowMinimize} size={1} />
-        </IconButton>
-        <IconButton onClick={maximizeWindow}>
-          <Icon path={mdiWindowMaximize} size={1} />
-        </IconButton>
-        <IconButton onClick={closeWindow}>
-          <Icon path={mdiClose} size={1} />
-        </IconButton>
+        <Box
+          display={"flex"}
+          minWidth={"100%"}
+          justifyContent={"space-between"}
+        >
+          <Avatar src="/icon.png" />
+          <ToolbarTitle
+            letterSpacing={"5px"}
+            fontSize={"1.25rem"}
+            alignSelf={"center"}
+          >
+            LAN - Launcher
+          </ToolbarTitle>
+          <Box>
+            <IconButton onClick={minimizeWindow}>
+              <Icon path={mdiWindowMinimize} size={1} />
+            </IconButton>
+            <IconButton onClick={maximizeWindow}>
+              <Icon path={mdiWindowMaximize} size={1} />
+            </IconButton>
+            <IconButton onClick={closeWindow}>
+              <Icon path={mdiClose} size={1} />
+            </IconButton>
+          </Box>
+        </Box>
       </ProminentToolbar>
     </AppBar>
   );
