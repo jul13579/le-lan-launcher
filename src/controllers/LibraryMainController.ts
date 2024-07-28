@@ -42,7 +42,7 @@ export function LibraryMainController(win: BrowserWindow) {
    * @private
    */
   function _read(libConfigPath: string) {
-    return new Promise((resolve, reject) => {
+    return new Promise<Library>((resolve, reject) => {
       readFile(libConfigPath, (err, data) => {
         if (err) {
           reject(err);
