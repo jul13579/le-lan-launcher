@@ -41,6 +41,12 @@
   },
   "license": "GNU GPLv3",
   "dependencies": {
+    "@emotion/react": "^11.13.0",
+    "@emotion/styled": "^11.13.0",
+    "@fontsource/roboto": "^5.0.13",
+    "@mdi/js": "^7.4.47",
+    "@mdi/react": "^1.6.1",
+    "@mui/material": "^5.16.5",
     "axios": "^1.7.2",
     "electron-squirrel-startup": "^1.0.1",
     "react": "^18.3.1",
