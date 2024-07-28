@@ -12,6 +12,7 @@ import SyncServiceOperations from "../enums/SyncServiceOperations";
 export function SyncServiceMainController(win: BrowserWindow) {
   let homeDir: string;
   let apiKey: string;
+  let syncServiceProcess: ReturnType<typeof spawn>;
 
   function _sendSyncServiceOutput(type: "stdout" | "stderr", message: string) {
     try {
@@ -50,7 +51,7 @@ export function SyncServiceMainController(win: BrowserWindow) {
       args.push("-no-console");
     }
 
-    const syncServiceProcess = spawn(binPath, args, {});
+    syncServiceProcess = spawn(binPath, args, {});
 
     syncServiceProcess.stdout.on("data", async (data) => {
       // Get API key if we notice that the sync service has booted
@@ -76,6 +77,15 @@ export function SyncServiceMainController(win: BrowserWindow) {
 
       _sendSyncServiceOutput("stdout", `Process exited with exit code ${code}`);
     });
+  }
+
+  function stop() {
+    if (!syncServiceProcess) {
+      console.warn(
+        "There was no sync service running when attempting to stop it"
+      );
+    }
+    syncServiceProcess.kill();
   }
 
   function _readApiKey() {
@@ -105,6 +115,7 @@ export function SyncServiceMainController(win: BrowserWindow) {
 
   return {
     [SyncServiceOperations.START]: start,
+    [SyncServiceOperations.STOP]: stop,
     [SyncServiceOperations.OPEN_SYNCTHING_UI]: openSyncthingUI,
   };
 }
