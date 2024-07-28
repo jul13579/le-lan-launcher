@@ -14,21 +14,23 @@ const FullScreenBox = styled("div")(() => ({
 interface BackgroundProps {
   hue: number;
 }
-const Background = styled(FullScreenBox)<BackgroundProps>(({ hue }) => ({
+const Background = styled(FullScreenBox, {
+  shouldForwardProp: (prop) => prop !== "hue",
+})<BackgroundProps>(({ hue }) => ({
   background: `linear-gradient(hsl(${hue}, 75%, 8%), black)`,
 }));
 
 interface ForegroundProps {
   themeConfig: Settings["theme"];
 }
-const Foreground = styled(FullScreenBox)<ForegroundProps>(
-  ({ themeConfig }) => ({
-    opacity: 0.1,
-    background: `url('${themeConfig.path}')`,
-    backgroundPosition: themeConfig.cover ? "center" : "initial",
-    backgroundSize: themeConfig.cover ? "cover" : "initial",
-  })
-);
+const Foreground = styled(FullScreenBox, {
+  shouldForwardProp: (prop) => prop !== "themeConfig",
+})<ForegroundProps>(({ themeConfig }) => ({
+  opacity: 0.1,
+  background: `url('${themeConfig.path}')`,
+  backgroundPosition: themeConfig.cover ? "center" : "initial",
+  backgroundSize: themeConfig.cover ? "cover" : "initial",
+}));
 
 export const ThemeBackground: FunctionComponent = () => {
   const { backgroundHue, theme } = useSettingsService();
