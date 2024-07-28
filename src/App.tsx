@@ -43,12 +43,12 @@ const noDrag = {
 };
 
 const DraggableAppBar = styled(AppBar)(() => ({
+  ...bgTransparentDarkWithBlur,
   WebkitAppRegion: "drag",
-  position: "static",
+  position: "sticky",
 }));
 
 const ProminentToolbar = styled(Toolbar)(({ theme }) => ({
-  ...bgTransparentDarkWithBlur,
   display: "grid",
   gridTemplateColumns: "1fr",
   gridTemplateRows: "1fr 1fr",
@@ -187,12 +187,14 @@ const App: FunctionComponent = () => {
           </AppBarRow>
         </ProminentToolbar>
       </DraggableAppBar>
-      <CustomTabPanel value={TabValue.GAMES}>
-        <GamesView />
-      </CustomTabPanel>
-      <CustomTabPanel value={TabValue.SETTINGS}>
-        <SettingsView />
-      </CustomTabPanel>
+      <Box mb={66}>
+        <CustomTabPanel value={TabValue.GAMES}>
+          <GamesView />
+        </CustomTabPanel>
+        <CustomTabPanel value={TabValue.SETTINGS}>
+          <SettingsView />
+        </CustomTabPanel>
+      </Box>
     </TabContext>
   );
 };
