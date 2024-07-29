@@ -18,7 +18,7 @@ import {
   Theme,
   Tooltip,
 } from "@mui/material";
-import { FunctionComponent } from "react";
+import { FunctionComponent, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { bgTransparentDarkWithBlur } from "../App";
 import { useFileChooser } from "../hooks/useFileChooser";
@@ -75,9 +75,34 @@ export const SettingsView: FunctionComponent = () => {
     setDebug,
     setPlayerName,
     setHomeDir,
+    setNas,
   } = useSettingsService();
-  const { started } = useSyncService();
+  const { started, online, getDiscovery } = useSyncService();
   const { openFileChooser } = useFileChooser();
+
+  /* -------------------------------------------------------------------------- */
+  /*                                    State                                   */
+  /* -------------------------------------------------------------------------- */
+  const [devices, setDevices] = useState({});
+
+  /* -------------------------------------------------------------------------- */
+  /*                             Instance Lifecycle                             */
+  /* -------------------------------------------------------------------------- */
+  useEffect(() => {
+    async function discoveryTask() {
+      try {
+        const response = await getDiscovery();
+        setDevices(response.data);
+      } catch (e) {
+        // Do nothing
+      }
+    }
+    let discoveryInterval: ReturnType<typeof setInterval>;
+    if (online) {
+      discoveryInterval = setInterval(discoveryTask, 1000);
+    }
+    return () => discoveryInterval && clearInterval(discoveryInterval);
+  }, [online]);
 
   /* -------------------------------------------------------------------------- */
   /*                             Instance Functions                             */
@@ -226,7 +251,24 @@ export const SettingsView: FunctionComponent = () => {
             </Button>
           </Box>
         </Grid>
-        <Grid item xs={5}></Grid>
+        <Grid item xs={5}>
+          <FormControl fullWidth>
+            <InputLabel id="nas-select-label">{t("settings.nas")}</InputLabel>
+            <Select
+              labelId="nas-select-label"
+              label={t("settings.nas")}
+              value={nas}
+              onChange={(event) => setNas(event.target.value)}
+              error={!nas}
+            >
+              {Object.entries(devices).map(([deviceId], index) => (
+                <MenuItem key={index} value={deviceId}>
+                  {deviceId}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        </Grid>
       </Grid>
     </Container>
   );
