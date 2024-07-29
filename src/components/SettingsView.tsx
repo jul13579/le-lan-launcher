@@ -7,6 +7,7 @@ import {
   Container,
   FormControl,
   FormControlLabel,
+  FormHelperText,
   Grid,
   InputLabel,
   MenuItem,
@@ -253,13 +254,23 @@ export const SettingsView: FunctionComponent = () => {
         </Grid>
         <Grid item xs={5}>
           <FormControl fullWidth>
-            <InputLabel id="nas-select-label">{t("settings.nas")}</InputLabel>
+            <InputLabel id="nas-select-label" shrink>
+              {t("settings.nas")}
+            </InputLabel>
             <Select
               labelId="nas-select-label"
               label={t("settings.nas")}
               value={nas}
               onChange={(event) => setNas(event.target.value)}
               error={!nas}
+              displayEmpty
+              renderValue={(value) =>
+                Object.entries(devices).length > 0 ? (
+                  value
+                ) : (
+                  <span>{t("settings.alerts.discovery")}</span>
+                )
+              }
             >
               {Object.entries(devices).map(([deviceId], index) => (
                 <MenuItem key={index} value={deviceId}>
@@ -267,6 +278,9 @@ export const SettingsView: FunctionComponent = () => {
                 </MenuItem>
               ))}
             </Select>
+            {!online && (
+              <FormHelperText>{t("settings.alerts.service")}</FormHelperText>
+            )}
           </FormControl>
         </Grid>
       </Grid>
