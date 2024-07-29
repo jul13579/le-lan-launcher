@@ -219,6 +219,7 @@ export const SettingsView: FunctionComponent = () => {
               disabled={true}
               error={!homeDir}
               onClick={selectHomeDir}
+              InputLabelProps={{ disabled: false }}
             />
             <Button onClick={selectHomeDir} disabled={started}>
               <Icon path={mdiDatabaseSearch} size={1} />
