@@ -1,3 +1,5 @@
+import { mdiImageSearch } from "@mdi/js";
+import Icon from "@mdi/react";
 import {
   Alert,
   Box,
@@ -5,7 +7,6 @@ import {
   Container,
   FormControl,
   FormControlLabel,
-  FormGroup,
   Grid,
   InputLabel,
   MenuItem,
@@ -15,17 +16,15 @@ import {
   Switch,
   TextField,
   Theme,
-  Tooltip,
+  Tooltip
 } from "@mui/material";
 import { FunctionComponent } from "react";
 import { useTranslation } from "react-i18next";
-import { useSettingsService } from "../hooks/useSettingsService";
 import { bgTransparentDarkWithBlur } from "../App";
-import { mdiImageSearch } from "@mdi/js";
-import Icon from "@mdi/react";
 import { useFileChooser } from "../hooks/useFileChooser";
-import langs from "../localization/langs";
+import { useSettingsService } from "../hooks/useSettingsService";
 import { useSyncService } from "../hooks/useSyncService";
+import langs from "../localization/langs";
 
 const ThemeItem = ({ theme }: { theme: Theme }) => ({
   margin: theme.spacing(3),
@@ -221,7 +220,7 @@ export const SettingsView: FunctionComponent = () => {
               error={!homeDir}
               onClick={selectHomeDir}
             />
-            <Button onClick={selectHomeDir} disabled={false} fullWidth>
+            <Button onClick={selectHomeDir} disabled={started} fullWidth>
               {t("settings.chooseHomeDir")}
             </Button>
           </Box>
