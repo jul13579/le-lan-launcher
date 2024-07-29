@@ -1,4 +1,4 @@
-import { mdiImageSearch } from "@mdi/js";
+import { mdiDatabaseSearch, mdiImageSearch } from "@mdi/js";
 import Icon from "@mdi/react";
 import {
   Alert,
@@ -16,7 +16,7 @@ import {
   Switch,
   TextField,
   Theme,
-  Tooltip
+  Tooltip,
 } from "@mui/material";
 import { FunctionComponent } from "react";
 import { useTranslation } from "react-i18next";
@@ -220,8 +220,8 @@ export const SettingsView: FunctionComponent = () => {
               error={!homeDir}
               onClick={selectHomeDir}
             />
-            <Button onClick={selectHomeDir} disabled={started} fullWidth>
-              {t("settings.chooseHomeDir")}
+            <Button onClick={selectHomeDir} disabled={started}>
+              <Icon path={mdiDatabaseSearch} size={1} />
             </Button>
           </Box>
         </Grid>

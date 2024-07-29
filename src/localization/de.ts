@@ -78,7 +78,6 @@ export default {
     language: "Sprache",
     playerName: "Spielername",
     homeDir: "Spieleverzeichnis",
-    chooseHomeDir: "Wähle Verzeichnis",
     nas: "NAS ID",
     alerts: {
       discovery:
