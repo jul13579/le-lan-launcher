@@ -19,7 +19,7 @@ import {
   Theme,
   Tooltip,
 } from "@mui/material";
-import { FunctionComponent, useEffect, useState } from "react";
+import { FunctionComponent, useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { bgTransparentDarkWithBlur } from "../App";
 import { useFileChooser } from "../hooks/useFileChooser";
@@ -254,29 +254,34 @@ export const SettingsView: FunctionComponent = () => {
         </Grid>
         <Grid item xs={5}>
           <FormControl fullWidth>
-            <InputLabel id="nas-select-label" shrink>
-              {t("settings.nas")}
-            </InputLabel>
+            <InputLabel id="nas-select-label">{t("settings.nas")}</InputLabel>
             <Select
               labelId="nas-select-label"
               label={t("settings.nas")}
               value={nas}
-              onChange={(event) => setNas(event.target.value)}
-              error={!nas}
-              displayEmpty
-              renderValue={(value) =>
-                Object.entries(devices).length > 0 ? (
-                  value
-                ) : (
-                  <span>{t("settings.alerts.discovery")}</span>
-                )
+              onChange={(event) =>
+                event.target.value !== "-1" && setNas(event.target.value)
               }
+              error={!nas}
             >
-              {Object.entries(devices).map(([deviceId], index) => (
-                <MenuItem key={index} value={deviceId}>
-                  {deviceId}
-                </MenuItem>
-              ))}
+              {useCallback(() => {
+                const deviceIds = Object.keys(devices);
+                if (deviceIds.length > 0) {
+                  return deviceIds.map((deviceId, index) => (
+                    <MenuItem key={index} value={deviceId}>
+                      {deviceId}
+                    </MenuItem>
+                  ));
+                } else if (nas) {
+                  return <MenuItem value={nas}>{nas}</MenuItem>;
+                } else {
+                  return (
+                    <MenuItem value={"-1"}>
+                      {t("settings.alerts.discovery")}
+                    </MenuItem>
+                  );
+                }
+              }, [devices, nas])()}
             </Select>
             {!online && (
               <FormHelperText>{t("settings.alerts.service")}</FormHelperText>
