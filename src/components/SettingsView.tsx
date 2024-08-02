@@ -244,12 +244,15 @@ export const SettingsView: FunctionComponent = () => {
               value={homeDir}
               disabled={true}
               error={!homeDir}
-              onClick={selectHomeDir}
               InputLabelProps={{ disabled: false }}
+              InputProps={{
+                endAdornment: (
+                  <Button onClick={selectHomeDir} disabled={started}>
+                    <Icon path={mdiDatabaseSearch} size={1} />
+                  </Button>
+                ),
+              }}
             />
-            <Button onClick={selectHomeDir} disabled={started}>
-              <Icon path={mdiDatabaseSearch} size={1} />
-            </Button>
           </Box>
         </Grid>
         <Grid item xs={5}>
