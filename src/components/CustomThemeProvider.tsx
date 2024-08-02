@@ -21,6 +21,9 @@ export const CustomThemeProvider: FunctionComponent<
       primary: {
         main: backgroundColorHex,
       },
+      background: {
+        paper: "#000",
+      },
     },
   });
 
