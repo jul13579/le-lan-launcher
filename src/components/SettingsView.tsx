@@ -244,7 +244,7 @@ export const SettingsView: FunctionComponent = () => {
               value={homeDir}
               disabled={true}
               error={!homeDir}
-              InputLabelProps={{ disabled: false }}
+              InputLabelProps={{ disabled: false, shrink: !!homeDir }}
               InputProps={{
                 endAdornment: (
                   <Button onClick={selectHomeDir} disabled={started}>
