@@ -1,10 +1,11 @@
 import axios from "axios";
 import { FunctionComponent, ReactNode, useEffect, useState } from "react";
-import { SyncServiceContext } from "./SyncServiceContext";
-import { useSettingsService } from "../../../hooks/useSettingsService";
+import { baseUrl } from "../../../config/service";
 import SyncServiceOperations from "../../../enums/SyncServiceOperations";
 import { useForwardSlashSeparator } from "../../../hooks/useForwardSlashSeparator";
 import { useLibraryWatcher } from "../../../hooks/useLibraryWatcher";
+import { useSettingsService } from "../../../hooks/useSettingsService";
+import { SyncServiceContext } from "./SyncServiceContext";
 
 const apiBase = `${baseUrl}/rest`;
 
