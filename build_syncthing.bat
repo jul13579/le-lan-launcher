@@ -10,13 +10,13 @@ git clone https://github.com/syncthing/syncthing.git %SYNCTHING_DIR%
 
 :build
 echo.
-echo Pulling latest changes...
+echo Fetching latest changes...
 pushd %SYNCTHING_DIR%
 git reset --hard
 git fetch
 
 echo.
-echo Checking out latest syncthing release tag (%VERSION%)
+echo Checking out syncthing release tag %VERSION%
 git checkout %VERSION%
 
 echo.

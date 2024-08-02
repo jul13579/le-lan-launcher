@@ -8,12 +8,12 @@ if [ ! -d "$SYNCTHING_DIR" ]; then
     git clone https://github.com/syncthing/syncthing.git $SYNCTHING_DIR
 fi
 
-echo -e "\nPulling latest changes..."
+echo -e "\nFetching latest changes..."
 pushd $SYNCTHING_DIR
 git reset --hard
 git fetch
 
-echo -e "\nChecking out latest syncthing release tag ($VERSION)"
+echo -e "\nChecking out syncthing release tag $VERSION"
 git checkout $VERSION
 
 echo -e "Patching syncthing"
