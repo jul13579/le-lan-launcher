@@ -3,7 +3,8 @@ import { FunctionComponent, ReactNode, useEffect, useState } from "react";
 import { SyncServiceContext } from "./SyncServiceContext";
 import { useSettingsService } from "../../../hooks/useSettingsService";
 import SyncServiceOperations from "../../../enums/SyncServiceOperations";
-import { baseUrl } from "../../../config/service";
+import { useForwardSlashSeparator } from "../../../hooks/useForwardSlashSeparator";
+import { useLibraryWatcher } from "../../../hooks/useLibraryWatcher";
 
 const apiBase = `${baseUrl}/rest`;
 
@@ -17,7 +18,11 @@ export const SyncServiceContextProvider: FunctionComponent<
   /* -------------------------------------------------------------------------- */
   /*                                   Context                                  */
   /* -------------------------------------------------------------------------- */
-  const { apiKey, homeDir } = useSettingsService();
+  const { apiKey, homeDir, nas } = useForwardSlashSeparator(
+    useSettingsService(),
+    ["homeDir"]
+  );
+  const { watch, unwatch } = useLibraryWatcher();
 
   /* -------------------------------------------------------------------------- */
   /*                                    State                                   */
