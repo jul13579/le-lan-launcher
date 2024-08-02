@@ -16,10 +16,42 @@ declare interface Window {
   ipcRenderer: Electron.IpcRenderer;
 }
 
-type GameFolder = {
+interface Device {
+  deviceID: string;
+  ignoredFolders: (Pick<Folder, "id" | "label"> & {
+    time: string;
+  })[];
+}
+
+interface SharedFolderDevice {
+  deviceID: string;
+}
+
+type FolderType =
+  | "sendreceive"
+  | "sendonly"
+  | "receiveonly"
+  | "receiveencrypted";
+
+interface Folder {
+  type: FolderType;
   id: string;
+  label: string;
   path: string;
-};
+  paused: boolean;
+  devices: SharedFolderDevice[];
+}
+
+interface PendingFolders {
+  [folderID: string]: {
+    offeredBy: {
+      [deviceID: string]: {
+        label: string;
+        time: string;
+      };
+    };
+  };
+}
 
 interface Game {
   id: string;
