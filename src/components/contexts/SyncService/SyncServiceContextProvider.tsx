@@ -148,21 +148,7 @@ export const SyncServiceContextProvider: FunctionComponent<
   const state = {
     started,
     online,
-    openSyncthingUI,
-    start,
-    restart,
-    stop,
-    ping,
-    status,
-    getConfig,
-    setConfig,
-    connections,
     getDiscovery,
-    folderStatus,
-    revertFolder,
-    pendingFolders,
-    eventsSince,
-    latestEvents,
   };
   return (
     <SyncServiceContext.Provider value={state}>
