@@ -111,6 +111,10 @@ export const SyncServiceContextProvider: FunctionComponent<
    */
   const [devices, setDevices] = useState<Device[]>([]);
   const [folders, setFolders] = useState<Folder[]>([]);
+  const nasDevice = useMemo(
+    () => devices.find(({ deviceID }) => deviceID === nas),
+    [devices, nas]
+  );
   const libFolder = useMemo(
     () => folders.find((folder) => folder.id === gamelibDirId),
     [folders]
@@ -209,7 +213,7 @@ export const SyncServiceContextProvider: FunctionComponent<
     (async () => {
       // Skip configuration of NAS device if the `nas` ID isn't set, the service isn't online
       // or the device is already configured
-      if (!nas || !online || devices.find(({ deviceID }) => deviceID === nas)) {
+      if (!online || nasDevice) {
         return;
       }
 
@@ -217,7 +221,7 @@ export const SyncServiceContextProvider: FunctionComponent<
         await SyncthingAPI.Config.getDeviceTemplate();
       SyncthingAPI.Config.setDevice({ ...deviceTemplate, deviceID: nas });
     })();
-  }, [nas, online, devices]);
+  }, [online, nasDevice]);
 
   /**
    * Auto-subscribe to library folder & hide pending folders from Syncthing UI
@@ -262,11 +266,10 @@ export const SyncServiceContextProvider: FunctionComponent<
           )
         );
       }
-      if (pendingFoldersToIgnore.length > 0) {
+      if (pendingFoldersToIgnore.length > 0 && nasDevice) {
         const ignoreTimestamp = new Date().toISOString();
-        const nasDevice = devices.find(({ deviceID }) => deviceID === nas);
         const { ignoredFolders } = nasDevice;
-        const newIgnoredFolders = {
+        const newIgnoredFolders = [
           ...ignoredFolders,
           ...pendingFoldersToIgnore.map(
             ({ id, nasOfferedFolder: { label } }) => ({
@@ -275,7 +278,7 @@ export const SyncServiceContextProvider: FunctionComponent<
               time: ignoreTimestamp,
             })
           ),
-        };
+        ];
         SyncthingAPI.Config.setDevice({
           ...nasDevice,
           ignoredFolders: newIgnoredFolders,
@@ -288,7 +291,7 @@ export const SyncServiceContextProvider: FunctionComponent<
       5000
     );
     return () => clearInterval(interval);
-  }, []);
+  }, [nasDevice]);
 
   /**
    * Request (un)watching of library directory when `libConfigPath` changes
