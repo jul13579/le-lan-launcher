@@ -7,11 +7,10 @@ import {
   useMemo,
   useState,
 } from "react";
-import { gamelibConfig, gamelibDirId } from "../../../config/folder";
+import { gamelibDirId } from "../../../config/folder";
 import { baseUrl } from "../../../config/service";
 import SyncServiceOperations from "../../../enums/SyncServiceOperations";
 import { useForwardSlashSeparator } from "../../../hooks/useForwardSlashSeparator";
-import { useLibraryWatcher } from "../../../hooks/useLibraryWatcher";
 import { useSettingsService } from "../../../hooks/useSettingsService";
 import { SyncServiceContext } from "./SyncServiceContext";
 
@@ -98,7 +97,6 @@ export const SyncServiceContextProvider: FunctionComponent<
     useSettingsService(),
     ["homeDir"]
   );
-  const { watch, unwatch } = useLibraryWatcher();
 
   /* -------------------------------------------------------------------------- */
   /*                                    State                                   */
@@ -115,23 +113,6 @@ export const SyncServiceContextProvider: FunctionComponent<
     () => devices.find(({ deviceID }) => deviceID === nas),
     [devices, nas]
   );
-  const libFolder = useMemo(
-    () => folders.find((folder) => folder.id === gamelibDirId),
-    [folders]
-  );
-  const libFolderPath = useMemo(() => {
-    if (!libFolder) return undefined;
-    return `${homeDir}/${libFolder.label}`;
-  }, [libFolder]);
-  const libConfigPath = useMemo(() => {
-    if (!libFolderPath) return undefined;
-    return `${libFolderPath}/${gamelibConfig}`;
-  }, [libFolderPath]);
-
-  /**
-   * Define state attributes for library data
-   */
-  const [lib, setLib] = useState<Library>(undefined);
 
   /* -------------------------------------------------------------------------- */
   /*                             Component Lifecycle                            */
@@ -293,15 +274,6 @@ export const SyncServiceContextProvider: FunctionComponent<
     return () => clearInterval(interval);
   }, [nasDevice]);
 
-  /**
-   * Request (un)watching of library directory when `libConfigPath` changes
-   */
-  useEffect(() => {
-    if (!libConfigPath) return;
-    watch(libConfigPath, (event, lib) => setLib(lib));
-    return () => unwatch(libConfigPath);
-  }, [libConfigPath]);
-
   /* -------------------------------------------------------------------------- */
   /*                             Instance Functions                             */
   /* -------------------------------------------------------------------------- */
@@ -363,6 +335,7 @@ export const SyncServiceContextProvider: FunctionComponent<
   const state = {
     started,
     online,
+    folders,
     getDiscovery: SyncthingAPI.System.getDiscovery,
   };
   return (
