@@ -1,7 +1,6 @@
 import { ThemeProvider } from "@emotion/react";
 import { createTheme } from "@mui/material";
-import hslToHex from "hsl-to-hex";
-import { FunctionComponent, ReactNode, useMemo } from "react";
+import { FunctionComponent, ReactNode } from "react";
 import { useSettingsService } from "../hooks/useSettingsService";
 
 interface CustomThemeProviderProps {

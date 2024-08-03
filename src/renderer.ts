@@ -41,6 +41,7 @@ import "@fontsource/roboto/400.css";
 import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
 
+import "./sass/app.scss";
 import "./sass/scrollbar.scss";
 
 import "./plugins/i18n";

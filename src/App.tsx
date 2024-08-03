@@ -104,6 +104,7 @@ const CustomTab = styled(Tab)(() => ({
 
 const CustomTabPanel = styled(TabPanel)(() => ({
   position: "relative",
+  height: "100%",
 }));
 
 const App: FunctionComponent = () => {
@@ -188,7 +189,7 @@ const App: FunctionComponent = () => {
           </AppBarRow>
         </ProminentToolbar>
       </DraggableAppBar>
-      <Box mb={"66px"}>
+      <Box mb={"66px"} height={"100%"}>
         <CustomTabPanel value={TabValue.GAMES}>
           <GamesView />
         </CustomTabPanel>

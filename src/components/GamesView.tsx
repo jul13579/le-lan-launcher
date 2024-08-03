@@ -1,11 +1,10 @@
-import { FunctionComponent } from "react";
-import { useLibrary } from "../hooks/useLibrary";
 import { Box } from "@mui/material";
-import { GameEntry } from "./GameEntry";
+import { FunctionComponent } from "react";
 import { SelfBuildingSquareSpinner } from "react-epic-spinners";
-import { useSettingsService } from "../hooks/useSettingsService";
-import hslToHex from "hsl-to-hex";
 import { useTranslation } from "react-i18next";
+import { useLibrary } from "../hooks/useLibrary";
+import { useSettingsService } from "../hooks/useSettingsService";
+import { GameEntry } from "./GameEntry";
 
 export const GamesView: FunctionComponent = () => {
   /* -------------------------------------------------------------------------- */
@@ -20,13 +19,19 @@ export const GamesView: FunctionComponent = () => {
   /* -------------------------------------------------------------------------- */
   if (!lib?.games) {
     return (
-      <Box>
+      <Box
+        display={"flex"}
+        flexDirection={"column"}
+        height={"100%"}
+        alignItems={"center"}
+        justifyContent={"center"}
+      >
         <SelfBuildingSquareSpinner
           animationDuration={6000}
           size={100}
           color={primaryColorHex}
         />
-        <div>{t("games.lib_loading")}</div>
+        <h3>{t("games.lib_loading")}</h3>
       </Box>
     );
   }
