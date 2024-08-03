@@ -109,7 +109,7 @@ export const SettingsServiceContextProvider: FunctionComponent<
     setTheme,
     playerName,
     setPlayerName,
-    homeDir,
+    homeDir: homeDir.replace(/\\/g, "/"),
     setHomeDir,
     nas,
     setNas,

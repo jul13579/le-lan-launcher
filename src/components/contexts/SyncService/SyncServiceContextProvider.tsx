@@ -10,7 +10,6 @@ import {
 import { gamelibDirId } from "../../../config/folder";
 import { baseUrl } from "../../../config/service";
 import SyncServiceOperations from "../../../enums/SyncServiceOperations";
-import { useForwardSlashSeparator } from "../../../hooks/useForwardSlashSeparator";
 import { useSettingsService } from "../../../hooks/useSettingsService";
 import { SyncServiceContext } from "./SyncServiceContext";
 
@@ -93,10 +92,7 @@ export const SyncServiceContextProvider: FunctionComponent<
   /* -------------------------------------------------------------------------- */
   /*                                   Context                                  */
   /* -------------------------------------------------------------------------- */
-  const { apiKey, homeDir, nas } = useForwardSlashSeparator(
-    useSettingsService(),
-    ["homeDir"]
-  );
+  const { apiKey, homeDir, nas } = useSettingsService();
 
   /* -------------------------------------------------------------------------- */
   /*                                    State                                   */

@@ -5,12 +5,11 @@ import {
   useMemo,
   useState,
 } from "react";
-import { LibraryContext } from "./LibraryContext";
-import { useLibraryWatcher } from "../../../hooks/useLibraryWatcher";
-import { useSyncService } from "../../../hooks/useSyncService";
 import { gamelibConfig, gamelibDirId } from "../../../config/folder";
-import { useForwardSlashSeparator } from "../../../hooks/useForwardSlashSeparator";
+import { useLibraryWatcher } from "../../../hooks/useLibraryWatcher";
 import { useSettingsService } from "../../../hooks/useSettingsService";
+import { useSyncService } from "../../../hooks/useSyncService";
+import { LibraryContext } from "./LibraryContext";
 
 interface LibraryContextProviderProps {
   children: ReactNode;
@@ -22,9 +21,7 @@ export const LibraryContextProvider: FunctionComponent<
   /* -------------------------------------------------------------------------- */
   /*                                   Context                                  */
   /* -------------------------------------------------------------------------- */
-  const { homeDir } = useForwardSlashSeparator(useSettingsService(), [
-    "homeDir",
-  ]);
+  const { homeDir } = useSettingsService();
   const { folders } = useSyncService();
   const { watch, unwatch } = useLibraryWatcher();
 
