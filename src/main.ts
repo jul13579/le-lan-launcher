@@ -43,10 +43,7 @@ async function createWindow() {
     title: "[|LE|] LAN-Launcher",
     icon: "./images/icons/icon.png",
     webPreferences: {
-      webSecurity: true,
       preload: join(__dirname, "preload.js"),
-      nodeIntegration: !!process.env.ELECTRON_NODE_INTEGRATION,
-      contextIsolation: !process.env.ELECTRON_NODE_INTEGRATION,
     },
   });
 
