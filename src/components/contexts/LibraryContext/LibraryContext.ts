@@ -1,3 +1,5 @@
 import { createContext } from "react";
 
-export const LibraryContext = createContext<{}>(null);
+export const LibraryContext = createContext<{
+  lib: Library;
+}>(null);

@@ -63,7 +63,9 @@ export const LibraryContextProvider: FunctionComponent<
   /* -------------------------------------------------------------------------- */
   /*                                  Rendering                                 */
   /* -------------------------------------------------------------------------- */
-  const state = {};
+  const state = {
+    lib,
+  };
   return (
     <LibraryContext.Provider value={state}>{children}</LibraryContext.Provider>
   );
