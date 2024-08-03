@@ -11,15 +11,12 @@ interface CustomThemeProviderProps {
 export const CustomThemeProvider: FunctionComponent<
   CustomThemeProviderProps
 > = ({ children }) => {
-  const { backgroundHue } = useSettingsService();
-  const backgroundColorHex = useMemo(() => {
-    return hslToHex(backgroundHue, 100, 60);
-  }, [backgroundHue]);
+  const { primaryColorHex } = useSettingsService();
   const theme = createTheme({
     palette: {
       mode: "dark",
       primary: {
-        main: backgroundColorHex,
+        main: primaryColorHex,
       },
       background: {
         paper: "#000",

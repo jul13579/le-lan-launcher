@@ -57,6 +57,7 @@
     "i18next": "^23.12.2",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "react-epic-spinners": "^0.5.0",
     "react-i18next": "^15.0.0",
     "xml-parser": "^1.2.1"
   }

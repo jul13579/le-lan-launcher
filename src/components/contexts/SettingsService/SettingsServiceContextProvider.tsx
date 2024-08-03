@@ -13,6 +13,7 @@ import {
 } from "../../../config/app";
 import { IpcRendererEvent } from "electron";
 import { useTranslation } from "react-i18next";
+import hslToHex from "hsl-to-hex";
 
 const initialConfig = JSON.parse(
   localStorage.getItem("settings") ?? JSON.stringify({})
@@ -35,6 +36,10 @@ export const SettingsServiceContextProvider: FunctionComponent<
   /* -------------------------------------------------------------------------- */
   const [backgroundHue, setBackgroundHue] = useState<Settings["backgroundHue"]>(
     initialConfig.background ?? defaultBackgroundHue
+  );
+  const primaryColorHex = useMemo(
+    () => hslToHex(backgroundHue, 100, 60),
+    [backgroundHue]
   );
   const [theme, setTheme] = useState<Settings["theme"]>({
     cover: initialConfig.theme?.cover ?? false,
@@ -105,6 +110,7 @@ export const SettingsServiceContextProvider: FunctionComponent<
   const state = {
     backgroundHue,
     setBackgroundHue,
+    primaryColorHex,
     theme,
     setTheme,
     playerName,

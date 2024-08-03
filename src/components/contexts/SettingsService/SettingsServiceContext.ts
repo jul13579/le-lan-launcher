@@ -18,6 +18,7 @@ export interface Settings {
 export const SettingsServiceContext = createContext<{
   backgroundHue: Settings["backgroundHue"];
   setBackgroundHue: Dispatch<SetStateAction<Settings["backgroundHue"]>>;
+  primaryColorHex: string;
   theme: Settings["theme"];
   setTheme: Dispatch<SetStateAction<Settings["theme"]>>;
   playerName: Settings["playerName"];
