@@ -32,6 +32,7 @@ import { TabContext, TabPanel } from "@mui/lab";
 import { TabValue } from "./enums/TabValue";
 import { SettingsView } from "./components/SettingsView";
 import { GamesView } from "./components/GamesView";
+import { LibraryContextProvider } from "./components/contexts/LibraryContext/LibraryContextProvider";
 
 export const bgTransparentDarkWithBlur = {
   background: "rgba(0, 0, 0, 0.6)",
@@ -187,7 +188,7 @@ const App: FunctionComponent = () => {
           </AppBarRow>
         </ProminentToolbar>
       </DraggableAppBar>
-      <Box mb={'66px'}>
+      <Box mb={"66px"}>
         <CustomTabPanel value={TabValue.GAMES}>
           <GamesView />
         </CustomTabPanel>
@@ -204,10 +205,12 @@ root.render(
   <StrictMode>
     <SettingsServiceContextProvider>
       <SyncServiceContextProvider>
-        <CustomThemeProvider>
-          <CssBaseline />
-          <App />
-        </CustomThemeProvider>
+        <LibraryContextProvider>
+          <CustomThemeProvider>
+            <CssBaseline />
+            <App />
+          </CustomThemeProvider>
+        </LibraryContextProvider>
       </SyncServiceContextProvider>
     </SettingsServiceContextProvider>
   </StrictMode>
