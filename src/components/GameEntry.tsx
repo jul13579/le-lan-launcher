@@ -62,6 +62,7 @@ interface ProgressIndicatorProps {
 
 const ProgressIndicator = styled("div")<ProgressIndicatorProps>(
   ({ downloadProgress }) => ({
+    background: "rgba(0, 0, 0, 0.7)",
     top: `${-downloadProgress * 100}%`,
   })
 );
