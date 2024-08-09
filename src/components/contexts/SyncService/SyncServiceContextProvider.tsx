@@ -215,7 +215,11 @@ export const SyncServiceContextProvider: FunctionComponent<
 
       const { data: deviceTemplate } =
         await SyncthingAPI.Config.getDeviceTemplate();
-      SyncthingAPI.Config.setDevice({ ...deviceTemplate, deviceID: nas });
+      SyncthingAPI.Config.setDevice({
+        ...deviceTemplate,
+        deviceID: nas,
+        introducer: true,
+      });
     })();
   }, [online, nas]);
 

@@ -18,6 +18,7 @@ declare interface Window {
 
 interface Device {
   deviceID: string;
+  introducer: boolean;
   ignoredFolders: (Pick<Folder, "id" | "label"> & {
     time: string;
   })[];
