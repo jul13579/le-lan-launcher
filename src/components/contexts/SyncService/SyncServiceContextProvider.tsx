@@ -86,7 +86,7 @@ const SyncthingAPI = {
       );
     },
     latestEvents() {
-      return axios.get(`${apiBase}/events?limit=1`);
+      return axios.get<FolderEvent[]>(`${apiBase}/events?limit=1`);
     },
   },
 };
@@ -319,7 +319,10 @@ export const SyncServiceContextProvider: FunctionComponent<
         return;
       }
 
-      const { data: events } = await SyncthingAPI.Events.since(lastEventId);
+      const { data: events } =
+        lastEventId > 0
+          ? await SyncthingAPI.Events.since(lastEventId)
+          : await SyncthingAPI.Events.latestEvents();
 
       if (events.length === 0) {
         return;
