@@ -20,10 +20,14 @@ export const useDownloadButtons = (
   return useMemo(
     () => [
       { click: download, show: !subscribed, icon: mdiDownload },
-      { click: pause, show: thisGameFolder?.paused, icon: mdiPause },
+      {
+        click: pause,
+        show: thisGameFolder && !thisGameFolder.paused,
+        icon: mdiPause,
+      },
       {
         click: resume,
-        show: thisGameFolder?.paused,
+        show: thisGameFolder && thisGameFolder.paused,
         icon: mdiChevronDoubleRight,
       },
       { click: remove, show: subscribed, icon: mdiClose },
