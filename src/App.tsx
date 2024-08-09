@@ -36,6 +36,7 @@ import { ThemeBackground } from "./components/ThemeBackground";
 import { TabValue } from "./enums/TabValue";
 import { useSettingsService } from "./hooks/useSettingsService";
 import { useWindowControls } from "./hooks/useWindowControls";
+import { ServiceStatistics } from "./components/ServiceStatistics";
 
 const noDrag = {
   WebkitAppRegion: "no-drag",
@@ -201,6 +202,7 @@ const App: FunctionComponent = () => {
           <SettingsView />
         </CustomTabPanel>
       </TabPanelContainer>
+      <ServiceStatistics />
     </TabContext>
   );
 };
