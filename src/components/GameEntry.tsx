@@ -142,7 +142,7 @@ export const GameEntry: FunctionComponent<GameEntryProps> = ({
   /* -------------------------------------------------------------------------- */
   return (
     <>
-      <GameEntryRoot installed={installed} onClick={handleMenuOpenClick}>
+      <GameEntryRoot installed={installed}>
         {/* Game Thumbnail */}
         <img src={`game://${libFolderPath}/${gameConfig.cover}`} />
         {/* Progress indicator */}
@@ -170,7 +170,7 @@ export const GameEntry: FunctionComponent<GameEntryProps> = ({
             )}
           </DownloadButtonsContainer>
         ) : (
-          <Glass className="glass" />
+          <Glass className="glass" onClick={handleMenuOpenClick} />
         )}
       </GameEntryRoot>
 
