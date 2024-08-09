@@ -1,8 +1,17 @@
 import { ThemeProvider } from "@emotion/react";
 import { createTheme } from "@mui/material";
 import { FunctionComponent, ReactNode } from "react";
-import { useSettingsService } from "../hooks/useSettingsService";
 import { StyleSheetManager } from "styled-components";
+import { useSettingsService } from "../hooks/useSettingsService";
+
+export const bgTransparentDark = {
+  background: "rgba(0, 0, 0, 0.6)",
+};
+
+export const bgTransparentDarkWithBlur = {
+  ...bgTransparentDark,
+  backdropFilter: "blur(10px)",
+};
 
 interface CustomThemeProviderProps {
   children: ReactNode;
@@ -13,6 +22,22 @@ export const CustomThemeProvider: FunctionComponent<
 > = ({ children }) => {
   const { primaryColorHex } = useSettingsService();
   const theme = createTheme({
+    components: {
+      // FABs for some reason have white background in dark theme. The below fixes the styling.
+      MuiFab: {
+        styleOverrides: {
+          root: {
+            width: "70px",
+            height: "70px",
+            color: "white",
+            backgroundColor: bgTransparentDark.background,
+            ":hover": {
+              backgroundColor: "rgba(44, 44, 44, 0.6)",
+            },
+          },
+        },
+      },
+    },
     palette: {
       mode: "dark",
       primary: {

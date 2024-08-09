@@ -21,11 +21,11 @@ import {
 } from "@mui/material";
 import { FunctionComponent, useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { bgTransparentDarkWithBlur } from "../App";
 import { useFileChooser } from "../hooks/useFileChooser";
 import { useSettingsService } from "../hooks/useSettingsService";
 import { useSyncService } from "../hooks/useSyncService";
 import langs from "../localization/langs";
+import { bgTransparentDarkWithBlur } from "./CustomThemeProvider";
 
 const ThemeItem = ({ theme }: { theme: Theme }) => ({
   margin: theme.spacing(3),
@@ -55,7 +55,7 @@ const CustomBackgroundPicker = styled("div")<CustomBackgroundPickerProps>(
     border: `1px solid hsl(${hue}, 100%, 35%)`,
     alignItems: "center",
     justifyContent: "center",
-  }),
+  })
 );
 
 export const SettingsView: FunctionComponent = () => {
@@ -124,7 +124,7 @@ export const SettingsView: FunctionComponent = () => {
             extensions: ["jpg", "jpeg", "png"],
           },
         ],
-      },
+      }
     );
   }
 
@@ -133,7 +133,7 @@ export const SettingsView: FunctionComponent = () => {
       (result) => {
         setHomeDir(result.filePaths[0]);
       },
-      { properties: ["openDirectory"] },
+      { properties: ["openDirectory"] }
     );
   }
 

@@ -1,7 +1,14 @@
-import { Box, styled } from "@mui/material";
+import { Box, Fab, styled } from "@mui/material";
 import { FunctionComponent, useMemo } from "react";
 import { useLibrary } from "../hooks/useLibrary";
 import { useSyncService } from "../hooks/useSyncService";
+import Icon from "@mdi/react";
+import {
+  mdiChevronDoubleRight,
+  mdiClose,
+  mdiDownload,
+  mdiPause,
+} from "@mdi/js";
 
 const hoverAnimation = "0.2s ease-in-out";
 
@@ -53,6 +60,13 @@ const ProgressIndicator = styled("div")<ProgressIndicatorProps>(
   })
 );
 
+const DownloadButtonsContainer = styled("div")(() => ({
+  display: "flex",
+  flexDirection: "column",
+  justifyContent: "center",
+  alignItems: "center",
+}));
+
 const Glass = styled("div")(() => ({
   transition: `top ${hoverAnimation}`,
   top: "-175% !important",
@@ -96,6 +110,28 @@ export const GameEntry: FunctionComponent<GameEntryProps> = ({
   );
   const installed = useMemo(() => downloadProgress >= 1, [downloadProgress]);
 
+  const downloadButtons = useMemo(
+    () => [
+      { click: () => download, show: !subscribed, icon: mdiDownload },
+      { click: () => pause, show: thisGameFolder?.paused, icon: mdiPause },
+      {
+        click: () => resume,
+        show: thisGameFolder?.paused,
+        icon: mdiChevronDoubleRight,
+      },
+      { click: () => remove, show: subscribed, icon: mdiClose },
+    ],
+    [gameConfig, subscribed]
+  );
+
+  /* -------------------------------------------------------------------------- */
+  /*                             Instance functions                             */
+  /* -------------------------------------------------------------------------- */
+  const download = () => {};
+  const pause = () => {};
+  const resume = () => {};
+  const remove = () => {};
+
   /* -------------------------------------------------------------------------- */
   /*                                  Rendering                                 */
   /* -------------------------------------------------------------------------- */
@@ -103,8 +139,31 @@ export const GameEntry: FunctionComponent<GameEntryProps> = ({
     <GameEntryRoot installed={installed}>
       {/* Game Thumbnail */}
       <img src={`game://${libFolderPath}/${gameConfig.cover}`} />
+      {/* Progress indicator */}
       <ProgressIndicator downloadProgress={downloadProgress} />
-      {downloadProgress < 1 ? <></> : <Glass className="glass" />}
+      {/* Download buttons overlay. Only displayed when downloadProgress < 1, hence not completed */}
+      {downloadProgress < 1 ? (
+        <DownloadButtonsContainer>
+          {subscribed && Object.keys(thisGameFolderStatus).length === 0 ? (
+            // If game is subscribed but there is no syncFolderStatus yet, show loader
+            <></>
+          ) : (
+            // Else show applicable download buttons
+            <>
+              {downloadButtons.map(
+                ({ click, show, icon }, index) =>
+                  show && (
+                    <Fab key={index} onClick={click}>
+                      <Icon path={icon} size={1.5} />
+                    </Fab>
+                  )
+              )}
+            </>
+          )}
+        </DownloadButtonsContainer>
+      ) : (
+        <Glass className="glass" />
+      )}
     </GameEntryRoot>
   );
 };

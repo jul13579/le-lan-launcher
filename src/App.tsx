@@ -24,7 +24,7 @@ import { createRoot } from "react-dom/client";
 import { useTranslation } from "react-i18next";
 import { SettingsServiceContextProvider } from "./components/contexts/SettingsService/SettingsServiceContextProvider";
 import { SyncServiceContextProvider } from "./components/contexts/SyncService/SyncServiceContextProvider";
-import { CustomThemeProvider } from "./components/CustomThemeProvider";
+import { bgTransparentDarkWithBlur, CustomThemeProvider } from "./components/CustomThemeProvider";
 import { ThemeBackground } from "./components/ThemeBackground";
 import { useSettingsService } from "./hooks/useSettingsService";
 import { useWindowControls } from "./hooks/useWindowControls";
@@ -33,11 +33,6 @@ import { TabValue } from "./enums/TabValue";
 import { SettingsView } from "./components/SettingsView";
 import { GamesView } from "./components/GamesView";
 import { LibraryContextProvider } from "./components/contexts/LibraryContext/LibraryContextProvider";
-
-export const bgTransparentDarkWithBlur = {
-  background: "rgba(0, 0, 0, 0.6)",
-  backdropFilter: "blur(10px)",
-};
 
 const noDrag = {
   WebkitAppRegion: "no-drag",
