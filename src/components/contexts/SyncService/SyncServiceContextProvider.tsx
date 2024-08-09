@@ -192,9 +192,8 @@ export const SyncServiceContextProvider: FunctionComponent<
    */
   useEffect(() => {
     (async () => {
-      // Skip configuration of NAS device if the `nas` ID isn't set, the service isn't online
-      // or the device is already configured
-      if (!online || nasDevice) {
+      // Skip configuration of NAS device if the `nas` ID isn't set or the service isn't online
+      if (!online || !nas) {
         return;
       }
 
@@ -202,7 +201,7 @@ export const SyncServiceContextProvider: FunctionComponent<
         await SyncthingAPI.Config.getDeviceTemplate();
       SyncthingAPI.Config.setDevice({ ...deviceTemplate, deviceID: nas });
     })();
-  }, [online, nasDevice]);
+  }, [online, nas]);
 
   /**
    * Auto-subscribe to library folder & hide pending folders from Syncthing UI
