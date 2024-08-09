@@ -277,6 +277,12 @@ export const SettingsView: FunctionComponent = () => {
                   ));
                 } else if (nas) {
                   return <MenuItem value={nas}>{nas}</MenuItem>;
+                } else if (!online) {
+                  return (
+                    <MenuItem value={"-1"}>
+                      {t("settings.alerts.service")}
+                    </MenuItem>
+                  );
                 } else {
                   return (
                     <MenuItem value={"-1"}>
@@ -284,11 +290,8 @@ export const SettingsView: FunctionComponent = () => {
                     </MenuItem>
                   );
                 }
-              }, [devices, nas])()}
+              }, [devices, nas, online])()}
             </Select>
-            {!online && (
-              <FormHelperText>{t("settings.alerts.service")}</FormHelperText>
-            )}
           </FormControl>
         </Grid>
       </Grid>

@@ -82,7 +82,7 @@ export default {
     alerts: {
       discovery: "Please wait a moment while online devices are discovered...",
       service:
-        "The syncing service has to be started in order to discover online devices.",
+        "The sync service has to be started in order to discover online devices.",
     },
     images: "Images",
   },
