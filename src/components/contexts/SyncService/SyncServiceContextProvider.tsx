@@ -320,6 +320,10 @@ export const SyncServiceContextProvider: FunctionComponent<
 
       const { data: events } = await SyncthingAPI.Events.since(lastEventId);
 
+      if (events.length === 0) {
+        return;
+      }
+
       const newFolderStatuses: Record<string, FolderStatus> = {
         ...folderStatuses,
       };
