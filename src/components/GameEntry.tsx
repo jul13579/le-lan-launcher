@@ -133,7 +133,7 @@ export const GameEntry: FunctionComponent<GameEntryProps> = ({
   const handleMenuOpenClick = (event: MouseEvent<HTMLDivElement>) => {
     setAnchorEl(event.currentTarget.parentElement.nextSibling);
   };
-  const handleMenuClose = () => {
+  const closeMenu = () => {
     setAnchorEl(null);
   };
 
@@ -181,7 +181,7 @@ export const GameEntry: FunctionComponent<GameEntryProps> = ({
       <Menu
         anchorEl={anchorEl}
         open={!!anchorEl}
-        onClose={handleMenuClose}
+        onClose={closeMenu}
         anchorOrigin={{
           vertical: "top",
           horizontal: "right",
@@ -194,7 +194,13 @@ export const GameEntry: FunctionComponent<GameEntryProps> = ({
         {gameMenuButtons.map(
           ({ click, show, icon, text }, index) =>
             show && (
-              <MenuItem key={index} onClick={click}>
+              <MenuItem
+                key={index}
+                onClick={() => {
+                  click();
+                  closeMenu();
+                }}
+              >
                 <ListItemIcon>
                   <Icon path={icon} size={1} />
                 </ListItemIcon>
