@@ -119,7 +119,7 @@ const App: FunctionComponent = () => {
   /*                                    State                                   */
   /* -------------------------------------------------------------------------- */
   const [tab, setTab] = useState(
-    setupCompleted ? TabValue.GAMES : TabValue.SETTINGS
+    setupCompleted ? TabValue.GAMES : TabValue.SETTINGS,
   );
 
   /* -------------------------------------------------------------------------- */
@@ -143,7 +143,7 @@ const App: FunctionComponent = () => {
               ].map(
                 (
                   [cb, icon, color]: [() => void, string, ButtonProps["color"]],
-                  index
+                  index,
                 ) => (
                   <WindowButton
                     key={index}
@@ -153,7 +153,7 @@ const App: FunctionComponent = () => {
                   >
                     <Icon path={icon} size={1} />
                   </WindowButton>
-                )
+                ),
               )}
             </WindowButtonsBox>
           </AppBarRow>
@@ -171,9 +171,9 @@ const App: FunctionComponent = () => {
                     string,
                     string,
                     string,
-                    boolean
+                    boolean,
                   ],
-                  index
+                  index,
                 ) => (
                   <CustomTab
                     key={index}
@@ -183,7 +183,7 @@ const App: FunctionComponent = () => {
                     icon={<Icon path={icon} size={1} />}
                     iconPosition="start"
                   />
-                )
+                ),
               )}
             </NonDraggableTabs>
           </AppBarRow>
@@ -214,5 +214,5 @@ root.render(
         </LibraryContextProvider>
       </SyncServiceContextProvider>
     </SettingsServiceContextProvider>
-  </StrictMode>
+  </StrictMode>,
 );

@@ -1,6 +1,6 @@
 /**
  * Enum for sync-service events.
- * 
+ *
  * Sync this with https://github.com/syncthing/syncthing/blob/main/gui/default/syncthing/core/eventService.js
  */
 enum SyncEvents {

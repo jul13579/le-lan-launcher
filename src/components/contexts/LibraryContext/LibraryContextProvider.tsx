@@ -37,7 +37,7 @@ export const LibraryContextProvider: FunctionComponent<
   const [lib, setLib] = useState<Library>(undefined);
   const libFolder = useMemo(
     () => folders.find((folder) => folder.id === gamelibDirId),
-    [folders]
+    [folders],
   );
   const libFolderPath = useMemo(() => {
     if (!libFolder) return undefined;

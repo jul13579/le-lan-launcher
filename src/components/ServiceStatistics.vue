@@ -67,25 +67,12 @@
 </style>
 
 <template>
-  <v-footer
-    fixed
-    :height="66"
-    class="statistics pa-0"
-  >
+  <v-footer fixed :height="66" class="statistics pa-0">
     <div class="d-flex">
       <div class="d-flex flex-grow-1">
-        <v-container
-          class="py-0 d-flex"
-          style="height: 100%"
-        >
-          <v-row
-            no-gutters
-            sytle="height: 100%"
-          >
-            <v-col
-              cols="4"
-              class="d-flex justify-center align-center"
-            >
+        <v-container class="py-0 d-flex" style="height: 100%">
+          <v-row no-gutters sytle="height: 100%">
+            <v-col cols="4" class="d-flex justify-center align-center">
               <template v-if="nasConnected">
                 <div>
                   <v-icon class="mx-2">{{ icons.mdiCloudCheck }}</v-icon>
@@ -102,45 +89,23 @@
                 </div>
               </template>
             </v-col>
-            <v-col
-              cols="4"
-              class="d-flex justify-center align-center"
-            >
-              <v-icon
-                class="mx-2"
-                color="green"
-              >{{ icons.mdiDownload }}</v-icon>
-              <i18n-n
-                :value="inbps / 1024**2"
-                format="mbps"
-              ></i18n-n>
+            <v-col cols="4" class="d-flex justify-center align-center">
+              <v-icon class="mx-2" color="green">{{
+                icons.mdiDownload
+              }}</v-icon>
+              <i18n-n :value="inbps / 1024 ** 2" format="mbps"></i18n-n>
             </v-col>
-            <v-col
-              cols="4"
-              class="d-flex justify-center align-center"
-            >
-              <v-icon
-                class="mx-2"
-                color="red"
-              >{{ icons.mdiUpload }}</v-icon>
-              <i18n-n
-                :value="outbps / 1024**2"
-                format="mbps"
-              ></i18n-n>
+            <v-col cols="4" class="d-flex justify-center align-center">
+              <v-icon class="mx-2" color="red">{{ icons.mdiUpload }}</v-icon>
+              <i18n-n :value="outbps / 1024 ** 2" format="mbps"></i18n-n>
             </v-col>
           </v-row>
         </v-container>
       </div>
       <div class="d-flex popup v-footer theme--dark backdrop">
         <v-container>
-          <v-row
-            no-gutters
-            sytle="height: 100%"
-          >
-            <v-col
-              cols="4"
-              class="px-1"
-            >
+          <v-row no-gutters sytle="height: 100%">
+            <v-col cols="4" class="px-1">
               <v-card class="text-center">
                 <v-card-title class="justify-center flex-nowrap">
                   <span
@@ -181,22 +146,25 @@
                 </v-card-text>
               </v-card>
             </v-col>
-            <template v-for="(item, index) in [{headline: 'statistics.download_speed', value: inbps / 1024**2}, {headline: 'statistics.upload_speed', value: outbps / 1024**2}]">
-              <v-col
-                :key="index"
-                cols="4"
-                class="px-1"
-              >
+            <template
+              v-for="(item, index) in [
+                {
+                  headline: 'statistics.download_speed',
+                  value: inbps / 1024 ** 2,
+                },
+                {
+                  headline: 'statistics.upload_speed',
+                  value: outbps / 1024 ** 2,
+                },
+              ]"
+            >
+              <v-col :key="index" cols="4" class="px-1">
                 <v-card class="text-center">
                   <v-card-title class="justify-center">
                     <span v-html="$t(item.headline)"></span>
                   </v-card-title>
                   <v-card-text>
-                    <bar-chart
-                      ref="barchart"
-                      :value="item.value"
-                      unit="mbps"
-                    />
+                    <bar-chart ref="barchart" :value="item.value" unit="mbps" />
                   </v-card-text>
                 </v-card>
               </v-col>
@@ -209,7 +177,17 @@
 </template>
 
 <script>
-import { mdiCloudCheck, mdiCloudOffOutline, mdiCloudSearch, mdiDownload, mdiOpenInNew, mdiPlay, mdiRestart, mdiStop, mdiUpload } from "@mdi/js";
+import {
+  mdiCloudCheck,
+  mdiCloudOffOutline,
+  mdiCloudSearch,
+  mdiDownload,
+  mdiOpenInNew,
+  mdiPlay,
+  mdiRestart,
+  mdiStop,
+  mdiUpload,
+} from "@mdi/js";
 import { mapState } from "vuex";
 import BarChart from "./BarChart";
 
@@ -256,7 +234,7 @@ export default {
         mdiPlay,
         mdiRestart,
         mdiStop,
-      }
+      };
     },
     nasConnected() {
       return (this.connections.connections[this.nas] || {}).connected;

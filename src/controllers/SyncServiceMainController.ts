@@ -83,7 +83,7 @@ export function SyncServiceMainController(win: BrowserWindow) {
   function stop() {
     if (!syncServiceProcess) {
       console.warn(
-        "There was no sync service running when attempting to stop it"
+        "There was no sync service running when attempting to stop it",
       );
       return;
     }
@@ -106,7 +106,7 @@ export function SyncServiceMainController(win: BrowserWindow) {
           const gui = xml.root.children.find((item) => item.name == "gui");
           resolve(gui.children.find((item) => item.name == "apikey").content);
           return;
-        }
+        },
       );
     });
   }

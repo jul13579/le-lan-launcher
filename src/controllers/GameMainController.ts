@@ -22,7 +22,7 @@ export function GameMainController(win: BrowserWindow) {
     game: Game,
     executable: string,
     playerName: string,
-    debug: boolean
+    debug: boolean,
   ) {
     // Try setting the player name with the given configuration
     try {
@@ -44,7 +44,7 @@ export function GameMainController(win: BrowserWindow) {
       {
         cwd: gameFolder.path,
         detached: true, // Spawn executable detached, so it stays open if launcher is closed.
-      }
+      },
     );
 
     if (!debug) {
@@ -100,7 +100,7 @@ export function GameMainController(win: BrowserWindow) {
   function _setPlayerName(
     gameFolder: GameFolder,
     game: Game,
-    playerName: string
+    playerName: string,
   ) {
     if (!game.nameConfig) {
       return Promise.resolve();
@@ -110,7 +110,7 @@ export function GameMainController(win: BrowserWindow) {
       const filePath = pathResolve(
         gameFolder.path,
         nameConfig.env ? process.env[nameConfig.env] : "",
-        nameConfig.file
+        nameConfig.file,
       );
       readFile(filePath, { encoding: "utf8" }, (err, nameFileContents) => {
         if (err) {
@@ -120,7 +120,7 @@ export function GameMainController(win: BrowserWindow) {
         if (nameConfig.regex) {
           nameFileContents = nameFileContents.replace(
             new RegExp(nameConfig.regex),
-            playerName
+            playerName,
           );
         } else {
           nameFileContents = playerName;

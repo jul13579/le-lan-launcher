@@ -8,4 +8,4 @@ enum WindowOperation {
   CLOSE = "close",
 }
 
-export default WindowOperation
+export default WindowOperation;

@@ -11,10 +11,7 @@
           :size="100"
           :color="$vuetify.theme.themes.dark.primary"
         />
-        <div
-          class="text-h5 mt-5"
-          v-html="$t('games.lib_loading')"
-        ></div>
+        <div class="text-h5 mt-5" v-html="$t('games.lib_loading')"></div>
       </div>
     </template>
 
@@ -44,35 +41,37 @@
     <v-dialog v-model="deleteDialog.show" max-width="500">
       <v-card>
         <v-card-title>
-          {{$t("games.deleteDialog.title", { gameTitle: deleteDialog.gameConfig.title })}}
+          {{
+            $t("games.deleteDialog.title", {
+              gameTitle: deleteDialog.gameConfig.title,
+            })
+          }}
         </v-card-title>
         <v-card-text>
-          <b>{{$t("games.deleteDialog.message", { gameTitle: deleteDialog.gameConfig.title })}}</b>
+          <b>{{
+            $t("games.deleteDialog.message", {
+              gameTitle: deleteDialog.gameConfig.title,
+            })
+          }}</b>
         </v-card-text>
         <v-card-actions class="justify-end">
           <v-btn @click="deleteDialog.show = false">
-            {{$t("cardActions.cancel")}}
+            {{ $t("cardActions.cancel") }}
           </v-btn>
           <v-btn color="error" @click="deleteDialog.confirmCb">
-            {{$t("cardActions.delete")}}
+            {{ $t("cardActions.delete") }}
           </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
 
     <!-- Debug dialog -->
-    <v-dialog
-      max-width="600"
-      v-model="debugDialog"
-    >
+    <v-dialog max-width="600" v-model="debugDialog">
       <v-card>
         <v-card-title>
           <span>Debug</span>
           <v-spacer></v-spacer>
-          <v-btn
-            icon
-            @click="debugDialog = false"
-          >
+          <v-btn icon @click="debugDialog = false">
             <v-icon>{{ icons.mdiClose }}</v-icon>
           </v-btn>
         </v-card-title>
@@ -92,7 +91,8 @@ import { SelfBuildingSquareSpinner } from "epic-spinners";
 import { mapState } from "vuex";
 
 import defaultFolderConfig, {
-gamelibConfig, gamelibDirId
+  gamelibConfig,
+  gamelibDirId,
 } from "../config/folder";
 import SyncServiceController from "../controllers/SyncServiceRendererController";
 import online from "../mixins/online";
@@ -148,7 +148,7 @@ export default {
     icons() {
       return {
         mdiClose,
-      }
+      };
     },
     // List of devices present in config
     devices() {
@@ -241,13 +241,13 @@ export default {
 
         Object.entries(folders).forEach(([id, pendingFolderConfig]) => {
           const { label, time } = Object.values(
-            pendingFolderConfig.offeredBy
+            pendingFolderConfig.offeredBy,
           )[0];
 
           // If library folder is among pending folders, add it to shared folders
           if (id == gamelibDirId) {
             this.config.folders.push(
-              this.newSyncFolderObject(gamelibDirId, label)
+              this.newSyncFolderObject(gamelibDirId, label),
             );
           } else {
             // Else add folder to ignored folders
@@ -281,7 +281,7 @@ export default {
 
             // Update last event id
             this.lastEventId = Math.max(
-              ...response.data.map((event) => event.id)
+              ...response.data.map((event) => event.id),
             );
 
             for (var folderEvent of response.data) {
@@ -305,7 +305,7 @@ export default {
             let progress = Math.min(
               ...Object.values(this.$refs.gameEntries)
                 .filter((game) => game.subscribed)
-                .map((game) => game.downloadProgress)
+                .map((game) => game.downloadProgress),
             );
             if (progress > 0 && progress < 1) {
               window.ipcRenderer.send("setProgress", progress);
@@ -361,12 +361,12 @@ export default {
      */
     downloadGame(gameConfig) {
       this.config.folders.push(
-        this.newSyncFolderObject(gameConfig.id, gameConfig.title)
+        this.newSyncFolderObject(gameConfig.id, gameConfig.title),
       );
       SyncServiceController.System.setConfig(this.config)
         .then(() => {
           this.$toasted.success(
-            this.$t("toast.download.started", { gameTitle: gameConfig.title })
+            this.$t("toast.download.started", { gameTitle: gameConfig.title }),
           );
         })
         .catch();
@@ -384,11 +384,13 @@ export default {
         .then(() => {
           if (pause) {
             this.$toasted.success(
-              this.$t("toast.download.paused", { gameTitle: gameConfig.title })
+              this.$t("toast.download.paused", { gameTitle: gameConfig.title }),
             );
           } else {
             this.$toasted.success(
-              this.$t("toast.download.resumed", { gameTitle: gameConfig.title })
+              this.$t("toast.download.resumed", {
+                gameTitle: gameConfig.title,
+              }),
             );
           }
         })
@@ -401,32 +403,32 @@ export default {
      * @param {Object} syncFolderConfig The Syncthing config object of the folder.
      */
     deleteGame(gameConfig, syncFolderConfig) {
-      this.deleteDialog.gameConfig = {...gameConfig};
+      this.deleteDialog.gameConfig = { ...gameConfig };
       this.deleteDialog.show = true;
       this.deleteDialog.confirmCb = () => {
         this.deleteDialog.show = false;
         this.config.folders = this.config.folders.filter(
-          (folder) => folder.id != gameConfig.id
+          (folder) => folder.id != gameConfig.id,
         );
         SyncServiceController.System.setConfig(this.config)
           .then(() => {
             this.$toasted.success(
               this.$t("toast.game.delete.success", {
                 gameTitle: gameConfig.title,
-              })
+              }),
             );
             window.ipcRenderer
               .invoke("controlGame", GameOperations.DELETE, syncFolderConfig)
               .then((error) => {
                 if (error)
                   this.$toasted.success(
-                    this.$t("toast.game.delete.error", { error: error })
+                    this.$t("toast.game.delete.error", { error: error }),
                   );
               });
             this.folderStatus[gameConfig.id] = null;
           })
           .catch();
-      }
+      };
     },
 
     /**
@@ -437,7 +439,7 @@ export default {
       window.ipcRenderer.invoke(
         "controlGame",
         GameOperations.BROWSE,
-        syncFolderConfig
+        syncFolderConfig,
       );
     },
 
@@ -450,7 +452,7 @@ export default {
       SyncServiceController.DB.revertFolder(syncFolderConfig.id)
         .then(() => {
           this.$toasted.success(
-            this.$t("toast.game.reset", { gameTitle: gameConfig.title })
+            this.$t("toast.game.reset", { gameTitle: gameConfig.title }),
           );
         })
         .catch();
@@ -474,7 +476,7 @@ export default {
         syncFolderConfig,
         executable,
         this.playerName,
-        this.debug
+        this.debug,
       );
     },
   },

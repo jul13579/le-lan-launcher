@@ -19,7 +19,7 @@ const commonNumberFormats = {
 } as const;
 
 const numberFormats = Object.fromEntries(
-  Object.entries(langs).map(([lang]) => [lang, commonNumberFormats])
+  Object.entries(langs).map(([lang]) => [lang, commonNumberFormats]),
 ) as {
   [k in keyof typeof langs]: typeof commonNumberFormats;
 };

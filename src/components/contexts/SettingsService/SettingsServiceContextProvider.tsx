@@ -16,7 +16,7 @@ import { useTranslation } from "react-i18next";
 import hslToHex from "hsl-to-hex";
 
 const initialConfig = JSON.parse(
-  localStorage.getItem("settings") ?? JSON.stringify({})
+  localStorage.getItem("settings") ?? JSON.stringify({}),
 );
 
 interface SettingsServiceContextProviderProps {
@@ -35,37 +35,37 @@ export const SettingsServiceContextProvider: FunctionComponent<
   /*                                    State                                   */
   /* -------------------------------------------------------------------------- */
   const [backgroundHue, setBackgroundHue] = useState<Settings["backgroundHue"]>(
-    initialConfig.background ?? defaultBackgroundHue
+    initialConfig.background ?? defaultBackgroundHue,
   );
   const primaryColorHex = useMemo(
     () => hslToHex(backgroundHue, 100, 60),
-    [backgroundHue]
+    [backgroundHue],
   );
   const [theme, setTheme] = useState<Settings["theme"]>({
     cover: initialConfig.theme?.cover ?? false,
     path: initialConfig.theme?.path ?? defaultTheme,
   });
   const [playerName, setPlayerName] = useState<Settings["playerName"]>(
-    initialConfig.playerName ?? ""
+    initialConfig.playerName ?? "",
   );
   const [homeDir, setHomeDir] = useState<Settings["homeDir"]>(
-    initialConfig.homeDir ?? ""
+    initialConfig.homeDir ?? "",
   );
   const [nas, setNas] = useState<Settings["nas"]>(initialConfig.nas ?? "");
   const [locale, setLocale] = useState<Settings["locale"]>(
-    initialConfig.locale ?? defaultLocale
+    initialConfig.locale ?? defaultLocale,
   );
   const [debug, setDebug] = useState<Settings["debug"]>(
-    initialConfig.debug ?? false
+    initialConfig.debug ?? false,
   );
 
   const [apiKey, setApiKey] = useState<string>(
-    sessionStorage.getItem("apiKey") ?? ""
+    sessionStorage.getItem("apiKey") ?? "",
   );
 
   const setupCompleted = useMemo(
     () => !!playerName && !!homeDir && !!nas,
-    [playerName, homeDir, nas]
+    [playerName, homeDir, nas],
   );
 
   /* -------------------------------------------------------------------------- */
@@ -82,7 +82,7 @@ export const SettingsServiceContextProvider: FunctionComponent<
         nas,
         locale,
         debug,
-      })
+      }),
     );
   }, [backgroundHue, theme, playerName, homeDir, nas, locale, debug]);
 

@@ -62,7 +62,7 @@ async function createWindow() {
     }
   } else {
     win.loadFile(
-      join(__dirname, `../renderer/${MAIN_WINDOW_VITE_NAME}/index.html`)
+      join(__dirname, `../renderer/${MAIN_WINDOW_VITE_NAME}/index.html`),
     );
   }
 }
@@ -136,7 +136,7 @@ function registerFileProtocol(protocolName: string) {
     } catch (error) {
       console.error(
         "ERROR: registerLocalResourceProtocol: Could not get file path:",
-        error
+        error,
       );
     }
   });
@@ -154,7 +154,7 @@ ipcMain.handle(
   "controlSyncService",
   (event, action: SyncServiceOperations, ...args) => {
     return syncServiceController[action].apply(null, args);
-  }
+  },
 );
 
 ipcMain.on("controlLibrary", (event, action: LibraryOperations, ...args) => {
@@ -174,7 +174,7 @@ ipcMain.on("controlWindow", async (event, action: WindowOperation) => {
 });
 
 ipcMain.handle("showOpenDialog", (event, options) =>
-  dialog.showOpenDialog(options)
+  dialog.showOpenDialog(options),
 );
 
 ipcMain.on("setProgress", (event, progress) => win.setProgressBar(progress));

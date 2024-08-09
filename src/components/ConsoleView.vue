@@ -8,16 +8,13 @@
 </style>
 
 <template>
-  <div
-    class="console"
-    ref="console"
-    style="max-height: 150px"
-  >
+  <div class="console" ref="console" style="max-height: 150px">
     <span
       v-for="(item, index) in messages"
       :key="index"
-      :style="{color: item.type == 'stderr' ? 'red' : 'inherit'}"
-    >{{item.message}}</span>
+      :style="{ color: item.type == 'stderr' ? 'red' : 'inherit' }"
+      >{{ item.message }}</span
+    >
   </div>
 </template>
 

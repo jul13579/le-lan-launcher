@@ -9,13 +9,13 @@ export const useLibraryWatcher = () => ({
    */
   watch: (
     libConfigPath: string,
-    callback: Parameters<IpcRenderer["on"]>[1]
+    callback: Parameters<IpcRenderer["on"]>[1],
   ) => {
     window.ipcRenderer.on("library", callback);
     window.ipcRenderer.send(
       "controlLibrary",
       LibraryOperations.WATCH,
-      libConfigPath
+      libConfigPath,
     );
   },
 
@@ -27,7 +27,7 @@ export const useLibraryWatcher = () => ({
     window.ipcRenderer.send(
       "controlLibrary",
       LibraryOperations.UNWATCH,
-      libConfigPath
+      libConfigPath,
     );
     window.ipcRenderer.removeAllListeners("library");
   },

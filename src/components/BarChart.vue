@@ -1,11 +1,7 @@
 <template>
   <div ref="chartContainer" style="width: 100%; height: 150px">
     <!-- Chart width will be at maximum the container's width. It is responsive -->
-    <canvas
-      ref="chart"
-      width="500"
-      height="150"
-    ></canvas>
+    <canvas ref="chart" width="500" height="150"></canvas>
   </div>
 </template>
 
@@ -16,12 +12,18 @@ import {
   BarElement,
   PointElement,
   LinearScale,
-  CategoryScale
+  CategoryScale,
 } from "chart.js";
 import { mapState } from "vuex";
 
 // Common options for all charts
-Chart.register(BarController, BarElement, PointElement, LinearScale, CategoryScale);
+Chart.register(
+  BarController,
+  BarElement,
+  PointElement,
+  LinearScale,
+  CategoryScale,
+);
 Chart.defaults.datasets.type = "line";
 Chart.defaults.font.family = "'Roboto', sans-serif";
 Chart.defaults.maintainAspectRatio = false;
@@ -68,9 +70,9 @@ export default {
     let options = {
       scales: {
         x: {
-          type: 'category',
-          labels: new Array(queueLength).fill(''),
-          display: false
+          type: "category",
+          labels: new Array(queueLength).fill(""),
+          display: false,
         },
         y: {
           title: {
@@ -85,7 +87,7 @@ export default {
             display: false,
           },
           grid: {
-            color: 'rgba(255,255,255,.1)',
+            color: "rgba(255,255,255,.1)",
           },
         },
       },
@@ -141,7 +143,7 @@ export default {
       let locale = this.$i18n.locale;
       return new Intl.NumberFormat(
         locale,
-        this.$i18n.numberFormats[locale][this.unit]
+        this.$i18n.numberFormats[locale][this.unit],
       )
         .formatToParts(0) // Use arbitrary number, we are only interested in unit
         .find((item) => item.type == "unit").value;

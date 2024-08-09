@@ -48,18 +48,16 @@ $hover-animation: 0.2s ease-in-out;
     top: -175%;
     height: 200%;
     width: 200%;
-    box-shadow: 0px 0px 20px 5px white, inset 0px 0px 20px 5px white;
+    box-shadow:
+      0px 0px 20px 5px white,
+      inset 0px 0px 20px 5px white;
     transform: rotate(-45deg);
   }
 }
 </style>
 
 <template>
-  <v-menu
-    offset-x
-    open-on-click
-    transition="slide-x-transition"
-  >
+  <v-menu offset-x open-on-click transition="slide-x-transition">
     <template v-slot:activator="{ on }">
       <div
         class="gameEntry ma-3"
@@ -67,13 +65,13 @@ $hover-animation: 0.2s ease-in-out;
       >
         <v-img
           :src="`game://${libFolderPath}/${gameConfig.cover}`"
-          :aspect-ratio="600/900"
+          :aspect-ratio="600 / 900"
           eager
         />
         <!-- Progress indicator -->
         <div
           class="progress"
-          :style="{top: `${-downloadProgress*100}%`}"
+          :style="{ top: `${-downloadProgress * 100}%` }"
         ></div>
         <!-- Download buttons overlay. Only displayed when downloadProgress < 1, hence not completed -->
         <div
@@ -98,17 +96,12 @@ $hover-animation: 0.2s ease-in-out;
                 v-if="item.show"
                 :key="index"
               >
-                <v-icon>{{item.icon}}</v-icon>
+                <v-icon>{{ item.icon }}</v-icon>
               </v-btn>
             </template>
           </template>
         </div>
-        <div
-          v-else
-          class="glass"
-          v-on="on"
-        >
-        </div>
+        <div v-else class="glass" v-on="on"></div>
       </div>
     </template>
 
@@ -124,7 +117,8 @@ $hover-animation: 0.2s ease-in-out;
             class="justify-start"
             :key="index"
           >
-            <v-icon left>{{item.icon}}</v-icon>{{item.text}}
+            <v-icon left>{{ item.icon }}</v-icon
+            >{{ item.text }}
           </v-btn>
         </template>
       </div>
@@ -133,7 +127,17 @@ $hover-animation: 0.2s ease-in-out;
 </template>
 
 <script>
-import { mdiBackupRestore, mdiChevronDoubleRight, mdiClose, mdiDelete, mdiDotsHorizontal, mdiDownload, mdiFolderOpen, mdiPause, mdiPlay } from "@mdi/js";
+import {
+  mdiBackupRestore,
+  mdiChevronDoubleRight,
+  mdiClose,
+  mdiDelete,
+  mdiDotsHorizontal,
+  mdiDownload,
+  mdiFolderOpen,
+  mdiPause,
+  mdiPlay,
+} from "@mdi/js";
 
 export default {
   props: {
@@ -171,7 +175,8 @@ export default {
           icon: mdiChevronDoubleRight,
         },
         {
-          click: () => this.$emit("delete", this.gameConfig, this.syncFolderConfig),
+          click: () =>
+            this.$emit("delete", this.gameConfig, this.syncFolderConfig),
           show: this.subscribed,
           icon: mdiClose,
         },
@@ -185,7 +190,7 @@ export default {
               "execute",
               this.syncFolderConfig,
               this.gameConfig,
-              this.gameConfig.launch.exe
+              this.gameConfig.launch.exe,
             ),
           show: true,
           icon: mdiPlay,
@@ -206,7 +211,8 @@ export default {
           text: this.$t("gameEntry.resume"),
         },
         {
-          click: () => this.$emit("reset", this.gameConfig, this.syncFolderConfig),
+          click: () =>
+            this.$emit("reset", this.gameConfig, this.syncFolderConfig),
           show: this.syncFolderStatus.receiveOnlyTotalItems > 0,
           icon: mdiBackupRestore,
           text: this.$t("gameEntry.reset"),
@@ -218,7 +224,8 @@ export default {
           text: this.$t("gameEntry.browse"),
         },
         {
-          click: () => this.$emit("delete", this.gameConfig, this.syncFolderConfig),
+          click: () =>
+            this.$emit("delete", this.gameConfig, this.syncFolderConfig),
           show: true,
           icon: mdiDelete,
           text: this.$t("gameEntry.delete"),
@@ -227,7 +234,13 @@ export default {
 
       (this.gameConfig.moreLaunchs || []).forEach((item) => {
         buttons.splice(-2, 0, {
-          click: () => this.$emit("execute", this.syncFolderConfig, this.gameConfig, item.exe),
+          click: () =>
+            this.$emit(
+              "execute",
+              this.syncFolderConfig,
+              this.gameConfig,
+              item.exe,
+            ),
           show: true,
           icon: mdiDotsHorizontal,
           text: item.text,

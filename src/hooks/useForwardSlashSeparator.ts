@@ -1,6 +1,6 @@
 export const useForwardSlashSeparator = <T extends object>(
   data: T,
-  keys: (keyof T)[]
+  keys: (keyof T)[],
 ) => {
   const copyObj = { ...data };
   keys.forEach((key) => {

@@ -74,7 +74,7 @@ export function LibraryMainController(win: BrowserWindow) {
       win.webContents.send("library", lib);
     } catch (e) {
       console.error(
-        `Unable to send the library configuration to the renderer: ${e}`
+        `Unable to send the library configuration to the renderer: ${e}`,
       );
     }
   }

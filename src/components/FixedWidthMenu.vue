@@ -17,8 +17,8 @@ export default {
             this.dimensions.activator.width +
               Number(this.nudgeWidth) +
               (this.auto ? 16 : 0),
-            Math.max(this.pageWidth - 24, 0)
-          )
+            Math.max(this.pageWidth - 24, 0),
+          ),
         ) || "0"
       );
     },
