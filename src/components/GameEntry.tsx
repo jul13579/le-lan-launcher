@@ -110,7 +110,7 @@ export const GameEntry: FunctionComponent<GameEntryProps> = ({
       subscribed && thisGameFolderStatus?.globalBytes > 0
         ? thisGameFolderStatus?.inSyncBytes / thisGameFolderStatus?.globalBytes
         : 0,
-    []
+    [subscribed, thisGameFolderStatus]
   );
   const installed = useMemo(() => downloadProgress >= 1, [downloadProgress]);
 
