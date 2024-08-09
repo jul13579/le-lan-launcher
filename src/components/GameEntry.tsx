@@ -63,6 +63,7 @@ interface ProgressIndicatorProps {
 const ProgressIndicator = styled("div")<ProgressIndicatorProps>(
   ({ downloadProgress }) => ({
     background: "rgba(0, 0, 0, 0.7)",
+    transition: "top 0.1s linear",
     top: `${-downloadProgress * 100}% !important`,
   }),
 );
@@ -149,7 +150,9 @@ export const GameEntry: FunctionComponent<GameEntryProps> = ({
         {/* Download buttons overlay. Only displayed when downloadProgress < 1, hence not completed */}
         {downloadProgress < 1 ? (
           <DownloadButtonsContainer>
-            {subscribed && thisGameFolderStatus ? (
+            {subscribed &&
+            thisGameFolderStatus &&
+            Object.entries(thisGameFolderStatus).length === 0 ? (
               // If game is subscribed but there is no syncFolderStatus yet, show loader
               <Fab>
                 <TextColoredCircularProgress size={30} />
