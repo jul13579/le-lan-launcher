@@ -85,6 +85,7 @@ export function SyncServiceMainController(win: BrowserWindow) {
       console.warn(
         "There was no sync service running when attempting to stop it"
       );
+      return;
     }
     syncServiceProcess.kill();
   }
