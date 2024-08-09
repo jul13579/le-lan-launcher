@@ -15,6 +15,7 @@ import { useSettingsService } from "../../../hooks/useSettingsService";
 import { SyncServiceContext } from "./SyncServiceContext";
 import SyncEvents from "../../../enums/SyncEvents";
 import { calculateDownloadProgress } from "../../../utils/calculateDownloadProgress";
+import GameOperations from "../../../enums/GameOperations";
 
 const apiBase = `${baseUrl}/rest`;
 
@@ -429,8 +430,13 @@ export const SyncServiceContextProvider: FunctionComponent<
   const unPauseGame = (folder: Folder, pause: boolean) =>
     SyncthingAPI.Config.setFolder({ ...folder, paused: pause });
 
-  const deleteGame = (folder: Folder) =>
-    SyncthingAPI.Config.deleteFolder(folder);
+  const deleteGame = async (folder: Folder) => {
+    await SyncthingAPI.Config.deleteFolder(folder);
+    window.ipcRenderer.invoke("controlGame", GameOperations.DELETE, folder);
+    const newFolderStatuses = { ...folderStatuses };
+    delete newFolderStatuses[folder.id];
+    setFolderStatuses(newFolderStatuses);
+  };
 
   /* -------------------------------------------------------------------------- */
   /*                                  Rendering                                 */
