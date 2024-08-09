@@ -70,8 +70,8 @@ const SyncthingAPI = {
     folderStatus(folderID: string) {
       return axios.get(`${apiBase}/db/status?folder=${folderID}`);
     },
-    revertFolder(folder: string) {
-      return axios.post(`${apiBase}/db/revert?folder=${folder}`);
+    revertFolder(folderID: string) {
+      return axios.post(`${apiBase}/db/revert?folder=${folderID}`);
     },
   },
   Cluster: {
@@ -318,67 +318,6 @@ export const SyncServiceContextProvider: FunctionComponent<
   }, [folders]);
 
   useEffect(() => {
-    const getEvents = async () => {
-      if (!online) {
-        return;
-      }
-
-      const { data: events } =
-        lastEventId > 0
-          ? await SyncthingAPI.Events.since(lastEventId)
-          : await SyncthingAPI.Events.latestEvents();
-
-      if (events.length === 0) {
-        return;
-      }
-
-      const newFolderStatuses = events
-        .sort(({ id: id1 }, { id: id2 }) => id1 - id2)
-        .reduce(
-          (previousValue, event) => {
-            const { data, type } = event;
-            switch (type) {
-              case SyncEvents.FOLDER_SUMMARY:
-                previousValue[data.folder] = (
-                  data as any as FolderSummaryEvent["data"]
-                ).summary;
-                break;
-              case SyncEvents.STATE_CHANGED:
-                // Skip state change event if the folder is not tracked in our state
-                if (!folderStatuses[data.folder]) {
-                  break;
-                }
-                // If there is a state update for a folder that has not yet received a summary event, copy its state
-                if (!previousValue[data.folder]) {
-                  previousValue[data.folder] = {
-                    ...folderStatuses[data.folder],
-                  };
-                }
-                previousValue[data.folder].state = (
-                  data as any as FolderStateChangedEvent["data"]
-                ).to;
-                break;
-              case SyncEvents.FOLDER_REJECTED:
-                delete previousValue[data.folder];
-                break;
-            }
-            return previousValue;
-          },
-          {} as Record<string, FolderStatus>,
-        );
-
-      const progress = Math.min(
-        ...Object.values(newFolderStatuses).map(calculateDownloadProgress),
-      );
-      window.ipcRenderer.send(
-        "setProgress",
-        progress > 0 && progress < 1 ? progress : -1,
-      );
-
-      setFolderStatuses({ ...folderStatuses, ...newFolderStatuses });
-      setLastEventId(Math.max(...events.map(({ id }) => id)));
-    };
-
     getEvents();
     const interval = setInterval(getEvents, 5000);
     return () => clearInterval(interval);
@@ -414,6 +353,67 @@ export const SyncServiceContextProvider: FunctionComponent<
     [homeDir, devices],
   );
 
+  const getEvents = async () => {
+    if (!online) {
+      return;
+    }
+
+    const { data: events } =
+      lastEventId > 0
+        ? await SyncthingAPI.Events.since(lastEventId)
+        : await SyncthingAPI.Events.latestEvents();
+
+    if (events.length === 0) {
+      return;
+    }
+
+    const newFolderStatuses = events
+      .sort(({ id: id1 }, { id: id2 }) => id1 - id2)
+      .reduce(
+        (previousValue, event) => {
+          const { data, type } = event;
+          switch (type) {
+            case SyncEvents.FOLDER_SUMMARY:
+              previousValue[data.folder] = (
+                data as any as FolderSummaryEvent["data"]
+              ).summary;
+              break;
+            case SyncEvents.STATE_CHANGED:
+              // Skip state change event if the folder is not tracked in our state
+              if (!folderStatuses[data.folder]) {
+                break;
+              }
+              // If there is a state update for a folder that has not yet received a summary event, copy its state
+              if (!previousValue[data.folder]) {
+                previousValue[data.folder] = {
+                  ...folderStatuses[data.folder],
+                };
+              }
+              previousValue[data.folder].state = (
+                data as any as FolderStateChangedEvent["data"]
+              ).to;
+              break;
+            case SyncEvents.FOLDER_REJECTED:
+              delete previousValue[data.folder];
+              break;
+          }
+          return previousValue;
+        },
+        {} as Record<string, FolderStatus>,
+      );
+
+    const progress = Math.min(
+      ...Object.values(newFolderStatuses).map(calculateDownloadProgress),
+    );
+    window.ipcRenderer.send(
+      "setProgress",
+      progress > 0 && progress < 1 ? progress : -1,
+    );
+
+    setFolderStatuses({ ...folderStatuses, ...newFolderStatuses });
+    setLastEventId(Math.max(...events.map(({ id }) => id)));
+  };
+
   const openSyncthingUI = () =>
     window.ipcRenderer.invoke(
       "controlSyncService",
@@ -439,20 +439,27 @@ export const SyncServiceContextProvider: FunctionComponent<
     }
   }
 
-  const downloadGame = async (gameConfig: Game) =>
-    SyncthingAPI.Config.setFolder(
+  const revertFolder = async (folderId: string) => {
+    await SyncthingAPI.DB.revertFolder(folderId);
+    getEvents();
+  };
+
+  const downloadGame = async (gameConfig: Game) => {
+    await SyncthingAPI.Config.setFolder(
       await newSyncFolderObject(gameConfig.id, gameConfig.title),
     );
+    getEvents();
+  };
 
-  const unPauseGame = (folder: Folder, pause: boolean) =>
-    SyncthingAPI.Config.setFolder({ ...folder, paused: pause });
+  const unPauseGame = async (folder: Folder, pause: boolean) => {
+    await SyncthingAPI.Config.setFolder({ ...folder, paused: pause });
+    getEvents();
+  };
 
   const deleteGame = async (folder: Folder) => {
     await SyncthingAPI.Config.deleteFolder(folder);
     window.ipcRenderer.invoke("controlGame", GameOperations.DELETE, folder);
-    const newFolderStatuses = { ...folderStatuses };
-    delete newFolderStatuses[folder.id];
-    setFolderStatuses(newFolderStatuses);
+    getEvents();
   };
 
   /* -------------------------------------------------------------------------- */
@@ -464,7 +471,7 @@ export const SyncServiceContextProvider: FunctionComponent<
     folders,
     folderStatuses,
     getDiscovery: SyncthingAPI.System.getDiscovery,
-    revertFolder: SyncthingAPI.DB.revertFolder,
+    revertFolder,
     downloadGame,
     unPauseGame,
     deleteGame,
