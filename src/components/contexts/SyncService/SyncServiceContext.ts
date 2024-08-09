@@ -8,4 +8,10 @@ export const SyncServiceContext = createContext<{
   folderStatuses: Record<string, FolderStatus>;
   getDiscovery: () => Promise<AxiosResponse<unknown>>;
   revertFolder: (id: string) => Promise<AxiosResponse<unknown>>;
+  downloadGame: (gameConfig: Game) => Promise<AxiosResponse<unknown>>;
+  unPauseGame: (
+    folder: Folder,
+    pause: boolean
+  ) => Promise<AxiosResponse<unknown>>;
+  deleteGame: (folder: Folder) => Promise<AxiosResponse<unknown>>;
 }>(null);

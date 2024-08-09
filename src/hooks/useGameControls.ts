@@ -4,14 +4,15 @@ import { useSyncService } from "./useSyncService";
 import { useSettingsService } from "./useSettingsService";
 
 export const useGameControls = (folder: Folder, gameConfig: Game) => {
-  const { revertFolder } = useSyncService();
+  const { downloadGame, unPauseGame, deleteGame, revertFolder } =
+    useSyncService();
   const { playerName, debug } = useSettingsService();
 
   return useMemo(() => {
-    const download = () => {};
-    const pause = () => {};
-    const resume = () => {};
-    const remove = () => {};
+    const download = () => downloadGame(gameConfig);
+    const pause = () => unPauseGame(folder, true);
+    const resume = () => unPauseGame(folder, false);
+    const remove = () => deleteGame(folder);
     const execute = (executable: string) => {
       // TODO: add debug modal handling
       //   if (this.debug) {

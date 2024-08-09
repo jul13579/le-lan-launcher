@@ -128,14 +128,14 @@ export const GameEntry: FunctionComponent<GameEntryProps> = ({
 
   const downloadButtons = useMemo(
     () => [
-      { click: () => download, show: !subscribed, icon: mdiDownload },
-      { click: () => pause, show: thisGameFolder?.paused, icon: mdiPause },
+      { click: download, show: !subscribed, icon: mdiDownload },
+      { click: pause, show: thisGameFolder?.paused, icon: mdiPause },
       {
-        click: () => resume,
+        click: resume,
         show: thisGameFolder?.paused,
         icon: mdiChevronDoubleRight,
       },
-      { click: () => remove, show: subscribed, icon: mdiClose },
+      { click: remove, show: subscribed, icon: mdiClose },
     ],
     [subscribed, thisGameFolder]
   );
@@ -155,31 +155,31 @@ export const GameEntry: FunctionComponent<GameEntryProps> = ({
         text: item.text,
       })),
       {
-        click: () => pause,
+        click: pause,
         show: thisGameFolder?.paused,
         icon: mdiPause,
         text: t("gameEntry.pause"),
       },
       {
-        click: () => resume,
+        click: resume,
         show: thisGameFolder?.paused,
         icon: mdiChevronDoubleRight,
         text: t("gameEntry.resume"),
       },
       {
-        click: () => reset,
+        click: reset,
         show: thisGameFolderStatus?.receiveOnlyTotalItems > 0,
         icon: mdiBackupRestore,
         text: t("gameEntry.reset"),
       },
       {
-        click: () => browse,
+        click: browse,
         show: true,
         icon: mdiFolderOpen,
         text: t("gameEntry.browse"),
       },
       {
-        click: () => remove,
+        click: remove,
         show: true,
         icon: mdiDelete,
         text: t("gameEntry.delete"),

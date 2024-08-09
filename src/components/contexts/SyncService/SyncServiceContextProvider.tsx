@@ -59,6 +59,9 @@ const SyncthingAPI = {
     setFolder(folder: Folder) {
       return axios.post(`${apiBase}/config/folders`, folder);
     },
+    deleteFolder(folder: Folder) {
+      return axios.delete(`${apiBase}/config/folders/${folder.id}`);
+    },
   },
   DB: {
     folderStatus(folderID: string) {
@@ -328,12 +331,12 @@ export const SyncServiceContextProvider: FunctionComponent<
     [homeDir, devices]
   );
 
-  function openSyncthingUI() {
-    return window.ipcRenderer.invoke(
+  const openSyncthingUI = () =>
+    window.ipcRenderer.invoke(
       "controlSyncService",
       SyncServiceOperations.OPEN_SYNCTHING_UI
     );
-  }
+
   async function start() {
     if (started || !homeDir) {
       return;
@@ -353,6 +356,17 @@ export const SyncServiceContextProvider: FunctionComponent<
     }
   }
 
+  const downloadGame = async (gameConfig: Game) =>
+    SyncthingAPI.Config.setFolder(
+      await newSyncFolderObject(gameConfig.id, gameConfig.title)
+    );
+
+  const unPauseGame = (folder: Folder, pause: boolean) =>
+    SyncthingAPI.Config.setFolder({ ...folder, paused: pause });
+
+  const deleteGame = (folder: Folder) =>
+    SyncthingAPI.Config.deleteFolder(folder);
+
   /* -------------------------------------------------------------------------- */
   /*                                  Rendering                                 */
   /* -------------------------------------------------------------------------- */
@@ -363,6 +377,9 @@ export const SyncServiceContextProvider: FunctionComponent<
     folderStatuses,
     getDiscovery: SyncthingAPI.System.getDiscovery,
     revertFolder: SyncthingAPI.DB.revertFolder,
+    downloadGame,
+    unPauseGame,
+    deleteGame,
   };
   return (
     <SyncServiceContext.Provider value={state}>
