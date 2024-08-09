@@ -189,7 +189,7 @@ const App: FunctionComponent = () => {
           </AppBarRow>
         </ProminentToolbar>
       </DraggableAppBar>
-      <Box mb={"66px"} height={"100%"}>
+      <Box pb={"66px"} flexGrow={1}>
         <CustomTabPanel value={TabValue.GAMES}>
           <GamesView />
         </CustomTabPanel>

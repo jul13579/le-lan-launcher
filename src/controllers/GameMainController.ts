@@ -97,11 +97,7 @@ export function GameMainController(win: BrowserWindow) {
    * @param {string} playerName The user's playername.
    * @private
    */
-  function _setPlayerName(
-    gameFolder: Folder,
-    game: Game,
-    playerName: string,
-  ) {
+  function _setPlayerName(gameFolder: Folder, game: Game, playerName: string) {
     if (!game.nameConfig) {
       return Promise.resolve();
     }
