@@ -221,19 +221,19 @@ export const GameEntry: FunctionComponent<GameEntryProps> = ({
           <DownloadButtonsContainer>
             {subscribed && Object.keys(thisGameFolderStatus).length === 0 ? (
               // If game is subscribed but there is no syncFolderStatus yet, show loader
-              <></>
+              <Fab></Fab>
             ) : (
               // Else show applicable download buttons
-              <>
-                {downloadButtons.map(
-                  ({ click, show, icon }, index) =>
-                    show && (
-                      <Fab key={index} onClick={click}>
+              downloadButtons.map(
+                ({ click, show, icon }, index) =>
+                  show && (
+                    <Box key={index} m={0.5}>
+                      <Fab onClick={click}>
                         <Icon path={icon} size={1.5} />
                       </Fab>
-                    )
-                )}
-              </>
+                    </Box>
+                  )
+              )
             )}
           </DownloadButtonsContainer>
         ) : (
