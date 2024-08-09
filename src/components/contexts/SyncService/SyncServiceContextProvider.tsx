@@ -328,30 +328,40 @@ export const SyncServiceContextProvider: FunctionComponent<
         return;
       }
 
-      const newFolderStatuses: Record<string, FolderStatus> = {
-        ...folderStatuses,
-      };
-      events.forEach((event) => {
-        const { data, type } = event;
-        switch (type) {
-          case SyncEvents.FOLDER_SUMMARY:
-            newFolderStatuses[data.folder] = (
-              data as any as FolderSummaryEvent["data"]
-            ).summary;
-            break;
-          case SyncEvents.STATE_CHANGED:
-            if (!folderStatuses[data.folder]) {
-              break;
+      const newFolderStatuses = events
+        .sort(({ id: id1 }, { id: id2 }) => id1 - id2)
+        .reduce(
+          (previousValue, event) => {
+            const { data, type } = event;
+            switch (type) {
+              case SyncEvents.FOLDER_SUMMARY:
+                previousValue[data.folder] = (
+                  data as any as FolderSummaryEvent["data"]
+                ).summary;
+                break;
+              case SyncEvents.STATE_CHANGED:
+                // Skip state change event if the folder is not tracked in our state
+                if (!folderStatuses[data.folder]) {
+                  break;
+                }
+                // If there is a state update for a folder that has not yet received a summary event, copy its state
+                if (!previousValue[data.folder]) {
+                  previousValue[data.folder] = {
+                    ...folderStatuses[data.folder],
+                  };
+                }
+                previousValue[data.folder].state = (
+                  data as any as FolderStateChangedEvent["data"]
+                ).to;
+                break;
+              case SyncEvents.FOLDER_REJECTED:
+                delete previousValue[data.folder];
+                break;
             }
-            newFolderStatuses[data.folder].state = (
-              data as any as FolderStateChangedEvent["data"]
-            ).to;
-            break;
-          case SyncEvents.FOLDER_REJECTED:
-            delete newFolderStatuses[data.folder];
-            break;
-        }
-      });
+            return previousValue;
+          },
+          {} as Record<string, FolderStatus>,
+        );
 
       const progress = Math.min(
         ...Object.values(newFolderStatuses).map(calculateDownloadProgress),
@@ -361,14 +371,14 @@ export const SyncServiceContextProvider: FunctionComponent<
         progress > 0 && progress < 1 ? progress : -1,
       );
 
-      setFolderStatuses(newFolderStatuses);
+      setFolderStatuses({ ...folderStatuses, ...newFolderStatuses });
       setLastEventId(Math.max(...events.map(({ id }) => id)));
     };
 
     getEvents();
     const interval = setInterval(getEvents, 5000);
     return () => clearInterval(interval);
-  }, [online, lastEventId]);
+  }, [online, lastEventId, folderStatuses]);
 
   /* -------------------------------------------------------------------------- */
   /*                             Instance Functions                             */
