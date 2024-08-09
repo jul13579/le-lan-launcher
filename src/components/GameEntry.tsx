@@ -1,14 +1,3 @@
-import {
-  mdiBackupRestore,
-  mdiChevronDoubleRight,
-  mdiClose,
-  mdiDelete,
-  mdiDotsHorizontal,
-  mdiDownload,
-  mdiFolderOpen,
-  mdiPause,
-  mdiPlay,
-} from "@mdi/js";
 import Icon from "@mdi/react";
 import {
   Box,
@@ -22,9 +11,10 @@ import {
 } from "@mui/material";
 import { FunctionComponent, MouseEvent, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { useDownloadButtons } from "../hooks/useDownloadButtons";
 import { useGameFolder } from "../hooks/useGameFolder";
+import { useGameMenuButtons } from "../hooks/useGameMenuButtons";
 import { useLibrary } from "../hooks/useLibrary";
-import { useGameControls } from "../hooks/useGameControls";
 
 const hoverAnimation = "0.2s ease-in-out";
 
@@ -123,69 +113,16 @@ export const GameEntry: FunctionComponent<GameEntryProps> = ({
   );
   const installed = useMemo(() => downloadProgress >= 1, [downloadProgress]);
 
-  const { browse, download, execute, pause, remove, reset, resume } =
-    useGameControls(thisGameFolder, gameConfig);
-
-  const downloadButtons = useMemo(
-    () => [
-      { click: download, show: !subscribed, icon: mdiDownload },
-      { click: pause, show: thisGameFolder?.paused, icon: mdiPause },
-      {
-        click: resume,
-        show: thisGameFolder?.paused,
-        icon: mdiChevronDoubleRight,
-      },
-      { click: remove, show: subscribed, icon: mdiClose },
-    ],
-    [subscribed, thisGameFolder]
+  const downloadButtons = useDownloadButtons(
+    subscribed,
+    thisGameFolder,
+    gameConfig
   );
 
-  const gameMenuButtons = useMemo(
-    () => [
-      {
-        click: () => execute(gameConfig.launch.exe),
-        show: true,
-        icon: mdiPlay,
-        text: t("gameEntry.play"),
-      },
-      ...(gameConfig.moreLaunchs || []).map((item) => ({
-        click: () => execute(item.exe),
-        show: true,
-        icon: mdiDotsHorizontal,
-        text: item.text,
-      })),
-      {
-        click: pause,
-        show: thisGameFolder?.paused,
-        icon: mdiPause,
-        text: t("gameEntry.pause"),
-      },
-      {
-        click: resume,
-        show: thisGameFolder?.paused,
-        icon: mdiChevronDoubleRight,
-        text: t("gameEntry.resume"),
-      },
-      {
-        click: reset,
-        show: thisGameFolderStatus?.receiveOnlyTotalItems > 0,
-        icon: mdiBackupRestore,
-        text: t("gameEntry.reset"),
-      },
-      {
-        click: browse,
-        show: true,
-        icon: mdiFolderOpen,
-        text: t("gameEntry.browse"),
-      },
-      {
-        click: remove,
-        show: true,
-        icon: mdiDelete,
-        text: t("gameEntry.delete"),
-      },
-    ],
-    [thisGameFolder, thisGameFolderStatus, t]
+  const gameMenuButtons = useGameMenuButtons(
+    thisGameFolder,
+    thisGameFolderStatus,
+    gameConfig
   );
 
   const [anchorEl, setAnchorEl] = useState(null);
