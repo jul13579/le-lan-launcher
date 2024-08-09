@@ -46,10 +46,10 @@ export const SettingsServiceContextProvider: FunctionComponent<
     path: initialConfig.theme?.path ?? defaultTheme,
   });
   const [playerName, setPlayerName] = useState<Settings["playerName"]>(
-    initialConfig.playerName ?? undefined
+    initialConfig.playerName ?? ""
   );
   const [homeDir, setHomeDir] = useState<Settings["homeDir"]>(
-    initialConfig.homeDir ?? undefined
+    initialConfig.homeDir ?? ""
   );
   const [nas, setNas] = useState<Settings["nas"]>(initialConfig.nas ?? "");
   const [locale, setLocale] = useState<Settings["locale"]>(
@@ -60,7 +60,7 @@ export const SettingsServiceContextProvider: FunctionComponent<
   );
 
   const [apiKey, setApiKey] = useState<string>(
-    sessionStorage.getItem("apiKey") ?? undefined
+    sessionStorage.getItem("apiKey") ?? ""
   );
 
   const setupCompleted = useMemo(
