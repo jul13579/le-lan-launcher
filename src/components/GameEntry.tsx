@@ -29,6 +29,7 @@ import {
   mdiPlay,
 } from "@mdi/js";
 import { useTranslation } from "react-i18next";
+import { useGameFolder } from "../hooks/useGameFolder";
 
 const hoverAnimation = "0.2s ease-in-out";
 
@@ -107,20 +108,12 @@ export const GameEntry: FunctionComponent<GameEntryProps> = ({
   /*                                   Context                                  */
   /* -------------------------------------------------------------------------- */
   const { libFolderPath } = useLibrary();
-  const { folders, folderStatuses } = useSyncService();
   const { t } = useTranslation();
 
   /* -------------------------------------------------------------------------- */
   /*                                    State                                   */
   /* -------------------------------------------------------------------------- */
-  const thisGameFolder = useMemo(
-    () => folders.find(({ id }) => id === gameConfig.id),
-    [folders]
-  );
-  const thisGameFolderStatus = useMemo(
-    () => folderStatuses[gameConfig.id],
-    [folderStatuses]
-  );
+  const [thisGameFolder, thisGameFolderStatus] = useGameFolder(gameConfig);
   const subscribed = useMemo(() => !!thisGameFolder, [thisGameFolder]);
   const downloadProgress = useMemo(
     () =>
