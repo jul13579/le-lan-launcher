@@ -11,14 +11,14 @@ import GameOperations from "../enums/GameOperations";
 export function GameMainController(win: BrowserWindow) {
   /**
    * Launch a game.
-   * @param {GameFolder} gameFolder The sync-service folder config.
+   * @param {Folder} gameFolder The sync-service folder config.
    * @param {Game} game The game object of the library config file.
    * @param {string} executable The executable to run
    * @param {string} playerName The name of the player
    * @param {boolean} debug State of debug mode.
    */
   async function launch(
-    gameFolder: GameFolder,
+    gameFolder: Folder,
     game: Game,
     executable: string,
     playerName: string,
@@ -73,18 +73,18 @@ export function GameMainController(win: BrowserWindow) {
 
   /**
    * Open the install folder of a game in the file explorer.
-   * @param {GameFolder} gameFolder The sync-service folder config.
+   * @param {Folder} gameFolder The sync-service folder config.
    */
-  function browse(gameFolder: GameFolder) {
+  function browse(gameFolder: Folder) {
     shell.openPath(normalize(gameFolder.path));
   }
 
   /**
    * Remove a game.
-   * @param {GameFolder} gameFolder The sync-service folder config.
+   * @param {Folder} gameFolder The sync-service folder config.
    * @returns {String} Error if error was encountered.
    */
-  function remove(gameFolder: GameFolder) {
+  function remove(gameFolder: Folder) {
     rm(gameFolder.path, { recursive: true }, (error) => {
       if (error) return error;
     });
@@ -92,13 +92,13 @@ export function GameMainController(win: BrowserWindow) {
 
   /**
    * Set the player name according for a specific game.
-   * @param {GameFolder} gameFolder The sync-service folder config.
+   * @param {Folder} gameFolder The sync-service folder config.
    * @param {Game} game The game object of the library config file.
    * @param {string} playerName The user's playername.
    * @private
    */
   function _setPlayerName(
-    gameFolder: GameFolder,
+    gameFolder: Folder,
     game: Game,
     playerName: string,
   ) {
