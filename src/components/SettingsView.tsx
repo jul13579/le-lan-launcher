@@ -26,6 +26,8 @@ import { useSettingsService } from "../hooks/useSettingsService";
 import { useSyncService } from "../hooks/useSyncService";
 import langs from "../localization/langs";
 import { bgTransparentDarkWithBlur } from "./CustomThemeProvider";
+import { CustomTabPanel } from "../App";
+import { TabValue } from "../enums/TabValue";
 
 const ThemeItem = ({ theme }: { theme: Theme }) => ({
   margin: theme.spacing(3),
@@ -141,160 +143,162 @@ export const SettingsView: FunctionComponent = () => {
   /*                                  Rendering                                 */
   /* -------------------------------------------------------------------------- */
   return (
-    <Container>
-      {/* Alerts */}
-      {[
-        [!playerName, t("errors.playerNameUnset.message")],
-        [!homeDir, t("errors.homeDirUnset.message")],
-        [!nas, t("errors.nasUnset.message")],
-      ]
-        .filter(([visible]) => !!visible)
-        .map(([, text], index) => (
-          <Box key={index} my={1}>
-            <Alert severity="error">{text}</Alert>
-          </Box>
-        ))}
-
-      {/* Theme */}
-      <h1>{t("settings.theme")}</h1>
-      <Box display={"flex"} flexWrap={"wrap"}>
+    <CustomTabPanel value={TabValue.SETTINGS}>
+      <Container>
+        {/* Alerts */}
         {[
-          "./funky-lines.png",
-          "./gaming.png",
-          "./prism.png",
-          "./maze.png",
-          "./unicorns.png",
-        ].map((texture, index) => (
-          <PredefinedThemeItem
-            key={index}
-            src={texture}
-            onClick={() => setTheme({ path: texture, cover: false })}
-          />
-        ))}
-        <CustomBackgroundPicker
-          hue={backgroundHue}
-          onClick={selectCustomBackground}
-        >
-          <Icon path={mdiImageSearch} size={2} />
-        </CustomBackgroundPicker>
-      </Box>
+          [!playerName, t("errors.playerNameUnset.message")],
+          [!homeDir, t("errors.homeDirUnset.message")],
+          [!nas, t("errors.nasUnset.message")],
+        ]
+          .filter(([visible]) => !!visible)
+          .map(([, text], index) => (
+            <Box key={index} my={1}>
+              <Alert severity="error">{text}</Alert>
+            </Box>
+          ))}
 
-      {/* Background Hue Slider */}
-      <h1>{t("settings.backgroundHue")}</h1>
-      <Slider
-        min={0}
-        max={360}
-        valueLabelDisplay="auto"
-        value={backgroundHue}
-        onChange={(event, value: number) => setBackgroundHue(value)}
-      />
+        {/* Theme */}
+        <h1>{t("settings.theme")}</h1>
+        <Box display={"flex"} flexWrap={"wrap"}>
+          {[
+            "./funky-lines.png",
+            "./gaming.png",
+            "./prism.png",
+            "./maze.png",
+            "./unicorns.png",
+          ].map((texture, index) => (
+            <PredefinedThemeItem
+              key={index}
+              src={texture}
+              onClick={() => setTheme({ path: texture, cover: false })}
+            />
+          ))}
+          <CustomBackgroundPicker
+            hue={backgroundHue}
+            onClick={selectCustomBackground}
+          >
+            <Icon path={mdiImageSearch} size={2} />
+          </CustomBackgroundPicker>
+        </Box>
 
-      {/* Environment */}
-      <h1>{t("settings.environment")}</h1>
-      <Grid container spacing={2}>
-        <Grid item xs={3}>
-          <FormControl fullWidth>
-            <InputLabel id="language-select-label">
-              {t("settings.language")}
-            </InputLabel>
-            <Select
-              labelId="language-select-label"
-              label={t("settings.language")}
-              value={locale}
-              onChange={(event) => setLocale(event.target.value)}
-            >
-              {Object.keys(langs).map((lang, index) => (
-                <MenuItem key={index} value={lang}>
-                  {t(`langs.${lang}`)}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-        </Grid>
-        <Grid item xs={6} />
-        <Grid item xs={3}>
-          <Box display={"flex"} minHeight={"100%"}>
-            <Tooltip title={t("settings.debug_explanation")}>
-              <FormControlLabel
-                label={t("settings.debug")}
-                control={
-                  <Switch
-                    value={debug}
-                    onChange={(event, checked) => setDebug(checked)}
-                  />
-                }
-              />
-            </Tooltip>
-          </Box>
-        </Grid>
-        <Grid item xs={3}>
-          <TextField
-            fullWidth
-            label={t("settings.playerName")}
-            value={playerName}
-            error={!playerName}
-            onChange={(event) => setPlayerName(event.target.value)}
-          />
-        </Grid>
-        <Grid item xs={4}>
-          <Box display={"flex"} minWidth={"100%"} minHeight={"100%"}>
+        {/* Background Hue Slider */}
+        <h1>{t("settings.backgroundHue")}</h1>
+        <Slider
+          min={0}
+          max={360}
+          valueLabelDisplay="auto"
+          value={backgroundHue}
+          onChange={(event, value: number) => setBackgroundHue(value)}
+        />
+
+        {/* Environment */}
+        <h1>{t("settings.environment")}</h1>
+        <Grid container spacing={2}>
+          <Grid item xs={3}>
+            <FormControl fullWidth>
+              <InputLabel id="language-select-label">
+                {t("settings.language")}
+              </InputLabel>
+              <Select
+                labelId="language-select-label"
+                label={t("settings.language")}
+                value={locale}
+                onChange={(event) => setLocale(event.target.value)}
+              >
+                {Object.keys(langs).map((lang, index) => (
+                  <MenuItem key={index} value={lang}>
+                    {t(`langs.${lang}`)}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </Grid>
+          <Grid item xs={6} />
+          <Grid item xs={3}>
+            <Box display={"flex"} minHeight={"100%"}>
+              <Tooltip title={t("settings.debug_explanation")}>
+                <FormControlLabel
+                  label={t("settings.debug")}
+                  control={
+                    <Switch
+                      value={debug}
+                      onChange={(event, checked) => setDebug(checked)}
+                    />
+                  }
+                />
+              </Tooltip>
+            </Box>
+          </Grid>
+          <Grid item xs={3}>
             <TextField
               fullWidth
-              label={t("settings.homeDir")}
-              value={homeDir}
-              disabled={true}
-              error={!homeDir}
-              InputLabelProps={{ disabled: false, shrink: !!homeDir }}
-              InputProps={{
-                endAdornment: (
-                  <Button onClick={selectHomeDir} disabled={started}>
-                    <Icon path={mdiDatabaseSearch} size={1} />
-                  </Button>
-                ),
-              }}
+              label={t("settings.playerName")}
+              value={playerName}
+              error={!playerName}
+              onChange={(event) => setPlayerName(event.target.value)}
             />
-          </Box>
-        </Grid>
-        <Grid item xs={5}>
-          <FormControl fullWidth>
-            <InputLabel id="nas-select-label">{t("settings.nas")}</InputLabel>
-            <Select
-              labelId="nas-select-label"
-              label={t("settings.nas")}
-              value={nas}
-              onChange={(event) =>
-                event.target.value !== "-1" && setNas(event.target.value)
-              }
-              error={!nas}
-            >
-              {useCallback(() => {
-                const deviceIds = Object.keys(devices);
-                if (deviceIds.length > 0) {
-                  return deviceIds.map((deviceId, index) => (
-                    <MenuItem key={index} value={deviceId}>
-                      {deviceId}
-                    </MenuItem>
-                  ));
-                } else if (nas) {
-                  return <MenuItem value={nas}>{nas}</MenuItem>;
-                } else if (!online) {
-                  return (
-                    <MenuItem value={"-1"}>
-                      {t("settings.alerts.service")}
-                    </MenuItem>
-                  );
-                } else {
-                  return (
-                    <MenuItem value={"-1"}>
-                      {t("settings.alerts.discovery")}
-                    </MenuItem>
-                  );
+          </Grid>
+          <Grid item xs={4}>
+            <Box display={"flex"} minWidth={"100%"} minHeight={"100%"}>
+              <TextField
+                fullWidth
+                label={t("settings.homeDir")}
+                value={homeDir}
+                disabled={true}
+                error={!homeDir}
+                InputLabelProps={{ disabled: false, shrink: !!homeDir }}
+                InputProps={{
+                  endAdornment: (
+                    <Button onClick={selectHomeDir} disabled={started}>
+                      <Icon path={mdiDatabaseSearch} size={1} />
+                    </Button>
+                  ),
+                }}
+              />
+            </Box>
+          </Grid>
+          <Grid item xs={5}>
+            <FormControl fullWidth>
+              <InputLabel id="nas-select-label">{t("settings.nas")}</InputLabel>
+              <Select
+                labelId="nas-select-label"
+                label={t("settings.nas")}
+                value={nas}
+                onChange={(event) =>
+                  event.target.value !== "-1" && setNas(event.target.value)
                 }
-              }, [devices, nas, online])()}
-            </Select>
-          </FormControl>
+                error={!nas}
+              >
+                {useCallback(() => {
+                  const deviceIds = Object.keys(devices);
+                  if (deviceIds.length > 0) {
+                    return deviceIds.map((deviceId, index) => (
+                      <MenuItem key={index} value={deviceId}>
+                        {deviceId}
+                      </MenuItem>
+                    ));
+                  } else if (nas) {
+                    return <MenuItem value={nas}>{nas}</MenuItem>;
+                  } else if (!online) {
+                    return (
+                      <MenuItem value={"-1"}>
+                        {t("settings.alerts.service")}
+                      </MenuItem>
+                    );
+                  } else {
+                    return (
+                      <MenuItem value={"-1"}>
+                        {t("settings.alerts.discovery")}
+                      </MenuItem>
+                    );
+                  }
+                }, [devices, nas, online])()}
+              </Select>
+            </FormControl>
+          </Grid>
         </Grid>
-      </Grid>
-    </Container>
+      </Container>
+    </CustomTabPanel>
   );
 };

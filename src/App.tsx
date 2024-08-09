@@ -101,15 +101,20 @@ const CustomTab = styled(Tab)(() => ({
   lineHeight: 1,
 }));
 
-const CustomTabPanel = styled(TabPanel)(() => ({
+interface CustomTabPanelProps {
+  fullHeight?: boolean;
+}
+
+export const CustomTabPanel = styled(TabPanel, {
+  shouldForwardProp: (prop) => prop !== "fullHeight",
+})<CustomTabPanelProps>(({ fullHeight }) => ({
   position: "relative",
-  height: "100%",
-  overflowY: "scroll",
+  height: fullHeight ? "100%" : "auto",
 }));
 
 const TabPanelContainer = styled("div")(() => ({
-  overflow: "hidden",
   paddingBottom: 66,
+  height: "100%",
 }));
 
 const App: FunctionComponent = () => {
@@ -195,12 +200,8 @@ const App: FunctionComponent = () => {
         </ProminentToolbar>
       </DraggableAppBar>
       <TabPanelContainer>
-        <CustomTabPanel value={TabValue.GAMES}>
-          <GamesView />
-        </CustomTabPanel>
-        <CustomTabPanel value={TabValue.SETTINGS}>
-          <SettingsView />
-        </CustomTabPanel>
+        <GamesView />
+        <SettingsView />
       </TabPanelContainer>
       <ServiceStatistics />
     </TabContext>
