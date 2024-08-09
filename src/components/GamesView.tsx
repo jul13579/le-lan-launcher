@@ -1,10 +1,16 @@
-import { Box } from "@mui/material";
+import { Box, Container, styled } from "@mui/material";
 import { FunctionComponent } from "react";
 import { SelfBuildingSquareSpinner } from "react-epic-spinners";
 import { useTranslation } from "react-i18next";
 import { useLibrary } from "../hooks/useLibrary";
 import { useSettingsService } from "../hooks/useSettingsService";
 import { GameEntry } from "./GameEntry";
+
+const GameGridContainer = styled(Container)(() => ({
+  display: "flex",
+  flexWrap: "wrap",
+  justifyContent: "center",
+}));
 
 export const GamesView: FunctionComponent = () => {
   /* -------------------------------------------------------------------------- */
@@ -36,12 +42,10 @@ export const GamesView: FunctionComponent = () => {
     );
   }
   return (
-    <>
-      <Box>
-        {lib.games.map((game, index) => (
-          <GameEntry key={index} gameConfig={game} />
-        ))}
-      </Box>
-    </>
+    <GameGridContainer>
+      {lib.games.map((game, index) => (
+        <GameEntry key={index} gameConfig={game} />
+      ))}
+    </GameGridContainer>
   );
 };
