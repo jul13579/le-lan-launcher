@@ -1,23 +1,4 @@
 import {
-  Box,
-  Fab,
-  ListItemIcon,
-  Menu,
-  MenuItem,
-  styled,
-  Typography,
-} from "@mui/material";
-import {
-  FunctionComponent,
-  MouseEvent,
-  MouseEventHandler,
-  useMemo,
-  useState,
-} from "react";
-import { useLibrary } from "../hooks/useLibrary";
-import { useSyncService } from "../hooks/useSyncService";
-import Icon from "@mdi/react";
-import {
   mdiBackupRestore,
   mdiChevronDoubleRight,
   mdiClose,
@@ -28,8 +9,21 @@ import {
   mdiPause,
   mdiPlay,
 } from "@mdi/js";
+import Icon from "@mdi/react";
+import {
+  Box,
+  CircularProgress,
+  Fab,
+  ListItemIcon,
+  Menu,
+  MenuItem,
+  styled,
+  Typography,
+} from "@mui/material";
+import { FunctionComponent, MouseEvent, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useGameFolder } from "../hooks/useGameFolder";
+import { useLibrary } from "../hooks/useLibrary";
 
 const hoverAnimation = "0.2s ease-in-out";
 
@@ -95,6 +89,10 @@ const Glass = styled("div")(() => ({
   width: "200% !important",
   boxShadow: "0px 0px 20px 5px white, inset 0px 0px 20px 5px white",
   transform: "rotate(-45deg)",
+}));
+
+const TextColoredCircularProgress = styled(CircularProgress)(({ theme }) => ({
+  color: theme.palette.text.primary,
 }));
 
 interface GameEntryProps {
@@ -221,7 +219,9 @@ export const GameEntry: FunctionComponent<GameEntryProps> = ({
           <DownloadButtonsContainer>
             {subscribed && Object.keys(thisGameFolderStatus).length === 0 ? (
               // If game is subscribed but there is no syncFolderStatus yet, show loader
-              <Fab></Fab>
+              <Fab>
+                <TextColoredCircularProgress size={30} />
+              </Fab>
             ) : (
               // Else show applicable download buttons
               downloadButtons.map(
