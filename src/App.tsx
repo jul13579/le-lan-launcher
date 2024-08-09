@@ -6,6 +6,7 @@ import {
   mdiWindowMinimize,
 } from "@mdi/js";
 import Icon from "@mdi/react";
+import { TabContext, TabPanel } from "@mui/lab";
 import {
   AppBar,
   Avatar,
@@ -22,17 +23,19 @@ import {
 import { FunctionComponent, StrictMode, useState } from "react";
 import { createRoot } from "react-dom/client";
 import { useTranslation } from "react-i18next";
+import { LibraryContextProvider } from "./components/contexts/LibraryContext/LibraryContextProvider";
 import { SettingsServiceContextProvider } from "./components/contexts/SettingsService/SettingsServiceContextProvider";
 import { SyncServiceContextProvider } from "./components/contexts/SyncService/SyncServiceContextProvider";
-import { bgTransparentDarkWithBlur, CustomThemeProvider } from "./components/CustomThemeProvider";
+import {
+  bgTransparentDarkWithBlur,
+  CustomThemeProvider,
+} from "./components/CustomThemeProvider";
+import { GamesView } from "./components/GamesView";
+import { SettingsView } from "./components/SettingsView";
 import { ThemeBackground } from "./components/ThemeBackground";
+import { TabValue } from "./enums/TabValue";
 import { useSettingsService } from "./hooks/useSettingsService";
 import { useWindowControls } from "./hooks/useWindowControls";
-import { TabContext, TabPanel } from "@mui/lab";
-import { TabValue } from "./enums/TabValue";
-import { SettingsView } from "./components/SettingsView";
-import { GamesView } from "./components/GamesView";
-import { LibraryContextProvider } from "./components/contexts/LibraryContext/LibraryContextProvider";
 
 const noDrag = {
   WebkitAppRegion: "no-drag",
@@ -100,6 +103,12 @@ const CustomTab = styled(Tab)(() => ({
 const CustomTabPanel = styled(TabPanel)(() => ({
   position: "relative",
   height: "100%",
+  overflowY: "scroll",
+}));
+
+const TabPanelContainer = styled("div")(() => ({
+  overflow: "hidden",
+  paddingBottom: 66,
 }));
 
 const App: FunctionComponent = () => {
@@ -114,7 +123,7 @@ const App: FunctionComponent = () => {
   /*                                    State                                   */
   /* -------------------------------------------------------------------------- */
   const [tab, setTab] = useState(
-    setupCompleted ? TabValue.GAMES : TabValue.SETTINGS,
+    setupCompleted ? TabValue.GAMES : TabValue.SETTINGS
   );
 
   /* -------------------------------------------------------------------------- */
@@ -138,7 +147,7 @@ const App: FunctionComponent = () => {
               ].map(
                 (
                   [cb, icon, color]: [() => void, string, ButtonProps["color"]],
-                  index,
+                  index
                 ) => (
                   <WindowButton
                     key={index}
@@ -148,7 +157,7 @@ const App: FunctionComponent = () => {
                   >
                     <Icon path={icon} size={1} />
                   </WindowButton>
-                ),
+                )
               )}
             </WindowButtonsBox>
           </AppBarRow>
@@ -168,7 +177,7 @@ const App: FunctionComponent = () => {
                     string,
                     boolean,
                   ],
-                  index,
+                  index
                 ) => (
                   <CustomTab
                     key={index}
@@ -178,20 +187,20 @@ const App: FunctionComponent = () => {
                     icon={<Icon path={icon} size={1} />}
                     iconPosition="start"
                   />
-                ),
+                )
               )}
             </NonDraggableTabs>
           </AppBarRow>
         </ProminentToolbar>
       </DraggableAppBar>
-      <Box pb={"66px"} flexGrow={1}>
+      <TabPanelContainer>
         <CustomTabPanel value={TabValue.GAMES}>
           <GamesView />
         </CustomTabPanel>
         <CustomTabPanel value={TabValue.SETTINGS}>
           <SettingsView />
         </CustomTabPanel>
-      </Box>
+      </TabPanelContainer>
     </TabContext>
   );
 };
@@ -209,5 +218,5 @@ root.render(
         </LibraryContextProvider>
       </SyncServiceContextProvider>
     </SettingsServiceContextProvider>
-  </StrictMode>,
+  </StrictMode>
 );
