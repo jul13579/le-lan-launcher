@@ -43,6 +43,7 @@ interface Folder {
 }
 
 interface FolderStatus {
+  state: string;
   globalBytes: number;
   inSyncBytes: number;
   receiveOnlyTotalItems: number;

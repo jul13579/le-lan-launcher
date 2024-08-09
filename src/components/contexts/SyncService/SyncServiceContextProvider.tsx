@@ -343,7 +343,7 @@ export const SyncServiceContextProvider: FunctionComponent<
             if (!folderStatuses[data.folder]) {
               break;
             }
-            newFolderStatuses[data.folder] = (
+            newFolderStatuses[data.folder].state = (
               data as any as FolderStateChangedEvent["data"]
             ).to;
             break;
