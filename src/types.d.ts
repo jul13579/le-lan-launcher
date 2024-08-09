@@ -42,6 +42,11 @@ interface Folder {
   devices: SharedFolderDevice[];
 }
 
+interface FolderStatus {
+  globalBytes: number;
+  inSyncBytes: number;
+}
+
 interface PendingFolders {
   [folderID: string]: {
     offeredBy: {

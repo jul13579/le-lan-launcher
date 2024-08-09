@@ -5,5 +5,6 @@ export const SyncServiceContext = createContext<{
   started: boolean;
   online: boolean;
   folders: Folder[];
+  folderStatuses: Record<string, FolderStatus>;
   getDiscovery: () => Promise<AxiosResponse<unknown>>;
 }>(null);

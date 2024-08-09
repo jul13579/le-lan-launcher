@@ -1,6 +1,7 @@
 import { Box, styled } from "@mui/material";
 import { FunctionComponent, useMemo } from "react";
 import { useLibrary } from "../hooks/useLibrary";
+import { useSyncService } from "../hooks/useSyncService";
 
 const hoverAnimation = "0.2s ease-in-out";
 
@@ -72,11 +73,27 @@ export const GameEntry: FunctionComponent<GameEntryProps> = ({
   /*                                   Context                                  */
   /* -------------------------------------------------------------------------- */
   const { libFolderPath } = useLibrary();
+  const { folders, folderStatuses } = useSyncService();
 
   /* -------------------------------------------------------------------------- */
   /*                                    State                                   */
   /* -------------------------------------------------------------------------- */
-  const downloadProgress = useMemo(() => 1, []);
+  const thisGameFolder = useMemo(
+    () => folders.find(({ id }) => id === gameConfig.id),
+    [folders]
+  );
+  const thisGameFolderStatus = useMemo(
+    () => folderStatuses[gameConfig.id],
+    [folderStatuses]
+  );
+  const subscribed = useMemo(() => !!thisGameFolder, [thisGameFolder]);
+  const downloadProgress = useMemo(
+    () =>
+      subscribed && thisGameFolderStatus?.globalBytes > 0
+        ? thisGameFolderStatus?.inSyncBytes / thisGameFolderStatus?.globalBytes
+        : 0,
+    []
+  );
   const installed = useMemo(() => downloadProgress >= 1, [downloadProgress]);
 
   /* -------------------------------------------------------------------------- */

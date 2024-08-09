@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
 import {
   FunctionComponent,
   ReactNode,
@@ -95,7 +95,7 @@ export const SyncServiceContextProvider: FunctionComponent<
   /* -------------------------------------------------------------------------- */
   const { apiKey, homeDir, nas } = useForwardSlashSeparator(
     useSettingsService(),
-    ["homeDir"],
+    ["homeDir"]
   );
 
   /* -------------------------------------------------------------------------- */
@@ -111,8 +111,9 @@ export const SyncServiceContextProvider: FunctionComponent<
   const [folders, setFolders] = useState<Folder[]>([]);
   const nasDevice = useMemo(
     () => devices.find(({ deviceID }) => deviceID === nas),
-    [devices, nas],
+    [devices, nas]
   );
+  const [folderStatuses, setFolderStatuses] = useState({});
 
   /* -------------------------------------------------------------------------- */
   /*                             Component Lifecycle                            */
@@ -217,7 +218,7 @@ export const SyncServiceContextProvider: FunctionComponent<
         await SyncthingAPI.Cluster.getPendingFolders();
 
       const { libraryFolder, pendingFoldersToIgnore } = Object.entries(
-        pendingFolders,
+        pendingFolders
       ).reduce(
         (previousValue, [id, pendingFolderConfig]) => {
           const nasOfferedFolder = pendingFolderConfig.offeredBy[nas];
@@ -240,15 +241,15 @@ export const SyncServiceContextProvider: FunctionComponent<
             id: string;
             nasOfferedFolder: PendingFolders[string]["offeredBy"][string];
           }[];
-        },
+        }
       );
 
       if (libraryFolder) {
         await SyncthingAPI.Config.setFolder(
           await newSyncFolderObject(
             gamelibDirId,
-            libraryFolder.nasOfferedFolder.label,
-          ),
+            libraryFolder.nasOfferedFolder.label
+          )
         );
       }
       if (pendingFoldersToIgnore.length > 0 && nasDevice) {
@@ -261,7 +262,7 @@ export const SyncServiceContextProvider: FunctionComponent<
               id,
               label,
               time: ignoreTimestamp,
-            }),
+            })
           ),
         ];
         SyncthingAPI.Config.setDevice({
@@ -273,10 +274,29 @@ export const SyncServiceContextProvider: FunctionComponent<
     subscribeToLibraryFolderAndHidePendingFolders();
     const interval = setInterval(
       subscribeToLibraryFolderAndHidePendingFolders,
-      5000,
+      5000
     );
     return () => clearInterval(interval);
   }, [nasDevice]);
+
+  // Get initial folder states for folder that or not yet part of `folderStatuses`
+  // ! This is necessary for instances where folder states did not change since the app started (e.g. after startup)
+  useEffect(() => {
+    (async () => {
+      const missingFolderStatusResponses = await Promise.all(
+        folders
+          .filter(({ id }) => !Object.keys(folderStatuses).includes(id))
+          .map(async ({ id }) => [
+            id,
+            (await SyncthingAPI.DB.folderStatus(id)).data,
+          ])
+      );
+      setFolderStatuses((currentValue: Record<any, any>) => ({
+        ...currentValue,
+        ...Object.fromEntries(missingFolderStatusResponses),
+      }));
+    })();
+  }, [folders]);
 
   /* -------------------------------------------------------------------------- */
   /*                             Instance Functions                             */
@@ -305,13 +325,13 @@ export const SyncServiceContextProvider: FunctionComponent<
         }),
       };
     },
-    [homeDir, devices],
+    [homeDir, devices]
   );
 
   function openSyncthingUI() {
     return window.ipcRenderer.invoke(
       "controlSyncService",
-      SyncServiceOperations.OPEN_SYNCTHING_UI,
+      SyncServiceOperations.OPEN_SYNCTHING_UI
     );
   }
   async function start() {
@@ -322,13 +342,13 @@ export const SyncServiceContextProvider: FunctionComponent<
       const retVal = await window.ipcRenderer.invoke(
         "controlSyncService",
         SyncServiceOperations.START,
-        homeDir,
+        homeDir
       );
       setStarted(true);
       return retVal;
     } catch (e) {
       console.error(
-        `Encountered error when trying to start sync service: ${e}`,
+        `Encountered error when trying to start sync service: ${e}`
       );
     }
   }
@@ -340,6 +360,7 @@ export const SyncServiceContextProvider: FunctionComponent<
     started,
     online,
     folders,
+    folderStatuses,
     getDiscovery: SyncthingAPI.System.getDiscovery,
   };
   return (
