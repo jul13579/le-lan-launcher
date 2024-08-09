@@ -37,14 +37,19 @@ export const CustomThemeProvider: FunctionComponent<
           },
         },
       },
+      // Menus should also be dark with blurry backdrop filter
+      MuiMenu: {
+        styleOverrides: {
+          paper: {
+            ...bgTransparentDarkWithBlur,
+          },
+        },
+      },
     },
     palette: {
       mode: "dark",
       primary: {
         main: primaryColorHex,
-      },
-      background: {
-        paper: "#000",
       },
     },
   });

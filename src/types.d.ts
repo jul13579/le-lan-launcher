@@ -45,6 +45,7 @@ interface Folder {
 interface FolderStatus {
   globalBytes: number;
   inSyncBytes: number;
+  receiveOnlyTotalItems: number;
 }
 
 interface PendingFolders {
@@ -65,10 +66,12 @@ interface Game {
   launch: {
     exe: string;
   };
-  moreLaunchs: {
-    text: string;
-    exe: string;
-  };
+  moreLaunchs: [
+    {
+      text: string;
+      exe: string;
+    },
+  ];
   nameConfig: {
     env: string;
     file: string;
