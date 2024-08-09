@@ -1,4 +1,4 @@
-import axios, { AxiosResponse } from "axios";
+import axios from "axios";
 import {
   FunctionComponent,
   ReactNode,
@@ -9,13 +9,13 @@ import {
 } from "react";
 import { gamelibDirId } from "../../../config/folder";
 import { baseUrl } from "../../../config/service";
+import GameOperations from "../../../enums/GameOperations";
+import SyncEvents from "../../../enums/SyncEvents";
 import SyncServiceOperations from "../../../enums/SyncServiceOperations";
 import { useForwardSlashSeparator } from "../../../hooks/useForwardSlashSeparator";
 import { useSettingsService } from "../../../hooks/useSettingsService";
-import { SyncServiceContext } from "./SyncServiceContext";
-import SyncEvents from "../../../enums/SyncEvents";
 import { calculateDownloadProgress } from "../../../utils/calculateDownloadProgress";
-import GameOperations from "../../../enums/GameOperations";
+import { SyncServiceContext } from "./SyncServiceContext";
 
 const apiBase = `${baseUrl}/rest`;
 
