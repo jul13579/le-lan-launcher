@@ -362,6 +362,7 @@ export const SyncServiceContextProvider: FunctionComponent<
     folders,
     folderStatuses,
     getDiscovery: SyncthingAPI.System.getDiscovery,
+    revertFolder: SyncthingAPI.DB.revertFolder,
   };
   return (
     <SyncServiceContext.Provider value={state}>

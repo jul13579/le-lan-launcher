@@ -7,4 +7,5 @@ export const SyncServiceContext = createContext<{
   folders: Folder[];
   folderStatuses: Record<string, FolderStatus>;
   getDiscovery: () => Promise<AxiosResponse<unknown>>;
+  revertFolder: (id: string) => Promise<AxiosResponse<unknown>>;
 }>(null);

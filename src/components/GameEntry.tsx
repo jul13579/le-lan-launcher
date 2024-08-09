@@ -24,6 +24,7 @@ import { FunctionComponent, MouseEvent, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useGameFolder } from "../hooks/useGameFolder";
 import { useLibrary } from "../hooks/useLibrary";
+import { useGameControls } from "../hooks/useGameControls";
 
 const hoverAnimation = "0.2s ease-in-out";
 
@@ -122,6 +123,9 @@ export const GameEntry: FunctionComponent<GameEntryProps> = ({
   );
   const installed = useMemo(() => downloadProgress >= 1, [downloadProgress]);
 
+  const { browse, download, execute, pause, remove, reset, resume } =
+    useGameControls(thisGameFolder, gameConfig);
+
   const downloadButtons = useMemo(
     () => [
       { click: () => download, show: !subscribed, icon: mdiDownload },
@@ -139,13 +143,13 @@ export const GameEntry: FunctionComponent<GameEntryProps> = ({
   const gameMenuButtons = useMemo(
     () => [
       {
-        click: () => execute,
+        click: () => execute(gameConfig.launch.exe),
         show: true,
         icon: mdiPlay,
         text: t("gameEntry.play"),
       },
       ...(gameConfig.moreLaunchs || []).map((item) => ({
-        click: () => execute,
+        click: () => execute(item.exe),
         show: true,
         icon: mdiDotsHorizontal,
         text: item.text,
@@ -189,14 +193,6 @@ export const GameEntry: FunctionComponent<GameEntryProps> = ({
   /* -------------------------------------------------------------------------- */
   /*                             Instance functions                             */
   /* -------------------------------------------------------------------------- */
-  const download = () => {};
-  const pause = () => {};
-  const resume = () => {};
-  const remove = () => {};
-  const execute = () => {};
-  const reset = () => {};
-  const browse = () => {};
-
   const handleMenuOpenClick = (event: MouseEvent<HTMLDivElement>) => {
     setAnchorEl(event.currentTarget);
   };
