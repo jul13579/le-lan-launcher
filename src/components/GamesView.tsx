@@ -10,6 +10,7 @@ const GameGridContainer = styled(Container)(() => ({
   display: "flex",
   flexWrap: "wrap",
   justifyContent: "center",
+  userSelect: "none",
 }));
 
 export const GamesView: FunctionComponent = () => {
