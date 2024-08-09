@@ -352,7 +352,10 @@ export const SyncServiceContextProvider: FunctionComponent<
       const progress = Math.min(
         ...Object.values(newFolderStatuses).map(calculateDownloadProgress),
       );
-      window.ipcRenderer.send("setProgress", progress);
+      window.ipcRenderer.send(
+        "setProgress",
+        progress > 0 && progress < 1 ? progress : -1,
+      );
 
       setFolderStatuses(newFolderStatuses);
       setLastEventId(Math.max(...events.map(({ id }) => id)));
