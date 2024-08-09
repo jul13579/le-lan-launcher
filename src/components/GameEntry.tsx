@@ -24,12 +24,11 @@ interface GameEntryRootProps {
 }
 
 const GameEntryRoot = styled("div")<GameEntryRootProps>(
-  ({ theme, installed, thumbnail }) => ({
+  ({ installed, thumbnail }) => ({
     position: "relative",
     width: "190px",
     height: `${190 * 1.5}px`,
     overflow: "hidden",
-    margin: theme.spacing(1.5),
     // Game image styling
     backgroundImage: `url(${thumbnail})`,
     backgroundSize: "cover",
@@ -132,7 +131,7 @@ export const GameEntry: FunctionComponent<GameEntryProps> = ({
   /*                             Instance functions                             */
   /* -------------------------------------------------------------------------- */
   const handleMenuOpenClick = (event: MouseEvent<HTMLDivElement>) => {
-    setAnchorEl(event.currentTarget);
+    setAnchorEl(event.currentTarget.parentElement.nextSibling);
   };
   const handleMenuClose = () => {
     setAnchorEl(null);
@@ -142,7 +141,7 @@ export const GameEntry: FunctionComponent<GameEntryProps> = ({
   /*                                  Rendering                                 */
   /* -------------------------------------------------------------------------- */
   return (
-    <>
+    <Box display={"flex"} flexDirection={"row"} m={1.5}>
       <GameEntryRoot
         installed={installed}
         thumbnail={`game://${libFolderPath}/${gameConfig.cover}`}
@@ -176,6 +175,8 @@ export const GameEntry: FunctionComponent<GameEntryProps> = ({
         )}
       </GameEntryRoot>
 
+      {/* Menu anchor helper (such that the menu does not move because of the hover effect) */}
+      <div />
       {/* Game Menu */}
       <Menu
         anchorEl={anchorEl}
@@ -202,6 +203,6 @@ export const GameEntry: FunctionComponent<GameEntryProps> = ({
             )
         )}
       </Menu>
-    </>
+    </Box>
   );
 };
