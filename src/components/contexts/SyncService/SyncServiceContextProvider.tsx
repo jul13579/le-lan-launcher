@@ -208,6 +208,11 @@ export const SyncServiceContextProvider: FunctionComponent<
    * Auto-subscribe to library folder & hide pending folders from Syncthing UI
    */
   useEffect(() => {
+    // Skip hook if `nasDevice` is not set
+    if (!nasDevice) {
+      return
+    }
+
     const subscribeToLibraryFolderAndHidePendingFolders = async () => {
       const { data: pendingFolders } =
         await SyncthingAPI.Cluster.getPendingFolders();
