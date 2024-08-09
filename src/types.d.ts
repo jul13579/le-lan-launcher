@@ -59,6 +59,26 @@ interface PendingFolders {
   };
 }
 
+interface FolderEvent {
+  id: number;
+  type: SyncEvents;
+  data: {
+    folder: string;
+  };
+}
+
+interface FolderSummaryEvent extends FolderEvent {
+  data: {
+    summary: any;
+  };
+}
+
+interface FolderStateChangedEvent extends FolderEvent {
+  data: {
+    to: any;
+  };
+}
+
 interface Game {
   id: string;
   title: string;

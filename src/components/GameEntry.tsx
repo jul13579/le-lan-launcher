@@ -15,6 +15,7 @@ import { useDownloadButtons } from "../hooks/useDownloadButtons";
 import { useGameFolder } from "../hooks/useGameFolder";
 import { useGameMenuButtons } from "../hooks/useGameMenuButtons";
 import { useLibrary } from "../hooks/useLibrary";
+import { calculateDownloadProgress } from "../utils/calculateDownloadProgress";
 
 const hoverAnimation = "0.2s ease-in-out";
 
@@ -105,10 +106,7 @@ export const GameEntry: FunctionComponent<GameEntryProps> = ({
   const [thisGameFolder, thisGameFolderStatus] = useGameFolder(gameConfig);
   const subscribed = useMemo(() => !!thisGameFolder, [thisGameFolder]);
   const downloadProgress = useMemo(
-    () =>
-      subscribed && thisGameFolderStatus?.globalBytes > 0
-        ? thisGameFolderStatus?.inSyncBytes / thisGameFolderStatus?.globalBytes
-        : 0,
+    () => subscribed && calculateDownloadProgress(thisGameFolderStatus),
     [subscribed, thisGameFolderStatus],
   );
   const installed = useMemo(() => downloadProgress >= 1, [downloadProgress]);

@@ -13,6 +13,8 @@ import SyncServiceOperations from "../../../enums/SyncServiceOperations";
 import { useForwardSlashSeparator } from "../../../hooks/useForwardSlashSeparator";
 import { useSettingsService } from "../../../hooks/useSettingsService";
 import { SyncServiceContext } from "./SyncServiceContext";
+import SyncEvents from "../../../enums/SyncEvents";
+import { calculateDownloadProgress } from "../../../utils/calculateDownloadProgress";
 
 const apiBase = `${baseUrl}/rest`;
 
@@ -77,8 +79,10 @@ const SyncthingAPI = {
     },
   },
   Events: {
-    eventsSince(lastSeenID: string) {
-      return axios.get(`${apiBase}/events?timeout=1&since=${lastSeenID}`);
+    since(lastSeenID: number) {
+      return axios.get<FolderEvent[]>(
+        `${apiBase}/events?timeout=1&since=${lastSeenID}`,
+      );
     },
     latestEvents() {
       return axios.get(`${apiBase}/events?limit=1`);
@@ -116,7 +120,14 @@ export const SyncServiceContextProvider: FunctionComponent<
     () => devices.find(({ deviceID }) => deviceID === nas),
     [devices, nas],
   );
-  const [folderStatuses, setFolderStatuses] = useState({});
+  const [folderStatuses, setFolderStatuses] = useState<
+    Record<string, FolderStatus>
+  >({});
+
+  /**
+   * Remember latest event ID
+   */
+  const [lastEventId, setLastEventId] = useState(0);
 
   /* -------------------------------------------------------------------------- */
   /*                             Component Lifecycle                            */
@@ -300,6 +311,53 @@ export const SyncServiceContextProvider: FunctionComponent<
       }));
     })();
   }, [folders]);
+
+  useEffect(() => {
+    const getEvents = async () => {
+      if (!online) {
+        return;
+      }
+
+      const { data: events } = await SyncthingAPI.Events.since(lastEventId);
+
+      const newFolderStatuses: Record<string, FolderStatus> = {
+        ...folderStatuses,
+      };
+      events.forEach((event) => {
+        const { data, type } = event;
+        switch (type) {
+          case SyncEvents.FOLDER_SUMMARY:
+            newFolderStatuses[data.folder] = (
+              data as any as FolderSummaryEvent["data"]
+            ).summary;
+            break;
+          case SyncEvents.STATE_CHANGED:
+            if (!folderStatuses[data.folder]) {
+              break;
+            }
+            newFolderStatuses[data.folder] = (
+              data as any as FolderStateChangedEvent["data"]
+            ).to;
+            break;
+          case SyncEvents.FOLDER_REJECTED:
+            delete newFolderStatuses[data.folder];
+            break;
+        }
+      });
+
+      const progress = Math.min(
+        ...Object.values(newFolderStatuses).map(calculateDownloadProgress),
+      );
+      window.ipcRenderer.send("setProgress", progress);
+
+      setFolderStatuses(newFolderStatuses);
+      setLastEventId(Math.max(...events.map(({ id }) => id)));
+    };
+
+    getEvents();
+    const interval = setInterval(getEvents, 5000);
+    return () => clearInterval(interval);
+  }, [online, lastEventId]);
 
   /* -------------------------------------------------------------------------- */
   /*                             Instance Functions                             */
