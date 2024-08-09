@@ -26,7 +26,7 @@ export const useGameControls = (folder: Folder, gameConfig: Game) => {
         folder,
         executable,
         playerName,
-        debug
+        debug,
       );
     };
     const reset = () => {

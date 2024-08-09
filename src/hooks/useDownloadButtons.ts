@@ -10,11 +10,11 @@ import {
 export const useDownloadButtons = (
   subscribed: boolean,
   thisGameFolder: Folder,
-  gameConfig: Game
+  gameConfig: Game,
 ) => {
   const { download, pause, resume, remove } = useGameControls(
     thisGameFolder,
-    gameConfig
+    gameConfig,
   );
 
   return useMemo(
@@ -28,6 +28,6 @@ export const useDownloadButtons = (
       },
       { click: remove, show: subscribed, icon: mdiClose },
     ],
-    [subscribed, thisGameFolder]
+    [subscribed, thisGameFolder],
   );
 };

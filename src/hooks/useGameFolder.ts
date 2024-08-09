@@ -6,11 +6,11 @@ export const useGameFolder = (gameConfig: Game): [Folder, FolderStatus] => {
 
   const thisGameFolder = useMemo(
     () => folders.find(({ id }) => id === gameConfig.id),
-    [folders]
+    [folders],
   );
   const thisGameFolderStatus = useMemo(
     () => folderStatuses[gameConfig.id],
-    [folderStatuses]
+    [folderStatuses],
   );
 
   return [thisGameFolder, thisGameFolderStatus];

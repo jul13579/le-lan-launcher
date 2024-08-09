@@ -52,7 +52,7 @@ const GameEntryRoot = styled("div")<GameEntryRootProps>(
           },
         }
       : {}),
-  })
+  }),
 );
 
 interface ProgressIndicatorProps {
@@ -63,7 +63,7 @@ const ProgressIndicator = styled("div")<ProgressIndicatorProps>(
   ({ downloadProgress }) => ({
     background: "rgba(0, 0, 0, 0.7)",
     top: `${-downloadProgress * 100}% !important`,
-  })
+  }),
 );
 
 const DownloadButtonsContainer = styled("div")(() => ({
@@ -109,20 +109,20 @@ export const GameEntry: FunctionComponent<GameEntryProps> = ({
       subscribed && thisGameFolderStatus?.globalBytes > 0
         ? thisGameFolderStatus?.inSyncBytes / thisGameFolderStatus?.globalBytes
         : 0,
-    [subscribed, thisGameFolderStatus]
+    [subscribed, thisGameFolderStatus],
   );
   const installed = useMemo(() => downloadProgress >= 1, [downloadProgress]);
 
   const downloadButtons = useDownloadButtons(
     subscribed,
     thisGameFolder,
-    gameConfig
+    gameConfig,
   );
 
   const gameMenuButtons = useGameMenuButtons(
     thisGameFolder,
     thisGameFolderStatus,
-    gameConfig
+    gameConfig,
   );
 
   const [anchorEl, setAnchorEl] = useState(null);
@@ -166,7 +166,7 @@ export const GameEntry: FunctionComponent<GameEntryProps> = ({
                         <Icon path={icon} size={1.5} />
                       </Fab>
                     </Box>
-                  )
+                  ),
               )
             )}
           </DownloadButtonsContainer>
@@ -206,7 +206,7 @@ export const GameEntry: FunctionComponent<GameEntryProps> = ({
                 </ListItemIcon>
                 <Typography mx={1}>{text}</Typography>
               </MenuItem>
-            )
+            ),
         )}
       </Menu>
     </Box>

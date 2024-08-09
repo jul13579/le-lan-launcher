@@ -14,11 +14,11 @@ import {
 export const useGameMenuButtons = (
   thisGameFolder: Folder,
   thisGameFolderStatus: FolderStatus,
-  gameConfig: Game
+  gameConfig: Game,
 ) => {
   const { pause, resume, remove, execute, reset, browse } = useGameControls(
     thisGameFolder,
-    gameConfig
+    gameConfig,
   );
   const { t } = useTranslation();
 
@@ -67,6 +67,6 @@ export const useGameMenuButtons = (
         text: t("gameEntry.delete"),
       },
     ],
-    [thisGameFolder, thisGameFolderStatus, t]
+    [thisGameFolder, thisGameFolderStatus, t],
   );
 };
