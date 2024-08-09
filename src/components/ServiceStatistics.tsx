@@ -8,6 +8,7 @@ const Footer = styled("div")(() => ({
   width: '100vw',
   bottom: 0,
   left: 0,
+  zIndex: 9999,
   ...bgTransparentDarkWithBlur,
 }));
 
