@@ -1,9 +1,3 @@
-import { Container, styled } from "@mui/material";
-import { FunctionComponent, useEffect, useMemo, useState } from "react";
-import { bgTransparentDarkWithBlur } from "./CustomThemeProvider";
-import { useSyncService } from "../hooks/useSyncService";
-import { useSettingsService } from "../hooks/useSettingsService";
-import Icon from "@mdi/react";
 import {
   mdiCloudCheck,
   mdiCloudOffOutline,
@@ -11,8 +5,14 @@ import {
   mdiDownload,
   mdiUpload,
 } from "@mdi/js";
+import Icon from "@mdi/react";
+import { Container, styled, Typography } from "@mui/material";
+import { FunctionComponent, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { useSettingsService } from "../hooks/useSettingsService";
+import { useSyncService } from "../hooks/useSyncService";
 import { latestBpsFromSamples } from "../utils/latestBpsFromSamples";
+import { bgTransparentDarkWithBlur } from "./CustomThemeProvider";
 
 const Footer = styled("div")(({ theme }) => ({
   height: 66,
@@ -56,7 +56,7 @@ export const ServiceStatistics: FunctionComponent = () => {
 
   const nasConnected = useMemo(
     () => connections?.connections?.[nas]?.connected || false,
-    [connections, nas],
+    [connections, nas]
   );
   const latestInBps = useMemo(() => latestBpsFromSamples(inBps), [inBps]);
   const latestOutBps = useMemo(() => latestBpsFromSamples(outBps), [outBps]);
@@ -116,9 +116,15 @@ export const ServiceStatistics: FunctionComponent = () => {
         </div>
         <div>
           <Icon path={mdiDownload} size={1} color="green" />
+          <Typography px={1}>
+            {t("{{val, mbps}}", { val: latestInBps / 1024 ** 2 })}
+          </Typography>
         </div>
         <div>
           <Icon path={mdiUpload} size={1} color="red" />
+          <Typography px={1}>
+            {t("{{val, mbps}}", { val: latestOutBps / 1024 ** 2 })}
+          </Typography>
         </div>
       </Container>
     </Footer>

@@ -21,4 +21,14 @@ i18n.use(initReactI18next).init({
   },
 });
 
+i18n.services.formatter.addCached("mbps", (lng, options) => (value) => {
+  const formatter = Intl.NumberFormat(lng, {
+    style: "unit",
+    unit: "megabyte-per-second",
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  });
+  return formatter.format(value);
+});
+
 export { i18n };
