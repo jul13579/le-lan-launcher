@@ -106,6 +106,12 @@ interface Library {
 }
 
 interface Connections {
+  connections: Record<
+    string,
+    {
+      connected: boolean;
+    }
+  >;
   total: {
     inBytesTotal: number;
     outBytesTotal: number;
