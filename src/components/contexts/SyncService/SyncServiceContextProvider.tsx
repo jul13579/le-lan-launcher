@@ -420,12 +420,6 @@ export const SyncServiceContextProvider: FunctionComponent<
     setLastEventId(Math.max(...events.map(({ id }) => id)));
   };
 
-  const openSyncthingUI = () =>
-    window.ipcRenderer.invoke(
-      "controlSyncService",
-      SyncServiceOperations.OPEN_SYNCTHING_UI,
-    );
-
   async function start() {
     if (started || !homeDir) {
       return;

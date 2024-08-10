@@ -23,12 +23,15 @@ export const useLibraryWatcher = () => ({
    * Tear-down library watcher.
    * @param {string} libConfigPath The path to the config file to unwatch.
    */
-  unwatch: (libConfigPath: string) => {
+  unwatch: (
+    libConfigPath: string,
+    callback: Parameters<IpcRenderer["on"]>[1],
+  ) => {
     window.ipcRenderer.send(
       "controlLibrary",
       LibraryOperations.UNWATCH,
       libConfigPath,
     );
-    window.ipcRenderer.removeAllListeners("library");
+    window.ipcRenderer.off("library", callback);
   },
 });

@@ -11,7 +11,7 @@ import {
   defaultLocale,
   defaultTheme,
 } from "../../../config/app";
-import { IpcRendererEvent } from "electron";
+import { IpcRenderer, IpcRendererEvent } from "electron";
 import { useTranslation } from "react-i18next";
 import hslToHex from "hsl-to-hex";
 
@@ -97,11 +97,16 @@ export const SettingsServiceContextProvider: FunctionComponent<
   }, [locale]);
 
   useEffect(() => {
-    const listener = (event: IpcRendererEvent, apiKey: string) => {
+    const listener: Parameters<IpcRenderer["on"]>[1] = (
+      event,
+      apiKey: string,
+    ) => {
       setApiKey(apiKey);
     };
     window.ipcRenderer.on("setApiKey", listener);
-    () => window.ipcRenderer.removeListener("setApiKey", listener);
+    () => {
+      window.ipcRenderer.off("setApiKey", listener);
+    };
   }, []);
 
   /* -------------------------------------------------------------------------- */

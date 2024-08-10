@@ -15,7 +15,10 @@ export function SyncServiceMainController(win: BrowserWindow) {
   let apiKey: string;
   let syncServiceProcess: ReturnType<typeof spawn>;
 
-  function _sendSyncServiceOutput(type: "stdout" | "stderr", message: string) {
+  function _sendSyncServiceOutput(
+    type: SyncServiceMessageObj["type"],
+    message: SyncServiceMessageObj["message"],
+  ) {
     try {
       win.webContents.send("syncService", {
         type,

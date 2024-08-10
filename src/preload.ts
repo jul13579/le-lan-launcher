@@ -28,14 +28,12 @@ contextBridge.exposeInMainWorld("ipcRenderer", {
       ipcRenderer.on(channel, func);
     }
   },
-  removeAllListeners: () => {
-    return ipcRenderer.removeAllListeners();
+  off: (channel, func) => {
+    return ipcRenderer.off(channel, func);
   },
 } as {
   send: typeof ipcRenderer.send;
   invoke: typeof ipcRenderer.invoke;
   on: typeof ipcRenderer.on;
-  removeAllListeners: () => ReturnType<
-    Electron.IpcRenderer["removeAllListeners"]
-  >;
+  off: typeof ipcRenderer.off;
 });

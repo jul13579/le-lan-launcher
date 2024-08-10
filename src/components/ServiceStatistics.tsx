@@ -75,7 +75,6 @@ export const ServiceStatistics: FunctionComponent = () => {
   /* -------------------------------------------------------------------------- */
   const [status, setStatus] = useState(undefined);
   const [connections, setConnections] = useState<Connections>(undefined);
-  const [serviceMessages, setServiceMessages] = useState([]);
   const [inBps, setInBps] = useState(new Array(sampleCount).fill([0, 0]));
   const [outBps, setOutBps] = useState(new Array(sampleCount).fill([0, 0]));
 
@@ -89,13 +88,6 @@ export const ServiceStatistics: FunctionComponent = () => {
   /* -------------------------------------------------------------------------- */
   /*                             Component Lifecycle                            */
   /* -------------------------------------------------------------------------- */
-  // Setup IPC handler for sync-service startup notifications
-  useEffect(() => {
-    window.ipcRenderer.on("syncService", async (event, messageObj) => {
-      setServiceMessages((currentValue) => [...currentValue, messageObj]);
-    });
-  }, []);
-
   // Setup periodic task to fetch sync-service status
   useEffect(() => {
     if (!online) {

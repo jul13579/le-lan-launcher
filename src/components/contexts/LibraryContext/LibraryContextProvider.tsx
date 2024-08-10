@@ -11,6 +11,7 @@ import { useSyncService } from "../../../hooks/useSyncService";
 import { gamelibConfig, gamelibDirId } from "../../../config/folder";
 import { useForwardSlashSeparator } from "../../../hooks/useForwardSlashSeparator";
 import { useSettingsService } from "../../../hooks/useSettingsService";
+import { IpcRenderer } from "electron";
 
 interface LibraryContextProviderProps {
   children: ReactNode;
@@ -56,8 +57,10 @@ export const LibraryContextProvider: FunctionComponent<
    */
   useEffect(() => {
     if (!libConfigPath) return;
-    watch(libConfigPath, (event, lib) => setLib(lib));
-    return () => unwatch(libConfigPath);
+    const handler: Parameters<IpcRenderer["on"]>[1] = (event, lib: Library) =>
+      setLib(lib);
+    watch(libConfigPath, handler);
+    return () => unwatch(libConfigPath, handler);
   }, [libConfigPath]);
 
   /* -------------------------------------------------------------------------- */

@@ -117,3 +117,9 @@ interface Connections {
     outBytesTotal: number;
   };
 }
+
+type SyncServiceMessageType = "stdout" | "stderr";
+interface SyncServiceMessageObj {
+  type: SyncServiceMessageType;
+  message: string;
+}
