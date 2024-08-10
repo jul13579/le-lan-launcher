@@ -39,7 +39,7 @@ const SyncthingAPI = {
       );
     },
     connections() {
-      return axios.get(`${apiBase}/system/connections`);
+      return axios.get<Connections>(`${apiBase}/system/connections`);
     },
     getDiscovery() {
       return axios.get(`${apiBase}/system/discovery`);
@@ -484,6 +484,8 @@ export const SyncServiceContextProvider: FunctionComponent<
     downloadGame,
     unPauseGame,
     deleteGame,
+    getStatus: SyncthingAPI.System.status,
+    getConnections: SyncthingAPI.System.connections,
   };
   return (
     <SyncServiceContext.Provider value={state}>

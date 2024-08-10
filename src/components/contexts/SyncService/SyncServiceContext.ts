@@ -11,4 +11,6 @@ export const SyncServiceContext = createContext<{
   downloadGame: (gameConfig: Game) => Promise<void>;
   unPauseGame: (folder: Folder, pause: boolean) => Promise<void>;
   deleteGame: (folder: Folder) => Promise<void>;
+  getStatus: () => Promise<AxiosResponse<unknown>>;
+  getConnections: () => Promise<AxiosResponse<Connections>>;
 }>(null);

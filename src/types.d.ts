@@ -104,3 +104,10 @@ interface Game {
 interface Library {
   games: Game[];
 }
+
+interface Connections {
+  total: {
+    inBytesTotal: number;
+    outBytesTotal: number;
+  };
+}
