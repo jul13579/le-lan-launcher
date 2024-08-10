@@ -3,6 +3,7 @@ import { createTheme } from "@mui/material";
 import { FunctionComponent, ReactNode } from "react";
 import { StyleSheetManager } from "styled-components";
 import { useSettingsService } from "../hooks/useSettingsService";
+import { green, red, yellow } from "@mui/material/colors";
 
 export const bgTransparentDark = {
   background: "rgba(0, 0, 0, 0.6)",
@@ -21,7 +22,7 @@ export const CustomThemeProvider: FunctionComponent<
   CustomThemeProviderProps
 > = ({ children }) => {
   const { primaryColorHex } = useSettingsService();
-  const theme = createTheme({
+  let theme = createTheme({
     components: {
       // FABs for some reason have white background in dark theme. The below fixes the styling.
       MuiFab: {
@@ -51,6 +52,28 @@ export const CustomThemeProvider: FunctionComponent<
       primary: {
         main: primaryColorHex,
       },
+    },
+  });
+  theme = createTheme(theme, {
+    palette: {
+      green: theme.palette.augmentColor({
+        color: {
+          main: green.A700,
+        },
+        name: "green",
+      }),
+      yellow: theme.palette.augmentColor({
+        color: {
+          main: yellow.A700,
+        },
+        name: "yellow",
+      }),
+      red: theme.palette.augmentColor({
+        color: {
+          main: red.A700,
+        },
+        name: "red",
+      }),
     },
   });
 

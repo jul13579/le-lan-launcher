@@ -5,22 +5,22 @@ import { IpcRenderer } from "electron";
 import { FunctionComponent, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import SyncServiceOperations from "../enums/SyncServiceOperations";
+import { useSyncService } from "../hooks/useSyncService";
+import { useSettingsService } from "../hooks/useSettingsService";
+import { green } from "@mui/material/colors";
 
 const ConsoleViewContainer = styled("div")(() => ({
   display: "flex",
   flexDirection: "column",
-}));
-
-const ConsoleViewHeader = styled("span")(() => ({
-  whiteSpace: "nowrap",
-  textOverflow: "ellipsis",
-  overflow: "hidden",
+  maxHeight: "100%",
 }));
 
 export const ConsoleView: FunctionComponent = () => {
   /* -------------------------------------------------------------------------- */
   /*                                   Context                                  */
   /* -------------------------------------------------------------------------- */
+  const { online } = useSyncService();
+  const { homeDir } = useSettingsService();
   const { t } = useTranslation();
 
   /* -------------------------------------------------------------------------- */
@@ -78,23 +78,25 @@ export const ConsoleView: FunctionComponent = () => {
           </IconButton>
         </div>
         <div>
-          <IconButton>
-            <Icon path={mdiPlay} size={1} color="green" />
+          <IconButton disabled={online || !homeDir} color="green">
+            <Icon path={mdiPlay} size={1} />
           </IconButton>
-          <IconButton>
-            <Icon path={mdiRestart} size={1} color="yellow" />
+          <IconButton disabled={!online} color="yellow">
+            <Icon path={mdiRestart} size={1} />
           </IconButton>
-          <IconButton>
-            <Icon path={mdiStop} size={1} color="red" />
+          <IconButton disabled={!online} color="red">
+            <Icon path={mdiStop} size={1} />
           </IconButton>
         </div>
       </Box>
-      <Box height={"100%"}>
+      <Box height={"100%"} whiteSpace={"pre"} overflow={"auto"}>
         {serviceMessages.map((messageObj, index) => (
           <span
             key={index}
             style={{ color: messageObj.type === "stderr" ? "red" : "inherit" }}
-          ></span>
+          >
+            {messageObj.message}
+          </span>
         ))}
       </Box>
     </ConsoleViewContainer>

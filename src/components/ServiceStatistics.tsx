@@ -6,7 +6,14 @@ import {
   mdiUpload,
 } from "@mdi/js";
 import Icon from "@mdi/react";
-import { Container, styled, Theme, Typography } from "@mui/material";
+import {
+  Box,
+  Container,
+  styled,
+  Theme,
+  Typography,
+  useTheme,
+} from "@mui/material";
 import { FunctionComponent, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useSettingsService } from "../hooks/useSettingsService";
@@ -69,6 +76,7 @@ export const ServiceStatistics: FunctionComponent = () => {
   const { nas } = useSettingsService();
   const { online, getStatus, getConnections } = useSyncService();
   const { t } = useTranslation();
+  const theme = useTheme();
 
   /* -------------------------------------------------------------------------- */
   /*                                    State                                   */
@@ -119,9 +127,11 @@ export const ServiceStatistics: FunctionComponent = () => {
   return (
     <Footer>
       <StatisticsInsights>
-        <ConsoleView />
-        <BarChart />
-        <BarChart />
+        <Box maxWidth={"100%"} overflow={"hidden"}>
+          <ConsoleView />
+          <BarChart />
+          <BarChart />
+        </Box>
       </StatisticsInsights>
       <StatisticsOverview>
         <div>
@@ -137,13 +147,13 @@ export const ServiceStatistics: FunctionComponent = () => {
           />
         </div>
         <div>
-          <Icon path={mdiDownload} size={1} color="green" />
+          <Icon path={mdiDownload} size={1} color={theme.palette.green.main} />
           <Typography px={1}>
             {t("{{val, mbps}}", { val: latestInBps / 1024 ** 2 })}
           </Typography>
         </div>
         <div>
-          <Icon path={mdiUpload} size={1} color="red" />
+          <Icon path={mdiUpload} size={1} color={theme.palette.red.main} />
           <Typography px={1}>
             {t("{{val, mbps}}", { val: latestOutBps / 1024 ** 2 })}
           </Typography>
