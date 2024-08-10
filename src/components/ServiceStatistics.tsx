@@ -6,13 +6,15 @@ import {
   mdiUpload,
 } from "@mdi/js";
 import Icon from "@mdi/react";
-import { Container, styled, Typography } from "@mui/material";
+import { Container, styled, Theme, Typography } from "@mui/material";
 import { FunctionComponent, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useSettingsService } from "../hooks/useSettingsService";
 import { useSyncService } from "../hooks/useSyncService";
 import { latestBpsFromSamples } from "../utils/latestBpsFromSamples";
 import { bgTransparentDarkWithBlur } from "./CustomThemeProvider";
+import { ConsoleView } from "./ConsoleView";
+import { BarChart } from "./BarChart";
 
 const footerHeight = 66;
 const popupHeight = 250;
@@ -27,24 +29,34 @@ const Footer = styled("div")(({ theme }) => ({
   zIndex: 9999,
   transition: "grid-template-rows 0.1s linear",
   ...bgTransparentDarkWithBlur,
-  "> div": {
-    height: "100%",
-    width: "100%",
-    overflow: "hidden",
-  },
-  "> div: nth-of-type(2)": {
-    display: "grid",
-    gridTemplateColumns: "repeat(3, 1fr)",
-    gridGap: theme.spacing(2),
-    userSelect: "none",
-    "> div": {
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
-    },
-  },
   ":hover": {
     gridTemplateRows: `${popupHeight}px ${footerHeight}px`,
+  },
+}));
+
+const FooterItem = ({ theme }: { theme: Theme }) => ({
+  height: "100%",
+  width: "100%",
+  overflow: "hidden",
+  display: "grid",
+  gridTemplateColumns: "repeat(3, 1fr)",
+  gridGap: theme.spacing(2),
+});
+
+const StatisticsOverview = styled(Container)(({ theme }) => ({
+  ...FooterItem({ theme }),
+  userSelect: "none",
+  "> div": {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+}));
+
+const StatisticsInsights = styled(Container)(({ theme }) => ({
+  ...FooterItem({ theme }),
+  "> div": {
+    height: popupHeight,
   },
 }));
 
@@ -69,7 +81,7 @@ export const ServiceStatistics: FunctionComponent = () => {
 
   const nasConnected = useMemo(
     () => connections?.connections?.[nas]?.connected || false,
-    [connections, nas]
+    [connections, nas],
   );
   const latestInBps = useMemo(() => latestBpsFromSamples(inBps), [inBps]);
   const latestOutBps = useMemo(() => latestBpsFromSamples(outBps), [outBps]);
@@ -114,10 +126,12 @@ export const ServiceStatistics: FunctionComponent = () => {
   /* -------------------------------------------------------------------------- */
   return (
     <Footer>
-      <div>
-        <div></div>
-      </div>
-      <Container>
+      <StatisticsInsights>
+        <ConsoleView />
+        <BarChart />
+        <BarChart />
+      </StatisticsInsights>
+      <StatisticsOverview>
         <div>
           <Icon
             path={
@@ -142,7 +156,7 @@ export const ServiceStatistics: FunctionComponent = () => {
             {t("{{val, mbps}}", { val: latestOutBps / 1024 ** 2 })}
           </Typography>
         </div>
-      </Container>
+      </StatisticsOverview>
     </Footer>
   );
 };
