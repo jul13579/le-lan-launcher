@@ -236,59 +236,66 @@ export const SyncServiceContextProvider: FunctionComponent<
       const { data: pendingFolders } =
         await SyncthingAPI.Cluster.getPendingFolders();
 
+      const ignoreTimestamp = new Date().toISOString();
       const { libraryFolder, pendingFoldersToIgnore } = Object.entries(
         pendingFolders,
       ).reduce(
         (previousValue, [id, pendingFolderConfig]) => {
-          const nasOfferedFolder = pendingFolderConfig.offeredBy[nas];
-          if (id === gamelibDirId) {
-            previousValue.libraryFolder = { id, nasOfferedFolder };
-          } else {
-            previousValue.pendingFoldersToIgnore.push({ id, nasOfferedFolder });
-          }
+          const { libraryFolder, pendingFoldersToIgnore } = previousValue;
+          Object.entries(pendingFolderConfig.offeredBy).forEach(
+            ([deviceId, deviceOfferedFolder]) => {
+              // Initialize pending folders for device
+              if (!pendingFoldersToIgnore[deviceId]) {
+                pendingFoldersToIgnore[deviceId] = [];
+              }
+
+              if (deviceId === nasDevice.deviceID && id === gamelibDirId) {
+                Object.assign(libraryFolder, {
+                  id,
+                  ...deviceOfferedFolder,
+                });
+              } else {
+                pendingFoldersToIgnore[deviceId].push({
+                  id,
+                  ...deviceOfferedFolder,
+                  // Overwrite `time` attribute with own ignore timestamp
+                  time: ignoreTimestamp,
+                });
+              }
+            },
+          );
           return previousValue;
         },
         {
           libraryFolder: undefined,
-          pendingFoldersToIgnore: [],
+          pendingFoldersToIgnore: {},
         } as {
-          libraryFolder: {
+          libraryFolder: PendingFolders[string]["offeredBy"][string] & {
             id: string;
-            nasOfferedFolder: PendingFolders[string]["offeredBy"][string];
           };
-          pendingFoldersToIgnore: {
-            id: string;
-            nasOfferedFolder: PendingFolders[string]["offeredBy"][string];
-          }[];
+          pendingFoldersToIgnore: Record<
+            string,
+            (PendingFolders[string]["offeredBy"][string] & {
+              id: string;
+            })[]
+          >;
         },
       );
 
       if (libraryFolder) {
         await SyncthingAPI.Config.setFolder(
-          await newSyncFolderObject(
-            gamelibDirId,
-            libraryFolder.nasOfferedFolder.label,
-          ),
+          await newSyncFolderObject(gamelibDirId, libraryFolder.label),
         );
       }
-      if (pendingFoldersToIgnore.length > 0 && nasDevice) {
-        const ignoreTimestamp = new Date().toISOString();
-        const { ignoredFolders } = nasDevice;
-        const newIgnoredFolders = [
-          ...ignoredFolders,
-          ...pendingFoldersToIgnore.map(
-            ({ id, nasOfferedFolder: { label } }) => ({
-              id,
-              label,
-              time: ignoreTimestamp,
-            }),
-          ),
-        ];
-        SyncthingAPI.Config.setDevice({
-          ...nasDevice,
-          ignoredFolders: newIgnoredFolders,
-        });
-      }
+      Object.entries(pendingFoldersToIgnore).forEach(
+        ([deviceId, foldersToIgnore]) => {
+          const device = devices.find(({ deviceID }) => deviceID === deviceId);
+          SyncthingAPI.Config.setDevice({
+            ...device,
+            ignoredFolders: foldersToIgnore,
+          });
+        },
+      );
     };
     subscribeToLibraryFolderAndHidePendingFolders();
     const interval = setInterval(
