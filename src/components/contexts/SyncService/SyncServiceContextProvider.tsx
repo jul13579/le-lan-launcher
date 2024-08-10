@@ -34,7 +34,9 @@ const SyncthingAPI = {
       return axios.get(`${apiBase}/system/status`);
     },
     getConfig() {
-      return axios.get(`${apiBase}/system/config`);
+      return axios.get<{ devices: Device[]; folders: Folder[] }>(
+        `${apiBase}/system/config`,
+      );
     },
     connections() {
       return axios.get(`${apiBase}/system/connections`);
@@ -196,12 +198,29 @@ export const SyncServiceContextProvider: FunctionComponent<
       } = await SyncthingAPI.System.getConfig();
       setDevices(devices);
       setFolders(folders);
+
+      // Get initial folder states for folder that or not yet part of `folderStatuses`
+      // ! This is necessary for instances where folder states did not change since the app started (e.g. after startup)
+      if (folders.length > 0 && Object.entries(folderStatuses).length === 0) {
+        const missingFolderStatusResponses = await Promise.all(
+          folders
+            .filter(({ id }) => !Object.keys(folderStatuses).includes(id))
+            .map(async ({ id }) => [
+              id,
+              (await SyncthingAPI.DB.folderStatus(id)).data,
+            ]),
+        );
+        setFolderStatuses({
+          ...folderStatuses,
+          ...Object.fromEntries(missingFolderStatusResponses),
+        });
+      }
     };
 
     getConfig(); // Execute the callback once immediately
     const configInterval = setInterval(getConfig, 5000);
-    () => clearInterval(configInterval);
-  }, [online]);
+    return () => clearInterval(configInterval);
+  }, [online, folderStatuses]);
 
   /**
    * Configure NAS device in sync service config
@@ -305,27 +324,7 @@ export const SyncServiceContextProvider: FunctionComponent<
     return () => clearInterval(interval);
   }, [nasDevice]);
 
-  // Get initial folder states for folder that or not yet part of `folderStatuses`
-  // ! This is necessary for instances where folder states did not change since the app started (e.g. after startup)
   useEffect(() => {
-    (async () => {
-      const missingFolderStatusResponses = await Promise.all(
-        folders
-          .filter(({ id }) => !Object.keys(folderStatuses).includes(id))
-          .map(async ({ id }) => [
-            id,
-            (await SyncthingAPI.DB.folderStatus(id)).data,
-          ]),
-      );
-      setFolderStatuses((currentValue: Record<any, any>) => ({
-        ...currentValue,
-        ...Object.fromEntries(missingFolderStatusResponses),
-      }));
-    })();
-  }, [folders]);
-
-  useEffect(() => {
-    getEvents();
     const interval = setInterval(getEvents, 5000);
     return () => clearInterval(interval);
   }, [online, lastEventId, folderStatuses]);
@@ -448,25 +447,28 @@ export const SyncServiceContextProvider: FunctionComponent<
 
   const revertFolder = async (folderId: string) => {
     await SyncthingAPI.DB.revertFolder(folderId);
-    getEvents();
+    await getEvents();
   };
 
   const downloadGame = async (gameConfig: Game) => {
     await SyncthingAPI.Config.setFolder(
       await newSyncFolderObject(gameConfig.id, gameConfig.title),
     );
-    getEvents();
+    await getEvents();
   };
 
   const unPauseGame = async (folder: Folder, pause: boolean) => {
     await SyncthingAPI.Config.setFolder({ ...folder, paused: pause });
-    getEvents();
+    await getEvents();
   };
 
   const deleteGame = async (folder: Folder) => {
     await SyncthingAPI.Config.deleteFolder(folder);
     window.ipcRenderer.invoke("controlGame", GameOperations.DELETE, folder);
-    getEvents();
+    await getEvents();
+    const newFolderStatuses = { ...folderStatuses };
+    delete newFolderStatuses[folder.id];
+    setFolderStatuses(newFolderStatuses);
   };
 
   /* -------------------------------------------------------------------------- */

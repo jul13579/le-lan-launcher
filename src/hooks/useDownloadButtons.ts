@@ -32,6 +32,6 @@ export const useDownloadButtons = (
       },
       { click: remove, show: subscribed, icon: mdiClose },
     ],
-    [subscribed, thisGameFolder],
+    [subscribed, thisGameFolder, download, pause, resume, remove],
   );
 };

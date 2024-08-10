@@ -37,5 +37,14 @@ export const useGameControls = (folder: Folder, gameConfig: Game) => {
     };
 
     return { download, pause, resume, remove, execute, reset, browse };
-  }, [folder]);
+  }, [
+    folder,
+    gameConfig,
+    playerName,
+    debug,
+    downloadGame,
+    unPauseGame,
+    deleteGame,
+    revertFolder,
+  ]);
 };
