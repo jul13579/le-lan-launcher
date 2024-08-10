@@ -14,24 +14,37 @@ import { useSyncService } from "../hooks/useSyncService";
 import { latestBpsFromSamples } from "../utils/latestBpsFromSamples";
 import { bgTransparentDarkWithBlur } from "./CustomThemeProvider";
 
+const footerHeight = 66;
+const popupHeight = 250;
+
 const Footer = styled("div")(({ theme }) => ({
-  height: 66,
   position: "fixed",
+  display: "grid",
+  gridTemplateRows: `0px ${footerHeight}px`,
   width: "100vw",
   bottom: 0,
   left: 0,
   zIndex: 9999,
+  transition: "grid-template-rows 0.1s linear",
   ...bgTransparentDarkWithBlur,
   "> div": {
     height: "100%",
+    width: "100%",
+    overflow: "hidden",
+  },
+  "> div: nth-of-type(2)": {
     display: "grid",
     gridTemplateColumns: "repeat(3, 1fr)",
     gridGap: theme.spacing(2),
+    userSelect: "none",
     "> div": {
       display: "flex",
       alignItems: "center",
       justifyContent: "center",
     },
+  },
+  ":hover": {
+    gridTemplateRows: `${popupHeight}px ${footerHeight}px`,
   },
 }));
 
@@ -101,6 +114,9 @@ export const ServiceStatistics: FunctionComponent = () => {
   /* -------------------------------------------------------------------------- */
   return (
     <Footer>
+      <div>
+        <div></div>
+      </div>
       <Container>
         <div>
           <Icon
