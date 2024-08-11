@@ -18,7 +18,7 @@ import { FunctionComponent, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useSettingsService } from "../hooks/useSettingsService";
 import { useSyncService } from "../hooks/useSyncService";
-import { latestBpsFromSamples } from "../utils/latestBpsFromSamples";
+import { latestBpsFromSamples } from "../utils/bpsFromSamples";
 import { bgTransparentDarkWithBlur } from "./CustomThemeProvider";
 import { ConsoleView } from "./ConsoleView";
 import { BarChart } from "./BarChart";
@@ -67,7 +67,11 @@ const StatisticsInsights = styled(Container)(({ theme }) => ({
   },
 }));
 
-const sampleCount = 30;
+/**
+ * Record one more sample to be able to calculate transmission speed between samples
+ * and end up with 30 samples
+ */
+const sampleCount = 30 + 1;
 
 export const ServiceStatistics: FunctionComponent = () => {
   /* -------------------------------------------------------------------------- */
@@ -128,8 +132,8 @@ export const ServiceStatistics: FunctionComponent = () => {
     <Footer>
       <StatisticsInsights>
         <ConsoleView />
-        <BarChart />
-        <BarChart />
+        <BarChart samples={inBps} />
+        <BarChart samples={outBps} />
       </StatisticsInsights>
       <StatisticsOverview>
         <div>
