@@ -12,6 +12,8 @@ const ConsoleViewContainer = styled("div")(() => ({
   display: "flex",
   flexDirection: "column",
   maxHeight: "100%",
+  maxWidth: "100%",
+  overflow: "hidden",
 }));
 
 export const ConsoleView: FunctionComponent = () => {
@@ -129,7 +131,9 @@ export const ConsoleView: FunctionComponent = () => {
         {serviceMessages.map((messageObj, index) => (
           <span
             key={index}
-            style={{ color: messageObj.type === "stderr" ? "red" : "inherit" }}
+            style={{
+              color: messageObj.type === "stderr" ? "red" : "inherit",
+            }}
           >
             {messageObj.message}
           </span>

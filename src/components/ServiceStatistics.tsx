@@ -127,11 +127,9 @@ export const ServiceStatistics: FunctionComponent = () => {
   return (
     <Footer>
       <StatisticsInsights>
-        <Box maxWidth={"100%"} overflow={"hidden"}>
-          <ConsoleView />
-          <BarChart />
-          <BarChart />
-        </Box>
+        <ConsoleView />
+        <BarChart />
+        <BarChart />
       </StatisticsInsights>
       <StatisticsOverview>
         <div>
