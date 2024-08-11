@@ -28,6 +28,7 @@ import langs from "../localization/langs";
 import { bgTransparentDarkWithBlur } from "./CustomThemeProvider";
 import { CustomTabPanel } from "../App";
 import { TabValue } from "../enums/TabValue";
+import { footerHeight } from "./ServiceStatistics";
 
 const ThemeItem = ({ theme }: { theme: Theme }) => ({
   margin: theme.spacing(3),
@@ -289,6 +290,9 @@ const SettingsView: FunctionComponent = () => {
                 event.target.value !== "-1" && setNas(event.target.value)
               }
               error={!nas}
+              MenuProps={{
+                marginThreshold: footerHeight,
+              }}
             >
               {useCallback(() => {
                 const deviceIds = Object.keys(devices);

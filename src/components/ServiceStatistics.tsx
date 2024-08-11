@@ -23,7 +23,7 @@ import { bgTransparentDarkWithBlur } from "./CustomThemeProvider";
 import { ConsoleView } from "./ConsoleView";
 import { BarChart } from "./BarChart";
 
-const footerHeight = 66;
+export const footerHeight = 66;
 const popupHeight = 250;
 
 const Footer = styled("div")(({ theme }) => ({
