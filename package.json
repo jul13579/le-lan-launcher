@@ -54,6 +54,7 @@
     "@mui/material": "^5.16.5",
     "@types/hsl-to-hex": "^1.0.2",
     "axios": "^1.7.2",
+    "chart.js": "^4.4.3",
     "electron-squirrel-startup": "^1.0.1",
     "hsl-to-hex": "^1.0.0",
     "i18next": "^23.12.2",
