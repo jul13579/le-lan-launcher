@@ -43,7 +43,7 @@ export const ConsoleView: FunctionComponent = () => {
     };
     window.ipcRenderer.on("syncService", handler);
     return () => {
-      window.ipcRenderer.off("syncService", handler);
+      window.ipcRenderer.removeAllListeners("syncService");
     };
   }, []);
 

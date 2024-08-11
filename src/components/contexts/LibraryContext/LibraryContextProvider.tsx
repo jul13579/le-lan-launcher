@@ -60,7 +60,7 @@ export const LibraryContextProvider: FunctionComponent<
     const handler: Parameters<IpcRenderer["on"]>[1] = (event, lib: Library) =>
       setLib(lib);
     watch(libConfigPath, handler);
-    return () => unwatch(libConfigPath, handler);
+    return () => unwatch(libConfigPath);
   }, [libConfigPath]);
 
   /* -------------------------------------------------------------------------- */

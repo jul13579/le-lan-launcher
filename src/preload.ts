@@ -27,12 +27,14 @@ contextBridge.exposeInMainWorld("ipcRenderer", {
       ipcRenderer.on(channel, func);
     }
   },
-  off: (channel, func) => {
-    return ipcRenderer.off(channel, func);
+  removeAllListeners: (channel) => {
+    /* ipcRenderer.off does not work, since the `func` arguments received by `on` and `off` in this preload script
+    are native code functions that do not equal to one another */
+    ipcRenderer.removeAllListeners(channel);
   },
 } as {
   send: typeof ipcRenderer.send;
   invoke: typeof ipcRenderer.invoke;
   on: typeof ipcRenderer.on;
-  off: typeof ipcRenderer.off;
+  removeAllListeners: typeof ipcRenderer.removeAllListeners;
 });

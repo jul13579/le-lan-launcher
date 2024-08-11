@@ -105,7 +105,7 @@ export const SettingsServiceContextProvider: FunctionComponent<
     };
     window.ipcRenderer.on("setApiKey", listener);
     () => {
-      window.ipcRenderer.off("setApiKey", listener);
+      window.ipcRenderer.removeAllListeners("setApiKey");
     };
   }, []);
 
