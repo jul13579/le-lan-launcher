@@ -2,12 +2,11 @@ import { mdiOpenInNew, mdiPlay, mdiRestart, mdiStop } from "@mdi/js";
 import Icon from "@mdi/react";
 import { Box, IconButton, styled, Typography } from "@mui/material";
 import { IpcRenderer } from "electron";
-import { FunctionComponent, useEffect, useState } from "react";
+import { createRef, FunctionComponent, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import SyncServiceOperations from "../enums/SyncServiceOperations";
-import { useSyncService } from "../hooks/useSyncService";
 import { useSettingsService } from "../hooks/useSettingsService";
-import { green } from "@mui/material/colors";
+import { useSyncService } from "../hooks/useSyncService";
 
 const ConsoleViewContainer = styled("div")(() => ({
   display: "flex",
@@ -29,6 +28,8 @@ export const ConsoleView: FunctionComponent = () => {
   const [serviceMessages, setServiceMessages] = useState<
     SyncServiceMessageObj[]
   >([]);
+  const [autoScroll, setAutoScroll] = useState(true);
+  const consoleEl = createRef<HTMLDivElement>();
 
   /* -------------------------------------------------------------------------- */
   /*                             Component Lifecycle                            */
@@ -46,6 +47,37 @@ export const ConsoleView: FunctionComponent = () => {
       window.ipcRenderer.removeAllListeners("syncService");
     };
   }, []);
+
+  useEffect(() => {
+    // Don't register mutation observer if `autoScroll` is not enabled
+    if (!autoScroll) {
+      return;
+    }
+    // Make sure the console element is set
+    if (!consoleEl.current) {
+      return;
+    }
+
+    const { current: el } = consoleEl;
+
+    const consoleScrollHandler = () => {
+      if (el.scrollTop >= el.scrollHeight - el.getBoundingClientRect().height) {
+        setAutoScroll(true);
+        return;
+      }
+      setAutoScroll(false);
+    };
+
+    const observer = new MutationObserver(() => {
+      el.removeEventListener("scrollend", consoleScrollHandler);
+      el.lastElementChild.scrollIntoView(
+        false, // align at bottom of element
+      );
+      el.addEventListener("scrollend", consoleScrollHandler);
+    });
+    observer.observe(el, { childList: true });
+    return () => observer.disconnect();
+  }, [autoScroll]);
 
   /* -------------------------------------------------------------------------- */
   /*                             Instance Functions                             */
@@ -89,7 +121,7 @@ export const ConsoleView: FunctionComponent = () => {
           </IconButton>
         </div>
       </Box>
-      <Box height={"100%"} whiteSpace={"pre"} overflow={"auto"}>
+      <Box ref={consoleEl} height={"100%"} whiteSpace={"pre"} overflow={"auto"}>
         {serviceMessages.map((messageObj, index) => (
           <span
             key={index}
