@@ -2,7 +2,7 @@ import { mdiOpenInNew, mdiPlay, mdiRestart, mdiStop } from "@mdi/js";
 import Icon from "@mdi/react";
 import { Box, IconButton, styled, Typography } from "@mui/material";
 import { IpcRenderer } from "electron";
-import { createRef, FunctionComponent, useEffect, useState } from "react";
+import { FunctionComponent, useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import SyncServiceOperations from "../enums/SyncServiceOperations";
 import { useSettingsService } from "../hooks/useSettingsService";
@@ -31,7 +31,7 @@ export const ConsoleView: FunctionComponent = () => {
     SyncServiceMessageObj[]
   >([]);
   const [autoScroll, setAutoScroll] = useState(true);
-  const consoleEl = createRef<HTMLDivElement>();
+  const consoleEl = useRef<HTMLDivElement>();
 
   /* -------------------------------------------------------------------------- */
   /*                             Component Lifecycle                            */
