@@ -24,7 +24,6 @@ contextBridge.exposeInMainWorld("ipcRenderer", {
   on: (channel, func) => {
     const validChannels = ["syncService", "setApiKey", "library", "game"];
     if (validChannels.includes(channel)) {
-      // Deliberately strip event as it includes `sender`
       ipcRenderer.on(channel, func);
     }
   },
