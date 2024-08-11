@@ -246,8 +246,8 @@ export const SyncServiceContextProvider: FunctionComponent<
    * Auto-subscribe to library folder & hide pending folders from Syncthing UI
    */
   useEffect(() => {
-    // Skip hook if `nasDevice` is not set
-    if (!nasDevice) {
+    // Skip hook if `nasDevice` is not set or service is not online
+    if (!nasDevice || !online) {
       return;
     }
 
@@ -322,7 +322,7 @@ export const SyncServiceContextProvider: FunctionComponent<
       5000,
     );
     return () => clearInterval(interval);
-  }, [nasDevice]);
+  }, [online, nasDevice]);
 
   useEffect(() => {
     const interval = setInterval(getEvents, 5000);
@@ -420,7 +420,7 @@ export const SyncServiceContextProvider: FunctionComponent<
     setLastEventId(Math.max(...events.map(({ id }) => id)));
   };
 
-  async function start() {
+  const start = async () => {
     if (started || !homeDir) {
       return;
     }
@@ -437,7 +437,18 @@ export const SyncServiceContextProvider: FunctionComponent<
         `Encountered error when trying to start sync service: ${e}`,
       );
     }
-  }
+  };
+
+  const restart = async () => {
+    await SyncthingAPI.System.restart();
+    setOnline(false);
+  };
+
+  const stop = async () => {
+    await SyncthingAPI.System.stop();
+    setOnline(false);
+    setStarted(false);
+  };
 
   const revertFolder = async (folderId: string) => {
     await SyncthingAPI.DB.revertFolder(folderId);
@@ -480,6 +491,9 @@ export const SyncServiceContextProvider: FunctionComponent<
     deleteGame,
     getStatus: SyncthingAPI.System.status,
     getConnections: SyncthingAPI.System.connections,
+    start,
+    restart,
+    stop,
   };
   return (
     <SyncServiceContext.Provider value={state}>

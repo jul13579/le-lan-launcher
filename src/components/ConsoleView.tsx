@@ -18,7 +18,7 @@ export const ConsoleView: FunctionComponent = () => {
   /* -------------------------------------------------------------------------- */
   /*                                   Context                                  */
   /* -------------------------------------------------------------------------- */
-  const { online } = useSyncService();
+  const { online, started, start, restart, stop } = useSyncService();
   const { homeDir } = useSettingsService();
   const { t } = useTranslation();
 
@@ -110,13 +110,17 @@ export const ConsoleView: FunctionComponent = () => {
           </IconButton>
         </div>
         <div>
-          <IconButton disabled={online || !homeDir} color="green">
+          <IconButton
+            disabled={started || !homeDir}
+            color="green"
+            onClick={start}
+          >
             <Icon path={mdiPlay} size={1} />
           </IconButton>
-          <IconButton disabled={!online} color="yellow">
+          <IconButton disabled={!online} color="yellow" onClick={restart}>
             <Icon path={mdiRestart} size={1} />
           </IconButton>
-          <IconButton disabled={!online} color="red">
+          <IconButton disabled={!online} color="red" onClick={stop}>
             <Icon path={mdiStop} size={1} />
           </IconButton>
         </div>
