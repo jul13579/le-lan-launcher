@@ -442,6 +442,7 @@ export const SyncServiceContextProvider: FunctionComponent<
       setStarted(true);
       return retVal;
     } catch (e) {
+      setStarted(false);
       toast(t("toast.service.error.start"), { type: "error" });
     }
   };
