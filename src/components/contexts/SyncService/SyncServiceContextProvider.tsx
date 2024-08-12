@@ -18,6 +18,7 @@ import { calculateDownloadProgress } from "src/utils/calculateDownloadProgress";
 import { SyncServiceContext } from "./SyncServiceContext";
 import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
+import { useSwallowFirstEffect } from "src/hooks/useSwallowFirstEffect";
 
 const apiBase = `${baseUrl}/rest`;
 
@@ -326,7 +327,7 @@ export const SyncServiceContextProvider: FunctionComponent<
     return () => clearInterval(interval);
   }, [online, lastEventId, folderStatuses]);
 
-  useEffect(() => {
+  useSwallowFirstEffect(() => {
     if (started) {
       if (online) {
         toast(t("toast.service.connection.connected"), { type: "success" });

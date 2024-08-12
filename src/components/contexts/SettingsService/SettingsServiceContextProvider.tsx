@@ -14,6 +14,8 @@ import {
   defaultTheme,
 } from "src/config/app";
 import { Settings, SettingsServiceContext } from "./SettingsServiceContext";
+import { toast } from "react-toastify";
+import { useSwallowFirstEffect } from "src/hooks/useSwallowFirstEffect";
 
 const initialConfig = JSON.parse(
   localStorage.getItem("settings") ?? JSON.stringify({}),
@@ -29,7 +31,7 @@ export const SettingsServiceContextProvider: FunctionComponent<
   /* -------------------------------------------------------------------------- */
   /*                                   Context                                  */
   /* -------------------------------------------------------------------------- */
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   /* -------------------------------------------------------------------------- */
   /*                                    State                                   */
@@ -108,6 +110,40 @@ export const SettingsServiceContextProvider: FunctionComponent<
       window.ipcRenderer.removeAllListeners("setApiKey");
     };
   }, []);
+
+  useSwallowFirstEffect(() => {
+    toast(t("toast.theme"), { type: "success" });
+  }, [theme]);
+
+  useSwallowFirstEffect(() => {
+    const timeout = setTimeout(() => {
+      toast(t("toast.backgroundHue"), { type: "success" });
+    }, 1000);
+    return () => clearTimeout(timeout);
+  }, [backgroundHue]);
+
+  useSwallowFirstEffect(() => {
+    const timeout = setTimeout(() => {
+      toast(t("toast.playerName"), { type: "success" });
+    }, 1000);
+    return () => clearTimeout(timeout);
+  }, [playerName]);
+
+  useSwallowFirstEffect(() => {
+    toast(t("toast.homeDir"), { type: "success" });
+  }, [homeDir]);
+
+  useSwallowFirstEffect(() => {
+    toast(t("toast.nas"), { type: "success" });
+  }, [nas]);
+
+  useSwallowFirstEffect(() => {
+    toast(t("toast.locale"), { type: "success" });
+  }, [locale]);
+
+  useSwallowFirstEffect(() => {
+    toast(t("toast.debug"), { type: "success" });
+  }, [debug]);
 
   /* -------------------------------------------------------------------------- */
   /*                                  Rendering                                 */
