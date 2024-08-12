@@ -159,7 +159,7 @@ export const GameEntry: FunctionComponent<GameEntryProps> = ({
     <Box display={"flex"} flexDirection={"row"} m={1.5}>
       <GameEntryRoot
         installed={installed}
-        thumbnail={`game://${libFolderPath}/${gameConfig.cover}`}
+        thumbnail={`legc://${libFolderPath}/${gameConfig.cover}`}
       >
         {/* Progress indicator */}
         <ProgressIndicator downloadProgress={downloadProgress} />

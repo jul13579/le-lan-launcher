@@ -102,8 +102,7 @@ app.on("ready", async () => {
   }
 
   // Register file protocols to load external game thumbnails and theme background images
-  registerFileProtocol("game");
-  registerFileProtocol("theme");
+  registerFileProtocol("legc");
 
   createWindow();
 });
