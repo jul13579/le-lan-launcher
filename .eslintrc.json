@@ -12,13 +12,14 @@
     "plugin:import/electron",
     "plugin:import/typescript"
   ],
-  "parser": "import/resolver",
+  "ignorePatterns": [
+    "syncthing-src/"
+  ],
+  // "parser": "import/resolver",
   "settings": {
     "import/resolver": {
-      "node": {
-        "paths": {
-          "syncthing-src": "./syncthing-src"
-        }
+      "typescript": {
+        "project": "./"
       }
     }
   }
