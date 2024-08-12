@@ -23,7 +23,7 @@ import {
 import { FunctionComponent, StrictMode, useState } from "react";
 import { createRoot } from "react-dom/client";
 import { useTranslation } from "react-i18next";
-import { LibraryContextProvider } from "./components/contexts/LibraryContext/LibraryContextProvider";
+import { LibraryContextProvider } from "./components/contexts/Library/LibraryContextProvider";
 import { SettingsServiceContextProvider } from "./components/contexts/SettingsService/SettingsServiceContextProvider";
 import { SyncServiceContextProvider } from "./components/contexts/SyncService/SyncServiceContextProvider";
 import {
