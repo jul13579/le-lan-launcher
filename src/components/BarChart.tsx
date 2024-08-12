@@ -1,4 +1,4 @@
-import { Box, useTheme } from "@mui/material";
+import { Box, styled, Typography, useTheme } from "@mui/material";
 import {
   BarController,
   BarElement,
@@ -10,6 +10,19 @@ import {
 import { FunctionComponent, useEffect, useMemo, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { bpsFromSamples, latestBpsFromSamples } from "../utils/bpsFromSamples";
+
+const BarChartContainer = styled("div")(() => ({
+  display: "grid",
+  gridTemplateRows: "56px auto",
+  "> div:nth-of-type(1)": {
+    display: "flex",
+    alignItems: "center",
+  },
+  "> div:nth-of-type(2)": {
+    width: "100%",
+    height: "100%",
+  },
+}));
 
 Chart.register(
   BarController,
@@ -23,9 +36,13 @@ Chart.defaults.maintainAspectRatio = false;
 
 interface BarChartProps {
   samples: [number, number][];
+  headline: string;
 }
 
-export const BarChart: FunctionComponent<BarChartProps> = ({ samples }) => {
+export const BarChart: FunctionComponent<BarChartProps> = ({
+  samples,
+  headline,
+}) => {
   /* -------------------------------------------------------------------------- */
   /*                                   Context                                  */
   /* -------------------------------------------------------------------------- */
@@ -136,8 +153,15 @@ export const BarChart: FunctionComponent<BarChartProps> = ({ samples }) => {
   /*                                  Rendering                                 */
   /* -------------------------------------------------------------------------- */
   return (
-    <Box pt={2}>
-      <canvas ref={chartContainer} />
-    </Box>
+    <BarChartContainer>
+      <div>
+        <Typography variant="h6" py={1}>
+          {headline}
+        </Typography>
+      </div>
+      <div>
+        <canvas ref={chartContainer} />
+      </div>
+    </BarChartContainer>
   );
 };

@@ -132,8 +132,8 @@ export const ServiceStatistics: FunctionComponent = () => {
     <Footer>
       <StatisticsInsights>
         <ConsoleView />
-        <BarChart samples={inBps} />
-        <BarChart samples={outBps} />
+        <BarChart samples={inBps} headline={t("statistics.download_speed")} />
+        <BarChart samples={outBps} headline={t("statistics.upload_speed")} />
       </StatisticsInsights>
       <StatisticsOverview>
         <div>

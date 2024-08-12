@@ -96,7 +96,7 @@ export const ConsoleView: FunctionComponent = () => {
   return (
     <ConsoleViewContainer>
       <Box py={1} display={"flex"} justifyContent={"space-between"}>
-        <div>
+        <Box display={"flex"} alignItems={"center"}>
           <Typography
             whiteSpace={"nowrap"}
             textOverflow={"ellipsis"}
@@ -110,7 +110,7 @@ export const ConsoleView: FunctionComponent = () => {
           <IconButton onClick={openSyncthingUI}>
             <Icon path={mdiOpenInNew} size={1} />
           </IconButton>
-        </div>
+        </Box>
         <div>
           <IconButton
             disabled={started || !homeDir}
