@@ -52,14 +52,8 @@ const SyncthingAPI = {
     getFolderTemplate() {
       return axios.get<Folder>(`${apiBase}/config/defaults/folder`);
     },
-    getDevices() {
-      return axios.get<Device[]>(`${apiBase}/config/devices`);
-    },
     setDevice(device: Device) {
       return axios.post(`${apiBase}/config/devices`, device);
-    },
-    getFolders() {
-      return axios.get<Folder[]>(`${apiBase}/config/folders`);
     },
     setFolder(folder: Folder) {
       return axios.post(`${apiBase}/config/folders`, folder);
