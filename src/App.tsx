@@ -36,16 +36,21 @@ import { ThemeBackground } from "./components/ThemeBackground";
 import { TabValue } from "./enums/TabValue";
 import { useSettingsService } from "./hooks/useSettingsService";
 import { useWindowControls } from "./hooks/useWindowControls";
-import { ServiceStatistics } from "./components/ServiceStatistics";
+import {
+  footerHeight,
+  ServiceStatistics,
+} from "./components/ServiceStatistics";
 
 const noDrag = {
   WebkitAppRegion: "no-drag",
 };
 
+const appBarHeight = 116;
+
 const DraggableAppBar = styled(AppBar)(() => ({
   ...bgTransparentDarkWithBlur,
   WebkitAppRegion: "drag",
-  position: "sticky",
+  height: appBarHeight,
 }));
 
 const ProminentToolbar = styled(Toolbar)(({ theme }) => ({
@@ -113,8 +118,10 @@ export const CustomTabPanel = styled(TabPanel, {
 }));
 
 const TabPanelContainer = styled("div")(() => ({
-  paddingBottom: 66,
-  height: "100%",
+  paddingBottom: footerHeight,
+  paddingTop: appBarHeight,
+  minHeight: "100%",
+  display: "grid", // This is only needed for the loading animation to be able to use 'height: 100%'
 }));
 
 const App: FunctionComponent = () => {
