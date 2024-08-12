@@ -60,7 +60,7 @@ const GameEntryRoot = styled("div")<GameEntryRootProps>(
           },
         }
       : {}),
-  })
+  }),
 );
 
 interface ProgressIndicatorProps {
@@ -72,7 +72,7 @@ const ProgressIndicator = styled("div")<ProgressIndicatorProps>(
     background: "rgba(0, 0, 0, 0.7)",
     transition: "top 0.1s linear",
     top: `${-downloadProgress * 100}% !important`,
-  })
+  }),
 );
 
 const DownloadButtonsContainer = styled("div")(() => ({
@@ -116,7 +116,7 @@ export const GameEntry: FunctionComponent<GameEntryProps> = ({
   const subscribed = useMemo(() => !!thisGameFolder, [thisGameFolder]);
   const downloadProgress = useMemo(
     () => subscribed && calculateDownloadProgress(thisGameFolderStatus),
-    [subscribed, thisGameFolderStatus]
+    [subscribed, thisGameFolderStatus],
   );
   const installed = useMemo(() => downloadProgress >= 1, [downloadProgress]);
 
@@ -124,14 +124,14 @@ export const GameEntry: FunctionComponent<GameEntryProps> = ({
     subscribed,
     thisGameFolder,
     gameConfig,
-    () => openDeleteDialog()
+    () => openDeleteDialog(),
   );
 
   const gameMenuButtons = useGameMenuButtons(
     thisGameFolder,
     thisGameFolderStatus,
     gameConfig,
-    () => openDeleteDialog()
+    () => openDeleteDialog(),
   );
 
   const [anchorEl, setAnchorEl] = useState(null);
@@ -182,7 +182,7 @@ export const GameEntry: FunctionComponent<GameEntryProps> = ({
                         <Icon path={icon} size={1.5} />
                       </Fab>
                     </Box>
-                  )
+                  ),
               )
             )}
           </DownloadButtonsContainer>
@@ -222,7 +222,7 @@ export const GameEntry: FunctionComponent<GameEntryProps> = ({
                 </ListItemIcon>
                 <Typography mx={1}>{text}</Typography>
               </MenuItem>
-            )
+            ),
         )}
       </Menu>
 

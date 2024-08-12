@@ -127,7 +127,14 @@ export const ConsoleView: FunctionComponent = () => {
           </IconButton>
         </div>
       </Box>
-      <Box ref={consoleEl} height={"100%"} whiteSpace={"pre"} overflow={"auto"}>
+      <Box
+        ref={consoleEl}
+        height={"100%"}
+        whiteSpace={"pre"}
+        overflow={"auto"}
+        display={"flex"}
+        flexDirection={"column"}
+      >
         {serviceMessages.map((messageObj, index) => (
           <span
             key={index}
