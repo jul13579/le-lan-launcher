@@ -284,7 +284,7 @@ export const SyncServiceContextProvider: FunctionComponent<
           return previousValue;
         },
         {
-          libraryFolder: undefined,
+          libraryFolder: {},
           pendingFoldersToIgnore: {},
         } as {
           libraryFolder: PendingFolders[string]["offeredBy"][string] & {
@@ -299,7 +299,7 @@ export const SyncServiceContextProvider: FunctionComponent<
         },
       );
 
-      if (libraryFolder) {
+      if (libraryFolder.label) {
         await SyncthingAPI.Config.setFolder(
           await newSyncFolderObject(gamelibDirId, libraryFolder.label),
         );
