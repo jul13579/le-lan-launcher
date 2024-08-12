@@ -1,4 +1,4 @@
-import Icon from "@mdi/react";
+import { default as Icon } from "@mdi/react";
 import {
   Box,
   CircularProgress,
@@ -10,7 +10,6 @@ import {
   Typography,
 } from "@mui/material";
 import { FunctionComponent, MouseEvent, useMemo, useState } from "react";
-import { useTranslation } from "react-i18next";
 import { useDownloadButtons } from "../hooks/useDownloadButtons";
 import { useGameFolder } from "../hooks/useGameFolder";
 import { useGameMenuButtons } from "../hooks/useGameMenuButtons";
@@ -99,7 +98,6 @@ export const GameEntry: FunctionComponent<GameEntryProps> = ({
   /*                                   Context                                  */
   /* -------------------------------------------------------------------------- */
   const { libFolderPath } = useLibrary();
-  const { t } = useTranslation();
 
   /* -------------------------------------------------------------------------- */
   /*                                    State                                   */

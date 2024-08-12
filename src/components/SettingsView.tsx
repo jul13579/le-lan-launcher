@@ -1,5 +1,5 @@
 import { mdiDatabaseSearch, mdiImageSearch } from "@mdi/js";
-import Icon from "@mdi/react";
+import { default as Icon } from "@mdi/react";
 import {
   Alert,
   Box,

@@ -1,5 +1,5 @@
 import { mdiOpenInNew, mdiPlay, mdiRestart, mdiStop } from "@mdi/js";
-import Icon from "@mdi/react";
+import { default as Icon } from "@mdi/react";
 import { Box, IconButton, styled, Typography } from "@mui/material";
 import { IpcRenderer } from "electron";
 import { FunctionComponent, useEffect, useRef, useState } from "react";

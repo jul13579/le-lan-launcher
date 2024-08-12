@@ -13,7 +13,8 @@
     "plugin:import/typescript"
   ],
   "ignorePatterns": [
-    "syncthing-src/"
+    "syncthing-src/",
+    "vite.*"
   ],
   // "parser": "import/resolver",
   "settings": {

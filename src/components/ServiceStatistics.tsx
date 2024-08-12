@@ -5,28 +5,21 @@ import {
   mdiDownload,
   mdiUpload,
 } from "@mdi/js";
-import Icon from "@mdi/react";
-import {
-  Box,
-  Container,
-  styled,
-  Theme,
-  Typography,
-  useTheme,
-} from "@mui/material";
+import { default as Icon } from "@mdi/react";
+import { Container, styled, Theme, Typography, useTheme } from "@mui/material";
 import { FunctionComponent, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useSettingsService } from "../hooks/useSettingsService";
 import { useSyncService } from "../hooks/useSyncService";
 import { latestBpsFromSamples } from "../utils/bpsFromSamples";
-import { bgTransparentDarkWithBlur } from "./CustomThemeProvider";
-import { ConsoleView } from "./ConsoleView";
 import { BarChart } from "./BarChart";
+import { ConsoleView } from "./ConsoleView";
+import { bgTransparentDarkWithBlur } from "./CustomThemeProvider";
 
 export const footerHeight = 66;
 const popupHeight = 250;
 
-const Footer = styled("div")(({ theme }) => ({
+const Footer = styled("div")(() => ({
   position: "fixed",
   display: "grid",
   gridTemplateRows: `0px ${footerHeight}px`,
@@ -78,14 +71,13 @@ export const ServiceStatistics: FunctionComponent = () => {
   /*                                   Context                                  */
   /* -------------------------------------------------------------------------- */
   const { nas } = useSettingsService();
-  const { online, getStatus, getConnections } = useSyncService();
+  const { online, getConnections } = useSyncService();
   const { t } = useTranslation();
   const theme = useTheme();
 
   /* -------------------------------------------------------------------------- */
   /*                                    State                                   */
   /* -------------------------------------------------------------------------- */
-  const [status, setStatus] = useState(undefined);
   const [connections, setConnections] = useState<Connections>(undefined);
   const [inBps, setInBps] = useState(new Array(sampleCount).fill([0, 0]));
   const [outBps, setOutBps] = useState(new Array(sampleCount).fill([0, 0]));
@@ -106,8 +98,6 @@ export const ServiceStatistics: FunctionComponent = () => {
       return;
     }
     const getStatistics = async () => {
-      const { data: status } = await getStatus();
-      setStatus(status);
       const { data: connections } = await getConnections();
       setConnections(connections);
 

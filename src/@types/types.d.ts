@@ -71,13 +71,13 @@ interface FolderEvent {
 
 interface FolderSummaryEvent extends FolderEvent {
   data: {
-    summary: any;
+    summary: FolderStatus;
   };
 }
 
 interface FolderStateChangedEvent extends FolderEvent {
   data: {
-    to: any;
+    to: string;
   };
 }
 

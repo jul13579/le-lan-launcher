@@ -5,7 +5,7 @@ import {
   mdiWindowMaximize,
   mdiWindowMinimize,
 } from "@mdi/js";
-import Icon from "@mdi/react";
+import { default as Icon } from "@mdi/react";
 import { TabContext, TabPanel } from "@mui/lab";
 import {
   AppBar,

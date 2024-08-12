@@ -381,7 +381,7 @@ export const SyncServiceContextProvider: FunctionComponent<
           switch (type) {
             case SyncEvents.FOLDER_SUMMARY:
               previousValue[data.folder] = (
-                data as any as FolderSummaryEvent["data"]
+                data as unknown as FolderSummaryEvent["data"]
               ).summary;
               break;
             case SyncEvents.STATE_CHANGED:
@@ -396,7 +396,7 @@ export const SyncServiceContextProvider: FunctionComponent<
                 };
               }
               previousValue[data.folder].state = (
-                data as any as FolderStateChangedEvent["data"]
+                data as unknown as FolderStateChangedEvent["data"]
               ).to;
               break;
             case SyncEvents.FOLDER_REJECTED:
@@ -489,7 +489,6 @@ export const SyncServiceContextProvider: FunctionComponent<
     downloadGame,
     unPauseGame,
     deleteGame,
-    getStatus: SyncthingAPI.System.status,
     getConnections: SyncthingAPI.System.connections,
     start,
     restart,

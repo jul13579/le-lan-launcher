@@ -1,4 +1,4 @@
-import { Box, styled, Typography, useTheme } from "@mui/material";
+import { styled, Typography, useTheme } from "@mui/material";
 import {
   BarController,
   BarElement,

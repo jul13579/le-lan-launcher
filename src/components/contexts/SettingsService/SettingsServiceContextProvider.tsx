@@ -1,3 +1,5 @@
+import { IpcRenderer } from "electron";
+import hslToHex from "hsl-to-hex";
 import {
   FunctionComponent,
   ReactNode,
@@ -5,15 +7,13 @@ import {
   useMemo,
   useState,
 } from "react";
-import { Settings, SettingsServiceContext } from "./SettingsServiceContext";
+import { useTranslation } from "react-i18next";
 import {
   defaultBackgroundHue,
   defaultLocale,
   defaultTheme,
 } from "../../../config/app";
-import { IpcRenderer, IpcRendererEvent } from "electron";
-import { useTranslation } from "react-i18next";
-import hslToHex from "hsl-to-hex";
+import { Settings, SettingsServiceContext } from "./SettingsServiceContext";
 
 const initialConfig = JSON.parse(
   localStorage.getItem("settings") ?? JSON.stringify({}),

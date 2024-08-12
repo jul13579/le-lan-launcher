@@ -1,4 +1,4 @@
-import i18n from "i18next";
+import { use } from "i18next";
 import { initReactI18next } from "react-i18next";
 
 import en from "../localization/en";
@@ -13,7 +13,8 @@ const resources = {
   },
 };
 
-i18n.use(initReactI18next).init({
+const i18n = use(initReactI18next);
+i18n.init({
   resources,
   lng: "en",
   interpolation: {
@@ -21,7 +22,7 @@ i18n.use(initReactI18next).init({
   },
 });
 
-i18n.services.formatter.addCached("mbps", (lng, options) => (value) => {
+i18n.services.formatter.addCached("mbps", (lng) => (value) => {
   const formatter = Intl.NumberFormat(lng, {
     style: "unit",
     unit: "megabyte-per-second",
