@@ -11,6 +11,7 @@ import LibraryOperations from "./enums/LibraryOperations";
 import SyncServiceOperations from "./enums/SyncServiceOperations";
 import WindowOperation from "./enums/WindowOperation";
 import { MIN_HEIGHT, MIN_WIDTH } from "./config/window";
+import { pngIcon } from "./config/icons";
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require("electron-squirrel-startup")) {
@@ -41,7 +42,7 @@ async function createWindow() {
     minHeight: MIN_HEIGHT,
     frame: false,
     title: "[|LE|] LAN-Launcher",
-    icon: "./images/icons/icon.png",
+    icon: pngIcon,
     webPreferences: {
       preload: join(__dirname, "preload.js"),
     },
