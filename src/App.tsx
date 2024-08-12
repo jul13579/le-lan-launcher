@@ -40,6 +40,7 @@ import {
   footerHeight,
   ServiceStatistics,
 } from "./components/ServiceStatistics";
+import { GlobalStyles } from "./components/GlobalStyles";
 
 const noDrag = {
   WebkitAppRegion: "no-drag",
@@ -223,6 +224,7 @@ root.render(
         <LibraryContextProvider>
           <CustomThemeProvider>
             <CssBaseline />
+            <GlobalStyles />
             <App />
           </CustomThemeProvider>
         </LibraryContextProvider>

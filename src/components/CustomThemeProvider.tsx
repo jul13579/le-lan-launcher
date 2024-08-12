@@ -54,6 +54,10 @@ export const CustomThemeProvider: FunctionComponent<
       },
     },
   });
+
+  /**
+   * Custom color definitions. Make sure to also apply the necessary changes in `/src/@types/CustomPalette.d.ts`!
+   */
   theme = createTheme(theme, {
     palette: {
       green: theme.palette.augmentColor({
