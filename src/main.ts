@@ -1,6 +1,6 @@
 "use strict";
 
-import { app, BrowserWindow, dialog, ipcMain, protocol } from "electron";
+import { app, BrowserWindow, dialog, ipcMain, protocol, net } from "electron";
 import { join } from "path";
 
 import { GameMainController as GameController } from "./controllers/GameMainController";
@@ -127,12 +127,12 @@ if (isDevelopment) {
  * @param {string} protocolName The name of the protocol.
  */
 function registerFileProtocol(protocolName: string) {
-  protocol.registerFileProtocol(protocolName, (request, callback) => {
+  protocol.handle(protocolName, (request) => {
     const url = request.url.replace(new RegExp(`^${protocolName}://`), "");
     // Decode URL to prevent errors when loading filenames with UTF-8 chars or chars like "#"
     const decodedUrl = decodeURI(url); // Needed in case URL contains spaces
     try {
-      return callback(decodedUrl);
+      return net.fetch(`file://${decodedUrl}`);
     } catch (error) {
       console.error(
         "ERROR: registerLocalResourceProtocol: Could not get file path:",
