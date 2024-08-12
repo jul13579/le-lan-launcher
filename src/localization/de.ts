@@ -94,6 +94,7 @@ export default {
       message: "Möchtest du {{gameTitle}} wirklich löschen?",
     },
   },
+  debugDialogTitle: "Debug",
   gameEntry: {
     download: "Herunterladen",
     play: "Spielen",

@@ -2,13 +2,14 @@ import { mdiOpenInNew, mdiPlay, mdiRestart, mdiStop } from "@mdi/js";
 import { default as Icon } from "@mdi/react";
 import { Box, IconButton, styled, Typography } from "@mui/material";
 import { IpcRenderer } from "electron";
-import { FunctionComponent, useEffect, useRef, useState } from "react";
+import { FunctionComponent, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import SyncServiceOperations from "../enums/SyncServiceOperations";
 import { useSettingsService } from "../hooks/useSettingsService";
 import { useSyncService } from "../hooks/useSyncService";
+import { Console } from "./Console";
 
-const ConsoleViewContainer = styled("div")(() => ({
+const SyncConsoleViewContainer = styled("div")(() => ({
   display: "flex",
   flexDirection: "column",
   maxHeight: "100%",
@@ -16,7 +17,7 @@ const ConsoleViewContainer = styled("div")(() => ({
   overflow: "hidden",
 }));
 
-export const ConsoleView: FunctionComponent = () => {
+export const SyncConsoleView: FunctionComponent = () => {
   /* -------------------------------------------------------------------------- */
   /*                                   Context                                  */
   /* -------------------------------------------------------------------------- */
@@ -30,8 +31,6 @@ export const ConsoleView: FunctionComponent = () => {
   const [serviceMessages, setServiceMessages] = useState<
     SyncServiceMessageObj[]
   >([]);
-  const [autoScroll, setAutoScroll] = useState(true);
-  const consoleEl = useRef<HTMLDivElement>();
 
   /* -------------------------------------------------------------------------- */
   /*                             Component Lifecycle                            */
@@ -50,37 +49,6 @@ export const ConsoleView: FunctionComponent = () => {
     };
   }, []);
 
-  useEffect(() => {
-    // Don't register mutation observer if `autoScroll` is not enabled
-    if (!autoScroll) {
-      return;
-    }
-    // Make sure the console element is set
-    if (!consoleEl.current) {
-      return;
-    }
-
-    const { current: el } = consoleEl;
-
-    const consoleScrollHandler = () => {
-      if (el.scrollTop >= el.scrollHeight - el.getBoundingClientRect().height) {
-        setAutoScroll(true);
-        return;
-      }
-      setAutoScroll(false);
-    };
-
-    const observer = new MutationObserver(() => {
-      el.removeEventListener("scrollend", consoleScrollHandler);
-      el.lastElementChild.scrollIntoView(
-        false, // align at bottom of element
-      );
-      el.addEventListener("scrollend", consoleScrollHandler);
-    });
-    observer.observe(el, { childList: true });
-    return () => observer.disconnect();
-  }, [autoScroll]);
-
   /* -------------------------------------------------------------------------- */
   /*                             Instance Functions                             */
   /* -------------------------------------------------------------------------- */
@@ -94,7 +62,7 @@ export const ConsoleView: FunctionComponent = () => {
   /*                                  Rendering                                 */
   /* -------------------------------------------------------------------------- */
   return (
-    <ConsoleViewContainer>
+    <SyncConsoleViewContainer>
       <Box py={1} display={"flex"} justifyContent={"space-between"}>
         <Box display={"flex"} alignItems={"center"}>
           <Typography
@@ -127,25 +95,7 @@ export const ConsoleView: FunctionComponent = () => {
           </IconButton>
         </div>
       </Box>
-      <Box
-        ref={consoleEl}
-        height={"100%"}
-        whiteSpace={"pre"}
-        overflow={"auto"}
-        display={"flex"}
-        flexDirection={"column"}
-      >
-        {serviceMessages.map((messageObj, index) => (
-          <span
-            key={index}
-            style={{
-              color: messageObj.type === "stderr" ? "red" : "inherit",
-            }}
-          >
-            {messageObj.message}
-          </span>
-        ))}
-      </Box>
-    </ConsoleViewContainer>
+      <Console messages={serviceMessages} />
+    </SyncConsoleViewContainer>
   );
 };

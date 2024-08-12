@@ -2,27 +2,28 @@ import { useMemo } from "react";
 import GameOperations from "../enums/GameOperations";
 import { useSyncService } from "./useSyncService";
 import { useSettingsService } from "./useSettingsService";
+import { useDebugModal } from "./useDebugModal";
 
 export const useGameControls = (folder: Folder, gameConfig: Game) => {
   const { downloadGame, unPauseGame, deleteGame, revertFolder } =
     useSyncService();
   const { playerName, debug } = useSettingsService();
+  const { openDebugDialog, clearMessages } = useDebugModal();
 
   return useMemo(() => {
     const download = () => downloadGame(gameConfig);
     const pause = () => unPauseGame(folder, true);
     const resume = () => unPauseGame(folder, false);
     const execute = (executable: string) => {
-      // TODO: add debug modal handling
-      //   if (this.debug) {
-      //     this.debugMessages = [];
-      //     this.debugDialog = true;
-      //   }
+      if (debug) {
+        clearMessages();
+        openDebugDialog();
+      }
       window.ipcRenderer.invoke(
         "controlGame",
         GameOperations.LAUNCH,
-        gameConfig,
         folder,
+        gameConfig,
         executable,
         playerName,
         debug,

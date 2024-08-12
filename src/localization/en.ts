@@ -93,6 +93,7 @@ export default {
       message: "Do you really want to delete {{gameTitle}}?",
     },
   },
+  debugDialogTitle: "Debug",
   gameEntry: {
     download: "Download",
     play: "Play",

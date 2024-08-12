@@ -229,7 +229,7 @@ export const GameEntry: FunctionComponent<GameEntryProps> = ({
       <Dialog
         open={deleteDialogOpen}
         onClose={closeDeleteDialog}
-        maxWidth={"md"}
+        maxWidth={"sm"}
       >
         <DialogTitle>
           {t("games.deleteDialog.title", { gameTitle: gameConfig.title })}

@@ -7,6 +7,7 @@ import { useSettingsService } from "../hooks/useSettingsService";
 import { GameEntry } from "./GameEntry";
 import { CustomTabPanel } from "../App";
 import { TabValue } from "../enums/TabValue";
+import { DebugModalContextProvider } from "./contexts/DebugModal/DebugModalContextProvider";
 
 const GameGridContainer = styled(Container)(() => ({
   display: "flex",
@@ -47,9 +48,11 @@ export const GamesView: FunctionComponent = () => {
         </Box>
       ) : (
         <GameGridContainer>
-          {lib.games.map((game, index) => (
-            <GameEntry key={index} gameConfig={game} />
-          ))}
+          <DebugModalContextProvider>
+            {lib.games.map((game, index) => (
+              <GameEntry key={index} gameConfig={game} />
+            ))}
+          </DebugModalContextProvider>
         </GameGridContainer>
       )}
     </CustomTabPanel>

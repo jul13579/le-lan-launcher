@@ -13,7 +13,7 @@ import { useSettingsService } from "../hooks/useSettingsService";
 import { useSyncService } from "../hooks/useSyncService";
 import { latestBpsFromSamples } from "../utils/bpsFromSamples";
 import { BarChart } from "./BarChart";
-import { ConsoleView } from "./ConsoleView";
+import { SyncConsoleView } from "./SyncConsoleView";
 import { bgTransparentDarkWithBlur } from "./CustomThemeProvider";
 
 export const footerHeight = 66;
@@ -121,7 +121,7 @@ export const ServiceStatistics: FunctionComponent = () => {
   return (
     <Footer>
       <StatisticsInsights>
-        <ConsoleView />
+        <SyncConsoleView />
         <BarChart samples={inBps} headline={t("statistics.download_speed")} />
         <BarChart samples={outBps} headline={t("statistics.upload_speed")} />
       </StatisticsInsights>
