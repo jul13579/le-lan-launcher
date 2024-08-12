@@ -3,7 +3,6 @@
 import { app, BrowserWindow, dialog, ipcMain, protocol } from "electron";
 import { join } from "path";
 
-import WindowConfig from "./config/window";
 import { GameMainController as GameController } from "./controllers/GameMainController";
 import { LibraryMainController as LibraryController } from "./controllers/LibraryMainController";
 import { SyncServiceMainController as SyncServiceController } from "./controllers/SyncServiceMainController";
@@ -11,6 +10,7 @@ import GameOperations from "./enums/GameOperations";
 import LibraryOperations from "./enums/LibraryOperations";
 import SyncServiceOperations from "./enums/SyncServiceOperations";
 import WindowOperation from "./enums/WindowOperation";
+import { MIN_HEIGHT, MIN_WIDTH } from "./config/window";
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require("electron-squirrel-startup")) {
@@ -35,10 +35,10 @@ let syncServiceController: ReturnType<typeof SyncServiceController>,
 async function createWindow() {
   // Create the browser window.
   win = new BrowserWindow({
-    width: WindowConfig.MIN_WIDTH,
-    height: WindowConfig.MIN_HEIGHT,
-    minWidth: WindowConfig.MIN_WIDTH,
-    minHeight: WindowConfig.MIN_HEIGHT,
+    width: MIN_WIDTH,
+    height: MIN_HEIGHT,
+    minWidth: MIN_WIDTH,
+    minHeight: MIN_HEIGHT,
     frame: false,
     title: "[|LE|] LAN-Launcher",
     icon: "./images/icons/icon.png",
