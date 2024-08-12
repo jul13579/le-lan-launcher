@@ -26,6 +26,9 @@ export default defineConfig((env) => {
     plugins: [pluginHotRestart("restart")],
     define,
     resolve: {
+      alias: {
+        src: "/src", // Without this, vite for some reason cannot resolve `src/...` imports
+      },
       // Load the Node.js entry.
       mainFields: ["module", "jsnext:main", "jsnext"],
     },
