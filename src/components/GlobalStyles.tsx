@@ -1,7 +1,23 @@
 import { FunctionComponent } from "react";
-import { GlobalStyles as _GlobalStyles } from "@mui/material";
+import { GlobalStyles as _GlobalStyles, useTheme } from "@mui/material";
+import { footerHeight } from "./ServiceStatistics";
+import {
+  bgTransparentDark,
+  bgTransparentDarkWithBlur,
+} from "./CustomThemeProvider";
 
 export const GlobalStyles: FunctionComponent = () => {
+  /* -------------------------------------------------------------------------- */
+  /*                                   Context                                  */
+  /* -------------------------------------------------------------------------- */
+  const {
+    palette: { info, success, warning, error },
+    spacing,
+  } = useTheme();
+
+  /* -------------------------------------------------------------------------- */
+  /*                                  Rendering                                 */
+  /* -------------------------------------------------------------------------- */
   return (
     <_GlobalStyles
       styles={{
@@ -31,6 +47,24 @@ export const GlobalStyles: FunctionComponent = () => {
 
         "::-webkit-scrollbar-corner": {
           background: "none",
+        },
+
+        /**
+         * Toastify
+         */
+        ":root": {
+          "--toastify-toast-bottom": `${footerHeight + parseInt(spacing(1))}px`,
+          "--toastify-toast-width": `400px`,
+          "--toastify-color-info": info.main,
+          "--toastify-color-success": success.main,
+          "--toastify-color-warning": warning.main,
+          "--toastify-color-error": error.main,
+          "--toastify-color-dark": bgTransparentDark.background,
+        },
+
+        ".Toastify__toast": {
+          backdropFilter: bgTransparentDarkWithBlur.backdropFilter,
+          marginBottom: spacing(1),
         },
       }}
     />

@@ -31,16 +31,17 @@ import {
   CustomThemeProvider,
 } from "./components/CustomThemeProvider";
 import { GamesView } from "./components/GamesView";
+import { GlobalStyles } from "./components/GlobalStyles";
+import {
+  footerHeight,
+  ServiceStatistics,
+} from "./components/ServiceStatistics";
 import { SettingsView } from "./components/SettingsView";
 import { ThemeBackground } from "./components/ThemeBackground";
 import { TabValue } from "./enums/TabValue";
 import { useSettingsService } from "./hooks/useSettingsService";
 import { useWindowControls } from "./hooks/useWindowControls";
-import {
-  footerHeight,
-  ServiceStatistics,
-} from "./components/ServiceStatistics";
-import { GlobalStyles } from "./components/GlobalStyles";
+import { ToastContainer } from "./components/ToastContainer";
 
 const noDrag = {
   WebkitAppRegion: "no-drag",
@@ -212,6 +213,7 @@ const App: FunctionComponent = () => {
         <SettingsView />
       </TabPanelContainer>
       <ServiceStatistics />
+      <ToastContainer />
     </TabContext>
   );
 };

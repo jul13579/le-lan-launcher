@@ -16,6 +16,8 @@ import { useForwardSlashSeparator } from "src/hooks/useForwardSlashSeparator";
 import { useSettingsService } from "src/hooks/useSettingsService";
 import { calculateDownloadProgress } from "src/utils/calculateDownloadProgress";
 import { SyncServiceContext } from "./SyncServiceContext";
+import { toast } from "react-toastify";
+import { useTranslation } from "react-i18next";
 
 const apiBase = `${baseUrl}/rest`;
 
@@ -101,6 +103,7 @@ export const SyncServiceContextProvider: FunctionComponent<
     useSettingsService(),
     ["homeDir"],
   );
+  const { t } = useTranslation();
 
   /* -------------------------------------------------------------------------- */
   /*                                    State                                   */
@@ -322,6 +325,16 @@ export const SyncServiceContextProvider: FunctionComponent<
     const interval = setInterval(getEvents, 5000);
     return () => clearInterval(interval);
   }, [online, lastEventId, folderStatuses]);
+
+  useEffect(() => {
+    if (started) {
+      if (online) {
+        toast(t("toast.service.connection.connected"), { type: "success" });
+      } else {
+        toast(t("toast.service.connection.disconnected"), { type: "error" });
+      }
+    }
+  }, [online, started]);
 
   /* -------------------------------------------------------------------------- */
   /*                             Instance Functions                             */

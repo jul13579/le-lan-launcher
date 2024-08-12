@@ -40,7 +40,7 @@ export default {
       },
       connection: {
         connected: "Verbindung zu Service hergestellt",
-        disconnected: "Verbindung zu Service verloren",
+        disconnected: "Verbindung zu Service unterbrochen",
       },
     },
     debug: "Debug-Modus gespeichert",

@@ -62,6 +62,7 @@
     "react-dom": "^18.3.1",
     "react-epic-spinners": "^0.5.0",
     "react-i18next": "^15.0.0",
+    "react-toastify": "^10.0.5",
     "xml-parser": "^1.2.1"
   }
 }
