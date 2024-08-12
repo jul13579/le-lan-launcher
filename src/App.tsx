@@ -151,7 +151,7 @@ const App: FunctionComponent = () => {
         <ProminentToolbar>
           <AppBarRow>
             <AvatarBox>
-              <Avatar src="/icon.png" />
+              <Avatar src="./icon.png" />
             </AvatarBox>
             <ToolbarTitle>LAN - Launcher</ToolbarTitle>
             <WindowButtonsBox>
