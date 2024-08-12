@@ -47,7 +47,7 @@ export const GamesView: FunctionComponent = () => {
           <h3>{t("games.lib_loading")}</h3>
         </Box>
       ) : (
-        <GameGridContainer>
+        <GameGridContainer maxWidth={"xl"}>
           <DebugModalContextProvider>
             {lib.games.map((game, index) => (
               <GameEntry key={index} gameConfig={game} />

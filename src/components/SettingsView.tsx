@@ -168,7 +168,7 @@ const SettingsView: FunctionComponent = () => {
   /*                                  Rendering                                 */
   /* -------------------------------------------------------------------------- */
   return (
-    <Container>
+    <Container maxWidth={"xl"}>
       {/* Alerts */}
       {[
         [!playerName, t("errors.playerNameUnset.message")],
