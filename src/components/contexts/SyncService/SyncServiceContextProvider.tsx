@@ -7,14 +7,14 @@ import {
   useMemo,
   useState,
 } from "react";
-import { gamelibDirId } from "../../../config/folder";
-import { baseUrl } from "../../../config/service";
-import GameOperations from "../../../enums/GameOperations";
-import SyncEvents from "../../../enums/SyncEvents";
-import SyncServiceOperations from "../../../enums/SyncServiceOperations";
-import { useForwardSlashSeparator } from "../../../hooks/useForwardSlashSeparator";
-import { useSettingsService } from "../../../hooks/useSettingsService";
-import { calculateDownloadProgress } from "../../../utils/calculateDownloadProgress";
+import { gamelibDirId } from "src/config/folder";
+import { baseUrl } from "src/config/service";
+import GameOperations from "src/enums/GameOperations";
+import SyncEvents from "src/enums/SyncEvents";
+import SyncServiceOperations from "src/enums/SyncServiceOperations";
+import { useForwardSlashSeparator } from "src/hooks/useForwardSlashSeparator";
+import { useSettingsService } from "src/hooks/useSettingsService";
+import { calculateDownloadProgress } from "src/utils/calculateDownloadProgress";
 import { SyncServiceContext } from "./SyncServiceContext";
 
 const apiBase = `${baseUrl}/rest`;

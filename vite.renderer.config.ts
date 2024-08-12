@@ -17,6 +17,9 @@ export default defineConfig((env) => {
     },
     plugins: [pluginExposeRenderer(name)],
     resolve: {
+      alias: {
+        src: "/src", // Without this, vite for some reason cannot resolve `src/...` imports
+      },
       preserveSymlinks: true,
     },
     clearScreen: false,

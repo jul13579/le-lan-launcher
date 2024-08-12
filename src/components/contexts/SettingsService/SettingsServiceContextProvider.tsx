@@ -12,7 +12,7 @@ import {
   defaultBackgroundHue,
   defaultLocale,
   defaultTheme,
-} from "../../../config/app";
+} from "src/config/app";
 import { Settings, SettingsServiceContext } from "./SettingsServiceContext";
 
 const initialConfig = JSON.parse(

@@ -6,11 +6,11 @@ import {
   useState,
 } from "react";
 import { LibraryContext } from "./LibraryContext";
-import { useLibraryWatcher } from "../../../hooks/useLibraryWatcher";
-import { useSyncService } from "../../../hooks/useSyncService";
-import { gamelibConfig, gamelibDirId } from "../../../config/folder";
-import { useForwardSlashSeparator } from "../../../hooks/useForwardSlashSeparator";
-import { useSettingsService } from "../../../hooks/useSettingsService";
+import { useLibraryWatcher } from "src/hooks/useLibraryWatcher";
+import { useSyncService } from "src/hooks/useSyncService";
+import { gamelibConfig, gamelibDirId } from "src/config/folder";
+import { useForwardSlashSeparator } from "src/hooks/useForwardSlashSeparator";
+import { useSettingsService } from "src/hooks/useSettingsService";
 import { IpcRenderer } from "electron";
 
 interface LibraryContextProviderProps {
