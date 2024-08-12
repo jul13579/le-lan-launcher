@@ -43,7 +43,12 @@ export function SyncServiceMainController(win: BrowserWindow) {
 
     homeDir = _homeDir;
 
-    let binPath = join(__dirname, "./syncthing");
+    let binPath = join(
+      process.env.NODE_ENV === "development"
+        ? __dirname
+        : process.resourcesPath,
+      "./syncthing",
+    );
     const args = [
       "-no-browser",
       `-home=${_homeDir}`,

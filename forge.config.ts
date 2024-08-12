@@ -16,6 +16,15 @@ const config: ForgeConfig = {
   packagerConfig: {
     asar: true,
     icon: icon,
+    executableName: "legc-lan-launcher",
+    beforeCopyExtraResources: [
+      (buildPath, electronVersion, _platform, arch, callback) => {
+        platform = _platform;
+        callback();
+      },
+    ],
+    extraResource:
+      platform === "win32" ? ["public/syncthing.exe"] : ["public/syncthing"],
   },
   rebuildConfig: {},
   makers: [
