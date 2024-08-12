@@ -24,6 +24,13 @@ export const CustomThemeProvider: FunctionComponent<
   const { primaryColorHex } = useSettingsService();
   let theme = createTheme({
     components: {
+      MuiPaper: {
+        styleOverrides: {
+          root: {
+            ...bgTransparentDarkWithBlur,
+          },
+        },
+      },
       // FABs for some reason have white background in dark theme. The below fixes the styling.
       MuiFab: {
         styleOverrides: {
@@ -35,14 +42,6 @@ export const CustomThemeProvider: FunctionComponent<
             ":hover": {
               backgroundColor: "rgba(44, 44, 44, 0.6)",
             },
-          },
-        },
-      },
-      // Menus should also be dark with blurry backdrop filter
-      MuiMenu: {
-        styleOverrides: {
-          paper: {
-            ...bgTransparentDarkWithBlur,
           },
         },
       },
