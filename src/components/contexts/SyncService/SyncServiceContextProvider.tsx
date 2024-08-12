@@ -432,6 +432,7 @@ export const SyncServiceContextProvider: FunctionComponent<
     if (started || !homeDir) {
       return;
     }
+    toast(t("toast.service.starting"), { type: "success" });
     try {
       const retVal = await window.ipcRenderer.invoke(
         "controlSyncService",
@@ -441,21 +442,29 @@ export const SyncServiceContextProvider: FunctionComponent<
       setStarted(true);
       return retVal;
     } catch (e) {
-      console.error(
-        `Encountered error when trying to start sync service: ${e}`,
-      );
+      toast(t("toast.service.error.start"), { type: "error" });
     }
   };
 
   const restart = async () => {
-    await SyncthingAPI.System.restart();
-    setOnline(false);
+    try {
+      await SyncthingAPI.System.restart();
+      setOnline(false);
+      toast(t("toast.service.success.restart"), { type: "success" });
+    } catch (e) {
+      toast(t("toast.service.error.restart"), { type: "error" });
+    }
   };
 
   const stop = async () => {
-    await SyncthingAPI.System.stop();
-    setOnline(false);
-    setStarted(false);
+    try {
+      await SyncthingAPI.System.stop();
+      setOnline(false);
+      setStarted(false);
+      toast(t("toast.service.success.stop"), { type: "success" });
+    } catch (e) {
+      toast(t("toast.service.error.stop"), { type: "error" });
+    }
   };
 
   const revertFolder = async (folderId: string) => {

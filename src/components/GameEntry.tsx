@@ -23,6 +23,7 @@ import { useLibrary } from "../hooks/useLibrary";
 import { calculateDownloadProgress } from "../utils/calculateDownloadProgress";
 import { useTranslation } from "react-i18next";
 import { useSyncService } from "src/hooks/useSyncService";
+import { toast } from "react-toastify";
 
 const hoverAnimation = "0.2s ease-in-out";
 
@@ -244,9 +245,24 @@ export const GameEntry: FunctionComponent<GameEntryProps> = ({
         <DialogActions>
           <Button onClick={closeDeleteDialog}>{t("cardActions.cancel")}</Button>
           <Button
-            onClick={() => {
-              deleteGame(thisGameFolder);
+            onClick={async () => {
               closeDeleteDialog();
+              try {
+                await deleteGame(thisGameFolder);
+                toast(
+                  t("toast.game.delete.success", {
+                    gameTitle: gameConfig.title,
+                  }),
+                  { type: "success" },
+                );
+              } catch (e) {
+                toast(
+                  t("toast.game.delete.error", { gameTitle: gameConfig.title }),
+                  {
+                    type: "error",
+                  },
+                );
+              }
             }}
             color="error"
           >
