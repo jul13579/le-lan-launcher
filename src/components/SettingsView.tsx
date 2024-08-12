@@ -7,7 +7,6 @@ import {
   Container,
   FormControl,
   FormControlLabel,
-  FormHelperText,
   Grid,
   InputLabel,
   MenuItem,
@@ -21,13 +20,12 @@ import {
 } from "@mui/material";
 import { FunctionComponent, useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { CustomTabPanel } from "../App";
+import { TabValue } from "../enums/TabValue";
 import { useFileChooser } from "../hooks/useFileChooser";
 import { useSettingsService } from "../hooks/useSettingsService";
 import { useSyncService } from "../hooks/useSyncService";
-import langs from "../localization/langs";
 import { bgTransparentDarkWithBlur } from "./CustomThemeProvider";
-import { CustomTabPanel } from "../App";
-import { TabValue } from "../enums/TabValue";
 import { footerHeight } from "./ServiceStatistics";
 
 const ThemeItem = ({ theme }: { theme: Theme }) => ({
@@ -86,7 +84,12 @@ const SettingsView: FunctionComponent = () => {
   /* -------------------------------------------------------------------------- */
   /*                                   Context                                  */
   /* -------------------------------------------------------------------------- */
-  const { t } = useTranslation();
+  const {
+    t,
+    i18n: {
+      options: { resources: langs },
+    },
+  } = useTranslation();
   const {
     playerName,
     homeDir,
