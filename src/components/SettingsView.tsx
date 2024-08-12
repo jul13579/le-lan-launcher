@@ -246,7 +246,7 @@ const SettingsView: FunctionComponent = () => {
                 label={t("settings.debug")}
                 control={
                   <Switch
-                    value={debug}
+                    checked={debug}
                     onChange={(event, checked) => setDebug(checked)}
                   />
                 }
