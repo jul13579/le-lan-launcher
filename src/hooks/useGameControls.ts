@@ -12,7 +12,6 @@ export const useGameControls = (folder: Folder, gameConfig: Game) => {
     const download = () => downloadGame(gameConfig);
     const pause = () => unPauseGame(folder, true);
     const resume = () => unPauseGame(folder, false);
-    const remove = () => deleteGame(folder);
     const execute = (executable: string) => {
       // TODO: add debug modal handling
       //   if (this.debug) {
@@ -36,7 +35,7 @@ export const useGameControls = (folder: Folder, gameConfig: Game) => {
       window.ipcRenderer.invoke("controlGame", GameOperations.BROWSE, folder);
     };
 
-    return { download, pause, resume, remove, execute, reset, browse };
+    return { download, pause, resume, execute, reset, browse };
   }, [
     folder,
     gameConfig,

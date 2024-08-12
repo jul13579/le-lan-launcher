@@ -15,16 +15,16 @@ export default {
     nas: "NAS ID saved",
     locale: "Language saved",
     download: {
-      started: "Download started: {gameTitle}",
-      paused: "Download paused: {gameTitle}",
-      resumed: "Download resumed: {gameTitle}",
+      started: "Download started: {{gameTitle}}",
+      paused: "Download paused: {{gameTitle}}",
+      resumed: "Download resumed: {{gameTitle}}",
     },
     game: {
       delete: {
-        success: "Game deleted: {gameTitle}",
+        success: "Game deleted: {{gameTitle}}",
         error: "Error deleting game: {error}",
       },
-      reset: "Repairing game files: {gameTitle}",
+      reset: "Repairing game files: {{gameTitle}}",
     },
     service: {
       starting: "Service is starting...",
@@ -89,8 +89,8 @@ export default {
   games: {
     lib_loading: "Game library is being downloaded...",
     deleteDialog: {
-      title: "Delete {gameTitle}?",
-      message: "Do you really want to delete {gameTitle}?",
+      title: "Delete {{gameTitle}}?",
+      message: "Do you really want to delete {{gameTitle}}?",
     },
   },
   gameEntry: {

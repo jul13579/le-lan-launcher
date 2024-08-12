@@ -1,6 +1,3 @@
-import { useMemo } from "react";
-import { useGameControls } from "./useGameControls";
-import { useTranslation } from "react-i18next";
 import {
   mdiBackupRestore,
   mdiChevronDoubleRight,
@@ -10,13 +7,17 @@ import {
   mdiPause,
   mdiPlay,
 } from "@mdi/js";
+import { useMemo } from "react";
+import { useTranslation } from "react-i18next";
+import { useGameControls } from "./useGameControls";
 
 export const useGameMenuButtons = (
   thisGameFolder: Folder,
   thisGameFolderStatus: FolderStatus,
   gameConfig: Game,
+  openDeleteDialog: () => void,
 ) => {
-  const { pause, resume, remove, execute, reset, browse } = useGameControls(
+  const { pause, resume, execute, reset, browse } = useGameControls(
     thisGameFolder,
     gameConfig,
   );
@@ -61,12 +62,22 @@ export const useGameMenuButtons = (
         text: t("gameEntry.browse"),
       },
       {
-        click: remove,
+        click: openDeleteDialog,
         show: true,
         icon: mdiDelete,
         text: t("gameEntry.delete"),
       },
     ],
-    [thisGameFolder, thisGameFolderStatus, t],
+    [
+      thisGameFolder,
+      thisGameFolderStatus,
+      t,
+      pause,
+      resume,
+      execute,
+      reset,
+      browse,
+      openDeleteDialog,
+    ],
   );
 };

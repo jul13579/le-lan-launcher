@@ -1,18 +1,19 @@
-import { useMemo } from "react";
-import { useGameControls } from "./useGameControls";
 import {
   mdiChevronDoubleRight,
   mdiClose,
   mdiDownload,
   mdiPause,
 } from "@mdi/js";
+import { useMemo } from "react";
+import { useGameControls } from "./useGameControls";
 
 export const useDownloadButtons = (
   subscribed: boolean,
   thisGameFolder: Folder,
   gameConfig: Game,
+  openDeleteDialog: () => void,
 ) => {
-  const { download, pause, resume, remove } = useGameControls(
+  const { download, pause, resume } = useGameControls(
     thisGameFolder,
     gameConfig,
   );
@@ -30,8 +31,8 @@ export const useDownloadButtons = (
         show: thisGameFolder && thisGameFolder.paused,
         icon: mdiChevronDoubleRight,
       },
-      { click: remove, show: subscribed, icon: mdiClose },
+      { click: openDeleteDialog, show: subscribed, icon: mdiClose },
     ],
-    [subscribed, thisGameFolder, download, pause, resume, remove],
+    [subscribed, thisGameFolder, download, pause, resume, openDeleteDialog],
   );
 };

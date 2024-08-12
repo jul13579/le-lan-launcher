@@ -15,16 +15,16 @@ export default {
     nas: "NAS ID gespeichert",
     locale: "Sprache gespeichert",
     download: {
-      started: "Download gestartet: {gameTitle}",
-      paused: "Download pausiert: {gameTitle}",
-      resumed: "Download fortgesetzt: {gameTitle}",
+      started: "Download gestartet: {{gameTitle}}",
+      paused: "Download pausiert: {{gameTitle}}",
+      resumed: "Download fortgesetzt: {{gameTitle}}",
     },
     game: {
       delete: {
-        success: "Spiel gelöscht: {gameTitle}",
-        error: "Fehler beim Löschen: {error}",
+        success: "Spiel gelöscht: {{gameTitle}}",
+        error: "Fehler beim Löschen: {{error}}",
       },
-      reset: "Repariere Spiel: {gameTitle}",
+      reset: "Repariere Spiel: {{gameTitle}}",
     },
     service: {
       starting: "Service wird gestartet...",
@@ -90,8 +90,8 @@ export default {
   games: {
     lib_loading: "Spielebibliothek wird abgerufen...",
     deleteDialog: {
-      title: "{gameTitle} löschen?",
-      message: "Möchtest du {gameTitle} wirklich löschen?",
+      title: "{{gameTitle}} löschen?",
+      message: "Möchtest du {{gameTitle}} wirklich löschen?",
     },
   },
   gameEntry: {

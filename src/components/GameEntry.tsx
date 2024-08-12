@@ -1,7 +1,13 @@
 import { default as Icon } from "@mdi/react";
 import {
   Box,
+  Button,
   CircularProgress,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
   Fab,
   ListItemIcon,
   Menu,
@@ -15,6 +21,8 @@ import { useGameFolder } from "../hooks/useGameFolder";
 import { useGameMenuButtons } from "../hooks/useGameMenuButtons";
 import { useLibrary } from "../hooks/useLibrary";
 import { calculateDownloadProgress } from "../utils/calculateDownloadProgress";
+import { useTranslation } from "react-i18next";
+import { useSyncService } from "src/hooks/useSyncService";
 
 const hoverAnimation = "0.2s ease-in-out";
 
@@ -52,7 +60,7 @@ const GameEntryRoot = styled("div")<GameEntryRootProps>(
           },
         }
       : {}),
-  }),
+  })
 );
 
 interface ProgressIndicatorProps {
@@ -64,7 +72,7 @@ const ProgressIndicator = styled("div")<ProgressIndicatorProps>(
     background: "rgba(0, 0, 0, 0.7)",
     transition: "top 0.1s linear",
     top: `${-downloadProgress * 100}% !important`,
-  }),
+  })
 );
 
 const DownloadButtonsContainer = styled("div")(() => ({
@@ -98,6 +106,8 @@ export const GameEntry: FunctionComponent<GameEntryProps> = ({
   /*                                   Context                                  */
   /* -------------------------------------------------------------------------- */
   const { libFolderPath } = useLibrary();
+  const { t } = useTranslation();
+  const { deleteGame } = useSyncService();
 
   /* -------------------------------------------------------------------------- */
   /*                                    State                                   */
@@ -106,7 +116,7 @@ export const GameEntry: FunctionComponent<GameEntryProps> = ({
   const subscribed = useMemo(() => !!thisGameFolder, [thisGameFolder]);
   const downloadProgress = useMemo(
     () => subscribed && calculateDownloadProgress(thisGameFolderStatus),
-    [subscribed, thisGameFolderStatus],
+    [subscribed, thisGameFolderStatus]
   );
   const installed = useMemo(() => downloadProgress >= 1, [downloadProgress]);
 
@@ -114,15 +124,19 @@ export const GameEntry: FunctionComponent<GameEntryProps> = ({
     subscribed,
     thisGameFolder,
     gameConfig,
+    () => openDeleteDialog()
   );
 
   const gameMenuButtons = useGameMenuButtons(
     thisGameFolder,
     thisGameFolderStatus,
     gameConfig,
+    () => openDeleteDialog()
   );
 
   const [anchorEl, setAnchorEl] = useState(null);
+
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
 
   /* -------------------------------------------------------------------------- */
   /*                             Instance functions                             */
@@ -133,6 +147,9 @@ export const GameEntry: FunctionComponent<GameEntryProps> = ({
   const closeMenu = () => {
     setAnchorEl(null);
   };
+
+  const openDeleteDialog = () => setDeleteDialogOpen(true);
+  const closeDeleteDialog = () => setDeleteDialogOpen(false);
 
   /* -------------------------------------------------------------------------- */
   /*                                  Rendering                                 */
@@ -165,7 +182,7 @@ export const GameEntry: FunctionComponent<GameEntryProps> = ({
                         <Icon path={icon} size={1.5} />
                       </Fab>
                     </Box>
-                  ),
+                  )
               )
             )}
           </DownloadButtonsContainer>
@@ -205,9 +222,38 @@ export const GameEntry: FunctionComponent<GameEntryProps> = ({
                 </ListItemIcon>
                 <Typography mx={1}>{text}</Typography>
               </MenuItem>
-            ),
+            )
         )}
       </Menu>
+
+      <Dialog
+        open={deleteDialogOpen}
+        onClose={closeDeleteDialog}
+        maxWidth={"md"}
+      >
+        <DialogTitle>
+          {t("games.deleteDialog.title", { gameTitle: gameConfig.title })}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            <b>
+              {t("games.deleteDialog.message", { gameTitle: gameConfig.title })}
+            </b>
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={closeDeleteDialog}>{t("cardActions.cancel")}</Button>
+          <Button
+            onClick={() => {
+              deleteGame(thisGameFolder);
+              closeDeleteDialog();
+            }}
+            color="error"
+          >
+            {t("cardActions.delete")}
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 };
