@@ -9,22 +9,74 @@ import { VitePlugin } from "@electron-forge/plugin-vite";
 import { FusesPlugin } from "@electron-forge/plugin-fuses";
 import { FuseV1Options, FuseVersion } from "@electron/fuses";
 import { icnsIcon, icoIcon, icon, pngIcon } from "./src/config/icons";
+import { rename } from "fs";
+import { join } from "path";
 
-let platform;
+const syncthingPath = "public/syncthing";
 
 const config: ForgeConfig = {
   packagerConfig: {
     asar: true,
     icon: icon,
     executableName: "legc-lan-launcher",
+    // We can only use static file paths here, so we have to handle the platform-specific executable extension in the following hooks
+    extraResource: [syncthingPath],
+    // If building on `win32`, rename the `syncthing.exe` => `syncthing` before copying extra resources
     beforeCopyExtraResources: [
-      (buildPath, electronVersion, _platform, arch, callback) => {
-        platform = _platform;
-        callback();
+      (buildPath, electronVersion, platform, arch, callback) => {
+        if (platform !== "win32") {
+          callback();
+          return;
+        }
+        rename(
+          join(__dirname, `${syncthingPath}.exe`),
+          join(__dirname, syncthingPath),
+          callback,
+        );
       },
     ],
-    extraResource:
-      platform === "win32" ? ["public/syncthing.exe"] : ["public/syncthing"],
+    // After copying extra resources, revert the rename
+    afterCopyExtraResources: [
+      async (buildPath, electronVersion, platform, arch, callback) => {
+        if (platform !== "win32") {
+          callback();
+          return;
+        }
+        try {
+          await Promise.all([
+            new Promise((resolve, reject) => {
+              rename(
+                join(__dirname, syncthingPath),
+                join(__dirname, `${syncthingPath}.exe`),
+                (err) => {
+                  if (err) {
+                    reject(err);
+                  } else {
+                    resolve(err);
+                  }
+                },
+              );
+            }),
+            new Promise((resolve, reject) => {
+              rename(
+                join(buildPath, "resources", "syncthing"),
+                join(buildPath, "resources", "syncthing.exe"),
+                (err) => {
+                  if (err) {
+                    reject(err);
+                  } else {
+                    resolve(err);
+                  }
+                },
+              );
+            }),
+          ]);
+          callback();
+        } catch (e) {
+          callback(e);
+        }
+      },
+    ],
   },
   rebuildConfig: {},
   makers: [
