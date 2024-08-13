@@ -1,17 +1,17 @@
 # :video_game: LEGC LAN Launcher
 
-![Build](https://github.com/jul13579/le-lan-launcher/workflows/Build/badge.svg?branch=master)
-![Lint](https://github.com/jul13579/le-lan-launcher/workflows/Lint/badge.svg?branch=master)
+[![Build](https://github.com/jul13579/le-lan-launcher/actions/workflows/build.yml/badge.svg?branch=master)](https://github.com/jul13579/le-lan-launcher/actions/workflows/build.yml)
+[![Lint](https://github.com/jul13579/le-lan-launcher/actions/workflows/lint.yml/badge.svg?branch=master)](https://github.com/jul13579/le-lan-launcher/actions/workflows/lint.yml)
 
 ![Launcher preview](preview.png "Launcher preview")
 <sup><sub>(Shown games are examples and not included in the launcher. The launcher does not include **ANY** games by itself)</sup></sub>
 
 ## :book: Description
-The **LEGC LAN Launcher** mainly is a frontend for the widely known and used synchronization software *Syncthing* (https://github.com/syncthing/syncthing). The need for such a software arised every time our quite small gaming clan faced the challange to distribute games to other LAN-Party visitors in a fast and easy way.
+The **LEGC LAN Launcher** mainly is a frontend for the widely known and used synchronization software *Syncthing* (https://github.com/syncthing/syncthing). The need for such a software arised every time our quite small gaming clan faced the challenge to distribute games to other LAN-Party visitors in a fast and easy way.
 
 Instead of relying on a NAS for everyone to access, this launcher relies on *Syncthing*, the P2P synchronization software, to distribute data to LAN-Party visitors. The setup in mind is as follows:
 
-A node (in our case the NAS) shares gamefolders which are set up as "send only", while the LAN Launcher subscribes to these gamefolders as "receive only". This does **NOT** mean that a client does not further distribute the data! Instead it means that only original and unaltered files are distributed by the client.
+A node (in our case the NAS) shares game folders which are set up as "send only", while the LAN Launcher subscribes to these game folders as "receive only". This does **NOT** mean that a client does not further distribute the data! Instead it means that only original and unaltered files are distributed by the client.
 
 As *Syncthing* is written in go, it is especially suited for cross-platform use, such as e.g. on a ARM-based NAS. For a more convenient usage of *Syncthing* in this setup, some changes were made (see *patches* directory):
 * First and foremost, syncthing requires you to manually bind devices to each other by prompting you for it. This feature was removed in favor of automatic device approval (especially for the NAS side).
@@ -21,8 +21,8 @@ The necessary changes are very few, so feel free to see the patches in the `patc
 
 ## :metal: Features
 * Fancy customization features, including unicorns! :unicorn::rainbow:
-* Multilanguage support, currently english and german only!
-* Set a playername in settings, which can be automatically set in numerous games (see config)
+* Multi-language support, currently english and german only!
+* Set a player name in settings, which can be automatically set in numerous games (see config)
 * Download/browse/delete games, pause distribution of specific games, specify multiple launch configurations (see config)
 * See network usage of *Syncthing*
 * Spawns games detached from launcher, so the launcher can be closed without killing the game.
@@ -31,8 +31,10 @@ The necessary changes are very few, so feel free to see the patches in the `patc
 ## :floppy_disk: Installation
 ### Prerequisites
 * git
-* Node.js (14+) + npm
-* Syncthing prerequisties (see Syncthing documentation for further information)
+* Node.js + npm
+* Syncthing prerequisites (see Syncthing documentation for further information)
+
+I'd advise to use the versions specified in the `build > strategy > matrix` definition of this repo's [`build.yml`](https://github.com/jul13579/le-lan-launcher/blob/master/.github/workflows/build.yml)
 
 ### Building
 Download/clone the repo and run the desired build script:
@@ -79,7 +81,7 @@ Before the launcher can be used, a device should be set up to provide the game f
   * *id*: The id specified in this field has to be the folder ID of the game, which you have to set up on the server/NAS/etc.
   * *launch*: specifies the executable to be spawned when clicking "play". The path is relative to the game's root folder
   * *moreLaunchs*: There may be situations, where it is convenient to have a second "play" button that spawns the same executable with different parameters or even spawns a different executable. In such cases, *moreLaunchs* allows to specify such launch configs and lets you even specify a button text.
-  * *nameConfig*: For games that store the player's name in a human readable file, *nameConfig* lets you specify the path to this configuration file. In case this config file does not reside inside the games folder, you can specify an environment variable using *env* after which the given file path is interpreted relative to the resolved environment variable. If the player's name is the only content of the configuration file, you should omit the *regex* attribute, as it is used for search-replacing the player's name inside the configuration file. The regex has to be specified in a way that only the to-be-replaced playername inside the file is matched.
+  * *nameConfig*: For games that store the player's name in a human readable file, *nameConfig* lets you specify the path to this configuration file. In case this config file does not reside inside the games folder, you can specify an environment variable using *env* after which the given file path is interpreted relative to the resolved environment variable. If the player's name is the only content of the configuration file, you should omit the *regex* attribute, as it is used for search-replacing the player's name inside the configuration file. The regex has to be specified in a way that only the to-be-replaced player name inside the file is matched.
 
   All executables will be launched with the following arguments:
   1. Game directory path / the Syncthing shared directory path
