@@ -15,22 +15,30 @@ export function SyncServiceMainController(win: BrowserWindow) {
   let apiKey: string;
   let syncServiceProcess: ReturnType<typeof spawn>;
 
-  function _sendSyncServiceOutput(
-    type: SyncServiceMessageObj["type"],
-    message: SyncServiceMessageObj["message"],
-  ) {
+  function _useWin(cb: (win: BrowserWindow) => void) {
     try {
-      win.webContents.send("syncService", {
-        type,
-        message,
-      });
+      cb(win);
     } catch (e) {
       // when closing the app `win.webContents` might already be destroyed
     }
   }
 
+  function _sendSyncServiceOutput(
+    type: SyncServiceMessageObj["type"],
+    message: SyncServiceMessageObj["message"],
+  ) {
+    _useWin((win) => {
+      win.webContents.send("syncService", {
+        type,
+        message,
+      });
+    });
+  }
+
   function _sendApiKey(apiKey: string) {
-    win.webContents.send("setApiKey", apiKey);
+    _useWin((win) => {
+      win.webContents.send("setApiKey", apiKey);
+    });
   }
 
   function start(_homeDir: string) {
