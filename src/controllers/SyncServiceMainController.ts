@@ -5,6 +5,7 @@ import { join } from "path";
 import parse from "xml-parser";
 import SyncServiceOperations from "../enums/SyncServiceOperations";
 import { baseUrl } from "../config/service";
+import treeKill from "tree-kill";
 
 /**
  * Controller for the sync-service.
@@ -103,7 +104,8 @@ export function SyncServiceMainController(win: BrowserWindow) {
       );
       return;
     }
-    syncServiceProcess.kill();
+    // Syncthing has a child process, which isn't killed by the windows implementation of Node's `child_process.kill`.
+    treeKill(syncServiceProcess.pid, "SIGTERM");
   }
 
   function _readApiKey() {
