@@ -152,6 +152,19 @@ export const SyncServiceContextProvider: FunctionComponent<
   }, [apiKey]);
 
   /**
+   * Set the `started` state to `false` when receiving the `syncService.existed` message
+   */
+  useEffect(() => {
+    window.ipcRenderer.on("syncService.exited", () => {
+      setStarted(false);
+      setOnline(false);
+    });
+    () => {
+      window.ipcRenderer.removeAllListeners("syncService.exited");
+    };
+  }, []);
+
+  /**
    * Setup service pinging in 5s intervals
    */
   useEffect(() => {

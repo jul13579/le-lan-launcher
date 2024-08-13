@@ -90,6 +90,10 @@ export function SyncServiceMainController(win: BrowserWindow) {
         homeDir = undefined;
         apiKey = undefined;
 
+        _useWin((win) => {
+          win.webContents.send("syncService.exited");
+        });
+
         // Unset API key in renderer when service stopped
         _sendApiKey(undefined);
 

@@ -22,7 +22,13 @@ contextBridge.exposeInMainWorld("ipcRenderer", {
     }
   },
   on: (channel, func) => {
-    const validChannels = ["syncService", "setApiKey", "library", "game"];
+    const validChannels = [
+      "syncService",
+      "syncService.exited",
+      "setApiKey",
+      "library",
+      "game",
+    ];
     if (validChannels.includes(channel)) {
       ipcRenderer.on(channel, func);
     }
