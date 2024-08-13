@@ -142,8 +142,8 @@ function registerFileProtocol(protocolName: string) {
   });
 }
 
-function shutdown() {
-  syncServiceController.stop();
+async function shutdown() {
+  await syncServiceController.stop();
   app.quit();
 }
 
