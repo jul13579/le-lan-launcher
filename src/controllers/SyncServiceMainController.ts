@@ -1,11 +1,10 @@
-import { spawn } from "child_process";
+import { exec, spawn } from "child_process";
 import { BrowserWindow, shell } from "electron";
 import { readFile } from "fs";
 import { join } from "path";
 import parse from "xml-parser";
-import SyncServiceOperations from "../enums/SyncServiceOperations";
 import { baseUrl } from "../config/service";
-import treeKill from "tree-kill";
+import SyncServiceOperations from "../enums/SyncServiceOperations";
 
 /**
  * Controller for the sync-service.
@@ -105,7 +104,11 @@ export function SyncServiceMainController(win: BrowserWindow) {
       return;
     }
     // Syncthing has a child process, which isn't killed by the windows implementation of Node's `child_process.kill`.
-    treeKill(syncServiceProcess.pid, "SIGTERM");
+    if (process.platform === "win32") {
+      exec(`taskkill /pid ${syncServiceProcess.pid} /T /F`);
+    } else {
+      syncServiceProcess.kill();
+    }
   }
 
   function _readApiKey() {
