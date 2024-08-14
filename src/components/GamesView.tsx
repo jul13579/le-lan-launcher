@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next";
 import { useLibrary } from "../hooks/useLibrary";
 import { useSettingsService } from "../hooks/useSettingsService";
 import { GameEntry } from "./GameEntry";
-import { CustomTabPanel } from "../App";
+import { CustomTabPanel, TabPanelComponentProps } from "../App";
 import { TabValue } from "../enums/TabValue";
 import { DebugModalContextProvider } from "./contexts/DebugModal/DebugModalContextProvider";
 
@@ -16,7 +16,9 @@ const GameGridContainer = styled(Container)(() => ({
   userSelect: "none",
 }));
 
-export const GamesView: FunctionComponent = () => {
+export const GamesView: FunctionComponent<TabPanelComponentProps> = ({
+  value,
+}) => {
   /* -------------------------------------------------------------------------- */
   /*                                   Context                                  */
   /* -------------------------------------------------------------------------- */
@@ -30,7 +32,7 @@ export const GamesView: FunctionComponent = () => {
   /*                                  Rendering                                 */
   /* -------------------------------------------------------------------------- */
   return (
-    <CustomTabPanel value={TabValue.GAMES} fullHeight={loading}>
+    <CustomTabPanel value={value} match={TabValue.GAMES} fullHeight={loading}>
       {loading ? (
         <Box
           display={"flex"}

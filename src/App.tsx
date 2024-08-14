@@ -6,7 +6,6 @@ import {
   mdiWindowMinimize,
 } from "@mdi/js";
 import { default as Icon } from "@mdi/react";
-import { TabContext, TabPanel } from "@mui/lab";
 import {
   AppBar,
   Avatar,
@@ -108,15 +107,26 @@ const CustomTab = styled(Tab)(() => ({
   lineHeight: 1,
 }));
 
-interface CustomTabPanelProps {
-  fullHeight?: boolean;
+export interface TabPanelComponentProps {
+  value: string;
 }
 
-export const CustomTabPanel = styled(TabPanel, {
-  shouldForwardProp: (prop) => prop !== "fullHeight",
-})<CustomTabPanelProps>(({ fullHeight }) => ({
-  position: "relative",
+interface CustomTabPanelProps extends TabPanelComponentProps {
+  fullHeight?: boolean;
+  match: string;
+}
+
+export const CustomTabPanel = styled("div", {
+  shouldForwardProp: (prop) =>
+    !(["fullHeight", "value", "match"] as PropertyKey[]).includes(prop),
+})<CustomTabPanelProps>(({ fullHeight, value, match }) => ({
+  position: "absolute",
+  width: "100%",
   height: fullHeight ? "100%" : "auto",
+  visibility: value === match ? "visible" : "hidden",
+  opacity: value === match ? 1 : 0,
+  transform: value === match ? "initial" : "translateY(25px)",
+  transition: "opacity .2s linear, transform .2s ease-out",
 }));
 
 const TabPanelContainer = styled("div")(() => ({
@@ -145,7 +155,7 @@ const App: FunctionComponent = () => {
   /*                                  Rendering                                 */
   /* -------------------------------------------------------------------------- */
   return (
-    <TabContext value={tab}>
+    <>
       <ThemeBackground />
       <DraggableAppBar>
         <ProminentToolbar>
@@ -209,12 +219,12 @@ const App: FunctionComponent = () => {
         </ProminentToolbar>
       </DraggableAppBar>
       <TabPanelContainer>
-        <GamesView />
-        <SettingsView />
+        <GamesView value={tab} />
+        <SettingsView value={tab} />
       </TabPanelContainer>
       <ServiceStatistics />
       <ToastContainer />
-    </TabContext>
+    </>
   );
 };
 

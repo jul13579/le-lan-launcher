@@ -20,7 +20,7 @@ import {
 } from "@mui/material";
 import { FunctionComponent, useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { CustomTabPanel } from "../App";
+import { CustomTabPanel, TabPanelComponentProps } from "../App";
 import { TabValue } from "../enums/TabValue";
 import { useFileChooser } from "../hooks/useFileChooser";
 import { useSettingsService } from "../hooks/useSettingsService";
@@ -65,9 +65,11 @@ const CustomBackgroundPicker = styled("div")<CustomBackgroundPickerProps>(
  * tab panel is not active.
  * @returns {FunctionComponent}
  */
-const SettingsViewTab: FunctionComponent = () => {
+const SettingsViewTab: FunctionComponent<TabPanelComponentProps> = ({
+  value,
+}) => {
   return (
-    <CustomTabPanel value={TabValue.SETTINGS}>
+    <CustomTabPanel value={value} match={TabValue.SETTINGS}>
       <SettingsView />
     </CustomTabPanel>
   );
