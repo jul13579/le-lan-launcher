@@ -28,4 +28,4 @@ go run build.go -version $VERSION-LEGC -no-upgrade build
 popd
 
 echo -e "Move binary into place..."
-mv $SYNCTHING_DIR/syncthing* ./public/
+mv $SYNCTHING_DIR/syncthing* ./public/main/

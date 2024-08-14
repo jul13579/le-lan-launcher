@@ -12,7 +12,7 @@ import { icnsIcon, icoIcon, icon, pngIcon } from "./src/config/icons";
 import { rename } from "fs";
 import { join } from "path";
 
-const syncthingPath = "public/syncthing";
+const syncthingPath = "public/main/syncthing";
 
 const config: ForgeConfig = {
   packagerConfig: {

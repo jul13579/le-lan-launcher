@@ -33,4 +33,4 @@ popd
 
 echo.
 echo Move binary into place...
-move %SYNCTHING_DIR%\syncthing* .\public\
+move %SYNCTHING_DIR%\syncthing* .\public\main\
