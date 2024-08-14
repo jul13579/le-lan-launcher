@@ -1,0 +1,30 @@
+name: Format
+
+on: [push]
+
+jobs:
+  build:
+    name: Run format checks
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js 20
+        uses: actions/setup-node@v1
+        with:
+          node-version: 20
+      - run: npm ci
+      - run: npm run format
+      - run: git status --porcelain
+      - run: |
+          if [ -n "$(git status --porcelain)" ]; then
+            echo -e "${TXT_RED}Changes detected, versioned files are not formatted correctly!${TXT_RESET}";
+            exit 1;
+          else
+            echo -e "${TXT_GREEN}Versioned files are formatted correctly!${TXT_RESET}";
+            exit 0;
+          fi
+        env:
+          TXT_RESET: "\e[0m"
+          TXT_RED: "\e[1;31m"
+          TXT_GREEN: "\e[1;32m"

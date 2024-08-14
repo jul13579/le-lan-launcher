@@ -1,4 +1,4 @@
-name: Create Tag
+name: Auto-Tag
 
 on:
   push:
