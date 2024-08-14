@@ -117,9 +117,9 @@ export function SyncServiceMainController(win: BrowserWindow) {
       return;
     }
     // Use `treeKill` to kill the main Syncthing process and all its child processes
-    await new Promise((resolve, reject) => {
+    await new Promise<void>((resolve, reject) => {
       treeKill(syncServiceProcess.pid, (err) =>
-        err ? reject(err) : resolve(err),
+        err ? reject(err) : resolve(),
       );
     });
   }

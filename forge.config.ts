@@ -44,7 +44,7 @@ const config: ForgeConfig = {
         }
         try {
           await Promise.all([
-            new Promise((resolve, reject) => {
+            new Promise<void>((resolve, reject) => {
               rename(
                 join(__dirname, syncthingPath),
                 join(__dirname, `${syncthingPath}.exe`),
@@ -52,12 +52,12 @@ const config: ForgeConfig = {
                   if (err) {
                     reject(err);
                   } else {
-                    resolve(err);
+                    resolve();
                   }
                 },
               );
             }),
-            new Promise((resolve, reject) => {
+            new Promise<void>((resolve, reject) => {
               rename(
                 join(buildPath, "resources", "syncthing"),
                 join(buildPath, "resources", "syncthing.exe"),
@@ -65,7 +65,7 @@ const config: ForgeConfig = {
                   if (err) {
                     reject(err);
                   } else {
-                    resolve(err);
+                    resolve();
                   }
                 },
               );
