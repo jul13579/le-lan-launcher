@@ -120,7 +120,7 @@ export const CustomTabPanel = styled("div", {
   shouldForwardProp: (prop) =>
     !(["fullHeight", "value", "match"] as PropertyKey[]).includes(prop),
 })<CustomTabPanelProps>(({ fullHeight, value, match }) => ({
-  position: "absolute",
+  position: "relative",
   width: "100%",
   height: fullHeight ? "100%" : "auto",
   display: value === match ? "initial" : "none",
