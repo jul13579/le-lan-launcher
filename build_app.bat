@@ -6,4 +6,4 @@ call npm ci
 
 echo.
 echo Building LEGC LAN-Launcher...
-call npm run package
+call npm run make
