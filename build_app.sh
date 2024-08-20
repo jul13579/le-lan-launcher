@@ -4,4 +4,4 @@ echo "Installing npm dependencies..."
 npm ci
 
 echo -e "\nBuilding LEGC LAN-Launcher..."
-npm run package
+npm run make
