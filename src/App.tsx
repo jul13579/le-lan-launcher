@@ -123,10 +123,24 @@ export const CustomTabPanel = styled("div", {
   position: "absolute",
   width: "100%",
   height: fullHeight ? "100%" : "auto",
-  visibility: value === match ? "visible" : "hidden",
-  opacity: value === match ? 1 : 0,
-  transform: value === match ? "initial" : "translateY(25px)",
-  transition: "opacity .2s linear, transform .2s ease-out",
+  display: value === match ? "initial" : "none",
+  animation: "opacity .2s linear, translateY .2s ease-out",
+  "@keyframes opacity": {
+    "0%": {
+      opacity: 0,
+    },
+    "100%": {
+      opacity: 1,
+    },
+  },
+  "@keyframes translateY": {
+    "0%": {
+      transform: "translateY(25px)",
+    },
+    "100%": {
+      transform: "initial",
+    },
+  },
 }));
 
 const TabPanelContainer = styled("div")(() => ({
