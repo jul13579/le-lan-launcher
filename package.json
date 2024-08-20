@@ -1,7 +1,7 @@
 {
   "name": "legc-lan-launcher",
   "productName": "LEGC LAN-Launcher",
-  "version": "2.0.0-rc.2",
+  "version": "2.0.0-rc.3",
   "description": "A launcher to provide content (e.g. games, but it can also be used for other stuff) in a P2P-manner to friends on a LAN-Party. It is no more than a frontend based on electron to control a slightly modified instance of Syncthing.",
   "main": ".vite/build/main.js",
   "scripts": {
