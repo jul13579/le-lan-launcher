@@ -123,10 +123,24 @@ export const CustomTabPanel = styled("div", {
   position: "absolute",
   width: "100%",
   height: fullHeight ? "100%" : "auto",
-  visibility: value === match ? "visible" : "hidden",
-  opacity: value === match ? 1 : 0,
-  transform: value === match ? "initial" : "translateY(25px)",
-  transition: "opacity .2s linear, transform .2s ease-out",
+  display: value === match ? "initial" : "none",
+  animation: "opacity .2s linear, translateY .2s ease-out",
+  "@keyframes opacity": {
+    "0%": {
+      opacity: 0,
+    },
+    "100%": {
+      opacity: 1,
+    },
+  },
+  "@keyframes translateY": {
+    "0%": {
+      transform: "translateY(25px)",
+    },
+    "100%": {
+      transform: "initial",
+    },
+  },
 }));
 
 const TabPanelContainer = styled("div")(() => ({
@@ -148,7 +162,7 @@ const App: FunctionComponent = () => {
   /*                                    State                                   */
   /* -------------------------------------------------------------------------- */
   const [tab, setTab] = useState(
-    setupCompleted ? TabValue.GAMES : TabValue.SETTINGS,
+    setupCompleted ? TabValue.GAMES : TabValue.SETTINGS
   );
 
   /* -------------------------------------------------------------------------- */
@@ -172,7 +186,7 @@ const App: FunctionComponent = () => {
               ].map(
                 (
                   [cb, icon, color]: [() => void, string, ButtonProps["color"]],
-                  index,
+                  index
                 ) => (
                   <WindowButton
                     key={index}
@@ -182,7 +196,7 @@ const App: FunctionComponent = () => {
                   >
                     <Icon path={icon} size={1} />
                   </WindowButton>
-                ),
+                )
               )}
             </WindowButtonsBox>
           </AppBarRow>
@@ -202,7 +216,7 @@ const App: FunctionComponent = () => {
                     string,
                     boolean,
                   ],
-                  index,
+                  index
                 ) => (
                   <CustomTab
                     key={index}
@@ -212,7 +226,7 @@ const App: FunctionComponent = () => {
                     icon={<Icon path={icon} size={1} />}
                     iconPosition="start"
                   />
-                ),
+                )
               )}
             </NonDraggableTabs>
           </AppBarRow>
@@ -242,5 +256,5 @@ root.render(
         </LibraryContextProvider>
       </SyncServiceContextProvider>
     </SettingsServiceContextProvider>
-  </StrictMode>,
+  </StrictMode>
 );
