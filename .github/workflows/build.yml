@@ -23,6 +23,9 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
+      - name: Set up Python for appdmg to be installed
+        run: brew install python-setuptools
+        if: ${{ matrix.os == 'macos-latest' }}
       - run: ./build_all.bat
         if: ${{ matrix.os == 'windows-latest' }}
       - run: ./build_all.sh
