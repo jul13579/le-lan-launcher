@@ -11,6 +11,7 @@ import { useSyncService } from "src/hooks/useSyncService";
 import { gamelibConfig, gamelibDirId } from "src/config/folder";
 import { useSettingsService } from "src/hooks/useSettingsService";
 import { IpcRenderer } from "electron";
+import { localPathToPathname } from "../../../utils/localPathToPathname";
 
 interface LibraryContextProviderProps {
   children: ReactNode;
@@ -46,7 +47,7 @@ export const LibraryContextProvider: FunctionComponent<
     return `${libFolderPath}/${gamelibConfig}`;
   }, [libFolderPath]);
   const libFolderPathname = useMemo(
-    () => libFolderPath && new URL(`file://${libFolderPath}`).pathname,
+    () => libFolderPath && localPathToPathname(libFolderPath),
     [libFolderPath],
   );
 

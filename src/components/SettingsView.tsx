@@ -27,6 +27,7 @@ import { useSettingsService } from "../hooks/useSettingsService";
 import { useSyncService } from "../hooks/useSyncService";
 import { bgTransparentDarkWithBlur } from "./CustomThemeProvider";
 import { footerHeight } from "./ServiceStatistics";
+import { localPathToPathname } from "../utils/localPathToPathname";
 
 const ThemeItem = ({ theme }: { theme: Theme }) => ({
   margin: theme.spacing(3),
@@ -141,7 +142,7 @@ const SettingsView: FunctionComponent = () => {
     openFileChooser(
       (result) => {
         setTheme({
-          path: `legc://${new URL(`file://${result.filePaths[0].replace(/\\/g, "/")}`).pathname}`,
+          path: `legc://${localPathToPathname(result.filePaths[0])}`,
           cover: true,
         });
       },
