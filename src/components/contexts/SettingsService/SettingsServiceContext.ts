@@ -25,6 +25,7 @@ export const SettingsServiceContext = createContext<{
   setPlayerName: Dispatch<SetStateAction<Settings["playerName"]>>;
   homeDir: Settings["homeDir"];
   setHomeDir: Dispatch<SetStateAction<Settings["homeDir"]>>;
+  homeDirWithForwardSlash: string;
   nas: Settings["nas"];
   setNas: Dispatch<SetStateAction<Settings["nas"]>>;
   locale: Settings["locale"];

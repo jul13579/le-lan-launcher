@@ -12,7 +12,6 @@ import { baseUrl } from "src/config/service";
 import GameOperations from "src/enums/GameOperations";
 import SyncEvents from "src/enums/SyncEvents";
 import SyncServiceOperations from "src/enums/SyncServiceOperations";
-import { useForwardSlashSeparator } from "src/hooks/useForwardSlashSeparator";
 import { useSettingsService } from "src/hooks/useSettingsService";
 import { calculateDownloadProgress } from "src/utils/calculateDownloadProgress";
 import { SyncServiceContext } from "./SyncServiceContext";
@@ -100,10 +99,7 @@ export const SyncServiceContextProvider: FunctionComponent<
   /* -------------------------------------------------------------------------- */
   /*                                   Context                                  */
   /* -------------------------------------------------------------------------- */
-  const { apiKey, homeDir, nas } = useForwardSlashSeparator(
-    useSettingsService(),
-    ["homeDir"],
-  );
+  const { apiKey, homeDirWithForwardSlash, nas } = useSettingsService();
   const { t } = useTranslation();
 
   /* -------------------------------------------------------------------------- */
@@ -137,10 +133,10 @@ export const SyncServiceContextProvider: FunctionComponent<
    * Automatically start sync service when home directory is set
    */
   useEffect(() => {
-    if (homeDir) {
+    if (homeDirWithForwardSlash) {
       start();
     }
-  }, [homeDir]);
+  }, [homeDirWithForwardSlash]);
 
   /**
    * Configure HTTP client authentication when the API key is set
@@ -366,7 +362,7 @@ export const SyncServiceContextProvider: FunctionComponent<
       return {
         ...folderTemplate,
         type: "receiveonly",
-        path: `${homeDir}/${label}`,
+        path: `${homeDirWithForwardSlash}/${label}`,
         id: id,
         label: label,
         // Share with all devices
@@ -377,7 +373,7 @@ export const SyncServiceContextProvider: FunctionComponent<
         }),
       };
     },
-    [homeDir, devices],
+    [homeDirWithForwardSlash, devices],
   );
 
   const getEvents = async () => {
@@ -442,7 +438,7 @@ export const SyncServiceContextProvider: FunctionComponent<
   };
 
   const start = async () => {
-    if (started || !homeDir) {
+    if (started || !homeDirWithForwardSlash) {
       return;
     }
     toast(t("toast.service.starting"), { type: "success" });
@@ -450,7 +446,7 @@ export const SyncServiceContextProvider: FunctionComponent<
       const retVal = await window.ipcRenderer.invoke(
         "controlSyncService",
         SyncServiceOperations.START,
-        homeDir,
+        homeDirWithForwardSlash,
       );
       setStarted(true);
       return retVal;

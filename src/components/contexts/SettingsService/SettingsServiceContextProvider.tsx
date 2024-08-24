@@ -53,6 +53,10 @@ export const SettingsServiceContextProvider: FunctionComponent<
   const [homeDir, setHomeDir] = useState<Settings["homeDir"]>(
     initialConfig.homeDir ?? "",
   );
+  const homeDirWithForwardSlash = useMemo(
+    () => homeDir.replace(/\\/g, "/"),
+    [homeDir],
+  );
   const [nas, setNas] = useState<Settings["nas"]>(initialConfig.nas ?? "");
   const [locale, setLocale] = useState<Settings["locale"]>(
     initialConfig.locale ?? defaultLocale,
@@ -158,6 +162,7 @@ export const SettingsServiceContextProvider: FunctionComponent<
     setPlayerName,
     homeDir,
     setHomeDir,
+    homeDirWithForwardSlash,
     nas,
     setNas,
     locale,

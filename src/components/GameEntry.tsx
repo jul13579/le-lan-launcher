@@ -106,7 +106,7 @@ export const GameEntry: FunctionComponent<GameEntryProps> = ({
   /* -------------------------------------------------------------------------- */
   /*                                   Context                                  */
   /* -------------------------------------------------------------------------- */
-  const { libFolderPath } = useLibrary();
+  const { libFolderPathname } = useLibrary();
   const { t } = useTranslation();
   const { deleteGame } = useSyncService();
 
@@ -159,7 +159,7 @@ export const GameEntry: FunctionComponent<GameEntryProps> = ({
     <Box display={"flex"} flexDirection={"row"} m={1.5}>
       <GameEntryRoot
         installed={installed}
-        thumbnail={`legc://${libFolderPath}/${gameConfig.cover}`}
+        thumbnail={`legc://${libFolderPathname}/${gameConfig.cover}`}
       >
         {/* Progress indicator */}
         <ProgressIndicator downloadProgress={downloadProgress} />

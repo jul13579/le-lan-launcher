@@ -118,17 +118,9 @@ if (isDevelopment) {
  */
 function registerFileProtocol(protocolName: string) {
   protocol.handle(protocolName, (request) => {
-    const url = request.url.replace(new RegExp(`^${protocolName}://`), "");
-    // Decode URL to prevent errors when loading filenames with UTF-8 chars or chars like "#"
-    const decodedUrl = decodeURI(url); // Needed in case URL contains spaces
-    try {
-      return net.fetch(`file://${decodedUrl}`);
-    } catch (error) {
-      console.error(
-        "ERROR: registerLocalResourceProtocol: Could not get file path:",
-        error,
-      );
-    }
+    return net.fetch(
+      request.url.replace(new RegExp(`^${protocolName}://`), "file://"),
+    );
   });
 }
 

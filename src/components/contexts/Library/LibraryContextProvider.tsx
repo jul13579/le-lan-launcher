@@ -9,7 +9,6 @@ import { LibraryContext } from "./LibraryContext";
 import { useLibraryWatcher } from "src/hooks/useLibraryWatcher";
 import { useSyncService } from "src/hooks/useSyncService";
 import { gamelibConfig, gamelibDirId } from "src/config/folder";
-import { useForwardSlashSeparator } from "src/hooks/useForwardSlashSeparator";
 import { useSettingsService } from "src/hooks/useSettingsService";
 import { IpcRenderer } from "electron";
 
@@ -23,9 +22,7 @@ export const LibraryContextProvider: FunctionComponent<
   /* -------------------------------------------------------------------------- */
   /*                                   Context                                  */
   /* -------------------------------------------------------------------------- */
-  const { homeDir } = useForwardSlashSeparator(useSettingsService(), [
-    "homeDir",
-  ]);
+  const { homeDirWithForwardSlash } = useSettingsService();
   const { folders } = useSyncService();
   const { watch, unwatch } = useLibraryWatcher();
 
@@ -42,12 +39,16 @@ export const LibraryContextProvider: FunctionComponent<
   );
   const libFolderPath = useMemo(() => {
     if (!libFolder) return undefined;
-    return `${homeDir}/${libFolder.label}`;
+    return `${homeDirWithForwardSlash}/${libFolder.label}`;
   }, [libFolder]);
   const libConfigPath = useMemo(() => {
     if (!libFolderPath) return undefined;
     return `${libFolderPath}/${gamelibConfig}`;
   }, [libFolderPath]);
+  const libFolderPathname = useMemo(
+    () => libFolderPath && new URL(`file://${libFolderPath}`).pathname,
+    [libFolderPath],
+  );
 
   /* -------------------------------------------------------------------------- */
   /*                             Instance Lifecycle                             */
@@ -68,7 +69,7 @@ export const LibraryContextProvider: FunctionComponent<
   /* -------------------------------------------------------------------------- */
   const state = {
     lib,
-    libFolderPath,
+    libFolderPathname,
   };
   return (
     <LibraryContext.Provider value={state}>{children}</LibraryContext.Provider>

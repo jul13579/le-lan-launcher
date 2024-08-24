@@ -141,7 +141,7 @@ const SettingsView: FunctionComponent = () => {
     openFileChooser(
       (result) => {
         setTheme({
-          path: `legc://${result.filePaths[0].replace(/\\/g, "/")}`,
+          path: `legc://${new URL(`file://${result.filePaths[0].replace(/\\/g, "/")}`).pathname}`,
           cover: true,
         });
       },
