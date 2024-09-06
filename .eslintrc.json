@@ -12,10 +12,7 @@
     "plugin:import/electron",
     "plugin:import/typescript"
   ],
-  "ignorePatterns": [
-    "syncthing-src/",
-    "vite.*"
-  ],
+  "ignorePatterns": ["syncthing-src/", "vite.*"],
   // "parser": "import/resolver",
   "settings": {
     "import/resolver": {

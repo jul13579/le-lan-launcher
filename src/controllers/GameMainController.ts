@@ -44,6 +44,9 @@ export function GameMainController(win: BrowserWindow) {
       {
         cwd: gameFolder.path,
         detached: true, // Spawn executable detached, so it stays open if launcher is closed.
+        shell:
+          process.platform === "win32" &&
+          (executable.endsWith(".bat") || executable.endsWith(".cmd")), // https://nodejs.org/en/blog/vulnerability/april-2024-security-releases-2
       },
     );
 
