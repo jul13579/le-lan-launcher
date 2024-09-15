@@ -4,6 +4,9 @@ import { rm, readFile, writeFile } from "fs";
 import { resolve as pathResolve, normalize } from "path";
 import GameOperations from "../enums/GameOperations";
 
+const enquote = (string: string) =>
+  string.includes(" ") ? `"${string}"` : string;
+
 /**
  * Controller for games.
  * This is only to be used by the main process, as it depends on electron and node functionalities.
@@ -40,7 +43,11 @@ export function GameMainController(win: BrowserWindow) {
 
     const gameProcess = spawn(
       normalize(executable),
-      [normalize(gameFolder.path), gameFolder.id, playerName],
+      [
+        enquote(normalize(gameFolder.path)),
+        enquote(gameFolder.id),
+        enquote(playerName),
+      ],
       {
         cwd: gameFolder.path,
         detached: true, // Spawn executable detached, so it stays open if launcher is closed.
