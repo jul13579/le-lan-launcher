@@ -217,10 +217,10 @@ export const SyncServiceContextProvider: FunctionComponent<
               (await SyncthingAPI.DB.folderStatus(id)).data,
             ]),
         );
-        setFolderStatuses({
+        setFolderStatuses((folderStatuses) => ({
           ...folderStatuses,
           ...Object.fromEntries(missingFolderStatusResponses),
-        });
+        }));
       }
     };
 
@@ -433,7 +433,10 @@ export const SyncServiceContextProvider: FunctionComponent<
       progress > 0 && progress < 1 ? progress : -1,
     );
 
-    setFolderStatuses({ ...folderStatuses, ...newFolderStatuses });
+    setFolderStatuses((folderStatuses) => ({
+      ...folderStatuses,
+      ...newFolderStatuses,
+    }));
     setLastEventId(Math.max(...events.map(({ id }) => id)));
   };
 
@@ -498,9 +501,11 @@ export const SyncServiceContextProvider: FunctionComponent<
     await SyncthingAPI.Config.deleteFolder(folder);
     window.ipcRenderer.invoke("controlGame", GameOperations.DELETE, folder);
     await getEvents();
-    const newFolderStatuses = { ...folderStatuses };
-    delete newFolderStatuses[folder.id];
-    setFolderStatuses(newFolderStatuses);
+    setFolderStatuses((folderStatuses) => {
+      const newFolderStatuses = { ...folderStatuses };
+      delete newFolderStatuses[folder.id];
+      return newFolderStatuses;
+    });
   };
 
   /* -------------------------------------------------------------------------- */
