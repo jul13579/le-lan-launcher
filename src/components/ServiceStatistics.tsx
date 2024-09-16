@@ -41,11 +41,11 @@ const FooterItem = ({ theme }: { theme: Theme }) => ({
   display: "grid",
   gridTemplateColumns: "repeat(3, 1fr)",
   gridGap: theme.spacing(2),
+  userSelect: "none",
 });
 
 const StatisticsOverview = styled(Container)(({ theme }) => ({
   ...FooterItem({ theme }),
-  userSelect: "none",
   "> div": {
     display: "flex",
     alignItems: "center",

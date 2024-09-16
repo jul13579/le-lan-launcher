@@ -1,5 +1,14 @@
-import { Box } from "@mui/material";
+import { styled } from "@mui/material";
 import { FunctionComponent, useEffect, useRef, useState } from "react";
+
+const ConsoleBox = styled("div")(() => ({
+  height: "100%",
+  whiteSpace: "pre",
+  overflow: "auto",
+  display: "flex",
+  flexDirection: "column",
+  userSelect: "all",
+}));
 
 interface ConsoleProps {
   messages: SyncServiceMessageObj[];
@@ -50,14 +59,7 @@ export const Console: FunctionComponent<ConsoleProps> = ({ messages }) => {
   /*                                  Rendering                                 */
   /* -------------------------------------------------------------------------- */
   return (
-    <Box
-      ref={consoleEl}
-      height={"100%"}
-      whiteSpace={"pre"}
-      overflow={"auto"}
-      display={"flex"}
-      flexDirection={"column"}
-    >
+    <ConsoleBox ref={consoleEl}>
       {messages.map((messageObj, index) => (
         <span
           key={index}
@@ -68,6 +70,6 @@ export const Console: FunctionComponent<ConsoleProps> = ({ messages }) => {
           {messageObj.message}
         </span>
       ))}
-    </Box>
+    </ConsoleBox>
   );
 };
