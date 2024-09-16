@@ -20,7 +20,6 @@ import {
 } from "@mui/material";
 import { FunctionComponent, useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { CustomTabPanel, TabPanelComponentProps } from "../App";
 import { TabValue } from "../enums/TabValue";
 import { useFileChooser } from "../hooks/useFileChooser";
 import { useSettingsService } from "../hooks/useSettingsService";
@@ -28,6 +27,7 @@ import { useSyncService } from "../hooks/useSyncService";
 import { bgTransparentDarkWithBlur } from "./CustomThemeProvider";
 import { footerHeight } from "./ServiceStatistics";
 import { localPathToPathname } from "../utils/localPathToPathname";
+import { TabPanel, TabPanelComponentProps } from "./TabPanel";
 
 const ThemeItem = ({ theme }: { theme: Theme }) => ({
   margin: theme.spacing(3),
@@ -70,9 +70,9 @@ const SettingsViewTab: FunctionComponent<TabPanelComponentProps> = ({
   value,
 }) => {
   return (
-    <CustomTabPanel value={value} match={TabValue.SETTINGS}>
+    <TabPanel value={value} match={TabValue.SETTINGS}>
       <SettingsView />
-    </CustomTabPanel>
+    </TabPanel>
   );
 };
 

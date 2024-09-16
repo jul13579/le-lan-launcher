@@ -31,22 +31,20 @@ import {
 } from "./components/CustomThemeProvider";
 import { GamesView } from "./components/GamesView";
 import { GlobalStyles } from "./components/GlobalStyles";
-import {
-  footerHeight,
-  ServiceStatistics,
-} from "./components/ServiceStatistics";
+import { ServiceStatistics } from "./components/ServiceStatistics";
 import { SettingsView } from "./components/SettingsView";
 import { ThemeBackground } from "./components/ThemeBackground";
 import { TabValue } from "./enums/TabValue";
 import { useSettingsService } from "./hooks/useSettingsService";
 import { useWindowControls } from "./hooks/useWindowControls";
 import { ToastContainer } from "./components/ToastContainer";
+import { TabPanelContainer } from "./components/TabPanel";
 
 const noDrag = {
   WebkitAppRegion: "no-drag",
 };
 
-const appBarHeight = 116;
+export const appBarHeight = 116;
 
 const DraggableAppBar = styled(AppBar)(() => ({
   ...bgTransparentDarkWithBlur,
@@ -105,49 +103,6 @@ const NonDraggableTabs = styled(Tabs)(() => ({
 const CustomTab = styled(Tab)(() => ({
   minHeight: 50,
   lineHeight: 1,
-}));
-
-export interface TabPanelComponentProps {
-  value: string;
-}
-
-interface CustomTabPanelProps extends TabPanelComponentProps {
-  fullHeight?: boolean;
-  match: string;
-}
-
-export const CustomTabPanel = styled("div", {
-  shouldForwardProp: (prop) =>
-    !(["fullHeight", "value", "match"] as PropertyKey[]).includes(prop),
-})<CustomTabPanelProps>(({ fullHeight, value, match }) => ({
-  position: "relative",
-  width: "100%",
-  height: fullHeight ? "100%" : "auto",
-  display: value === match ? "initial" : "none",
-  animation: "opacity .2s linear, translateY .2s ease-out",
-  "@keyframes opacity": {
-    "0%": {
-      opacity: 0,
-    },
-    "100%": {
-      opacity: 1,
-    },
-  },
-  "@keyframes translateY": {
-    "0%": {
-      transform: "translateY(25px)",
-    },
-    "100%": {
-      transform: "initial",
-    },
-  },
-}));
-
-const TabPanelContainer = styled("div")(() => ({
-  paddingBottom: footerHeight,
-  paddingTop: appBarHeight,
-  minHeight: "100%",
-  display: "grid", // This is only needed for the loading animation to be able to use 'height: 100%'
 }));
 
 const App: FunctionComponent = () => {

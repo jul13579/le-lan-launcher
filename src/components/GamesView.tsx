@@ -5,9 +5,9 @@ import { useTranslation } from "react-i18next";
 import { useLibrary } from "../hooks/useLibrary";
 import { useSettingsService } from "../hooks/useSettingsService";
 import { GameEntry } from "./GameEntry";
-import { CustomTabPanel, TabPanelComponentProps } from "../App";
 import { TabValue } from "../enums/TabValue";
 import { DebugModalContextProvider } from "./contexts/DebugModal/DebugModalContextProvider";
+import { TabPanel, TabPanelComponentProps } from "./TabPanel";
 
 const GameGridContainer = styled(Container)(() => ({
   display: "flex",
@@ -32,7 +32,7 @@ export const GamesView: FunctionComponent<TabPanelComponentProps> = ({
   /*                                  Rendering                                 */
   /* -------------------------------------------------------------------------- */
   return (
-    <CustomTabPanel value={value} match={TabValue.GAMES} fullHeight={loading}>
+    <TabPanel value={value} match={TabValue.GAMES} fullHeight={loading}>
       {loading ? (
         <Box
           display={"flex"}
@@ -57,6 +57,6 @@ export const GamesView: FunctionComponent<TabPanelComponentProps> = ({
           </DebugModalContextProvider>
         </GameGridContainer>
       )}
-    </CustomTabPanel>
+    </TabPanel>
   );
 };
